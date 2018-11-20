@@ -1,0 +1,285 @@
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+
+.main {
+  padding: 20px;
+  background-color: #fff;
+}
+@media (min-width: 768px){
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+.characterscenter {
+	
+	margin-left: 220px;
+	margin-right: auto;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.table-editable {
+  position: relative;
+  
+  
+  .glyphicon {
+    font-size: 20px;
+  }
+}
+
+.table-remove {
+  color: #700;
+  cursor: pointer;
+}
+
+.table-edit {
+	
+	cursor: pointer;
+}
+    .main-container {
+      float: left;
+      position: relative;
+      left: 25%;
+    }
+    .fixer-container {
+      float: left;
+      position: relative;
+      left: -25%;
+    }
+	
+.fieldset {
+	
+  border: 1px solid #cecfd5;
+  border-radius: 6px;
+  padding: 24px 30px;
+}
+
+.fieldset2 {
+	
+  margin-top: 10px;
+  border: 1px solid #cecfd5;
+  border-radius: 6px;
+  padding: 24px 30px;
+  text-align: center;
+  text-transform: uppercase;
+  
+}
+
+
+
+
+
+.submitcitizen {
+	
+	-moz-box-shadow:inset 0px 1px 0px 0px #91b8b3;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #91b8b3;
+	box-shadow:inset 0px 1px 0px 0px #91b8b3;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #768d87), color-stop(1, #6c7c7c));
+	background:-moz-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-webkit-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-o-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-ms-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#768d87', endColorstr='#6c7c7c',GradientType=0);
+	background-color:#768d87;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2b665e;
+}
+.submitcitizen:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6c7c7c), color-stop(1, #768d87));
+	background:-moz-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:-webkit-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:-o-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:-ms-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6c7c7c', endColorstr='#768d87',GradientType=0);
+	background-color:#6c7c7c;
+}
+.submitcitizen:active {
+	position:relative;
+	top:1px;
+}
+
+.submitcitizen2 {
+	
+	-moz-box-shadow:inset 0px 1px 0px 0px #91b8b3;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #91b8b3;
+	box-shadow:inset 0px 1px 0px 0px #91b8b3;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #768d87), color-stop(1, #6c7c7c));
+	background:-moz-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-webkit-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-o-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:-ms-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#768d87', endColorstr='#6c7c7c',GradientType=0);
+	background-color:#768d87;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2b665e;
+}
+.submitcitizen2:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6c7c7c), color-stop(1, #768d87));
+	background:-moz-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:-webkit-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:-o-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:-ms-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
+	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6c7c7c', endColorstr='#768d87',GradientType=0);
+	background-color:#6c7c7c;
+}
+.submitcitizen2:active {
+	position:relative;
+	top:1px;
+}
+
+.row {
+	
+	width: 95%;
+}
+
+.vtext {
+	
+	text-align: center;
+	font-size: 25px;
+	text-shadow:0px 1px 0px #2b665e;
+	margin-top: 5px;
+	padding: 5px;
+}
+
+.password {
+	
+	margin: 0 auto;
+	width: 250px;
+	text-align: center;
+}
+.fieldpassword {
+	
+	width: 100%
+}
+
+.personcheck-img {
+	
+	float: left;
+	width: 50%;
+	margin-top: 50px;
+}
+.personcheck-text {
+	
+	text-align: center;
+	font-size: 15px;
+	float: left;
+}
+
+.spacer2 {
+	
+	margin-top: 30px;
+}
+
+.license {
+	
+	font-weight: bold;
+	
+	
+}
+.citizen {
+	
+	padding: 10px;
+	border: 1px solid #333f;
+	border-radius: 5px;
+	background-color: #333;
+	color: #fff;
+}
+
+.citizen2 {
+	
+	padding: 10px;
+	border: 1px solid #333f;
+	border-radius: 5px;
+	background-color: #333;
+	color: #fff;
+}
+
+.error1 {
+	
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	padding: 15px;
+	font-size: 15px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.sucess1 {
+	
+	color: #fff;
+	background-color: #63cc64;
+	border-color: #63cc64;
+	padding: 15px;
+	font-size: 15px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.charactersucess {
+	
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	padding: 15px;
+	font-size: 15px;
+	border: 1px solid transparent;
+	border-radius: 50px;
+}
+
+.error2 {
+	
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	padding: 15px;
+	font-size: 15px;
+	border: 1px solid transparent;
+	border-radius: 50px;
+}
+
+.vehicleplates {
+	
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+	padding: 15px;
+	font-size: 15px;
+	border: 1px solid transparent;
+	border-radius: 50px;
+}
