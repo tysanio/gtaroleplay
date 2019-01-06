@@ -1,6 +1,7 @@
 # gtaroleplay
 Ici texas roleplay de son nom sera déposé ici
 
+Il ya quelque typos mais rien d'impossible a refaire
 
 1 par jour sera déposé dans se repo
 
