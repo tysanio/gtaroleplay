@@ -9242,7 +9242,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 				}
 				case 3:
 				{
-					Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
+					Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);
 				}
 			}
 	    }
@@ -9260,16 +9260,16 @@ Dialog:LockerMoney(playerid,response,listitem,inputtext[])
 	    {
 	        case 0:
 			{
-					Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
+					Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);
 			}
 			case 1:
 			{
-				Dialog_Show(playerid, LockerMoneyRetirer, DIALOG_STYLE_INPUT, "Coffre d'argent","Argent dans le coffre %d\nVous voulez retirer combien?", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));			
+				Dialog_Show(playerid, LockerMoneyRetirer, DIALOG_STYLE_INPUT, "Coffre d'argent","Argent dans le coffre %d\nVous voulez retirer combien?", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);			
 				return 1;
 			}
 			case 2:
 			{
-				Dialog_Show(playerid, LockerMoneyAjouter, DIALOG_STYLE_INPUT, "Coffre d'argent","Argent dans le coffre %d\nVous voulez mettre combien?", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));			
+				Dialog_Show(playerid, LockerMoneyAjouter, DIALOG_STYLE_INPUT, "Coffre d'argent","Argent dans le coffre %d\nVous voulez mettre combien?", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);			
 				return 1;
 			}
 		}
@@ -9286,17 +9286,11 @@ Dialog:LockerMoneyRetirer(playerid,response,listitem,inputtext[])
 		return 0;
 	if (response)
 	{
-	    switch (listitem)
-	    {
-	        case 0:
-			{
-				SendServerMessage(playerid,"Vous avez retirer %d du coffre faction.",amount);
-				FactionData[factionid][factioncoffre] -= amount;
-				GiveMoney(playerid, amount);
-				Faction_Save(factionid);
-				Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
-			}
-		}
+		SendServerMessage(playerid,"Vous avez retirer %d du coffre faction.",amount);
+		FactionData[factionid][factioncoffre] -= amount;
+		GiveMoney(playerid, amount);
+		Faction_Save(factionid);
+		Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);
 	}
 	return 1;
 }
@@ -9307,17 +9301,11 @@ Dialog:LockerMoneyAjouter(playerid,response,listitem,inputtext[])
 		return 0;
 	if (response)
 	{
-	    switch (listitem)
-	    {
-	        case 0:
-			{
-				SendServerMessage(playerid,"Vous avez mis %d du coffre faction.",amount);
-				FactionData[factionid][factioncoffre] += amount;
-				GiveMoney(playerid, -amount);
-				Faction_Save(factionid);
-				Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
-			}
-		}
+		SendServerMessage(playerid,"Vous avez mis %d du coffre faction.",amount);
+		FactionData[factionid][factioncoffre] += amount;
+		GiveMoney(playerid, -amount);
+		Faction_Save(factionid);
+		Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);
 	}
 	return 1;
 }

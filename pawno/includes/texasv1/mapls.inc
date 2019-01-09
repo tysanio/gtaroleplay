@@ -4579,7 +4579,7 @@ stock CreateServerObjectsLosSantos()
 	hdmotors = CreateDynamicObjectEx(19375,1438.713,-1324.100,34.162,0.000,90.000,0.000,300.000,300.000);
 	SetDynamicObjectMaterial(hdmotors, 0, 10101, "2notherbuildsfe", "ws_rooftarmac1", 0x00000000);
 	hdmotors = CreateDynamicObjectEx(19358,1444.739,-1330.884,16.784,0.000,0.000,0.000,300.000,300.000);
-	SetDynamicObjectMaterialText(hdmotors, 0, "HARLEY-DAVidppSON", 140, "Ariel", 36, 1, 0xFFFFFFFF, 0x00000000, 1);
+	SetDynamicObjectMaterialText(hdmotors, 0, "HARLEY-DAVidSON", 140, "Ariel", 36, 1, 0xFFFFFFFF, 0x00000000, 1);
 	hdmotors = CreateDynamicObjectEx(19467,1443.741,-1327.337,13.652,0.000,-90.000,0.000,300.000,300.000);
 	SetDynamicObjectMaterial(hdmotors, 0, 19595, "lsappartments1", "carpet4-256x256", 0x00000000);
 	hdmotors = CreateDynamicObjectEx(19426,1438.592,-1322.943,16.556,180.000,90.000,180.000,300.000,300.000);

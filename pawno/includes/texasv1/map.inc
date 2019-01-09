@@ -6854,7 +6854,8 @@ stock CreateServerObjects()
 	CreateDynamicObject(12822, 2319.2578, 1.9219, 1029.6797,0, 0.0000, 0);
 	CreateDynamicObject(12840, 2330.4922, 1.3047, 1030.7500,0, 0.0000, 0);
 	CreateDynamicObject(12841, 2329.0391, 2.1094, 1027.7578,0, 0.0000, 0);
-	//fix malibu
+	//vice city ajoute
+/*	//fix malibu
 	CreateDynamicObject(3573,2473.72,-992.708,6.2039,0.1999,-0.2999,0.7481);
 	CreateDynamicObject(3573,2473.78,-992.711,8.904,0,0,0.6498);
 	CreateDynamicObject(2932,2477.06,-990.016,10.1535,0,0,-89.2509);
@@ -7010,5 +7011,5 @@ stock CreateServerObjects()
 	CreateDynamicObject(14588, 948.98438, 2137.09375, 1013.92188,   0.00000, 0.00000, 0.00000);
 	CreateDynamicObject(1497, 965.74219, 2161.57813, 1010.00000,   0.00000, 0.00000, -90.00000);
 	CreateDynamicObject(1497, 965.75781, 2158.57031, 1010.00000,   0.00000, 0.00000, 90.00000);
-	CreateDynamicObject(14612, 961.17188, 2166.57813, 1012.73438,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(14612, 961.17188, 2166.57813, 1012.73438,   0.00000, 0.00000, 0.00000);*/
 }
