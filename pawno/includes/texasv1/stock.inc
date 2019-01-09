@@ -2129,7 +2129,7 @@ stock GetLocation(Float:fX, Float:fY, Float:fZ)
 	};
 	new const g_arrZoneData[][e_ZoneData] =
 	{
-		/*{!"The Big Ear", 	              {-410.00, 1403.30, -3.00, -137.90, 1681.20, 200.00}},
+		{!"The Big Ear", 	              {-410.00, 1403.30, -3.00, -137.90, 1681.20, 200.00}},
 		{!"Aldea Malvada",                {-1372.10, 2498.50, 0.00, -1277.50, 2615.30, 200.00}},
 		{!"Angel Pine",                   {-2324.90, -2584.20, -6.10, -1964.20, -2212.10, 200.00}},
 		{!"Arco del Oeste",               {-901.10, 2221.80, 0.00, -592.00, 2571.90, 200.00}},
@@ -2493,8 +2493,8 @@ stock GetLocation(Float:fX, Float:fY, Float:fZ)
 		{!"San Fierro",                   {-2997.40, -1115.50, -242.90, -1213.90, 1659.60, 900.00}},
 		{!"Red County",                   {-1213.90, -768.00, -242.90, 2997.00, 596.30, 900.00}},
 		{!"Flint County",                 {-1213.90, -2892.90, -242.90, 44.60, -768.00, 900.00}},
-		{!"Whetstone",                    {-2997.40, -2892.90, -242.90, -1213.90, -1115.50, 900.00}}*/
-        {!"Leaf Links",                   {1786.27, -1191.43, 0.0, 2163.66, -152.395, 300.0}}, //vc seulement
+		{!"Whetstone",                    {-2997.40, -2892.90, -242.90, -1213.90, -1115.50, 900.00}}
+        /*{!"Leaf Links",                   {1786.27, -1191.43, 0.0, 2163.66, -152.395, 300.0}}, //vc seulement
 		{!"Escobar International",        {92.1001, -1895.2, 0.0, 792.1, -1265.2, 300.0}},
 		{!"Escobar International",        {77.7263, -2752.63, 0.0, 792.246, -1895.2, 300.0}},
 		{!"Base Army",                    {112.466, -1265.46, 0.0, 792.466, -905.464, 300.0}},
@@ -2512,7 +2512,7 @@ stock GetLocation(Float:fX, Float:fY, Float:fZ)
 		{!"Downtown",                     {386.97, -536.872, 0.0, 1786.27, 727.32, 300.0}},
 		{!"Hyman Memorial Stadium",       {413.973, 189.007, 0.0, 1062.48, 643.753, 290.0}},
 		{!"North Point Mall",             {2324.31, 27.1423, 0.0, 2484.31, 327.142, 250.0}},
-		{!"VC Bridge",                    {1421.38, -1191.47, 0.0, 1783.81, -537.34, 300.0}}
+		{!"VC Bridge",                    {1421.38, -1191.47, 0.0, 1783.81, -537.34, 300.0}}*/
 	};
 	new name[32] = "San Andreas";
 	for (new i = 0; i != sizeof(g_arrZoneData); i ++) if ((fX >= g_arrZoneData[i][e_ZoneArea][0] && fX <= g_arrZoneData[i][e_ZoneArea][3]) && (fY >= g_arrZoneData[i][e_ZoneArea][1] && fY <= g_arrZoneData[i][e_ZoneArea][4]) && (fZ >= g_arrZoneData[i][e_ZoneArea][2] && fZ <= g_arrZoneData[i][e_ZoneArea][5])) {
@@ -3740,14 +3740,15 @@ Faction_Refresh(factionid)
 Faction_Save(factionid)
 {
 	static query[2048];
-	format(query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s',`factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d'",
+	format(query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s',`factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d', `factioncoffre` = '%d'",
 		SQL_ReturnEscaped(FactionData[factionid][factionName]),
 		FactionData[factionid][factionRanks],
 		FactionData[factionid][factionLockerPos][0],
 		FactionData[factionid][factionLockerPos][1],
 		FactionData[factionid][factionLockerPos][2],
 		FactionData[factionid][factionLockerInt],
-		FactionData[factionid][factionLockerWorld]
+		FactionData[factionid][factionLockerWorld],
+		FactionData[factionid][factioncoffre]
 	);
 	for (new i = 0; i < 10; i ++)
 	{
@@ -9239,12 +9240,87 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						}
 					}					
 				}
+				case 3:
+				{
+					Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
+				}
 			}
 	    }
 	}
 	return 1;
 }
-
+Dialog:LockerMoney(playerid,response,listitem,inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (factionid == -1 || !IsNearFactionLocker(playerid))
+		return 0;
+	if (response)
+	{
+	    switch (listitem)
+	    {
+	        case 0:
+			{
+					Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
+			}
+			case 1:
+			{
+				Dialog_Show(playerid, LockerMoneyRetirer, DIALOG_STYLE_INPUT, "Coffre d'argent","Argent dans le coffre %d\nVous voulez retirer combien?", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));			
+				return 1;
+			}
+			case 2:
+			{
+				Dialog_Show(playerid, LockerMoneyAjouter, DIALOG_STYLE_INPUT, "Coffre d'argent","Argent dans le coffre %d\nVous voulez mettre combien?", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));			
+				return 1;
+			}
+		}
+	}
+	else {
+	    cmd_fequipement(playerid, "\1");
+	}
+	return 1;
+}
+Dialog:LockerMoneyRetirer(playerid,response,listitem,inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction],amount = strval(inputtext);
+	if (factionid == -1 || !IsNearFactionLocker(playerid))
+		return 0;
+	if (response)
+	{
+	    switch (listitem)
+	    {
+	        case 0:
+			{
+				SendServerMessage(playerid,"Vous avez retirer %d du coffre faction.",amount);
+				FactionData[factionid][factioncoffre] -= amount;
+				GiveMoney(playerid, amount);
+				Faction_Save(factionid);
+				Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
+			}
+		}
+	}
+	return 1;
+}
+Dialog:LockerMoneyAjouter(playerid,response,listitem,inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction],amount = strval(inputtext);
+	if (factionid == -1 || !IsNearFactionLocker(playerid))
+		return 0;
+	if (response)
+	{
+	    switch (listitem)
+	    {
+	        case 0:
+			{
+				SendServerMessage(playerid,"Vous avez mis %d du coffre faction.",amount);
+				FactionData[factionid][factioncoffre] += amount;
+				GiveMoney(playerid, -amount);
+				Faction_Save(factionid);
+				Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FormatNumber(FactionData[factionid][factioncoffre]));
+			}
+		}
+	}
+	return 1;
+}
 Dialog:LockerWeapons(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];

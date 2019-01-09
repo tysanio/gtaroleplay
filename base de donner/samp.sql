@@ -789,6 +789,7 @@ CREATE TABLE IF NOT EXISTS `factions` (
   `factionLockerZ` float DEFAULT '0',
   `factionLockerInt` int(12) DEFAULT '0',
   `factionLockerWorld` int(12) DEFAULT '0',
+  `factioncoffre` int(12) DEFAULT '0',
   `factionWeapon1` int(12) DEFAULT '0',
   `factionAmmo1` int(12) DEFAULT '0',
   `factionWeapon2` int(12) DEFAULT '0',

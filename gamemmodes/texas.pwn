@@ -752,7 +752,8 @@ public Faction_Load()
 	    FactionData[i][factionLockerPos][2] = cache_get_field_float(i, "factionLockerZ");
 	    FactionData[i][factionLockerInt] = cache_get_field_int(i, "factionLockerInt");
 	    FactionData[i][factionLockerWorld] = cache_get_field_int(i, "factionLockerWorld");
-
+        FactionData[i][factioncoffre] = cache_get_field_int(i, "factioncoffre");
+        
 	    for (new j = 0; j < 8; j ++) {
 	        format(str, sizeof(str), "factionSkin%d", j + 1);
 	        FactionData[i][factionSkins][j] = cache_get_field_int(i, str);
@@ -7471,12 +7472,12 @@ public OnPlayerDisconnect(playerid, reason)
 public OnGameModeInit()
 {
 	//partie fs oubliger
-	SendRconCommand("unloadfs pool");
+	/*SendRconCommand("unloadfs pool");
     SendRconCommand("loadfs pool");
     SendRconCommand("unloadfs soccer");
     SendRconCommand("loadfs soccer");
     SendRconCommand("unloadfs compteur");
-    SendRconCommand("loadfs compteur");
+    SendRconCommand("loadfs compteur");*/
     //fin des fs oubliger
     AntiDeAMX();
 	static arrVirtualWorlds[2000]; /*id = -1;*/
