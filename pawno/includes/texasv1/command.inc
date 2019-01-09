@@ -4914,7 +4914,7 @@ CMD:fequipement(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas proche de votre point d'équipement.");
 	if (FactionData[factionid][factionacces][0] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][3] == 1)
 		Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Se mettre en service\nVêtements\nArmes\nRegarder CV", "Valider", "Annuler");
-	else Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Vêtements\nArmes\nRegarder CV", "Valider", "Annuler");
+	else Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Vêtements\nArmes\nRegarder CV\nCoffre", "Valider", "Annuler");
 	return 1;
 }
 CMD:asetleader(playerid, params[])
@@ -11729,7 +11729,7 @@ CMD:ebracelet(playerid, params[])
 //louer veh
 CMD:louerveh(playerid, params[])
 {
-	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar),moneyentrepriseid;
+	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar),count;
 	if (PlayerData[playerid][pLocaID] > 0) return SendVehiculeMessage(playerid, "Vous louez déjà un véhicule (/delouerveh)");
 	if (GetPlayerMoney(playerid) < 200) return SendVehiculeMessage(playerid,"Vous devez avoir $200 pour louer un véhicule.");
 	if(CarData[id][carLoca] == 0) return SendVehiculeMessage(playerid,"Ce véhicule n'est pas louable.");
@@ -11742,8 +11742,19 @@ CMD:louerveh(playerid, params[])
 	PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 	TSM(playerid, "~r~/delouerveh pour delouer le vehicule\n~w~Oublier pas de delouer quand vous avez fini avec!\nProche de l'auto-ecole", "Location", 5000, 0x00000088, 20.0000, 110.000000, 130.000000);
 	GiveMoney(playerid,-200);
-	argent_entreprise[moneyentrepriseid][argentmafiazone4] +=200;
-	moneyentreprisesave(moneyentrepriseid);
+	for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists] && FactionData[i][factionacces][12] == 1) {
+		count++;
+	}
+	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+	{
+		new aye = 200 / count;
+		if(FactionData[ii][factionacces][12] == 1)
+		{
+			FactionData[ii][factioncoffre] += aye;
+			Faction_Save(ii);
+		}
+		SendServerMessage(playerid,"%d nombre de faction qui a le 12 et sa fait %d",count,aye);
+	}
     //DernieVehLoc[playerid]=voicar;
     //DernieVehLocID[playerid]=id;
 	Car_Save(id);
@@ -12950,7 +12961,7 @@ CMD:skinstest(playerid,params[])
 }
 CMD:abus(playerid,params[])
 {
-	Dialog_Show(playerid, ShowOnly, DIALOG_STYLE_MSGBOX, "Donc vous avez fait /abus.","Vous trouver que d'attendre X nombres d'heures est injuste?\nDit vous qu'il y a des gens qui abusent des scripts mis en place pour le serveur et\nqui en abusent donc on doit sanctionner tout le monde a cause de certaines personnes.\nVous pouvez vous plaindre sur le forum %s mais à cause de gens qui abusent les actions entreprises par le staff et les développeurs peut être lourd ou injuste.\nNe soyer par surprit des réponses données.\nMerci de votre compréension et bonne journée.L'équipe de développement du serveur."," X ", "",SERVER_URL);
+	Dialog_Show(playerid, ShowOnly, DIALOG_STYLE_MSGBOX, "Donc vous avez fait /abus.","Vous trouver que d'attendre X nombres d'heures est injuste?\nDit vous qu'il y a des gens qui abusent des scripts mis en place pour le serveur et\nqui en abusent donc on doit sanctionner tout le monde a cause de certaines personnes.\nVous pouvez vous plaindre sur le forum %s,\n mais à cause de gens qui abusent les actions entreprises par le staff et les développeurs peut être lourd ou injuste.\nNe soyer par surprit des réponses données.\nMerci de votre compréension et bonne journée.\nL'équipe de développement du serveur."," X ", "",SERVER_URL);
 	return 1;
 }
 CMD:minutecheck(playerid,params[])

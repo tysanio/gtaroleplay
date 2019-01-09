@@ -132,6 +132,7 @@ Dialog:DIALOG_BOWLING_TIME(playerid,response,listitem,inputtext[])
 {
 	if(response)
     {
+		new count;
         switch(listitem)
         {
 			case 0:
@@ -139,45 +140,90 @@ Dialog:DIALOG_BOWLING_TIME(playerid,response,listitem,inputtext[])
 				GameTextForPlayer(playerid,"~y~+3 ~w~minutes",3000,1);
 				BowlingMinutes[playerid] += 3;
 				GiveMoney(playerid,-30);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 30;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 30 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 1:
         	{
         	    GameTextForPlayer(playerid,"~y~+5 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 5;
         	    GiveMoney(playerid,-50);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 50;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 50 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 2:
         	{
         	    GameTextForPlayer(playerid,"~y~+10 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 10;
         	    GiveMoney(playerid,-100);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 100;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 100 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 3:
         	{
         	    GameTextForPlayer(playerid,"~y~+25 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 25;
         	    GiveMoney(playerid,-250);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 250;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 250 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 4:
         	{
         	    GameTextForPlayer(playerid,"~y~+30 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 30;
         	    GiveMoney(playerid,-300);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 300;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 300 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
 		}
 		new str[150];
@@ -228,6 +274,7 @@ Dialog:DIALOG_ADD_TIME(playerid,response,listitem,inputtext[])
 {
 	if(response)
 	{
+		new count;
     	switch(listitem)
 	    {
         	case 0:
@@ -235,45 +282,90 @@ Dialog:DIALOG_ADD_TIME(playerid,response,listitem,inputtext[])
 				GameTextForPlayer(playerid,"~y~+3 ~w~minutes",3000,1);
 				BowlingMinutes[playerid] += 3;
 				GiveMoney(playerid,-30);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 30;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 30 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 1:
         	{
         	    GameTextForPlayer(playerid,"~y~+5 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 5;
         	    GiveMoney(playerid,-50);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 50;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 50 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 2:
         	{
         	    GameTextForPlayer(playerid,"~y~+10 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 10;
         	    GiveMoney(playerid,-100);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 100;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 100 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 3:
         	{
         	    GameTextForPlayer(playerid,"~y~+25 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 25;
         	    GiveMoney(playerid,-250);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 250;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 250 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
         	case 4:
         	{
         	    GameTextForPlayer(playerid,"~y~+30 ~w~minutes",3000,1);
         	    BowlingMinutes[playerid] += 30;
         	    GiveMoney(playerid,-300);
-				new moneyentrepriseid;
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += 300;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 300 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
         	}
 		}
 		new str[128];

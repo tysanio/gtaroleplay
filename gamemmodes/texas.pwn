@@ -3056,7 +3056,7 @@ public MinuteCheck()
 			PlayerData[i][pBankMoney] -= interettaxe;
 			moneyentreprisesave(moneyentrepriseid);
 			//compte épargne
-			new savingsgain = floatround((PlayerData[i][pSavings] * 0.01));
+			new savingsgain = floatround((PlayerData[i][pSavings] * 0.01)),count;
 			if(argent_entreprise[moneyentrepriseid][argentbanque] >= 0)
 			{
 			    if(savingsgain <= 10000)
@@ -3100,8 +3100,18 @@ public MinuteCheck()
 					{
 					    SendSalaireMessage(i, "Charges du vehicule louer {FF0000}-200$");
 					    PlayerData[i][pBankMoney] -= 200;
-						argent_entreprise[moneyentrepriseid][argentmafiazone4] +=200;
-						moneyentreprisesave(moneyentrepriseid);
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
+							count++;
+						}
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+						{
+							new aye = 200 / count;
+							if(FactionData[ii][factionacces][12] == 1)
+							{
+								FactionData[ii][factioncoffre] += aye;
+								Faction_Save(ii);
+							}
+						}
 					}
 	         		SendSalaireMessage(i, "Vous avez reçus votre salaire de {33CC33}%s{FFFFFF}$ il a été viré sur votre compte bancaire.", FormatNumber(paycheck));
 	         		SendSalaireMessage(i, "Vous payez {FF0000}%s{FFFFFF}$ de taxe sur le revenu.", FormatNumber(interettaxe));

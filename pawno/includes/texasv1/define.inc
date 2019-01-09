@@ -6,14 +6,14 @@
 #define SQL_USERNAME 															"root"
 #define SQL_DATABASE 															"samp2"
 //#define SQL_DATABASE 															"test"
-#define SQL_PASSWORD															""
+#define SQL_PASSWORD															"DkdY6JRosQwSYV76"
 //#define SQL_PASSWORD															""
 
 //Information serveur
-#define SERVER_NAME 	 														"[0.3.dl] In Real Life [RP]" //pour le nom du serveur
+#define SERVER_NAME 	 														"[0.3.dl] TEST[RP]" //pour le nom du serveur
 #define SERVER_URL 		 														"----------"
-#define SERVER_REVISION  														"Vice city build"
-#define LANGUAGE																"FranÃ§ais"
+#define SERVER_REVISION  														"Los Santos Build"
+#define LANGUAGE																"Français"
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
 //Couleur
@@ -176,14 +176,14 @@
 #define SendAnnonceMessage(%0,%1) \
 	SendClientMessageEx(%0,COLOR_ADMINCHAT,"[Annonce]:{FFFFFF}" %1)
 #define SendTelephoneMessage(%0,%1) \
-	SendClientMessageEx(%0,COLOR_YELLOW,"[TÃ©lÃ©phone]:{FFFFFF}" %1)
+	SendClientMessageEx(%0,COLOR_YELLOW,"[Téléphone]:{FFFFFF}" %1)
 #define SendBlackJackMessage(%0,%1) \
 	SendClientMessageEx(%0,COLOR_LIME,"[Croupier]: {FFFFFF}" %1)
 	
 #define PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
-//limitation de vitesse sur un vÃ©hicule abimer
-#define BE_MIN_HLS 																500.00 // SantÃ© en dessous de laquelle la machine est considÃ©rÃ© comme cassÃ©
-#define BE_MAX_SPD_VAR 															50 // la vitesse maximale peut Ãªtre changÃ©e
+//limitation de vitesse sur un véhicule abimer
+#define BE_MIN_HLS 																500.00 // Santé en dessous de laquelle la machine est considéré comme cassé
+#define BE_MAX_SPD_VAR 															50 // la vitesse maximale peut être changée
 #define BE_MAX_SPD 																BE_MAX_SPD_VAR*0.005
 #define GCASH                                                                   30
 //slot machine

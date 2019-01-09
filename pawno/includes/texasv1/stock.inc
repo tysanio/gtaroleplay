@@ -2623,11 +2623,20 @@ stock LeaveTaxi(playerid, driverid)
 {
 	if (driverid != INVALID_PLAYER_ID && IsPlayerConnected(driverid))
 	{
+		new count;
 	    GiveMoney(playerid, -PlayerData[playerid][pTaxiFee]);
-   		//GiveMoney(driverid,PlayerData[playerid][pTaxiFee]);
-   		new moneyentrepriseid;
-    	argent_entreprise[moneyentrepriseid][argentmafiazone4] +=PlayerData[playerid][pTaxiFee];
-        moneyentreprisesave(moneyentrepriseid);
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+		{
+			new aye = 200 / count;
+			if(FactionData[ii][factionacces][12] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a payé %d$ au chauffeur de taxi.", ReturnName(playerid, 0),PlayerData[playerid][pTaxiFee]);
 	    PlayerData[playerid][pTaxiFee] = 0;
 	    PlayerData[playerid][pTaxiTime] = 0;
@@ -8963,7 +8972,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 	{
 	    static skins[8], string[512];
 		string[0] = 0;
-		if (FactionData[factionid][factionacces][0] == 1)
+		if (FactionData[factionid][factionacces][0] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][3] == 1)
 	    {
 	        switch (listitem)
 	        {
@@ -9019,7 +9028,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9029,7 +9038,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, policecv1, DIALOG_STYLE_MSGBOX, "C.V - police", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][2] == 1)
+					else if (FactionData[factionid][factionacces][2] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);	
@@ -9037,7 +9046,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9047,7 +9056,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, fbicv1, DIALOG_STYLE_MSGBOX, "C.V - F.B.I", szString, "Ok", "Supprimer");
 						}		
 					}
-					if (FactionData[factionid][factionacces][3] == 1)
+					else if (FactionData[factionid][factionacces][3] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9055,7 +9064,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9065,7 +9074,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, swatcv1, DIALOG_STYLE_MSGBOX, "C.V - swat", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][4] == 1)
+					else if (FactionData[factionid][factionacces][4] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9073,7 +9082,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9083,7 +9092,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, urgentistecv1, DIALOG_STYLE_MSGBOX, "C.V - Urgentiste", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][6] == 1)
+					else if (FactionData[factionid][factionacces][6] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 						return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9091,7 +9100,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9139,7 +9148,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9149,7 +9158,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, mecanozone3cv1, DIALOG_STYLE_MSGBOX, "C.V - mecanozone3", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][9] == 1)
+					else if (FactionData[factionid][factionacces][9] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9157,7 +9166,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9167,7 +9176,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, journalistecv1, DIALOG_STYLE_MSGBOX, "C.V - Journaliste", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][8] == 1)
+					else if (FactionData[factionid][factionacces][8] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 						return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9175,7 +9184,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9185,7 +9194,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, mecanozone4cv1, DIALOG_STYLE_MSGBOX, "C.V - mecanozone4", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][5] == 1)
+					else if (FactionData[factionid][factionacces][5] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9193,7 +9202,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9203,7 +9212,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, livraisonbizcv1, DIALOG_STYLE_MSGBOX, "C.V - livraison magasin", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][12] == 1)
+					else if (FactionData[factionid][factionacces][12] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9211,7 +9220,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
@@ -9221,7 +9230,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, taxicv1, DIALOG_STYLE_MSGBOX, "C.V - taxi", szString, "Ok", "Supprimer");
 						}
 					}
-					if (FactionData[factionid][factionacces][10] == 0)
+					else if (FactionData[factionid][factionacces][10] == 0)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 						return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9229,7 +9238,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						mysql_query(1, query);
 						if(rows == 0)
 						{
-							SendClientMessage(playerid, -1, "Il y a pas de curriculum vitae");
+							SendErrorMessage(playerid,"Il y a pas de curriculum vitae");
 							return 1;
 						}
 						else
