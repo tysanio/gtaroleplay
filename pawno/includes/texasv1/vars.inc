@@ -536,7 +536,8 @@ enum factionData {
 	factionAmmo[10],
 	Text3D:factionText3D,
 	factionPickup,
-	factionacces[15]
+	factionacces[15],
+	factioncoffre
 };
 enum arrestPoints {
 	arrestID,
