@@ -3147,8 +3147,18 @@ public MinuteCheck()
 					{
 					    SendSalaireMessage(i, "Charges du vehicule louer {FF0000}-200$");
 					    PlayerData[i][pBankMoney] -= 200;
-						argent_entreprise[moneyentrepriseid][argentmafiazone4] +=200;
-						moneyentreprisesave(moneyentrepriseid);
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+							count++;
+						}
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+						{
+							new aye = 200 / count;
+							if(FactionData[ii][factionacces][11] == 1)
+							{
+								FactionData[ii][factioncoffre] += aye;
+								Faction_Save(ii);
+							}
+						}
 					}
 					moneyentreprisesave(moneyentrepriseid);
 	         		SendSalaireMessage(i, "Vous avez reçus votre salaire de {33CC33}%s{FFFFFF}$ il a été viré sur votre compte bancaire.", FormatNumber(paycheck));
@@ -3183,8 +3193,18 @@ public MinuteCheck()
 			{
 			    SendSalaireMessage(i, "Charges du vehicule louer {FF0000}-200$");
 			    PlayerData[i][pBankMoney] -= 200;
-				argent_entreprise[moneyentrepriseid][argentmafiazone4] +=200;
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 200 / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			moneyentreprisesave(moneyentrepriseid);
          	SendSalaireMessage(i, "Vous avez reçus votre salaire de {33CC33}%s{FFFFFF}$ il a été viré sur votre compte bancaire.", FormatNumber(paycheck));
@@ -13397,7 +13417,7 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
     {
 	    if (FactionData[facass][factionacces][12] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
-		if (argent_entreprise[moneyentrepriseid][argentmafiazone4] < 7500)
+		if (FactionData[facass][factioncoffre] < 7500)
 		    return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (minimum 7500$)");
 		if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 		Dialog_Show(playerid, commande1, DIALOG_STYLE_LIST,"Vous-vouler commander quoi?","Commander pièce d'arme blanche\nCommander pièce de pistolet\nCommander pièce d'smg\nCommander pièce de shotgun\nCommander pièce de rifle\nCommander Matos", "Fermer", "");
@@ -13514,10 +13534,12 @@ public commandlunch(playerid)
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
+    	FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des boites de matos a été livré a %s.", GetLocation(x,y,z)); }
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+		{Faction_Save(ii);}
 	}
-	argent_entreprise[moneyentrepriseid][argentmafiazone4] -= 5000;
 	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
 	moneyentreprisesave(moneyentrepriseid);
 }
@@ -13532,12 +13554,14 @@ public commandlunchkevlar(playerid)
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
+    	FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des kevlar a été livré a %s.", GetLocation(x,y,z)); }
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+		{Faction_Save(ii);}
 	}
 	kev = DropItem("Gilet par balles","Commande",19142, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentpolice] -= 5000;
 	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
 	moneyentreprisesave(moneyentrepriseid);
 }
@@ -13552,12 +13576,14 @@ public commandlunchsoins(playerid)
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
+    	FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des trousses de soins a été livré a %s.", GetLocation(x,y,z)); }
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+		{Faction_Save(ii);}
 	}
 	kev = DropItem("Trousse de soin","Commande",1580, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentmedecin] -= 5000;
 	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
 	moneyentreprisesave(moneyentrepriseid);
 }
@@ -13572,12 +13598,14 @@ public commandlunchpaint(playerid)
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
+    	FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des bombonnes de peinture a été livré a %s.", GetLocation(x,y,z)); }
 	}
 	kev = DropItem("Bombe de peinture","Commande",365, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentmecanozone4] -= 5000;
+	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+	{Faction_Save(ii);}
 	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
 	moneyentreprisesave(moneyentrepriseid);
 }
@@ -13594,10 +13622,12 @@ public commandlunchoutils(playerid)
     	new facass1 = PlayerData[i][pFaction];
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des boites à outils a été livré a %s.", GetLocation(x,y,z)); }
+		FactionData[facass1][factioncoffre] -= 5000;
 	}
 	kev = DropItem("Boite a outils","Commande",19921, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+	{Faction_Save(ii);}
 	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
 	moneyentreprisesave(moneyentrepriseid);
 }
@@ -13612,12 +13642,14 @@ public commandlunchnos(playerid)
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
+		FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des bonbonnes de nos a été livré a %s.", GetLocation(x,y,z)); }
 	}
 	kev = DropItem("Bonbonne de NOS","Commande",1010, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+	{Faction_Save(ii);}
 	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
 	moneyentreprisesave(moneyentrepriseid);
 }
