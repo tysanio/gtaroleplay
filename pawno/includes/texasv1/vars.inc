@@ -1192,7 +1192,8 @@ new const g_arrInteriorData[][e_InteriorData] = {
 	{"Trailer park boys",1,2334.9458, -1047.7510,1043.7659},
 	{"Pompier",1,361.2743, 878.6762, 1033.5049},
 	{"Bureau Moderne",5,1543.1100,-1355.8649,226.4853},
-	{"WareHouse",10,1471.0497, -520.2286, 992.0684}
+	{"WareHouse",10,1471.0497, -520.2286, 992.0684},
+	{"Appartement Gros Luxe",12,1518.0410,-1099.2505,129.5806}
 };
 
 /*new const Float:g_arrDrivingCheckpoints[][] = { //version vc

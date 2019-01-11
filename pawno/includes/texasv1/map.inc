@@ -2538,8 +2538,6 @@ stock CreateServerObjects()
 	CreateDynamicObject(3657, 253.42163, 91.45544, 1001.96350,   0.00000, 0.00000, 0.00000,-1,-1);
 	CreateDynamicObject(3657, 270.04477, 79.61166, 1000.55725,   0.00000, 0.00000, 269.56738,-1);
 	//maison
-    //Интерьер квартиры
-    //Стена 1
     new StenaKV1[6],StenaKV2[8],StenaKV3[9],StenaKV4[7],StenaKV5[19],PolKV[6],PotolokKV[6];
     StenaKV1[0] = CreateDynamicObject(19363,1491.2714844,-1723.7744141,1362.7929688,0.0000000,0.0000000,270.0000000,-1,-1); //object(wall011) (1)
     StenaKV1[1] = CreateDynamicObject(19363,1484.8559570,-1723.7744141,1362.7929688,0.0000000,0.0000000,270.0000000,-1,-1); //object(wall011) (2)
@@ -3448,7 +3446,6 @@ stock CreateServerObjects()
 	SetDynamicObjectMaterial(mariaintaa, 0, 14674, "civic02cj", "ab_hosWallUpr", 0);
 	mariaintaa = CreateDynamicObjectEx(19362,1459.409,-1742.904,1049.948,0.000,0.000,0.000,250.000,250.000);
 	SetDynamicObjectMaterial(mariaintaa, 0, 4830, "airport2", "brnstucco1", 0);
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	mariaintaa = CreateDynamicObjectEx(19461,1468.382,-1728.403,1049.302,0.000,0.000,90.000,250.000,250.000);
 	mariaintaa = CreateDynamicObjectEx(19461,1468.390,-1724.725,1049.302,0.000,0.000,90.000,250.000,250.000);
 	mariaintaa = CreateDynamicObjectEx(19461,1458.755,-1728.403,1049.302,0.000,0.000,90.000,250.000,250.000);
@@ -3880,7 +3877,6 @@ stock CreateServerObjects()
 	CreateDynamicObject(19377, 1372.36499, -1587.05933, 1099.40002,   0.00000, 90.00000, 0.00000,-1,-1);
 	CreateDynamicObject(19377, 1361.84973, -1587.06177, 1099.40002,   0.00000, 90.00000, 0.00000,-1,-1);
 	CreateDynamicObject(19377, 1351.35681, -1587.06372, 1099.40002,   0.00000, 90.00000, 0.00000,-1,-1);
-	//auto-école
 	//Job boucher
 	CreateDynamicObject(1501, -2030.47656, -120.06250, 1034.15625,   0.00000, 0.00000, 0.00000);
 	CreateDynamicObject(1721, -2032.83594, -119.60160, 1034.16406,   0.00000, 0.00000, 0.00000);
@@ -3922,6 +3918,7 @@ stock CreateServerObjects()
 	CreateDynamicObject(950, -2021.54688, -113.81250, 1034.70313,   0.00000, 0.00000, 90.00000);
 	CreateDynamicObject(14532, -2026.81250, -113.63280, 1035.14844,   0.00000, 0.00000, -180.00000);
 	CreateDynamicObject(1501, -2026.17188, -103.16410, 1034.25781,   0.00000, 0.00000, 180.00000);
+	//bureau?
 	CreateDynamicObject(2804,942.4840088,2160.7519531,  1011.2860107,0.0000000,0.0000000,0.0000000,-1,-1); //object(cj_meat_1) (1)
 	CreateDynamicObject(2806,942.3671875,2164.9287109,  1011.2479858,0.0000000,0.0000000,0.0000000,-1,-1); //object(cj_meat_2) (1)
 	CreateDynamicObject(2804,942.4099731,2167.0400391,  1011.2390137,0.0000000,0.0000000,280.0000000,-1,-1); //object(cj_meat_1) (2)
