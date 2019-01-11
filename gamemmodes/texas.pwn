@@ -2350,20 +2350,12 @@ public OnCharacterLookup(extraid, id, character[])
 	if (!IsPlayerConnected(extraid))
 	    return 0;
 
-	static
-	    rows,
-	    fields,
-	    string[128];
-
+	static rows,fields,string[128];
 	cache_get_data(rows, fields, g_iHandle);
 
 	if (rows)
 	{
-	    static
-	        admin,
-	        skin,
-	        createDate,
-	        lastLogin;
+	    static admin,skin,createDate,lastLogin;
 
 		admin = cache_get_field_int(0, "Admin");
 		skin = cache_get_field_int(0, "Skin");
@@ -6172,13 +6164,14 @@ public OnPlayerEnterCheckpoint(playerid)
         RemovePlayerAttachedObject(playerid,4);
         ApplyAnimation(playerid,"CARRY","putdwn105",4.1,0,1,1,1,1);
         SetPVarInt(playerid,"ForestKG", GetPVarInt(playerid,"ForestKG")+1);
-        SendJOBMessage(playerid, "Vous avez apporté 1 barril il contient 10 kg d'huile. Nombre de kg d'huile produits par vous: %d",GetPVarInt(playerid,"ForestKG"));
+        SendJOBMessage(playerid, "Vous avez apporté 1 baril il contient 10 kg d'huile. Nombre de kg d'huile produits par vous: %d",GetPVarInt(playerid,"ForestKG"));
         new stockjobinfoid,P = random(sizeof(cForestJob));
 		info_stockjobinfo[stockjobinfoid][stockjobinfopetrol] += 10;
 		stockjobinfosave(stockjobinfoid);
 		Updatepetrol();
         SetPlayerCheckpoint(playerid,cForestJob[P][0],cForestJob[P][1],cForestJob[P][2],2.0);
         SetPVarInt(playerid,"pForestJob",1);
+        ClearAnimations(playerid, 1);
         return 1;
     }
     //job doc fortcarson
@@ -6239,7 +6232,7 @@ public OnPlayerEnterCheckpoint(playerid)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
-		   	if(info_stockjobinfo[stockjobinfoid][stockjobinfopetrol] < 50) return SendErrorMessage(playerid,"Il a pas assez de barril de pétrol");
+		   	if(info_stockjobinfo[stockjobinfoid][stockjobinfopetrol] < 50) return SendErrorMessage(playerid,"Il a pas assez de baril de pétrol");
 			SendEntrepriseMessage(playerid,"Chargement en cours");
       		TogglePlayerControllable(playerid, 0);
       		SetTimerEx("jobchargement", 10000, false, "d", playerid);
@@ -6462,8 +6455,8 @@ public jobchargement(playerid)
 		quantiterdejob[playerid] = 50;
 		livraisonjob[playerid] = 11;
 		DisablePlayerCheckpoint(playerid);
-		SendEntrepriseMessage(playerid,"Votre vehicule est chargé de barrils de pétrol. Aller au point de déchargement");
-        SendEntrepriseMessage(playerid,"50 barrils de pétrole chargé");
+		SendEntrepriseMessage(playerid,"Votre vehicule est chargé de barils de pétrol. Aller au point de déchargement");
+        SendEntrepriseMessage(playerid,"50 barils de pétrole chargé");
 		SetPlayerCheckpoint(playerid,2494.6187,-2492.1155,13.2144,8.0);
 		stockjobinfosave(stockjobinfoid);
 		Updatepetrol();
@@ -7145,8 +7138,8 @@ public OnPlayerUpdate(playerid)
  	  		fSpeed = floatmul(floatsqroot((fVelocity[0] * fVelocity[0]) + (fVelocity[1] * fVelocity[1]) + (fVelocity[2] * fVelocity[2])), 180.0);
 			if (fDamage < 0.0) fDamage = 0.0;
 			else if (fDamage > 100.0) fDamage = 100.0;
-			format(str, sizeof(str), "~r~%.0f", fSpeed);
-			//PlayerTextDrawSetString(playerid,PlayerData[playerid][pTextdraws][88], str);
+			format(str, sizeof(str), "%.0f Km/h", fSpeed);
+			PlayerTextDrawSetString(playerid,PlayerData[playerid][pTextdraws][88], str);
  			new idk = Car_GetID(vehicleid);
  			if(CarData[idk][carvie]  < 500) {PlayerTextDrawShow(playerid,PlayerData[playerid][pTextdraws][95]);}
  			if(CarData[idk][carvie]  > 501) {PlayerTextDrawHide(playerid,PlayerData[playerid][pTextdraws][95]);}
@@ -7502,12 +7495,10 @@ public OnPlayerDisconnect(playerid, reason)
 public OnGameModeInit()
 {
 	//partie fs oubliger
-	/*SendRconCommand("unloadfs pool");
+	SendRconCommand("unloadfs pool");
     SendRconCommand("loadfs pool");
     SendRconCommand("unloadfs soccer");
     SendRconCommand("loadfs soccer");
-    SendRconCommand("unloadfs compteur");
-    SendRconCommand("loadfs compteur");*/
     //fin des fs oubliger
     AntiDeAMX();
 	static arrVirtualWorlds[2000]; /*id = -1;*/
@@ -13172,8 +13163,8 @@ public AFK()
 				    AFKMin[i]++;
 				    if(AFKMin[i] >=  AFKMaxMin)
 				    {
-		   			   	SendErrorMessage(i,"Afk trop longtemps kick");
-		   			   	Kick(i);
+		   			   	SendErrorMessage(i,"Afk trop longtemps kick.");
+		   			   	KickEx(i);
 					}
 				}
   				AFKPos[i][0] = x;

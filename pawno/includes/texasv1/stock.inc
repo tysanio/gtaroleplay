@@ -13226,9 +13226,9 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][82], 0);
 	
 	//compteur tysanio
-	PlayerData[playerid][pTextdraws][84]= CreatePlayerTextDraw(playerid,613.600280, 260.842163, "usebox");
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][84], 0.000000, 7.225063);
-	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][84], 487.200042, 0.000000);
+	PlayerData[playerid][pTextdraws][84]= CreatePlayerTextDraw(playerid,634.800354, 357.908843, "usebox");
+	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][84], 0.000000, 8.865058);
+	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][84], 488.799865, 0.000000);
 	PlayerTextDrawAlignment(playerid,PlayerData[playerid][pTextdraws][84], 1);
 	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][84], 0);
 	PlayerTextDrawUseBox(playerid,PlayerData[playerid][pTextdraws][84], true);
@@ -13260,9 +13260,9 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][87], 1);
 	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][87], 51);
 	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][87], 1);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][87], 1);
+	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][87], 1);*/
 
-	PlayerData[playerid][pTextdraws][88] = CreatePlayerTextDraw(playerid,310.999755, 364.875518, "300");
+	PlayerData[playerid][pTextdraws][88] = CreatePlayerTextDraw(playerid,522.800048, 391.253265, "360 Km/h");
 	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][88], 0.449999, 1.600000);
 	PlayerTextDrawAlignment(playerid,PlayerData[playerid][pTextdraws][88], 1);
 	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][88], -1);
@@ -13270,9 +13270,9 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][88], 1);
 	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][88], 51);
 	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][88], 1);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][88], 1);*/
+	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][88], 1);
 
-	PlayerData[playerid][pTextdraws][89] = CreatePlayerTextDraw(playerid, 505.999938, 279.253326, "00000000");
+	PlayerData[playerid][pTextdraws][89] = CreatePlayerTextDraw(playerid, 519.599853, 373.831054, "00000000");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][89], 0.449999, 1.600000);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][89], 1);
 	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][89], -1);
@@ -13291,7 +13291,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][90], 0);
 	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][90], 4);
 
-	/*PlayerData[playerid][pTextdraws][91] = CreatePlayerTextDraw(playerid,422.800079, 392.746673, "hud:radar_light");
+	/*PlayerData[playerid][pTextdraws][91] = CreatePlayerTextDraw(playerid,537.199951, 413.155639, "hud:radar_light");
 	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][91], 0.449999, 1.600000);
 	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][91], 25.199998, 25.386680);
 	PlayerTextDrawAlignment(playerid,PlayerData[playerid][pTextdraws][91], 1);
@@ -13302,7 +13302,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][91], 4);
 	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][91], 1);*/
 
-	PlayerData[playerid][pTextdraws][92] = CreatePlayerTextDraw(playerid, 548.000183, 299.164489, "hud:radar_gangN");
+	PlayerData[playerid][pTextdraws][92] = CreatePlayerTextDraw(playerid, 561.200866, 411.164581, "hud:radar_gangN");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][92], 0.000000, 0.000000);
 	PlayerTextDrawTextSize(playerid, PlayerData[playerid][pTextdraws][92], 22.000007, 17.919988);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][92], 1);
@@ -13311,7 +13311,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][92], 0);
 	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][92], 4);
 
-	PlayerData[playerid][pTextdraws][93] = CreatePlayerTextDraw(playerid, 520.799987, 298.666687, "hud:radar_light");
+	PlayerData[playerid][pTextdraws][93] = CreatePlayerTextDraw(playerid, 537.199951, 413.155639, "hud:radar_light");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][93], 0.000000, 0.000000);
 	PlayerTextDrawTextSize(playerid, PlayerData[playerid][pTextdraws][93], 22.800022, 20.906669);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][93], 1);
@@ -13320,7 +13320,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][93], 0);
 	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][93], 4);
 
-	PlayerData[playerid][pTextdraws][94] = CreatePlayerTextDraw(playerid, 548.000183, 299.164489, "/");
+	PlayerData[playerid][pTextdraws][94] = CreatePlayerTextDraw(playerid, 561.200866, 411.164581, "/");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][94], 0.449999, 1.600000);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][94], 1);
 	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][94], 16711935);
@@ -13330,7 +13330,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][94], 1);
 	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][94], 1);
 
-	PlayerData[playerid][pTextdraws][95] = CreatePlayerTextDraw(playerid, 498.800079, 300.657714, "hud:radar_girlfriend");
+	PlayerData[playerid][pTextdraws][95] = CreatePlayerTextDraw(playerid, 514.400146, 414.151000, "hud:radar_girlfriend");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][95], 0.000000, 0.000000);
 	PlayerTextDrawTextSize(playerid, PlayerData[playerid][pTextdraws][95], 18.400007, 14.933341);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][95], 1);
@@ -13339,7 +13339,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][95], 0);
 	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][95], 4);
 
-	PlayerData[playerid][pTextdraws][96] = CreatePlayerTextDraw(playerid, 494.399963, 262.826660, "Essence: 100%");
+	PlayerData[playerid][pTextdraws][96] = CreatePlayerTextDraw(playerid, 507.200073, 357.404479, "Essence: 100%");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][96], 0.449999, 1.600000);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][96], 1);
 	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][96], -1);
@@ -14772,12 +14772,12 @@ GetNumberOwner(number)
 }
 IsPlayerInsideTaxi(playerid)
 {
-	new vehicleid = GetPlayerVehicleID(playerid),facass = PlayerData[playerid][pFaction];
+	new vehicleid = GetPlayerVehicleID(playerid);
 	if (GetVehicleModel(vehicleid) == 420 || GetVehicleModel(vehicleid) == 438)
 	{
 	    foreach (new i : Player)
 		{
-			if ((i != playerid) && (FactionData[facass][factionacces][12] == 1 && PlayerData[i][pTaxiDuty] && GetPlayerState(i) == PLAYER_STATE_DRIVER) && GetPlayerVehicleID(i) == vehicleid)
+			if ((i != playerid) && GetPlayerVehicleID(i) == vehicleid)
 				return 1;
 		}
 	}
@@ -15232,9 +15232,7 @@ stock FlashTextDrawEx(playerid, PlayerText:textid, amount = 1)
 }
 stock RestartCheck()
 {
-	static
-	    time[3],
-		string[32];
+	static time[3],string[32];
 	if (g_ServerRestart == 1 && !g_RestartTime)
 	{
 		foreach (new i : Player) {

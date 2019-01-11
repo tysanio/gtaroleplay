@@ -4153,8 +4153,6 @@ CMD:racrocher(playerid, params[])
         SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s raccroche son téléphone", ReturnName(playerid, 0));
         return 1;
 	}
-	if (targetid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Il n'y a pas d'appels.");
 	if (PlayerData[playerid][pIncomingCall])
 	{
 	    SendClientMessage(playerid, COLOR_YELLOW, "[Téléphone]:{FFFFFF} Vous n'avez pas répondu");
@@ -4168,6 +4166,8 @@ CMD:racrocher(playerid, params[])
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s raccroche son téléphone.", ReturnName(playerid, 0));
 	    SendNearbyMessage(targetid, 30.0, COLOR_PURPLE, "** %s raccroche son téléphone.", ReturnName(targetid, 0));
 	}
+	if (targetid == INVALID_PLAYER_ID)
+	    return SendErrorMessage(playerid, "Il n'y a pas d'appels.");
 	PlayerData[playerid][pIncomingCall] = 0;
 	PlayerData[targetid][pIncomingCall] = 0;
 	PlayerData[playerid][pCallLine] = INVALID_PLAYER_ID;
@@ -4747,7 +4747,7 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces3", true))
 	{
-	    new acces;
+		new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces3 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -6618,15 +6618,15 @@ CMD:channel(playerid, params[])
 }
 CMD:r(playerid, params[])
 {
+	new facass = PlayerData[playerid][pFaction];
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/r [Radio IC]");
     if (!Inventory_HasItem(playerid, "Talkie-Walkie"))
 	    return SendErrorMessage(playerid, "Vous devez avoir une radio portable.");
+	if(PlayerData[playerid][pChannel] == 911 && FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Ceci est la fréquence de département de la police seulement.");
 	if (!PlayerData[playerid][pChannel])
 	    return SendErrorMessage(playerid, "Votre radio n'est pas configurée (/channel).");
 	static string[128];
-	new facass = PlayerData[playerid][pFaction];
-	if(PlayerData[playerid][pChannel] == 911 && FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Ceci est la fréquence de département de la police seulement.");
 	if (strlen(params) > 64)
 	{
 		format(string, sizeof(string), "** [RADIO: %d] %s: %.64s",PlayerData[playerid][pChannel],ReturnName(playerid, 0), params);
@@ -9390,7 +9390,7 @@ CMD:appeler(playerid, params[])
 		DisablePlayerCheckpoint(playerid);
 		livraisonjob[playerid] = -1;
 		quantiterdejob[playerid] = 0;
-		Dialog_Show(playerid, Livraison, DIALOG_STYLE_LIST,"Veuiller choisir le type de livraison","Bois\nBarril de pétrole\nViande\nCaisse dock\nCaisse carriste\nCaisse Manutentionnaire\nPierre de la mine\nPiece électronique\nPièce d'armes\nMeuble","Valider", "Quitter");
+		Dialog_Show(playerid, Livraison, DIALOG_STYLE_LIST,"Veuiller choisir le type de livraison","Bois\nBaril de pétrole\nViande\nCaisse dock\nCaisse carriste\nCaisse Manutentionnaire\nPierre de la mine\nPiece électronique\nPièce d'armes\nMeuble","Valider", "Quitter");
 	}
 	else if (number == 1002)
 	{
