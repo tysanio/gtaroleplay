@@ -9295,10 +9295,15 @@ Dialog:LockerMoneyRetirer(playerid,response,listitem,inputtext[])
 		return 0;
 	if (response)
 	{
+		if (amount < 1 || amount > FactionData[factionid][factioncoffre])
+		{
+			SendErrorMessage(playerid,"Vous n'avez pas asser d'argent dans le coffre vous avez %d",FactionData[factionid][factioncoffre]);
+		}
 		SendServerMessage(playerid,"Vous avez retirer %d du coffre faction.",amount);
 		FactionData[factionid][factioncoffre] -= amount;
 		GiveMoney(playerid, amount);
 		Faction_Save(factionid);
+		Log_Write("logs/faction_coffre.txt", "%s %s a prie %d", ReturnDate(), ReturnName(playerid, 0),amount);
 		Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);
 	}
 	return 1;
@@ -9314,6 +9319,7 @@ Dialog:LockerMoneyAjouter(playerid,response,listitem,inputtext[])
 		FactionData[factionid][factioncoffre] += amount;
 		GiveMoney(playerid, -amount);
 		Faction_Save(factionid);
+		Log_Write("logs/faction_coffre.txt", "%s %s a ajouter %d", ReturnDate(), ReturnName(playerid, 0),amount);
 		Dialog_Show(playerid, LockerMoney, DIALOG_STYLE_LIST, "Coffre d'argent","Argent dans le coffre %d\nRetirer du coffre\nMettre dans le coffre", "Choisir", "Annuler",FactionData[factionid][factioncoffre]);
 	}
 	return 1;
@@ -13282,7 +13288,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][89], 1);
 	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][89], 1);
 
-	PlayerData[playerid][pTextdraws][90] = CreatePlayerTextDraw(playerid, 574.799865, 295.182220, "hud:radar_impound");
+	PlayerData[playerid][pTextdraws][90] = CreatePlayerTextDraw(playerid, 590.399780, 411.662109, "hud:radar_impound");
 	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][90], 0.000000, 0.000000);
 	PlayerTextDrawTextSize(playerid, PlayerData[playerid][pTextdraws][90], 22.800050, 21.404449);
 	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][90], 1);

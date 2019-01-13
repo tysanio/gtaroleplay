@@ -2965,7 +2965,7 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentmecanozone4] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if (FactionData[factionid][factionacces][12] == 1 && argent_entreprise[moneyentrepriseid][argentmafiazone4] >= 0)
+            else if (FactionData[factionid][factionacces][12] == 1 && FactionData[factionid][factioncoffre] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
 				{ paycheck = info_salairetaxi[rank][salairetaxi1];
@@ -3012,7 +3012,7 @@ public MinuteCheck()
 				else if (PlayerData[i][pFactionRank] == 15)
 				{ paycheck = info_salairetaxi[rank][salairetaxi15];
  				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentmafiazone4] -= paycheck;
+				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
 			//bracelet electronic
