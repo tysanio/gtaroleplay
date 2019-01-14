@@ -13045,3 +13045,19 @@ CMD:event(playerid,params[])
 	}
 	return 1;
 }
+//job gaz
+CMD:gaz(playerid, params[])
+{
+	new id = Job_NearestPoint(playerid),string[128],kanistrab = 20,stockjobinfoid;
+    if(OnGener[playerid] == 0 || JobData[id][jobType] != JOB_GENERATEUR) return SendClientMessage(playerid, COLOR_WHITE, "{FF0000}[ERREUR]{FFFFFF} Vous n'avez pas commencé à travailler.");
+    if(OnBenz[playerid] == 1) return 1;
+    if(info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator] <= 0) return SendErrorMessage(playerid,"Il n'y a plus d'essence dans les citerne");
+    format(string, sizeof(string), "Vous avez remplis votre bidon d'essence de %d litres.",kanistrab);
+    SendClientMessage(playerid, COLOR_WHITE, string);
+    info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator] -= kanistrab;
+	stockjobinfosave(stockjobinfoid);
+	Updateessencegenerator();
+    SetPlayerAttachedObject(playerid,3, 1650, 6, 0.013610, -0.021393, -0.144862, 2.354303, 354.413848, 0.219168, 3.034477, 3.000000, 3.000000);
+    OnBenz[playerid] = 1;
+	return 1;
+}

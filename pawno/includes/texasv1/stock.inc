@@ -3770,6 +3770,10 @@ Faction_Save(factionid)
 	{
 		format(query, sizeof(query), "%s, `factionacces%d` = '%d'", query, i + 1, FactionData[factionid][factionacces][i], i + 1);
 	}
+	for (new i = 0; i < 15; i ++)
+	{
+		format(query, sizeof(query), "%s, `SalaireRank%d` = '%d'", query, i + 1, FactionData[factionid][factionsalaire][i], i + 1);
+	}
 	format(query, sizeof(query), "%s WHERE `factionID` = '%d'",
 		query,
 		FactionData[factionid][factionID]
@@ -4279,6 +4283,11 @@ Job_Refresh(jobid)
 		}
         else if (JobData[jobid][jobType] == 12) {
 			format(string2,sizeof(string2),"[Bucheron]\n{FFFFFF}Tapez /bucheron pour commencer.\n Stock de bois %d",info_stockjobinfo[stockjobinfoid][stockjobinfobois]);
+		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel(string2, COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
+			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1239, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
+		}
+        else if (JobData[jobid][jobType] == 15) {
+			format(string2,sizeof(string2),"[Générateur]\n{FFFFFF}Tapez /gaz pour commencer.\n En stock: {ff3300}%d litre d'essence{ffffff}",info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator]);
 		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel(string2, COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1239, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 		}

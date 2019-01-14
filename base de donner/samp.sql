@@ -847,7 +847,22 @@ CREATE TABLE IF NOT EXISTS `factions` (
   `factionacces12` int(4) NOT NULL DEFAULT '0',
   `factionacces13` int(4) NOT NULL DEFAULT '0',
   `factionacces14` int(4) NOT NULL DEFAULT '0',
-  `factionacces15` int(4) NOT NULL DEFAULT '0'
+  `factionacces15` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank1` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank2` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank3` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank4` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank5` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank6` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank7` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank8` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank9` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank10` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank11` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank12` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank13` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank14` int(4) NOT NULL DEFAULT '0',
+  `SalaireRank15` int(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 

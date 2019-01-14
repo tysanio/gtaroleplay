@@ -537,7 +537,8 @@ enum factionData {
 	Text3D:factionText3D,
 	factionPickup,
 	factionacces[15],
-	factioncoffre
+	factioncoffre,
+	factionsalaire[15]
 };
 enum arrestPoints {
 	arrestID,
@@ -2174,7 +2175,6 @@ new OnGen5 = 0;
 new Text3D: gen5text;
 new Text3D: gen5money;
 new OnBenz[MAX_PLAYERS]; // Max litres de carburant dans le lecteur de cartouche.
-new gaspickup; // Pick-up bidons pour le carburant.
 new genpickup[5]; // Pick-up générateurs.
 //new dambapickup[2]; // Entrée / Sortie (DAM).
 new threesecondtimer;

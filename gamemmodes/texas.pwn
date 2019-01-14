@@ -772,6 +772,10 @@ public Faction_Load()
 		    format(str, sizeof(str), "factionacces%d", j + 1);
 		    FactionData[i][factionacces][j] = cache_get_field_int(i, str);
 		}
+		for (new j = 0; j < 15; j ++) {
+		    format(str, sizeof(str), "SalaireRank%d", j + 1);
+		    FactionData[i][factionsalaire][j] = cache_get_field_int(i, str);
+		}
 		Faction_Refresh(i);
 	}
 	return 1;
@@ -7694,11 +7698,7 @@ public OnGameModeInit()
     rabot[8] = CreateDynamicPickup(18635, 2, 2556.1992,-1295.8508,1044.1250);
     rabot[9] = CreateDynamicPickup(18635, 2, 2558.5471,-1295.8512,1044.1250);
     //job generator
-    gaspickup = CreateDynamicPickup(1650,2,-2034.6775,-1013.0289,32.1719,-1);
-    new stringi2[100],essencegeneratorstokc = info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator];
-    format(stringi2, sizeof(stringi2), "{FFD700}Entrepôt d'essence{FFFFFF}\nEn stock: {ff3300}%d litre d'essence{ffffff}",essencegeneratorstokc);
-	stockinfoessencegenerator = CreateDynamicObject(19805,-962.6293, 1946.4481, 9.9594,0.0000, 0.0000, 90.5005);
-	SetDynamicObjectMaterialText(stockinfoessencegenerator, 0, stringi2, OBJECT_MATERIAL_SIZE_256x128,"Arial", 21, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
+    new stringi2[128];
 	gen1 = info_stockjobinfo[stockjobinfoid][stockjobinfocentral1];
 	format(stringi2, sizeof(stringi2), "Pour commencer a travailler Tapez /gason\nGENERATEUR [N°1]\n\nStatut: {ff3300}Aucun service{ffffff}\n\n\nCarburant %d/300000",gen1);
 	gen1text = CreateDynamic3DTextLabel(stringi2,0xFFFF00FF,-956.9048,1943.4753,9.0000,15.0);
@@ -12032,20 +12032,6 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
         else Dialog_Show(playerid,petroljob1,0,"Travail pétrolier","{ffffff}Voulez-vous quitter le travail","Oui","Non");
     }
     //job generator
-    if(pickupid == gaspickup)
-    {
-        new string[128],kanistrab = 20,stockjobinfoid;
-        if(OnGener[playerid] == 0) return SendClientMessage(playerid, COLOR_WHITE, "{FF0000}[ERREUR]{FFFFFF} Vous n'avez pas commencé à travailler.");
-        if(OnBenz[playerid] == 1) return 1;
-        if(info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator] <= 0) return SendErrorMessage(playerid,"Il n'y a plus d'essence dans les citerne");
-        format(string, sizeof(string), "Vous avez remplis votre bidon d'essence de %d litres.",kanistrab);
-        SendClientMessage(playerid, COLOR_WHITE, string);
-        info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator] -= kanistrab;
-		stockjobinfosave(stockjobinfoid);
-		Updateessencegenerator();
-        SetPlayerAttachedObject(playerid,3, 1650, 6, 0.013610, -0.021393, -0.144862, 2.354303, 354.413848, 0.219168, 3.034477, 3.000000, 3.000000);
-        OnBenz[playerid] = 1;
-    }
     else if(pickupid == genpickup[0])
     {
         new string[128],salairejobinfoid,generateurprix = info_salairejobinfo[salairejobinfoid][salairejobinfogenerateur],kanistrab = 200,stockjobinfoid;
