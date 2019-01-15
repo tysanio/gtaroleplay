@@ -2458,7 +2458,7 @@ public MinuteCheck()
             PlayerData[i][pHideTags] -= 1;
             PlayerData[i][pMinutes] = 0;
 			PlayerData[i][pPlayingHours]++;
-            new paycheck,moneyentrepriseid,rank,interettaxe,taxerevenue = info_gouvernementinfo[gouvernementinfoid][gouvernementtaxerevenue],factionid = PlayerData[i][pFaction];
+            new paycheck,moneyentrepriseid,rank,interettaxe,taxerevenue = info_gouvernementinfo[gouvernementinfoid][gouvernementtaxerevenue],factionid = PlayerData[i][pFaction],Derp = PlayerData[i][pFactionRank];
 			if (PlayerData[i][pFaction] == -1)
 			{
 				paycheck = info_gouvernementinfo[gouvernementinfoid][gouvernementchomage];
@@ -2469,54 +2469,54 @@ public MinuteCheck()
 				paycheck = info_gouvernementinfo[gouvernementinfoid][gouvernementchomage];
 				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
 			}
-            else if(FactionData[factionid][factionacces][6] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
+            else if (FactionData[factionid][factionacces][0] == 1 && argent_entreprise[moneyentrepriseid][argentpolice] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairemairie[rank][salairemairie1];
+				{ paycheck = info_salairepolice[rank][salairepolice1];
  				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairemairie[rank][salairemairie2];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice2];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairemairie[rank][salairemairie3];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice3];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairemairie[rank][salairemairie4];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice4];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairemairie[rank][salairemairie5];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice5];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairemairie[rank][salairemairie6];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice6];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairemairie[rank][salairemairie7];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice7];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairemairie[rank][salairemairie8];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice8];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairemairie[rank][salairemairie9];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice9];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairemairie[rank][salairemairie10];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice10];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairemairie[rank][salairemairie11];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice11];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairemairie[rank][salairemairie12];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice12];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairemairie[rank][salairemairie13];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice13];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairemairie[rank][salairemairie14];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				{ paycheck = info_salairepolice[rank][salairepolice14];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairemairie[rank][salairemairie15];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
+				{ paycheck = info_salairepolice[rank][salairepolice15];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				argent_entreprise[moneyentrepriseid][argentpolice] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
             else if (FactionData[factionid][factionacces][2] == 1 && argent_entreprise[moneyentrepriseid][argentfbi] >= 0)
@@ -2567,206 +2567,6 @@ public MinuteCheck()
 				{ paycheck = info_salairefbi[rank][salairefbi15];
  				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				argent_entreprise[moneyentrepriseid][argentfbi] -= paycheck;
-		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
-			}
-            else if (FactionData[factionid][factionacces][9] == 1&& argent_entreprise[moneyentrepriseid][argentjournaliste] >= 0)
-			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste1];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste2];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste3];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste4];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste5];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste6];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste7];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste8];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste9];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste10];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste11];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste12];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste13];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste14];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairejournaliste[rank][salairejournaliste15];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentjournaliste] -= paycheck;
-		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
-			}
-            else if (FactionData[factionid][factionacces][10] == 1 && argent_entreprise[moneyentrepriseid][argentvendeur] >= 0)
-			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue1];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue2];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue3];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue4];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue5];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue6];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue7];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue8];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue9];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue10];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue11];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue12];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue13];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue14];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairevendeurrue[rank][salairevendeurrue15];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentvendeur] -= paycheck;
-		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
-			}
-            else if (FactionData[factionid][factionacces][5] == 1 && argent_entreprise[moneyentrepriseid][argentcourier] >= 0)
-			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz1];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz2];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz3];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz4];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz5];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz6];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz7];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz8];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz9];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz10];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz11];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz12];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz13];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz14];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairelivreurbiz[rank][salairelivreurbiz15];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentcourier] -= paycheck;
-		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
-			}
-            else if (FactionData[factionid][factionacces][0] == 1 && argent_entreprise[moneyentrepriseid][argentpolice] >= 0)
-			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairepolice[rank][salairepolice1];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairepolice[rank][salairepolice2];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairepolice[rank][salairepolice3];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairepolice[rank][salairepolice4];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairepolice[rank][salairepolice5];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairepolice[rank][salairepolice6];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairepolice[rank][salairepolice7];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairepolice[rank][salairepolice8];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairepolice[rank][salairepolice9];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairepolice[rank][salairepolice10];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairepolice[rank][salairepolice11];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairepolice[rank][salairepolice12];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairepolice[rank][salairepolice13];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairepolice[rank][salairepolice14];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairepolice[rank][salairepolice15];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentpolice] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
             else if (FactionData[factionid][factionacces][3] == 1 && argent_entreprise[moneyentrepriseid][argentswat] >= 0)
@@ -2869,6 +2669,91 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentmedecin] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
+            else if(FactionData[factionid][factionacces][6] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
+			{
+	            if (PlayerData[i][pFactionRank] == 1)
+				{ paycheck = info_salairemairie[rank][salairemairie1];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 2)
+				{ paycheck = info_salairemairie[rank][salairemairie2];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 3)
+				{ paycheck = info_salairemairie[rank][salairemairie3];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 4)
+				{ paycheck = info_salairemairie[rank][salairemairie4];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 5)
+				{ paycheck = info_salairemairie[rank][salairemairie5];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 6)
+				{ paycheck = info_salairemairie[rank][salairemairie6];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 7)
+				{ paycheck = info_salairemairie[rank][salairemairie7];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 8)
+				{ paycheck = info_salairemairie[rank][salairemairie8];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 9)
+				{ paycheck = info_salairemairie[rank][salairemairie9];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 10)
+				{ paycheck = info_salairemairie[rank][salairemairie10];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 11)
+				{ paycheck = info_salairemairie[rank][salairemairie11];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 12)
+				{ paycheck = info_salairemairie[rank][salairemairie12];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 13)
+				{ paycheck = info_salairemairie[rank][salairemairie13];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 14)
+				{ paycheck = info_salairemairie[rank][salairemairie14];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 15)
+				{ paycheck = info_salairemairie[rank][salairemairie15];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
+            else if (FactionData[factionid][factionacces][5] == 1 && FactionData[factionid][factioncoffre] >= 0)
+			{
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
+            else if (FactionData[factionid][factionacces][9] == 1 && FactionData[factionid][factioncoffre] >= 0)
+			{
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
+            else if (FactionData[factionid][factionacces][10] == 1 && FactionData[factionid][factioncoffre] >= 0)
+			{
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
+            else if (FactionData[factionid][factionacces][11] == 1 && FactionData[factionid][factioncoffre] >= 0)
+			{
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
+            else if (FactionData[factionid][factionacces][12] == 1 && FactionData[factionid][factioncoffre] >= 0)
+			{
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
 			else if (FactionData[factionid][factionacces][13] == 1 && argent_entreprise[moneyentrepriseid][argentmecanozone3] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
@@ -2967,56 +2852,6 @@ public MinuteCheck()
 				{ paycheck = info_salairemecano4[rank][salairemecano415];
  				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
 				argent_entreprise[moneyentrepriseid][argentmecanozone4] -= paycheck;
-		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
-			}
-            else if (FactionData[factionid][factionacces][12] == 1 && FactionData[factionid][factioncoffre] >= 0)
-			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairetaxi[rank][salairetaxi1];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairetaxi[rank][salairetaxi2];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairetaxi[rank][salairetaxi3];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairetaxi[rank][salairetaxi4];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairetaxi[rank][salairetaxi5];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairetaxi[rank][salairetaxi6];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairetaxi[rank][salairetaxi7];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairetaxi[rank][salairetaxi8];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairetaxi[rank][salairetaxi9];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairetaxi[rank][salairetaxi10];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairetaxi[rank][salairetaxi11];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairetaxi[rank][salairetaxi12];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairetaxi[rank][salairetaxi13];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairetaxi[rank][salairetaxi14];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairetaxi[rank][salairetaxi15];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
 			//bracelet electronic
@@ -4862,7 +4697,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if(newkeys & KEY_ACTION) {if(IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER) return cmd_demarrer(playerid,"");}
 	if(newkeys & KEY_SECONDARY_ATTACK)
 	{
-		static id = -1;
+		static id = -1,count;
 		if ((id = Vendor_Nearest(playerid)) != -1)
 		{
 		    switch (VendorData[id][vendorType])
@@ -4880,9 +4715,18 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					{
 					    PlayerData[playerid][pVendorTime] = 3;
 					    GiveMoney(playerid, -3);
-					    new moneyentrepriseid;
-				    	argent_entreprise[moneyentrepriseid][argentvendeur] +=3;
-				        moneyentreprisesave(moneyentrepriseid);
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+							count++;
+						}
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+						{
+							new aye = 3 / count;
+							if(FactionData[ii][factionacces][10] == 1)
+							{
+								FactionData[ii][factioncoffre] += aye;
+								Faction_Save(ii);
+							}
+						}
 					    ApplyAnimation(playerid, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
 					    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a acheté un kebab du vendeur pour $3.", ReturnName(playerid, 0));
 						ShowPlayerFooter(playerid, "Votre ~p~kebab~w~ a ete ajouter dans votre inventaire.");
@@ -4915,9 +4759,18 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					{
                         PlayerData[playerid][pVendorTime] = 3;
 					    GiveMoney(playerid, -2);
-					    new moneyentrepriseid;
-				    	argent_entreprise[moneyentrepriseid][argentvendeur] +=2;
-				        moneyentreprisesave(moneyentrepriseid);
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+							count++;
+						}
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+						{
+							new aye = 3 / count;
+							if(FactionData[ii][factionacces][10] == 1)
+							{
+								FactionData[ii][factioncoffre] += aye;
+								Faction_Save(ii);
+							}
+						}
 					    ApplyAnimation(playerid, "VENDING", "VEND_USE", 4.0, 0, 0, 0, 0, 0);
 					    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a acheté un soda du vendeur pour $2.", ReturnName(playerid, 0));
 						ShowPlayerFooter(playerid, "Votre ~p~soda~w~ a ete ajouter dans votre inventaire.");
@@ -7970,15 +7823,11 @@ public OnGameModeInit()
 	cvurgentisteidload();
 	salairemairieload();
 	salairefbiload();
-	salairejournalisteload();
-	salairelivreurbizload();
 	salairepoliceload();
 	salaireswatload();
 	salaireurgentisteload();
-	salairevendeurrueload();
 	salairemecano3load();
 	salairemecano4load();
-	salairetaxiload();
 	//aide menu
 	AideMenu0 = TextDrawCreate(310.000000, 141.000000, "_");
 	TextDrawAlignment(AideMenu0, 2);
@@ -8568,36 +8417,6 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 		Dialog_Show(playerid,Salairefbi,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
 		return 1;
 	}
- 	if (strcmp("/salairejournaliste", cmdtext, true) == 0)
-	{
-	    new facass = PlayerData[playerid][pFaction];
-	    if (FactionData[facass][factionacces][9] == 0)
-	    	return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise journaliste.");
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		new string1[60], string2[60], string3[60],string[200];
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairejournaliste,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
- 	if (strcmp("/salairelivreurbiz", cmdtext, true) == 0)
-	{
-	    new facass = PlayerData[playerid][pFaction];
-	    if (FactionData[facass][factionacces][5] == 0)
-	    	return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise de livreur de magasin.");
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		new string1[60], string2[60], string3[60],string[200];
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairelivreurbiz,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
  	if (strcmp("/salairepolice", cmdtext, true) == 0)
 	{
 	    if (FactionData[factionid][factionacces][6] == 0)
@@ -8640,21 +8459,6 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 		Dialog_Show(playerid,Salaireurgentiste,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
 		return 1;
 	}
-	if (strcmp("/salairevendeurrue", cmdtext, true) == 0)
-	{
-		new facass = PlayerData[playerid][pFaction];
-	    if (FactionData[facass][factionacces][10] == 0)
-	    	return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise de vendeur de rue.");
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		new string1[60], string2[60], string3[60],string[200];
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairevendeurrue,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
 	if (strcmp("/salairemecano3", cmdtext, true) == 0)
 	{
 	    new facass = PlayerData[playerid][pFaction];
@@ -8683,21 +8487,6 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
 		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
 		Dialog_Show(playerid,Salairemecano4,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
-	if (strcmp("/salairetaxi", cmdtext, true) == 0)
-	{
-		new facass = PlayerData[playerid][pFaction];
-	    if (FactionData[facass][factionacces][12] == 0)
-	    	return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise de taxi.");
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		new string1[60], string2[60], string3[60],string[200];
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairetaxi,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
 		return 1;
 	}
 	if(strcmp(cmdtext, "/porteavantgauche", true) == 0)
@@ -9926,7 +9715,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
 				- /chargermarchandise pour charger les marchandise,\n- /stopchargement pour stoppé le chargement en cours,\n- /rem pour enlever la remorque,\n\
-				- /livrermarchandise pour livrée,\n- /fairelivraison pour commencer une livraison,\n- /quitterlivraison pour quitter une livraison,\n- /salairelivreurbiz pour gérer le salaire livreur, \
+				- /livrermarchandise pour livrée,\n- /fairelivraison pour commencer une livraison,\n- /quitterlivraison pour quitter une livraison,\n- /salairefaction pour gérer le salaire, \
 				- /appeler 1001 pour commencer une livraison dans votre vehicule,\n- /infob info sur les produits du biz\n \n- Vous aller recevoir des appelles pour des livraisons \
 				 ","Quitter","");
 			}
@@ -9967,7 +9756,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				- /radio pour parlé en radio IC,\n- /diffuser pour diffuser un show,\n- /bc pour parlé dans le show,\n- /inviterpersonne inviter une personne dans le show,\n- /enleverpersonne enlever une personne du show.\n- /salairejournaliste pour gérer le salaire journaliste, \
+				- /radio pour parlé en radio IC,\n- /diffuser pour diffuser un show,\n- /bc pour parlé dans le show,\n- /inviterpersonne inviter une personne dans le show,\n- /enleverpersonne enlever une personne du show. \
 				 ","Quitter","");
 			}
 			//vendeur de rue
@@ -9976,7 +9765,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 				- /fexclure exclure une personne,\n- /frang mettre un rang,\n- /vendrefood vendre de la nourriture / boisson,\n\
-				- /salairevendeurrue pour gérer le salaire des vendeur des rues,\
+				- /salairefaction pour gérer le salaire\
 				 ","Quitter","");
 			}
 			//mafia caison
@@ -9984,7 +9773,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang\
+				- /fexclure exclure une personne,\n- /frang mettre un rang,\n- /salairefaction pour modifier le salaire des rangs\
 				 ","Quitter","");
 			}
 			//mafia taxi
@@ -9993,8 +9782,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				- /taxi pour vous mettre en taxi,\n- /acceptertaxi accepté un appelle de taxi,\n\
-				- /salairetaxi pour gérer le salaire taxi,\
+				- /taxi pour vous mettre en taxi,\n- /acceptertaxi accepté un appelle de taxi,\n- /salairefaction pour modifier le salaire des rangs\
 				 ","Quitter","");
 			}
 		}
@@ -11373,101 +11161,6 @@ public salairefbiload()
 	}
 	cache_delete(result);
 }
-public salairejournaliste(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairejournaliste SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairejournaliste[rank][salairejournaliste1],
-	    info_salairejournaliste[rank][salairejournaliste2],
-	    info_salairejournaliste[rank][salairejournaliste3],
-	    info_salairejournaliste[rank][salairejournaliste4],
-	    info_salairejournaliste[rank][salairejournaliste5],
-	    info_salairejournaliste[rank][salairejournaliste6],
-	    info_salairejournaliste[rank][salairejournaliste7],
-	    info_salairejournaliste[rank][salairejournaliste8],
-	    info_salairejournaliste[rank][salairejournaliste9],
-	    info_salairejournaliste[rank][salairejournaliste10],
-	    info_salairejournaliste[rank][salairejournaliste11],
-	    info_salairejournaliste[rank][salairejournaliste12],
-	    info_salairejournaliste[rank][salairejournaliste13],
-	    info_salairejournaliste[rank][salairejournaliste14],
-	    info_salairejournaliste[rank][salairejournaliste15]);
-    mysql_tquery(g_iHandle, query);
-}
-
-public salairejournalisteload()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairejournaliste");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairejournaliste[rank][salairejournalisteiddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairejournaliste[rank][salairejournaliste1] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairejournaliste[rank][salairejournaliste2] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairejournaliste[rank][salairejournaliste3] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairejournaliste[rank][salairejournaliste4] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairejournaliste[rank][salairejournaliste5] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairejournaliste[rank][salairejournaliste6] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairejournaliste[rank][salairejournaliste7] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairejournaliste[rank][salairejournaliste8] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairejournaliste[rank][salairejournaliste9] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairejournaliste[rank][salairejournaliste10] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairejournaliste[rank][salairejournaliste11] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairejournaliste[rank][salairejournaliste12] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairejournaliste[rank][salairejournaliste13] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairejournaliste[rank][salairejournaliste14] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairejournaliste[rank][salairejournaliste15] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
-public salairelivreurbiz(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairelivreurbiz SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairelivreurbiz[rank][salairelivreurbiz1],
-	    info_salairelivreurbiz[rank][salairelivreurbiz2],
-	    info_salairelivreurbiz[rank][salairelivreurbiz3],
-	    info_salairelivreurbiz[rank][salairelivreurbiz4],
-	    info_salairelivreurbiz[rank][salairelivreurbiz5],
-	    info_salairelivreurbiz[rank][salairelivreurbiz6],
-	    info_salairelivreurbiz[rank][salairelivreurbiz7],
-	    info_salairelivreurbiz[rank][salairelivreurbiz8],
-	    info_salairelivreurbiz[rank][salairelivreurbiz9],
-	    info_salairelivreurbiz[rank][salairelivreurbiz10],
-	    info_salairelivreurbiz[rank][salairelivreurbiz11],
-	    info_salairelivreurbiz[rank][salairelivreurbiz12],
-	    info_salairelivreurbiz[rank][salairelivreurbiz13],
-	    info_salairelivreurbiz[rank][salairelivreurbiz14],
-	    info_salairelivreurbiz[rank][salairelivreurbiz15]);
-    mysql_tquery(g_iHandle, query);
-}
-public salairelivreurbizload()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairelivreurbiz");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairelivreurbiz[rank][salairelivreurbiziddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairelivreurbiz[rank][salairelivreurbiz1] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairelivreurbiz[rank][salairelivreurbiz2] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairelivreurbiz[rank][salairelivreurbiz3] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairelivreurbiz[rank][salairelivreurbiz4] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairelivreurbiz[rank][salairelivreurbiz5] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairelivreurbiz[rank][salairelivreurbiz6] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairelivreurbiz[rank][salairelivreurbiz7] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairelivreurbiz[rank][salairelivreurbiz8] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairelivreurbiz[rank][salairelivreurbiz9] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairelivreurbiz[rank][salairelivreurbiz10] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairelivreurbiz[rank][salairelivreurbiz11] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairelivreurbiz[rank][salairelivreurbiz12] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairelivreurbiz[rank][salairelivreurbiz13] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairelivreurbiz[rank][salairelivreurbiz14] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairelivreurbiz[rank][salairelivreurbiz15] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
 public salairepolice(rank)
 {
 	new query[900];
@@ -11612,54 +11305,6 @@ public salaireurgentisteload()
 	}
 	cache_delete(result);
 }
-public salairevendeurrue(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairevendeurrue SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairevendeurrue[rank][salairevendeurrue1],
-	    info_salairevendeurrue[rank][salairevendeurrue2],
-	    info_salairevendeurrue[rank][salairevendeurrue3],
-	    info_salairevendeurrue[rank][salairevendeurrue4],
-	    info_salairevendeurrue[rank][salairevendeurrue5],
-	    info_salairevendeurrue[rank][salairevendeurrue6],
-	    info_salairevendeurrue[rank][salairevendeurrue7],
-	    info_salairevendeurrue[rank][salairevendeurrue8],
-	    info_salairevendeurrue[rank][salairevendeurrue9],
-	    info_salairevendeurrue[rank][salairevendeurrue10],
-	    info_salairevendeurrue[rank][salairevendeurrue11],
-	    info_salairevendeurrue[rank][salairevendeurrue12],
-	    info_salairevendeurrue[rank][salairevendeurrue13],
-	    info_salairevendeurrue[rank][salairevendeurrue14],
-	    info_salairevendeurrue[rank][salairevendeurrue15]);
-    mysql_tquery(g_iHandle, query);
-}
-
-public salairevendeurrueload()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairevendeurrue");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairevendeurrue[rank][salairevendeurrueiddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairevendeurrue[rank][salairevendeurrue1] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairevendeurrue[rank][salairevendeurrue2] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairevendeurrue[rank][salairevendeurrue3] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairevendeurrue[rank][salairevendeurrue4] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairevendeurrue[rank][salairevendeurrue5] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairevendeurrue[rank][salairevendeurrue6] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairevendeurrue[rank][salairevendeurrue7] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairevendeurrue[rank][salairevendeurrue8] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairevendeurrue[rank][salairevendeurrue9] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairevendeurrue[rank][salairevendeurrue10] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairevendeurrue[rank][salairevendeurrue11] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairevendeurrue[rank][salairevendeurrue12] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairevendeurrue[rank][salairevendeurrue13] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairevendeurrue[rank][salairevendeurrue14] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairevendeurrue[rank][salairevendeurrue15] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
 public salairemecano3(rank)
 {
 	new query[900];
@@ -11753,102 +11398,6 @@ public salairemecano4load()
 	    info_salairemecano4[rank][salairemecano413] = cache_get_field_content_int(rank,"salairerang13");
 	    info_salairemecano4[rank][salairemecano414] = cache_get_field_content_int(rank,"salairerang14");
 	    info_salairemecano4[rank][salairemecano415] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
-public salairepetitlivreur(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairepetitlivreur SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairepetitlivreur[rank][petitlivreur1],
-	    info_salairepetitlivreur[rank][petitlivreur2],
-	    info_salairepetitlivreur[rank][petitlivreur3],
-	    info_salairepetitlivreur[rank][petitlivreur4],
-	    info_salairepetitlivreur[rank][petitlivreur5],
-	    info_salairepetitlivreur[rank][petitlivreur6],
-	    info_salairepetitlivreur[rank][petitlivreur7],
-	    info_salairepetitlivreur[rank][petitlivreur8],
-	    info_salairepetitlivreur[rank][petitlivreur9],
-	    info_salairepetitlivreur[rank][petitlivreur10],
-	    info_salairepetitlivreur[rank][petitlivreur11],
-	    info_salairepetitlivreur[rank][petitlivreur12],
-	    info_salairepetitlivreur[rank][petitlivreur13],
-	    info_salairepetitlivreur[rank][petitlivreur14],
-	    info_salairepetitlivreur[rank][petitlivreur15]);
-    mysql_tquery(g_iHandle, query);
-}
-
-public salairepetitlivreurload()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairepetitlivreur");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairepetitlivreur[rank][petitlivreuriddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairepetitlivreur[rank][petitlivreur1] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairepetitlivreur[rank][petitlivreur2] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairepetitlivreur[rank][petitlivreur3] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairepetitlivreur[rank][petitlivreur4] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairepetitlivreur[rank][petitlivreur5] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairepetitlivreur[rank][petitlivreur6] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairepetitlivreur[rank][petitlivreur7] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairepetitlivreur[rank][petitlivreur8] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairepetitlivreur[rank][petitlivreur9] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairepetitlivreur[rank][petitlivreur10] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairepetitlivreur[rank][petitlivreur11] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairepetitlivreur[rank][petitlivreur12] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairepetitlivreur[rank][petitlivreur13] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairepetitlivreur[rank][petitlivreur14] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairepetitlivreur[rank][petitlivreur15] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
-public salairetaxi(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairetaxi SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairetaxi[rank][salairetaxi1],
-	    info_salairetaxi[rank][salairetaxi2],
-	    info_salairetaxi[rank][salairetaxi3],
-	    info_salairetaxi[rank][salairetaxi4],
-	    info_salairetaxi[rank][salairetaxi5],
-	    info_salairetaxi[rank][salairetaxi6],
-	    info_salairetaxi[rank][salairetaxi7],
-	    info_salairetaxi[rank][salairetaxi8],
-	    info_salairetaxi[rank][salairetaxi9],
-	    info_salairetaxi[rank][salairetaxi10],
-	    info_salairetaxi[rank][salairetaxi11],
-	    info_salairetaxi[rank][salairetaxi12],
-	    info_salairetaxi[rank][salairetaxi13],
-	    info_salairetaxi[rank][salairetaxi14],
-	    info_salairetaxi[rank][salairetaxi15]);
-    mysql_tquery(g_iHandle, query);
-}
-
-public salairetaxiload()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairetaxi");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairetaxi[rank][salairetaxiiddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairetaxi[rank][salairetaxi1] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairetaxi[rank][salairetaxi2] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairetaxi[rank][salairetaxi3] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairetaxi[rank][salairetaxi4] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairetaxi[rank][salairetaxi5] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairetaxi[rank][salairetaxi6] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairetaxi[rank][salairetaxi7] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairetaxi[rank][salairetaxi8] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairetaxi[rank][salairetaxi9] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairetaxi[rank][salairetaxi10] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairetaxi[rank][salairetaxi11] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairetaxi[rank][salairetaxi12] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairetaxi[rank][salairetaxi13] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairetaxi[rank][salairetaxi14] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairetaxi[rank][salairetaxi15] = cache_get_field_content_int(rank,"salairerang15");
 	}
 	cache_delete(result);
 }

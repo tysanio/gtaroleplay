@@ -2225,10 +2225,7 @@ CMD:accepter(playerid, params[])
 	}
 	if (!strcmp(params, "food", true) && PlayerData[playerid][pFoodSeller] != INVALID_PLAYER_ID)
 	{
-	    new
-	        sellerid = PlayerData[playerid][pFoodSeller],
-			type = PlayerData[playerid][pFoodType],
-	        price = PlayerData[playerid][pFoodPrice];
+	    new sellerid = PlayerData[playerid][pFoodSeller],type = PlayerData[playerid][pFoodType],price = PlayerData[playerid][pFoodPrice],count;
 		if (!IsPlayerNearPlayer(playerid, sellerid, 6.0))
 		    return SendErrorMessage(playerid, "Vous n'êtes pas proche de ce joueur.");
 		if (GetMoney(playerid) < price)
@@ -2243,9 +2240,18 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté une bouteille d'eau à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté une bouteille d'eau %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-		        new moneyentrepriseid;
-		    	argent_entreprise[moneyentrepriseid][argentvendeur] +=price;
-		        moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = price / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			case 2:
 		    {
@@ -2255,9 +2261,18 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté une bouteille de soda à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté une bouteille de soda %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-		        new moneyentrepriseid;
-		    	argent_entreprise[moneyentrepriseid][argentvendeur] +=price;
-		        moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = price / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			case 3:
 		    {
@@ -2267,9 +2282,18 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté un burger de %s pour à %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté le burger pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-		        new moneyentrepriseid;
-		    	argent_entreprise[moneyentrepriseid][argentvendeur] +=price;
-		        moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = price / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			case 4:
 		    {
@@ -2279,9 +2303,18 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté une de pizza à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté la pizza pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-		        new moneyentrepriseid;
-		    	argent_entreprise[moneyentrepriseid][argentvendeur] +=price;
-		        moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = price / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			case 5:
 		    {
@@ -2291,9 +2324,18 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté du poulet à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté le poulet pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-		        new moneyentrepriseid;
-		    	argent_entreprise[moneyentrepriseid][argentvendeur] +=price;
-		        moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = price / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			case 6:
 		    {
@@ -2303,9 +2345,18 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté un chargeur à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté un chargeur pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-		        new moneyentrepriseid;
-		    	argent_entreprise[moneyentrepriseid][argentvendeur] +=price;
-		        moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = price / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 		}
 		PlayerData[playerid][pFoodSeller] = INVALID_PLAYER_ID;
@@ -10073,247 +10124,6 @@ CMD:fbirang15(playerid, params[])
 	Dialog_Show(playerid, FBIRank15, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
 }
-//salaire journaliste
-CMD:journalisterang1(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank1, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang2(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank2, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang3(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank3, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang4(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank4, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang5(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank5, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang6(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank6, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang7(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank7, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang8(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank8, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang9(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank9, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang10(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank10, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang11(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank11, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang12(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank12, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang13(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank13, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang14(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank14, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:journalisterang15(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du Journaliste ou le leader.");
-	Dialog_Show(playerid, journalisteRank15, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang1(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank1, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang2(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank2, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang3(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank3, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang4(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank4, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang5(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank5, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang6(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank6, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang7(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank7, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang8(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank8, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang9(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank9, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang10(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank10, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang11(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, licvreurbizRank11, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang12(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank12, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang13(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank13, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang14(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank14, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:livreurbizrang15(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du livreurbiz ou le leader.");
-	Dialog_Show(playerid, livreurbizRank15, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
 //salaire police
 CMD:policerang1(playerid, params[])
 {
@@ -10674,126 +10484,6 @@ CMD:urgentisterang15(playerid, params[])
 	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank15, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang1(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank1, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang2(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank2, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang3(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank3, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang4(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank4, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang5(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank5, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang6(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank6, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang7(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank7, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang8(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank8, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang9(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank9, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang10(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank10, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang11(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank11, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang12(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank12, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang13(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank13, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang14(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank14, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
-	return 1;
-}
-CMD:vendeurruerang15(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return SendErrorMessage(playerid, "Tu n'est pas du vendeurrue ou le leader.");
-	Dialog_Show(playerid, vendeurrueRank15, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
 }
 CMD:mecano3rang1(playerid, params[])
@@ -13059,5 +12749,19 @@ CMD:gaz(playerid, params[])
 	Updateessencegenerator();
     SetPlayerAttachedObject(playerid,3, 1650, 6, 0.013610, -0.021393, -0.144862, 2.354303, 354.413848, 0.219168, 3.034477, 3.000000, 3.000000);
     OnBenz[playerid] = 1;
+	return 1;
+}
+//salaire faction
+CMD:salairefaction(playerid,params[])
+{
+	static id,idd;
+	new factionid = PlayerData[playerid][pFaction];
+	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)  return SendErrorMessage(playerid,"Vous n'avez pas acces a cette option.");
+	if(sscanf(params, "dd",idd,id)) return SendClientMessage(playerid, -1, "Utilisation: /salaire1 rank entre 1 et 2500");
+	if (idd < 1 || idd > 15) return SendErrorMessage(playerid,"Erreur Le rang est entre 1 et 15");
+	if (id < 1 || id > 2500) return SendErrorMessage(playerid,"Erreur le salaire du rang %d doit être comprie entre 1 et 2500$",idd+1);
+	FactionData[factionid][factionsalaire][idd] = id;
+	SendServerMessage(playerid,"Vous avez modifier le salaire du rang %d a %d $",idd+1,id);
+	Faction_Save(factionid);
 	return 1;
 }

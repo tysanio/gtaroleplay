@@ -6853,14 +6853,22 @@ Dialog:MyBillboardMessage(playerid, response, listitem, inputtext[]) {
 Dialog:MyBillboardUnrent(playerid, response, listitem, inputtext[]) {
 	if (response)
 	{
-		new bbid = PlayerData[playerid][pOwnsBillboard];
-
+		new bbid = PlayerData[playerid][pOwnsBillboard],count;
 		GiveMoney(playerid, BillBoardData[bbid][bbPrice]/2);
-		new moneyentrepriseid;
-		argent_entreprise[moneyentrepriseid][argentjournaliste] -= -BillBoardData[bbid][bbPrice]/2;
-		moneyentreprisesave(moneyentrepriseid);
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][9] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][9] == 1)
+		{
+			new aye = -BillBoardData[bbid][bbPrice]/2 / count;
+			if(FactionData[ii][factionacces][9] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 		BillBoardData[bbid][bbOwner] = 0;
-		format(BillBoardData[PlayerData[playerid][pOwnsBillboard]][bbMessage], 230, "Panneau d'affichage louer");
+		format(BillBoardData[PlayerData[playerid][pOwnsBillboard]][bbMessage], 230, "Panneau d'affichage");
 		Billboard_Save(bbid);
 		Billboard_Refresh(bbid);
 		PlayerData[playerid][pOwnsBillboard] = -1;
@@ -6872,7 +6880,7 @@ Dialog:MyBillboardUnrent(playerid, response, listitem, inputtext[]) {
 Dialog:BillboardRent(playerid, response, listitem, inputtext[]) {
 	if (response)
 	{
-	    new bbid = BillboardCheckout[playerid];
+	    new bbid = BillboardCheckout[playerid],count;
 	    if(PlayerData[playerid][pBankMoney] < BillBoardData[bbid][bbPrice])
 	    {
 	        SendErrorMessage(playerid, "Vous ne disposez pas de suffisamment d'argent dans votre compte bancaire pour les frais de location du panneau d'affichage");
@@ -6881,9 +6889,19 @@ Dialog:BillboardRent(playerid, response, listitem, inputtext[]) {
 	    else
 	    {
 			PlayerData[playerid][pBankMoney] -= BillBoardData[playerid][bbPrice];
-			new moneyentrepriseid;
-			argent_entreprise[moneyentrepriseid][argentjournaliste] += BillBoardData[playerid][bbPrice];
-			moneyentreprisesave(moneyentrepriseid);
+			
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][9] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][9] == 1)
+			{
+				new aye = BillBoardData[playerid][bbPrice] / count;
+				if(FactionData[ii][factionacces][9] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}			
 			PlayerData[playerid][pOwnsBillboard] = bbid;
 			BillBoardData[bbid][bbOwner] = GetPlayerSQLID(playerid);
 			//Tax_AddMoney(BillBoardData[bbid][bbPrice]);
@@ -16307,599 +16325,7 @@ Dialog:FBIRank15(playerid, response, listitem, inputtext[])
 	else {}
 	return 1;
 }
-//salaire journalise
-Dialog:Salairejournaliste(playerid, response, listitem, inputtext[])
-{
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0: {cmd_journalisterang1(playerid, "");}
-			case 1: {cmd_journalisterang2(playerid, "");}
-			case 2: {cmd_journalisterang3(playerid, "");}
-			case 3: {cmd_journalisterang4(playerid, "");}
-			case 4: {cmd_journalisterang5(playerid, "");}
-			case 5: {cmd_journalisterang6(playerid, "");}
-			case 6: {cmd_journalisterang7(playerid, "");}
-			case 7: {cmd_journalisterang8(playerid, "");}
-			case 8: {cmd_journalisterang9(playerid, "");}
-			case 9: {cmd_journalisterang10(playerid, "");}
-			case 10: {cmd_journalisterang11(playerid, "");}
-			case 11: {cmd_journalisterang12(playerid, "");}
-			case 12: {cmd_journalisterang13(playerid, "");}
-			case 13: {cmd_journalisterang14(playerid, "");}
-			case 14: {cmd_journalisterang15(playerid, "");}
-		}
-	}
-	if (!response) {return 0;}
-	return 1;
-}
-Dialog:journalisteRank1(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste1] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank1, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank1, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank2(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste2] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank1, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank2, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank3(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste3] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank3, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank3, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank4(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste4] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank4, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank4, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank5(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste5] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank5, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank5, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank6(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste6] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank6, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank6, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank7(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste7] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank7, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank7, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank8(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste8] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank8, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank8, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank9(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste9] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank9, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank9, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank10(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste10] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank10, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank10, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank11(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste11] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank11, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank11, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank12(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste12] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank12, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank12, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank13(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste13] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank13, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank13, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank14(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste14] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank14, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank14, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:journalisteRank15(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairejournaliste[rank][salairejournaliste15] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, journalisteRank15, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, journalisteRank15, DIALOG_STYLE_INPUT, "Journaliste Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
-		salairejournaliste(rank);
-	}
-	else {}
-	return 1;
-}
-//salaire livrebiz
-Dialog:Salairelivreurbiz(playerid, response, listitem, inputtext[])
-{
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0: {cmd_livreurbizrang1(playerid, "");}
-			case 1: {cmd_livreurbizrang2(playerid, "");}
-			case 2: {cmd_livreurbizrang3(playerid, "");}
-			case 3: {cmd_livreurbizrang4(playerid, "");}
-			case 4: {cmd_livreurbizrang5(playerid, "");}
-			case 5: {cmd_livreurbizrang6(playerid, "");}
-			case 6: {cmd_livreurbizrang7(playerid, "");}
-			case 7: {cmd_livreurbizrang8(playerid, "");}
-			case 8: {cmd_livreurbizrang9(playerid, "");}
-			case 9: {cmd_livreurbizrang10(playerid, "");}
-			case 10: {cmd_livreurbizrang11(playerid, "");}
-			case 11: {cmd_livreurbizrang12(playerid, "");}
-			case 12: {cmd_livreurbizrang13(playerid, "");}
-			case 13: {cmd_livreurbizrang14(playerid, "");}
-			case 14: {cmd_livreurbizrang15(playerid, "");}
-		}
-	}
-	if (!response) {return 0;}
-	return 1;
-}
-Dialog:livreurbizRank1(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz1] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank1, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank1, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	return 1;
-}
-Dialog:livreurbizRank2(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz2] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank1, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank2, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank3(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz3] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank3, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank3, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank4(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz4] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank4, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank4, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank5(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz5] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank5, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank5, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank6(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz6] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank6, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank6, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank7(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz7] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank7, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank7, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank8(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz8] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank8, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank8, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank9(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz9] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank9, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank9, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank10(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz10] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank10, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank10, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank11(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz11] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank11, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank11, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank12(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz12] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank12, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank12, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank13(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz13] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank13, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank13, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank14(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz14] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank14, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank14, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:livreurbizRank15(playerid, response, listitem, inputtext[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairelivreurbiz[rank][salairelivreurbiz15] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, livreurbizRank15, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, livreurbizRank15, DIALOG_STYLE_INPUT, "livreurbiz Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
-		salairelivreurbiz(rank);
-	}
-	else {}
-	return 1;
-}
+
 //salair epolice
 Dialog:Salairepolice(playerid, response, listitem, inputtext[])
 {
@@ -17791,303 +17217,6 @@ Dialog:urgentisteRank15(playerid, response, listitem, inputtext[])
 	else {}
 	return 1;
 }
-//salaire vendeur
-Dialog:Salairevendeurrue(playerid, response, listitem, inputtext[])
-{
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0: {cmd_vendeurruerang1(playerid, "");}
-			case 1: {cmd_vendeurruerang2(playerid, "");}
-			case 2: {cmd_vendeurruerang3(playerid, "");}
-			case 3: {cmd_vendeurruerang4(playerid, "");}
-			case 4: {cmd_vendeurruerang5(playerid, "");}
-			case 5: {cmd_vendeurruerang6(playerid, "");}
-			case 6: {cmd_vendeurruerang7(playerid, "");}
-			case 7: {cmd_vendeurruerang8(playerid, "");}
-			case 8: {cmd_vendeurruerang9(playerid, "");}
-			case 9: {cmd_vendeurruerang10(playerid, "");}
-			case 10: {cmd_vendeurruerang11(playerid, "");}
-			case 11: {cmd_vendeurruerang12(playerid, "");}
-			case 12: {cmd_vendeurruerang13(playerid, "");}
-			case 13: {cmd_vendeurruerang14(playerid, "");}
-			case 14: {cmd_vendeurruerang15(playerid, "");}
-		}
-	}
-	if (!response) {return 0;}
-	return 1;
-}
-Dialog:vendeurrueRank1(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue1] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank1, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank1, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank2(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue2] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank1, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank2, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank3(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue3] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank3, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank3, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank4(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue4] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank4, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank4, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank5(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue5] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank5, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank5, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank6(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue6] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank6, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank6, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank7(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue7] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank7, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank7, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank8(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue8] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank8, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank8, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank9(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue9] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank9, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank9, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank10(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue10] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank10, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank10, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank11(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue11] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank11, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank11, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank12(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue12] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank12, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank12, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank13(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue13] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank13, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank13, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank14(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue14] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank14, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank14, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:vendeurrueRank15(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairevendeurrue[rank][salairevendeurrue15] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, vendeurrueRank15, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, vendeurrueRank15, DIALOG_STYLE_INPUT, "vendeurrue Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
-		salairevendeurrue(rank);
-	}
-	else {}
-	return 1;
-}
 //salaire mecano
 Dialog:Salairemecano3(playerid, response, listitem, inputtext[])
 {
@@ -18681,302 +17810,6 @@ Dialog:mecano4Rank15(playerid, response, listitem, inputtext[])
 	else {}
 	return 1;
 }
-Dialog:Salairetaxi(playerid, response, listitem, inputtext[])
-{
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0: {cmd_taxirang1(playerid, "");}
-			case 1: {cmd_taxirang2(playerid, "");}
-			case 2: {cmd_taxirang3(playerid, "");}
-			case 3: {cmd_taxirang4(playerid, "");}
-			case 4: {cmd_taxirang5(playerid, "");}
-			case 5: {cmd_taxirang6(playerid, "");}
-			case 6: {cmd_taxirang7(playerid, "");}
-			case 7: {cmd_taxirang8(playerid, "");}
-			case 8: {cmd_taxirang9(playerid, "");}
-			case 9: {cmd_taxirang10(playerid, "");}
-			case 10: {cmd_taxirang11(playerid, "");}
-			case 11: {cmd_taxirang12(playerid, "");}
-			case 12: {cmd_taxirang13(playerid, "");}
-			case 13: {cmd_taxirang14(playerid, "");}
-			case 14: {cmd_taxirang15(playerid, "");}
-		}
-	}
-	if (!response) {return 0;}
-	return 1;
-}
-Dialog:taxiRank1(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi1] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank1, DIALOG_STYLE_INPUT, "taxi Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank1, DIALOG_STYLE_INPUT, "taxi Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank2(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi2] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank1, DIALOG_STYLE_INPUT, "taxi Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank2, DIALOG_STYLE_INPUT, "taxi Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank3(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi3] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank3, DIALOG_STYLE_INPUT, "taxi Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank3, DIALOG_STYLE_INPUT, "taxi Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank4(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi4] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank4, DIALOG_STYLE_INPUT, "taxi Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank4, DIALOG_STYLE_INPUT, "taxi Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank5(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi5] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank5, DIALOG_STYLE_INPUT, "taxi Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank5, DIALOG_STYLE_INPUT, "taxi Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank6(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi6] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank6, DIALOG_STYLE_INPUT, "taxi Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank6, DIALOG_STYLE_INPUT, "taxi Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank7(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi7] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank7, DIALOG_STYLE_INPUT, "taxi Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank7, DIALOG_STYLE_INPUT, "taxi Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank8(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi8] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank8, DIALOG_STYLE_INPUT, "taxi Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank8, DIALOG_STYLE_INPUT, "taxi Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank9(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi9] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank9, DIALOG_STYLE_INPUT, "taxi Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank9, DIALOG_STYLE_INPUT, "taxi Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank10(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi10] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank10, DIALOG_STYLE_INPUT, "taxi Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank10, DIALOG_STYLE_INPUT, "taxi Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank11(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi11] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank11, DIALOG_STYLE_INPUT, "taxi Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank11, DIALOG_STYLE_INPUT, "taxi Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank12(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi12] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank12, DIALOG_STYLE_INPUT, "taxi Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank12, DIALOG_STYLE_INPUT, "taxi Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank13(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi13] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank13, DIALOG_STYLE_INPUT, "taxi Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank13, DIALOG_STYLE_INPUT, "taxi Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank14(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi14] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank14, DIALOG_STYLE_INPUT, "taxi Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank14, DIALOG_STYLE_INPUT, "taxi Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
-Dialog:taxiRank15(playerid, response, listitem, inputtext[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    return 0;
-	if (response)
-	{
-		new taxe = strval(inputtext);
-	    static rank;
-		info_salairetaxi[rank][salairetaxi15] = taxe;
-		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, taxiRank15, DIALOG_STYLE_INPUT, "taxi Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, taxiRank15, DIALOG_STYLE_INPUT, "taxi Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
-		salairetaxi(rank);
-	}
-	else {}
-	return 1;
-}
 //cv
 Dialog:cv(playerid, response, listitem, inputtext[])
 {
@@ -19562,10 +18395,6 @@ Dialog:Bankfaction(playerid, response, listitem, inputtext[])
 					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
 				if (FactionData[facass][factionacces][5] == 1)
 					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-				if (FactionData[facass][factionacces][12] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-				if (FactionData[facass][factionacces][10] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 				if (FactionData[facass][factionacces][9] == 1)
 					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");		
 			}
@@ -19591,11 +18420,7 @@ Dialog:BankAccountfaction(playerid, response, listitem, inputtext[])
 				if (FactionData[facass][factionacces][14] == 1)
 					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 				if (FactionData[facass][factionacces][11] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-				if (FactionData[facass][factionacces][5] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-				if (FactionData[facass][factionacces][10] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
+					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));		
 				if (FactionData[facass][factionacces][9] == 1)
 					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 			}
@@ -19609,10 +18434,6 @@ Dialog:BankAccountfaction(playerid, response, listitem, inputtext[])
 					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 				if (FactionData[facass][factionacces][11] == 1)
 					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-				if (FactionData[facass][factionacces][5] == 1)
-					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-				if (FactionData[facass][factionacces][10] == 1)
-					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
 				if (FactionData[facass][factionacces][9] == 1)
 					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 			}
@@ -19626,10 +18447,6 @@ Dialog:BankAccountfaction(playerid, response, listitem, inputtext[])
 			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 		if (FactionData[facass][factionacces][11] == 1)
 			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		if (FactionData[facass][factionacces][5] == 1)
-			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-		if (FactionData[facass][factionacces][10] == 1)
-			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
 		if (FactionData[facass][factionacces][9] == 1)
 			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 	}
@@ -19652,10 +18469,6 @@ Dialog:Bankfactionretirer(playerid, response, listitem, inputtext[])
 				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 			if (FactionData[facass][factionacces][11] == 1)
 				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-			if (FactionData[facass][factionacces][5] == 1)
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-			if (FactionData[facass][factionacces][10] == 1)
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
 			if (FactionData[facass][factionacces][9] == 1)
 				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 		}
@@ -19680,12 +18493,8 @@ Dialog:Bankfactionretirer(playerid, response, listitem, inputtext[])
 		{argent_entreprise[moneyentrepriseid][argentmecanozone4]-= amount;}
 		if (FactionData[facass][factionacces][11] == 1)
 		{argent_entreprise[moneyentrepriseid][argentmafiazone1]-= amount;}
-		if (FactionData[facass][factionacces][5] == 1)
-		{argent_entreprise[moneyentrepriseid][argentcourier]-= amount;}
 		if (FactionData[facass][factionacces][9] == 1)
 		{argent_entreprise[moneyentrepriseid][argentjournaliste]-= amount;}
-		if (FactionData[facass][factionacces][10] == 1)
-		{argent_entreprise[moneyentrepriseid][argentvendeur]-= amount;}
 		GiveMoney(playerid, amount);
 		moneyentreprisesave(moneyentrepriseid);
 	    SendServerMessage(playerid, "Vous avez retiré %s$ de votre compte bancaire faction.", FormatNumber(amount));	
@@ -19695,10 +18504,6 @@ Dialog:Bankfactionretirer(playerid, response, listitem, inputtext[])
 			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 		if (FactionData[facass][factionacces][11] == 1)
 			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		if (FactionData[facass][factionacces][5] == 1)
-			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-		if (FactionData[facass][factionacces][10] == 1)
-			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
 		if (FactionData[facass][factionacces][9] == 1)
 			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 	}
@@ -19711,12 +18516,8 @@ Dialog:Bankfactionretirer(playerid, response, listitem, inputtext[])
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 		if (FactionData[facass][factionacces][11] == 1)
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
-		if (FactionData[facass][factionacces][12] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 		if (FactionData[facass][factionacces][5] == 1)
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
-		if (FactionData[facass][factionacces][10] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 		if (FactionData[facass][factionacces][9] == 1)
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 	}
@@ -19737,10 +18538,6 @@ Dialog:Bankfactiondeposer(playerid, response, listitem, inputtext[])
 				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 			if (FactionData[facass][factionacces][11] == 1)
 				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-			if (FactionData[facass][factionacces][5] == 1)
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-			if (FactionData[facass][factionacces][10] == 1)
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
 			if (FactionData[facass][factionacces][9] == 1)
 				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 		}
@@ -19765,12 +18562,8 @@ Dialog:Bankfactiondeposer(playerid, response, listitem, inputtext[])
 		{argent_entreprise[moneyentrepriseid][argentmecanozone4]+= amount;}
 		if (FactionData[facass][factionacces][11] == 1)
 		{argent_entreprise[moneyentrepriseid][argentmafiazone1]+= amount;}
-		if (FactionData[facass][factionacces][5] == 1)
-		{argent_entreprise[moneyentrepriseid][argentcourier]+= amount;}
 		if (FactionData[facass][factionacces][9] == 1)
 		{argent_entreprise[moneyentrepriseid][argentjournaliste]+= amount;}
-		if (FactionData[facass][factionacces][10] == 1)
-		{argent_entreprise[moneyentrepriseid][argentvendeur]+= amount;}
 		GiveMoney(playerid, -amount);
 		moneyentreprisesave(moneyentrepriseid);
 	    SendServerMessage(playerid, "Vous avez retiré %s$ de votre compte bancaire faction.", FormatNumber(amount));
@@ -19782,10 +18575,6 @@ Dialog:Bankfactiondeposer(playerid, response, listitem, inputtext[])
 			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
 		if (FactionData[facass][factionacces][11] == 1)
 			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		if (FactionData[facass][factionacces][5] == 1)
-			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));	
-		if (FactionData[facass][factionacces][10] == 1)
-			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]));	
 		if (FactionData[facass][factionacces][9] == 1)
 			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
 	}
@@ -19801,8 +18590,6 @@ Dialog:Bankfactiondeposer(playerid, response, listitem, inputtext[])
 		if (FactionData[facass][factionacces][12] == 1)
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 		if (FactionData[facass][factionacces][5] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][10] == 1)
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
 		if (FactionData[facass][factionacces][9] == 1)
 			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");		
@@ -21284,7 +20071,7 @@ stock SetVehicleSpeed(vehicleid,mph)
 Dialog:commande(playerid, response, listitem, inputtext[])
 {
 	static Float:x,Float:y,Float:z,Float:a;
-	new rand = random(3),moneyentrepriseid,facass = PlayerData[playerid][pFaction],string[2048],string1[512], string2[512], string3[512], stockjobinfoid;
+	new rand = random(3),moneyentrepriseid,facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count,aye = 5000 / count;
 	if (response)
 	{
 		for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
@@ -21308,7 +20095,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 9;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;	
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 1:
 				{
@@ -21324,7 +20121,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 10;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 2:
 				{
@@ -21340,7 +20147,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 11;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 3:
 				{
@@ -21356,7 +20173,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 12;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;				
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}				
 				}
 				case 4:
 				{
@@ -21372,7 +20199,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 13;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;				
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}			
 				}
 				case 5:
 				{
@@ -21388,7 +20225,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 14;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;				
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}			
 				}
 				case 6:
 				{
@@ -21404,7 +20251,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 15;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 7:
 				{
@@ -21420,7 +20277,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 16;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 8:
 				{
@@ -21436,7 +20303,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 17;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 9:
 				{
@@ -21452,7 +20329,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 18;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 10:
 				{
@@ -21468,7 +20355,17 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 19;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
 					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
-					argent_entreprise[moneyentrepriseid][argentcourier]  += 5000;
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+					{
+						if(FactionData[ii][factionacces][5] == 1)
+						{
+							FactionData[ii][factioncoffre] += aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				case 11:
 				{
@@ -21499,10 +20396,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				}
 				case 14:
 				{
-					format(string1, sizeof(string1), "{FFFFFF}FrontBumper : %s\nRearBumper : %s\nRoof : %s\nHood : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningrearbumper]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningroof]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunninghood]));
-					format(string2, sizeof(string2), "Spoiler : %s\nSideskirt1 : %s\nSideskirt2 : %s\nWheel : %s\nhydrolic  : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningspoiler]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningwheel]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunninghydrolic]));
-					format(string3, sizeof(string3),"Roue: %s\nPièce de carrosserie : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningroue]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningcaro]));
-					format(string, sizeof(string),"%s%s%s",string1,string2,string3);
+					format(string, sizeof(string), "{FFFFFF}FrontBumper : %s\nRearBumper : %s\nRoof : %s\nHood : %s\nSpoiler : %s\nSideskirt1 : %s\nSideskirt2 : %s\nWheel : %s\nhydrolic  : %s\nRoue: %s\nPièce de carrosserie : %s\n,FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningroue]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningcaro]",FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningrearbumper]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningroof]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunninghood]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningspoiler]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningwheel]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunninghydrolic]));
+					format(string, sizeof(string),"%s",string);
 					Dialog_Show(playerid, Caissedetat, DIALOG_STYLE_MSGBOX, "Les stock de pièce de tunning", string, " X ", "");
 				}
 			}

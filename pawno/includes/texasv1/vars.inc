@@ -1711,28 +1711,6 @@ enum gouvernementinfo
 	gouvernementbiz
 }
 new info_gouvernementinfo[MAX_PLAYERS][gouvernementinfo];
-//salaire rank
-/*
-enum salairerang
-{
-	factioniddd,	
-	salairerang1,
-	salairerang2,
-	salairerang3,
-	salairerang4,
-	salairerang5,
-	salairerang6,
-	salairerang7,
-	salairerang8,
-	salairerang9,
-	salairerang10,
-	salairerang11,
-	salairerang12,
-	salairerang13,
-	salairerang14,
-	salairerang15
-}
-new info_salairerang[MAX_FACTIONS][salairerang];*/
 //cv des entreprise
 enum cvfbii
 {
@@ -1888,47 +1866,6 @@ enum salairefbid
 	salairefbi15
 }
 new info_salairefbi[MAX_FACTIONS][salairefbid];
-//salaire journaliste
-enum salairejournalisted
-{
-	salairejournalisteiddd,	
-	salairejournaliste1,
-	salairejournaliste2,
-	salairejournaliste3,
-	salairejournaliste4,
-	salairejournaliste5,
-	salairejournaliste6,
-	salairejournaliste7,
-	salairejournaliste8,
-	salairejournaliste9,
-	salairejournaliste10,
-	salairejournaliste11,
-	salairejournaliste12,
-	salairejournaliste13,
-	salairejournaliste14,
-	salairejournaliste15
-}
-new info_salairejournaliste[MAX_FACTIONS][salairejournalisted];
-enum salairelivreurbizd
-{
-	salairelivreurbiziddd,	
-	salairelivreurbiz1,
-	salairelivreurbiz2,
-	salairelivreurbiz3,
-	salairelivreurbiz4,
-	salairelivreurbiz5,
-	salairelivreurbiz6,
-	salairelivreurbiz7,
-	salairelivreurbiz8,
-	salairelivreurbiz9,
-	salairelivreurbiz10,
-	salairelivreurbiz11,
-	salairelivreurbiz12,
-	salairelivreurbiz13,
-	salairelivreurbiz14,
-	salairelivreurbiz15
-}
-new info_salairelivreurbiz[MAX_FACTIONS][salairelivreurbizd];
 enum salairepoliced
 {
 	salairepoliceiddd,	
@@ -1989,26 +1926,6 @@ enum salaireurgentisted
 	salaireurgentiste15
 }
 new info_salaireurgentiste[MAX_FACTIONS][salaireurgentisted];
-enum salairevendeurrued
-{
-	salairevendeurrueiddd,	
-	salairevendeurrue1,
-	salairevendeurrue2,
-	salairevendeurrue3,
-	salairevendeurrue4,
-	salairevendeurrue5,
-	salairevendeurrue6,
-	salairevendeurrue7,
-	salairevendeurrue8,
-	salairevendeurrue9,
-	salairevendeurrue10,
-	salairevendeurrue11,
-	salairevendeurrue12,
-	salairevendeurrue13,
-	salairevendeurrue14,
-	salairevendeurrue15
-}
-new info_salairevendeurrue[MAX_FACTIONS][salairevendeurrued];
 enum salairemecano3d
 {
 	salairemecano3iddd,	
@@ -2049,46 +1966,6 @@ enum salairemecano4d
 	salairemecano415
 }
 new info_salairemecano4[MAX_FACTIONS][salairemecano4d];
-enum salairetaxid
-{
-	salairetaxiiddd,	
-	salairetaxi1,
-	salairetaxi2,
-	salairetaxi3,
-	salairetaxi4,
-	salairetaxi5,
-	salairetaxi6,
-	salairetaxi7,
-	salairetaxi8,
-	salairetaxi9,
-	salairetaxi10,
-	salairetaxi11,
-	salairetaxi12,
-	salairetaxi13,
-	salairetaxi14,
-	salairetaxi15
-}
-new info_salairetaxi[MAX_FACTIONS][salairetaxid];
-enum salairepetitlivreurd
-{
-	petitlivreuriddd,	
-	petitlivreur1,
-	petitlivreur2,
-	petitlivreur3,
-	petitlivreur4,
-	petitlivreur5,
-	petitlivreur6,
-	petitlivreur7,
-	petitlivreur8,
-	petitlivreur9,
-	petitlivreur10,
-	petitlivreur11,
-	petitlivreur12,
-	petitlivreur13,
-	petitlivreur14,
-	petitlivreur15
-}
-new info_salairepetitlivreur[MAX_FACTIONS][salairepetitlivreurd];
 //giro mecano
 new UCL[MAX_VEHICLES];
 new gelblicht1[MAX_VEHICLES];
