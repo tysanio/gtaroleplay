@@ -33,6 +33,7 @@ $fichier28="storage_log.txt"; $tabfich28=file($fichier28);
 $fichier29="name_log.txt"; $tabfich29=file($fichier29);
 $fichier30="sms.txt"; $tabfich30=file($fichier30);
 $fichier31="telephone.txt"; $tabfich31=file($fichier31);
+$fichier32="faction_coffre.txt"; $tabfich32=file($fichier32);
 
 ##Affichier les truc
 echo "<h4> ADMIN LOG</h4>"; for( $i = 0 ; $i < count($tabfich) ; $i++ ) {echo $tabfich[$i]."</br>";}
@@ -46,6 +47,7 @@ echo "<h4> CRAFT LOG</h4>"; for( $i = 0 ; $i < count($tabfich5) ; $i++ ) {echo $
 echo "<h4> DO LOG</h4>"; for( $i = 0 ; $i < count($tabfich6) ; $i++ ) {echo $tabfich6[$i]."</br>";}
 echo "<h4> DROPPICK LOG</h4>"; for( $i = 0 ; $i < count($tabfich7) ; $i++ ) {echo $tabfich7[$i]."</br>";}
 echo "<h4> FACTION CHAT LOG</h4>"; for( $i = 0 ; $i < count($tabfich8) ; $i++ ) {echo $tabfich8[$i]."</br>";}
+echo "<h4> FACTION COFFRE LOG</h4>"; for( $i = 0 ; $i < count($tabfich32) ; $i++ ) {echo $tabfich32[$i]."</br>";}
 echo "<h4> GIVE LOG</h4>"; for( $i = 0 ; $i < count($tabfich9) ; $i++ ) {echo $tabfich9[$i]."</br>";}
 echo "<h4> HOUSE LOG</h4>"; for( $i = 0 ; $i < count($tabfich10) ; $i++ ) {echo $tabfich10[$i]."</br>";}
 echo "<h4> JAIL LOG</h4>"; for( $i = 0 ; $i < count($tabfich11) ; $i++ ) {echo $tabfich11[$i]."</br>";}
