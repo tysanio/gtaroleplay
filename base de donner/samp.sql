@@ -1386,72 +1386,6 @@ CREATE TABLE IF NOT EXISTS `salairemairie` (
 INSERT INTO `salairemairie` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
 (1, 800, 850, 900, 950, 1050, 1100, 1150, 1200, 2500, 2500, 1350, 2400, 2500, 1200, 2500);
 
--- --------------------------------------------------------
-
---
--- Structure de la table `salairemecano3`
---
-
-CREATE TABLE IF NOT EXISTS `salairemecano3` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `salairemecano3`
---
-
-INSERT INTO `salairemecano3` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
-(1, 1, 550, 700, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `salairemecano4`
---
-
-CREATE TABLE IF NOT EXISTS `salairemecano4` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `salairemecano4`
---
-
-INSERT INTO `salairemecano4` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
-(1, 0, 0, 0, 1000, 1, 0, 0, 0, 0, 0, 2000, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
 --
 -- Structure de la table `salairepolice`
 --
@@ -2129,34 +2063,11 @@ ALTER TABLE `salairefbi`
 ALTER TABLE `salairejob`
  ADD KEY `id` (`id`);
 
---
--- Index pour la table `salairejournaliste`
---
-ALTER TABLE `salairejournaliste`
- ADD PRIMARY KEY (`idfaction`);
-
---
--- Index pour la table `salairelivreurbiz`
---
-ALTER TABLE `salairelivreurbiz`
- ADD PRIMARY KEY (`idfaction`);
 
 --
 -- Index pour la table `salairemairie`
 --
 ALTER TABLE `salairemairie`
- ADD PRIMARY KEY (`idfaction`);
-
---
--- Index pour la table `salairemecano3`
---
-ALTER TABLE `salairemecano3`
- ADD PRIMARY KEY (`idfaction`);
-
---
--- Index pour la table `salairemecano4`
---
-ALTER TABLE `salairemecano4`
  ADD PRIMARY KEY (`idfaction`);
 
 --
@@ -2172,21 +2083,9 @@ ALTER TABLE `salaireswat`
  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairetaxi`
---
-ALTER TABLE `salairetaxi`
- ADD PRIMARY KEY (`idfaction`);
-
---
 -- Index pour la table `salaireurgentiste`
 --
 ALTER TABLE `salaireurgentiste`
- ADD PRIMARY KEY (`idfaction`);
-
---
--- Index pour la table `salairevendeurrue`
---
-ALTER TABLE `salairevendeurrue`
  ADD PRIMARY KEY (`idfaction`);
 
 --

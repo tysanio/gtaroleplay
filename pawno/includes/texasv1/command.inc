@@ -298,12 +298,9 @@ CMD:caissedetat(playerid, params[])
 {
 	if (PlayerData[playerid][pAdmin] < 1)
     	return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	new string[4096],string1[256], string2[256], string3[256],string4[256], moneyentrepriseid;
-	format(string1, sizeof(string1), "{FFFFFF}Mécano Zone 3 : %s{2EFE2E}${FFFFFF}\nMécano Zone 4 : %s{2EFE2E}${FFFFFF}\n",FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));
-	format(string2, sizeof(string2), "Mafia Zone 1 : %s{2EFE2E}${FFFFFF}\nMafia Zone 4 : %s{2EFE2E}${FFFFFF}\n",FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone4]));
-	format(string3, sizeof(string3), "Police : %s{2EFE2E}${FFFFFF}\nFBI : %s{2EFE2E}${FFFFFF}\nSWAT : %s{2EFE2E}${FFFFFF}\nMédecin : %s{2EFE2E}${FFFFFF}\nMairie LS : %s{2EFE2E}${FFFFFF}\n",FormatNumber(argent_entreprise[moneyentrepriseid][argentpolice]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfbi]),FormatNumber(argent_entreprise[moneyentrepriseid][argentswat]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmedecin]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmairie]));
-	format(string4, sizeof(string4), "Journaliste : %s{2EFE2E}${FFFFFF}\nFermier : %s{2EFE2E}${FFFFFF}\nVendeur : %s{2EFE2E}${FFFFFF}\nBanque : %s{2EFE2E}${FFFFFF}\nPetit livreur : %s{2EFE2E}${FFFFFF}",FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfermier]),FormatNumber(argent_entreprise[moneyentrepriseid][argentvendeur]),FormatNumber(argent_entreprise[moneyentrepriseid][argentbanque]),FormatNumber(argent_entreprise[moneyentrepriseid][argentcourier]));
-	format(string, sizeof(string),"%s%s%s%s",string1,string2,string3,string4);
+	new string[4096], moneyentrepriseid;
+	format(string, sizeof(string), "Police : %s{2EFE2E}${FFFFFF}\nFBI : %s{2EFE2E}${FFFFFF}\nSWAT : %s{2EFE2E}${FFFFFF}\nMédecin : %s{2EFE2E}${FFFFFF}\nMairie LS : %s{2EFE2E}${FFFFFF}\nFermier : %s{2EFE2E}${FFFFFF}\nBanque : %s{2EFE2E}${FFFFFF}",FormatNumber(argent_entreprise[moneyentrepriseid][argentpolice]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfbi]),FormatNumber(argent_entreprise[moneyentrepriseid][argentswat]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmedecin]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmairie]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfermier]),FormatNumber(argent_entreprise[moneyentrepriseid][argentbanque]));
+	format(string, sizeof(string),"%s",string);
 	Dialog_Show(playerid, Caissedetat, DIALOG_STYLE_MSGBOX, "Les caisses des factions", string, " X ", "");
 	return 1;
 }

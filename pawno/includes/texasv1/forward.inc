@@ -146,10 +146,6 @@ forward salaireswat(rank);
 forward salaireswatload();
 forward salaireurgentiste(rank);
 forward salaireurgentisteload();
-forward salairemecano3(rank);
-forward salairemecano3load();
-forward salairemecano4(rank);
-forward salairemecano4load();
 //cv des entreprise
 forward cvfbiidload();
 forward cvjournalisteidload();

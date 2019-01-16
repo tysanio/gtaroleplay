@@ -1926,46 +1926,6 @@ enum salaireurgentisted
 	salaireurgentiste15
 }
 new info_salaireurgentiste[MAX_FACTIONS][salaireurgentisted];
-enum salairemecano3d
-{
-	salairemecano3iddd,	
-	salairemecano31,
-	salairemecano32,
-	salairemecano33,
-	salairemecano34,
-	salairemecano35,
-	salairemecano36,
-	salairemecano37,
-	salairemecano38,
-	salairemecano39,
-	salairemecano310,
-	salairemecano311,
-	salairemecano312,
-	salairemecano313,
-	salairemecano314,
-	salairemecano315
-}
-new info_salairemecano3[MAX_FACTIONS][salairemecano3d];
-enum salairemecano4d
-{
-	salairemecano4iddd,	
-	salairemecano41,
-	salairemecano42,
-	salairemecano43,
-	salairemecano44,
-	salairemecano45,
-	salairemecano46,
-	salairemecano47,
-	salairemecano48,
-	salairemecano49,
-	salairemecano410,
-	salairemecano411,
-	salairemecano412,
-	salairemecano413,
-	salairemecano414,
-	salairemecano415
-}
-new info_salairemecano4[MAX_FACTIONS][salairemecano4d];
 //giro mecano
 new UCL[MAX_VEHICLES];
 new gelblicht1[MAX_VEHICLES];

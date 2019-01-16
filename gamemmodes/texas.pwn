@@ -2754,104 +2754,18 @@ public MinuteCheck()
 				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-			else if (FactionData[factionid][factionacces][13] == 1 && argent_entreprise[moneyentrepriseid][argentmecanozone3] >= 0)
+            else if (FactionData[factionid][factionacces][13] == 1 && FactionData[factionid][factioncoffre] >= 0)
 			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairemecano3[rank][salairemecano31];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairemecano3[rank][salairemecano32];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairemecano3[rank][salairemecano33];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairemecano3[rank][salairemecano34];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairemecano3[rank][salairemecano35];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairemecano3[rank][salairemecano36];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairemecano3[rank][salairemecano37];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairemecano3[rank][salairemecano38];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairemecano3[rank][salairemecano39];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairemecano3[rank][salairemecano310];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairemecano3[rank][salairemecano311];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairemecano3[rank][salairemecano312];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairemecano3[rank][salairemecano313];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairemecano3[rank][salairemecano314];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairemecano3[rank][salairemecano315];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentmecanozone3] -= paycheck;
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if (FactionData[factionid][factionacces][14] == 1 && argent_entreprise[moneyentrepriseid][argentmecanozone4] >= 0)
+            else if (FactionData[factionid][factionacces][14] == 1 && FactionData[factionid][factioncoffre] >= 0)
 			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairemecano4[rank][salairemecano41];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairemecano4[rank][salairemecano42];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairemecano4[rank][salairemecano43];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairemecano4[rank][salairemecano44];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairemecano4[rank][salairemecano45];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairemecano4[rank][salairemecano46];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairemecano4[rank][salairemecano47];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairemecano4[rank][salairemecano48];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairemecano4[rank][salairemecano49];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairemecano4[rank][salairemecano410];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairemecano4[rank][salairemecano411];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairemecano4[rank][salairemecano412];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairemecano4[rank][salairemecano413];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairemecano4[rank][salairemecano414];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairemecano4[rank][salairemecano415];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentmecanozone4] -= paycheck;
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
 			//bracelet electronic
@@ -7826,8 +7740,6 @@ public OnGameModeInit()
 	salairepoliceload();
 	salaireswatload();
 	salaireurgentisteload();
-	salairemecano3load();
-	salairemecano4load();
 	//aide menu
 	AideMenu0 = TextDrawCreate(310.000000, 141.000000, "_");
 	TextDrawAlignment(AideMenu0, 2);
@@ -8457,36 +8369,6 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
 		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
 		Dialog_Show(playerid,Salaireurgentiste,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
-	if (strcmp("/salairemecano3", cmdtext, true) == 0)
-	{
-	    new facass = PlayerData[playerid][pFaction];
-	    if (FactionData[facass][factionacces][13] == 0)
-	    	return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise de mécano zone 3.");
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		new string1[60], string2[60], string3[60],string[200];
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairemecano3,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
-	if (strcmp("/salairemecano4", cmdtext, true) == 0)
-	{
-		new facass = PlayerData[playerid][pFaction];
-	    if (FactionData[facass][factionacces][14] == 0)
-	    	return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise de mécano zone 4.");
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		new string1[60], string2[60], string3[60],string[200];
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairemecano4,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
 		return 1;
 	}
 	if(strcmp(cmdtext, "/porteavantgauche", true) == 0)
@@ -11302,102 +11184,6 @@ public salaireurgentisteload()
 	    info_salaireurgentiste[rank][salaireurgentiste13] = cache_get_field_content_int(rank,"salairerang13");
 	    info_salaireurgentiste[rank][salaireurgentiste14] = cache_get_field_content_int(rank,"salairerang14");
 	    info_salaireurgentiste[rank][salaireurgentiste15] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
-public salairemecano3(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairemecano3 SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairemecano3[rank][salairemecano31],
-	    info_salairemecano3[rank][salairemecano32],
-	    info_salairemecano3[rank][salairemecano33],
-	    info_salairemecano3[rank][salairemecano34],
-	    info_salairemecano3[rank][salairemecano35],
-	    info_salairemecano3[rank][salairemecano36],
-	    info_salairemecano3[rank][salairemecano37],
-	    info_salairemecano3[rank][salairemecano38],
-	    info_salairemecano3[rank][salairemecano39],
-	    info_salairemecano3[rank][salairemecano310],
-	    info_salairemecano3[rank][salairemecano311],
-	    info_salairemecano3[rank][salairemecano312],
-	    info_salairemecano3[rank][salairemecano313],
-	    info_salairemecano3[rank][salairemecano314],
-	    info_salairemecano3[rank][salairemecano315]);
-    mysql_tquery(g_iHandle, query);
-}
-
-public salairemecano3load()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairemecano3");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairemecano3[rank][salairemecano3iddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairemecano3[rank][salairemecano31] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairemecano3[rank][salairemecano32] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairemecano3[rank][salairemecano33] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairemecano3[rank][salairemecano34] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairemecano3[rank][salairemecano35] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairemecano3[rank][salairemecano36] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairemecano3[rank][salairemecano37] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairemecano3[rank][salairemecano38] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairemecano3[rank][salairemecano39] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairemecano3[rank][salairemecano310] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairemecano3[rank][salairemecano311] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairemecano3[rank][salairemecano312] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairemecano3[rank][salairemecano313] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairemecano3[rank][salairemecano314] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairemecano3[rank][salairemecano315] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
-public salairemecano4(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairemecano4 SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairemecano4[rank][salairemecano41],
-	    info_salairemecano4[rank][salairemecano42],
-	    info_salairemecano4[rank][salairemecano43],
-	    info_salairemecano4[rank][salairemecano44],
-	    info_salairemecano4[rank][salairemecano45],
-	    info_salairemecano4[rank][salairemecano46],
-	    info_salairemecano4[rank][salairemecano47],
-	    info_salairemecano4[rank][salairemecano48],
-	    info_salairemecano4[rank][salairemecano49],
-	    info_salairemecano4[rank][salairemecano410],
-	    info_salairemecano4[rank][salairemecano411],
-	    info_salairemecano4[rank][salairemecano412],
-	    info_salairemecano4[rank][salairemecano413],
-	    info_salairemecano4[rank][salairemecano414],
-	    info_salairemecano4[rank][salairemecano415]);
-    mysql_tquery(g_iHandle, query);
-}
-
-public salairemecano4load()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairemecano4");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairemecano4[rank][salairemecano4iddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairemecano4[rank][salairemecano41] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairemecano4[rank][salairemecano42] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairemecano4[rank][salairemecano43] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairemecano4[rank][salairemecano44] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairemecano4[rank][salairemecano45] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairemecano4[rank][salairemecano46] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairemecano4[rank][salairemecano47] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairemecano4[rank][salairemecano48] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairemecano4[rank][salairemecano49] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairemecano4[rank][salairemecano410] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairemecano4[rank][salairemecano411] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairemecano4[rank][salairemecano412] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairemecano4[rank][salairemecano413] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairemecano4[rank][salairemecano414] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairemecano4[rank][salairemecano415] = cache_get_field_content_int(rank,"salairerang15");
 	}
 	cache_delete(result);
 }
