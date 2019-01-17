@@ -17780,229 +17780,6 @@ stock EndPlayerCasualJob(playerid)
       	PlayerDok[playerid] = false;
    	}
 }
-//systeme de bank x2
-Dialog:Bankfaction(playerid, response, listitem, inputtext[])
-{
-	if (!IsPlayerInBank(playerid))
-	    return 0;
-	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-		return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-	new facass = PlayerData[playerid][pFaction];
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0:
-	        {
-				if (FactionData[facass][factionacces][13] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-				if (FactionData[facass][factionacces][14] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-				if (FactionData[facass][factionacces][11] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
-				if (FactionData[facass][factionacces][5] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-				if (FactionData[facass][factionacces][9] == 1)
-					return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");		
-			}
-		}
-	}
-	return 1;
-}
-Dialog:BankAccountfaction(playerid, response, listitem, inputtext[])
-{
-	if (!IsPlayerInBank(playerid))
-	    return 0;
-	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-		return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-	new moneyentrepriseid,facass = PlayerData[playerid][pFaction];
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0:
-	        {	
-				if (FactionData[facass][factionacces][13] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-				if (FactionData[facass][factionacces][14] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-				if (FactionData[facass][factionacces][11] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));		
-				if (FactionData[facass][factionacces][9] == 1)
-					return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-			}
-	        case 1:
-	        {
-				if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-					return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);	
-				if (FactionData[facass][factionacces][13] == 1)
-					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-				if (FactionData[facass][factionacces][14] == 1)
-					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-				if (FactionData[facass][factionacces][11] == 1)
-					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-				if (FactionData[facass][factionacces][9] == 1)
-					return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Déposer", "Compte en banque: %s$\n\nEntrée un montant:", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-			}
-	    }
-	}
-	else
-	{
-		if (FactionData[facass][factionacces][13] == 1)
-			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-		if (FactionData[facass][factionacces][14] == 1)
-			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-		if (FactionData[facass][factionacces][11] == 1)
-			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		if (FactionData[facass][factionacces][9] == 1)
-			return 	Dialog_Show(playerid, Bankfaction, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-	}
-	return 1;
-}
-Dialog:Bankfactionretirer(playerid, response, listitem, inputtext[])
-{
-	if (!IsPlayerInBank(playerid))
-	    return 0;
-	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-		return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-	if (response)
-	{
-	    new amount = strval(inputtext),moneyentrepriseid,facass = PlayerData[playerid][pFaction];
-	    if (isnull(inputtext))
-	    {	
-			if (FactionData[facass][factionacces][13] == 1)
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-			if (FactionData[facass][factionacces][14] == 1)
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-			if (FactionData[facass][factionacces][11] == 1)
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-			if (FactionData[facass][factionacces][9] == 1)
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-		}
-		if (FactionData[facass][factionacces][13] == 1)
-		{
-			if (amount < 1 || amount > argent_entreprise[moneyentrepriseid][argentmecanozone3])
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-		}
-		if (FactionData[facass][factionacces][14] == 1)
-		{
-			if (amount < 1 || amount > argent_entreprise[moneyentrepriseid][argentmecanozone4])
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-		}
-		if (FactionData[facass][factionacces][11] == 1)
-		{
-			if (amount < 1 || amount > argent_entreprise[moneyentrepriseid][argentmafiazone1])
-				return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		}
-		if (FactionData[facass][factionacces][13] == 1)
-		{argent_entreprise[moneyentrepriseid][argentmecanozone3]-= amount;}
-		if (FactionData[facass][factionacces][14] == 1)
-		{argent_entreprise[moneyentrepriseid][argentmecanozone4]-= amount;}
-		if (FactionData[facass][factionacces][11] == 1)
-		{argent_entreprise[moneyentrepriseid][argentmafiazone1]-= amount;}
-		if (FactionData[facass][factionacces][9] == 1)
-		{argent_entreprise[moneyentrepriseid][argentjournaliste]-= amount;}
-		GiveMoney(playerid, amount);
-		moneyentreprisesave(moneyentrepriseid);
-	    SendServerMessage(playerid, "Vous avez retiré %s$ de votre compte bancaire faction.", FormatNumber(amount));	
-		if (FactionData[facass][factionacces][13] == 1)
-			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-		if (FactionData[facass][factionacces][14] == 1)
-			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-		if (FactionData[facass][factionacces][11] == 1)
-			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		if (FactionData[facass][factionacces][9] == 1)
-			return 	Dialog_Show(playerid, Bankfactionretirer, DIALOG_STYLE_INPUT, "Compte banquaire de la faction Retirer", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-	}
-	else
-	{
-		new facass = PlayerData[playerid][pFaction];
-		if (FactionData[facass][factionacces][13] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][14] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][11] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
-		if (FactionData[facass][factionacces][5] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
-		if (FactionData[facass][factionacces][9] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-	}
-	return 1;
-}
-Dialog:Bankfactiondeposer(playerid, response, listitem, inputtext[])
-{
-	if (!IsPlayerInBank(playerid))
-	    return 0;
-	if (response)
-	{
-	    new amount = strval(inputtext),moneyentrepriseid,facass = PlayerData[playerid][pFaction];
-	    if (isnull(inputtext))
-	    {
-			if (FactionData[facass][factionacces][13] == 1)
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-			if (FactionData[facass][factionacces][14] == 1)
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-			if (FactionData[facass][factionacces][11] == 1)
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-			if (FactionData[facass][factionacces][9] == 1)
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-		}
-		if (FactionData[facass][factionacces][13] == 1)
-		{
-			if (amount < 1 || amount > GetMoney(playerid))
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-		}
-		if (FactionData[facass][factionacces][14] == 1)
-		{
-			if (amount < 1 || amount > GetMoney(playerid))
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-		}
-		if (FactionData[facass][factionacces][11] == 1)
-		{
-			if (amount < 1 || amount > GetMoney(playerid))
-				return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		}
-		if (FactionData[facass][factionacces][13] == 1)
-		{argent_entreprise[moneyentrepriseid][argentmecanozone3]+= amount;}
-		if (FactionData[facass][factionacces][14] == 1)
-		{argent_entreprise[moneyentrepriseid][argentmecanozone4]+= amount;}
-		if (FactionData[facass][factionacces][11] == 1)
-		{argent_entreprise[moneyentrepriseid][argentmafiazone1]+= amount;}
-		if (FactionData[facass][factionacces][9] == 1)
-		{argent_entreprise[moneyentrepriseid][argentjournaliste]+= amount;}
-		GiveMoney(playerid, -amount);
-		moneyentreprisesave(moneyentrepriseid);
-	    SendServerMessage(playerid, "Vous avez retiré %s$ de votre compte bancaire faction.", FormatNumber(amount));
-		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
-			return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		if (FactionData[facass][factionacces][13] == 1)
-			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone3]));	
-		if (FactionData[facass][factionacces][14] == 1)
-			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmecanozone4]));	
-		if (FactionData[facass][factionacces][11] == 1)
-			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentmafiazone1]));	
-		if (FactionData[facass][factionacces][9] == 1)
-			return 	Dialog_Show(playerid, Bankfactiondeposer, DIALOG_STYLE_TABLIST, "Compte banquaire de la faction", "Compte en banque: \t%s$", "Valider", "Quitter", FormatNumber(argent_entreprise[moneyentrepriseid][argentjournaliste]));	
-	}
-	else
-	{
-		new facass = PlayerData[playerid][pFaction];
-		if (FactionData[facass][factionacces][13] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][14] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][11] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");
-		if (FactionData[facass][factionacces][12] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][5] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");	
-		if (FactionData[facass][factionacces][9] == 1)
-			return 	Dialog_Show(playerid, BankAccountfaction, DIALOG_STYLE_LIST, "Compte Banquaire de la faction", "Retirer\nDeposé", "Choisir", " <-- ");		
-	}
-	return 1;
-}
 //mission
 Dialog:Mission(playerid, response, listitem, inputtext[])
 {
@@ -19478,7 +19255,7 @@ stock SetVehicleSpeed(vehicleid,mph)
 Dialog:commande(playerid, response, listitem, inputtext[])
 {
 	static Float:x,Float:y,Float:z,Float:a;
-	new rand = random(3),moneyentrepriseid,facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count,aye = 5000 / count;
+	new rand = random(3),facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count,aye = 5000 / count;
 	if (response)
 	{
 		for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
@@ -19491,7 +19268,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 0:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19501,7 +19278,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 9;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19517,7 +19295,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 1:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19527,7 +19305,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 10;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19543,7 +19322,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 2:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19553,7 +19332,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 11;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19569,7 +19349,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 3:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19579,7 +19359,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 12;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19595,7 +19376,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 4:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19605,7 +19386,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 13;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19621,7 +19403,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 5:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19631,7 +19413,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 14;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19647,7 +19430,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 6:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19657,7 +19440,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 15;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19673,7 +19457,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 7:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19683,7 +19467,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 16;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19699,7 +19484,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 8:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19709,7 +19494,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 17;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19725,7 +19511,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 9:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19735,7 +19521,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 18;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19751,7 +19538,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 10:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
@@ -19761,7 +19548,8 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 19;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					argent_entreprise[moneyentrepriseid][argentmecanozone3] -= 5000;
+					FactionData[facass][factioncoffre] -= 5000;
+					Faction_Save(facass);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
 						count++;
 					}
@@ -19777,7 +19565,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 11:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchpaint",1000,0);
@@ -19786,7 +19574,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 12:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchoutils",1000,0);
@@ -19795,7 +19583,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				case 13:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (argent_entreprise[moneyentrepriseid][argentmecanozone3] < 5000)
+					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (500$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchnos",1000,0);
@@ -19817,7 +19605,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 			CrateData[i][crateInterior] = 0;
 			CrateData[i][crateWorld] = 0;
 			Crate_Refresh(i);
-			moneyentreprisesave(moneyentrepriseid);
 			if(FactionData[facass][factionacces][5] == 1)
 			{ SendServerMessage(playerid, "RADIO: Une boite qui a été commander sera livré a %s.", GetLocation(x,y,z));}
 			return i;
@@ -19828,7 +19615,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 Dialog:commande1(playerid, response, listitem, inputtext[])
 {
 	static Float:x,Float:y,Float:z,Float:a;
-	new rand = random(3),moneyentrepriseid,facass = PlayerData[playerid][pFaction];
+	new rand = random(3),facass = PlayerData[playerid][pFaction],count;
 	if (response)
 	{
 		for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
@@ -19894,10 +19681,21 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 			CrateData[i][crateWorld] = 0;
 			Crate_Refresh(i);
 			FactionData[facass][factioncoffre] -= 7500;
-			argent_entreprise[moneyentrepriseid][argentcourier] += 7500;
-			moneyentreprisesave(moneyentrepriseid);
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+			{
+				new aye = 7500 / count;
+				if(FactionData[ii][factionacces][5] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 			if(FactionData[facass][factionacces][5] == 1)
 			{ SendServerMessage(playerid,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
+			Faction_Save(facass);
 			return i;
 		}
 	}
@@ -21872,7 +21670,7 @@ Dialog:BlackJackMiser(playerid, response, listitem, inputtext[])
 {
 	if(response)
 	{
-	    new misejb = strval(inputtext),string[8],moneyentrepriseid;
+	    new misejb = strval(inputtext),string[8],count;
 	    if (misejb < 1 || misejb > 99999) return Dialog_Show(playerid, BlackJackMiser, DIALOG_STYLE_INPUT, "BlackJack mise","Mise trop élevée ou trop basse.\nEntre 1$ et 99999$ maximum.\nVeuiller placé une mise pour commencer.", "Mise", "Annuler");
 	    format(string, sizeof(string), "%d $",misejb);
 	    PlayerTextDrawSetString(playerid,BlackJackTD[10][playerid],string);
@@ -21880,8 +21678,18 @@ Dialog:BlackJackMiser(playerid, response, listitem, inputtext[])
 	    PlayerTextDrawShow(playerid,BlackJackTD[10][playerid]);
 	    //ici a mettre pour retirer l'argent
 		GiveMoney(playerid, -misejb);
-		argent_entreprise[moneyentrepriseid][argentmafiazone1] += misejb;
-		moneyentreprisesave(moneyentrepriseid);
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		{
+			new aye = misejb / count;
+			if(FactionData[ii][factionacces][11] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 	}
 	return 1;
 }

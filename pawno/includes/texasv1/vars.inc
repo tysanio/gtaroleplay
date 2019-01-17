@@ -2482,7 +2482,6 @@ new actorvendeuramendes[1];
 new actorvendeurpermis[1];
 new actorvendeurmairie[1];
 new actorvendeurbanque[4];
-new actorvendeurbanquef[4];
 new actorvendeuranpe[1];
 new HelpPic1[2];
 //roulette

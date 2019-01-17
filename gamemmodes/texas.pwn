@@ -5200,7 +5200,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	 	new id = slotmachine_Nearest(playerid);
 	 	if (id != -1)
 	 	{
-			new stockjobinfoid,moneyentrepriseid;
+			new stockjobinfoid,count;
 		    if(info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] == 0) return SendErrorMessage(playerid,"Il n'y a plus d'électricité dans le pays central générateur hors service");
 			//generateur
 			if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] -= 1;}
@@ -5221,8 +5221,18 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	 		timerslot[playerid] = SetTimerEx("UpdateMachineTD", 100, 1, "d", playerid);
 	 		GiveMoney(playerid, -MONEY_COST);
 	 		TogglePlayerControllable(playerid, 0);
-	 		argent_entreprise[moneyentrepriseid][argentmafiazone1] += MONEY_COST;
-	 		moneyentreprisesave(moneyentrepriseid);
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = MONEY_COST / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 	 	}
 	 	return 1;
 	}
@@ -5342,15 +5352,13 @@ public OnPlayerEnterCheckpoint(playerid)
 		    SendErrorMessage(playerid, "Vous nêtes pas dans le véhicule");
 		    return 1;
 		}
-		new vehicleid = GetPlayerVehicleID(playerid),string[180],moneyentrepriseid;
+		new vehicleid = GetPlayerVehicleID(playerid),string[180],facass = PlayerData[playerid][pFaction];
 		if (!IsLoadableVehicle(vehicleid)) {SendErrorMessage(playerid, "Vous nêtes pas dans un véhicule de livraison.");}
         format(string, sizeof(string), "Vous avez fait gagner $%d à l'entreprise!", TruckingCheck[playerid]);
-    	argent_entreprise[moneyentrepriseid][argentcourier] +=TruckingCheck[playerid];
-        moneyentreprisesave(moneyentrepriseid);
+    	FactionData[facass][factioncoffre]+= TruckingCheck[playerid];
         TruckingCheck[playerid] = 0;
 		SendClientMessageEx(playerid, COLOR_LIGHTYELLOW, string);
 		DisablePlayerCheckpoint(playerid);
-		//RespawnVehicle(vehicleid);
 	}
 	if (PlayerData[playerid][pCP])
 	{
@@ -5841,11 +5849,9 @@ public OnPlayerEnterCheckpoint(playerid)
 		DisablePlayerCheckpoint(playerid);
 		check9[playerid] = 0;
 		SendClientMessage(playerid,0xADFF2FAA, "{00FF15}[Entreprise]: {FFFFFF}Tout le courrier est livré argent gagner à l'entreprise {FFFFFF}200$");
-		//GameTextForPlayer(playerid,"~G~+200$",3000,5);
-		//GiveMoney(playerid, 200);
-		new moneyentrepriseid;
-		argent_entreprise[moneyentrepriseid][argentcourier] += 200;
-		moneyentreprisesave(moneyentrepriseid);
+		new facass = PlayerData[playerid][pFaction];
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 		return 1;
 	}
 	if(GetPVarInt(playerid, "Gjob") == 1)
@@ -6187,7 +6193,7 @@ public OnPlayerEnterCheckpoint(playerid)
 }
 public jobchargement(playerid)
 {
-    new stockjobinfoid,moneyentrepriseid;
+    new stockjobinfoid,moneyentrepriseid,facass = PlayerData[playerid][pFaction];
     if(livraisonjob[playerid] == 0)//bois
 	{
 	    if(info_stockjobinfo[stockjobinfoid][stockjobinfobois] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
@@ -6207,7 +6213,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfoboismeuble] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6238,7 +6245,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 350$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 350;
+		FactionData[facass][factioncoffre] += 350;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator] += 200;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6268,7 +6276,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6298,7 +6307,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6328,7 +6338,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6358,7 +6369,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6388,7 +6400,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6418,7 +6431,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6448,7 +6462,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -6478,7 +6493,8 @@ public jobchargement(playerid)
 	{
 		SendEntrepriseMessage(playerid,"Chargement terminer veuiller retourné au dépot");
 	    SendEntrepriseMessage(playerid,"Votre entreprise a gagné 200$");
-	    argent_entreprise[moneyentrepriseid][argentcourier] += 200;
+		FactionData[facass][factioncoffre] += 200;
+		Faction_Save(facass);
 	    info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] += 10;
 	    DisablePlayerCheckpoint(playerid);
 	    quantiterdejob[playerid] = 0;
@@ -7610,15 +7626,6 @@ public OnGameModeInit()
 	SetActorVirtualWorld(actorvendeurbanque[1], 7010);
 	SetActorVirtualWorld(actorvendeurbanque[2], 7010);
 	SetActorVirtualWorld(actorvendeurbanque[3], 7010);
-	//banque faction
-	actorvendeurbanquef[0] = CreateActor(194,1423.1017,-979.9238,996.1050,267.9750);
-	actorvendeurbanquef[1] = CreateActor(194,1423.1017,-977.5731,996.1050,268.9150);
-	actorvendeurbanquef[2] = CreateActor(194,1423.1017,-975.5717,996.1050,264.2150);
-	actorvendeurbanquef[3] = CreateActor(194,1423.1017,-971.3654,996.1050,268.9151);
-	SetActorVirtualWorld(actorvendeurbanquef[0], 7010);
-	SetActorVirtualWorld(actorvendeurbanquef[1], 7010);
-	SetActorVirtualWorld(actorvendeurbanquef[2], 7010);
-	SetActorVirtualWorld(actorvendeurbanquef[3], 7010);
 	//anpe
 	actorvendeuranpe[0] = CreateActor(290,314.2601,138.2111,1011.7645,164.0630);
 	SetActorVirtualWorld(actorvendeuranpe[0],0);
@@ -9916,7 +9923,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 		return CallLocalFunction("_gCasino_OPCPTD", "ii", playerid, _:playertextid);
 	}
 	//roulette
-	new moneyentrepriseid;
+	new count;
 	for(new i;i<37;i++)
 	{
 		if(pBet[playerid][i] >= 1000) return SendErrorMessage(playerid, "Tu ne peut misez plus haut.");
@@ -9929,7 +9936,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 					return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 				pBet[playerid][i] += Frist_Bet_Value;
 				GiveMoney(playerid,-Frist_Bet_Value);
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = Frist_Bet_Value / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			if(PlayerData[playerid][CType] == 1)
 			{
@@ -9937,7 +9955,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 					return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 				pBet[playerid][i] += Second_Bet_Value;
 				GiveMoney(playerid,-Second_Bet_Value);
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = Second_Bet_Value / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 			SendServerMessage(playerid,"Mise pour le chiffre %d : $%d",i,pBet[playerid][i]);
 	        if(C_Created[playerid][i] == false)
@@ -9956,7 +9985,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][40] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -9964,11 +10004,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][40] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-            argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_3to1] = 1;
 		SendServerMessage(playerid,"Mise pour 3 a 1 : $%d",pBet[playerid][40]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][40] == false)
 		{
  			C_Created[playerid][40] = true;
@@ -9984,7 +10034,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][41] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -9992,11 +10053,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][41] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_3to1] = 2;
 		SendServerMessage(playerid,"Mise pour 3 a 1 : $%d",pBet[playerid][41]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][41] == false)
  		{
  			C_Created[playerid][41] = true;
@@ -10012,7 +10083,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][42] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10020,11 +10102,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][42] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_3to1] = 3;
 		SendServerMessage(playerid,"Mise pour 3 a 1: $%d",pBet[playerid][42]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][42] == false)
  		{
  			C_Created[playerid][42] = true;
@@ -10040,7 +10132,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][43] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10048,11 +10151,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][43] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_1st12] = 1;
 		SendServerMessage(playerid,"Mise pour 1st12: $%d",pBet[playerid][43]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][43] == false)
  		{
  			C_Created[playerid][43] = true;
@@ -10068,7 +10181,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][44] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10076,11 +10200,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][44] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_2nd12] = 1;
 		SendServerMessage(playerid,"Mise pour 2st12: $%d",pBet[playerid][44]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][44] == false)
  		{
  			C_Created[playerid][44] = true;
@@ -10095,8 +10229,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
    			if(GetPlayerMoney(playerid) < 10)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][45] += Frist_Bet_Value;
-			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10104,11 +10248,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][45] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_3rd12] = 1;
 		SendServerMessage(playerid,"Mise pour 3st12: $%d",pBet[playerid][45]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][45] == false)
  		{
  			C_Created[playerid][45] = true;
@@ -10124,7 +10278,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][46] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10132,11 +10297,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][46] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_1to18] = 1;
 		SendServerMessage(playerid,"Mise pour 1 a 18: $%d",pBet[playerid][46]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][46] == false)
  		{
  			C_Created[playerid][46] = true;
@@ -10152,7 +10327,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][47] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10160,11 +10346,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][47] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][EVOROOD] = 1;
 		SendServerMessage(playerid,"Mise pour EVEN: $%d",pBet[playerid][47]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][47] == false)
  		{
  			C_Created[playerid][47] = true;
@@ -10180,7 +10376,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][48] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10188,11 +10395,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][48] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][Color] = 1;
 		SendServerMessage(playerid,"Mise pour Couleur Rouge: $%d",pBet[playerid][48]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][48] == false)
  		{
  			C_Created[playerid][48] = true;
@@ -10208,7 +10425,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][49] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10216,11 +10444,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][49] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][Color] = 2;
 		SendServerMessage(playerid,"Mise pour Couleur Noir: $%d",pBet[playerid][49]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][49] == false)
  		{
  			C_Created[playerid][49] = true;
@@ -10236,7 +10474,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][50] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10244,11 +10493,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][50] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][EVOROOD] = 2;
 		SendServerMessage(playerid,"Mise pour ODD : $%d",pBet[playerid][50]);
-		moneyentreprisesave(moneyentrepriseid);
         if(C_Created[playerid][50] == false)
         {
  			C_Created[playerid][50] = true;
@@ -10264,7 +10523,18 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][51] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Frist_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Frist_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		if(PlayerData[playerid][CType] == 1)
 		{
@@ -10272,11 +10542,21 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][51] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] += Second_Bet_Value;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = Second_Bet_Value / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					Faction_Save(ii);
+				}
+			}
 		}
  		PlayerData[playerid][_19to36] = 1;
 		SendServerMessage(playerid,"Mise pour 19 a 36 : $%d",pBet[playerid][51]);
-		moneyentreprisesave(moneyentrepriseid);
  		if(C_Created[playerid][51] == false)
  		{
  			C_Created[playerid][51] = true;
@@ -10397,14 +10677,24 @@ public StopRulet(playerid)
 }
 public CheckPlayer(playerid,number)
 {
-	new str[128], moneyentrepriseid;
+	new str[128],count;
 	if(PlayerData[playerid][Number] == number)
 	{
 	    GiveMoney(playerid,10*pBet[playerid][number]);
 	    format(str,sizeof(str),"~g~GAGNE $%d",10*pBet[playerid][number]);
 	    GameTextForPlayer(playerid,str,5000,4);
-	    argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 10*pBet[playerid][number];
-		moneyentreprisesave(moneyentrepriseid);
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		{
+			new aye = 10*pBet[playerid][number] / count;
+			if(FactionData[ii][factionacces][11] == 1)
+			{
+				FactionData[ii][factioncoffre] -= aye;
+				Faction_Save(ii);
+			}
+		}
 	}
 	switch(number)
 	{
@@ -10415,8 +10705,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][42]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][42]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 3*pBet[playerid][42];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 3*pBet[playerid][42] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 	    }
 	    case 2,5,8,11,14,17,20,23,26,29,32,35:
@@ -10426,8 +10726,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][41]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][41]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 3*pBet[playerid][41];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 3*pBet[playerid][41] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 	    }
 	    case 1,4,7,10,13,16,19,22,25,28,31,34:
@@ -10437,8 +10747,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][40]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][40]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 3*pBet[playerid][40];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 3*pBet[playerid][40] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 	    }
    	}
@@ -10451,8 +10771,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][43]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][43]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 3*pBet[playerid][43];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 3*pBet[playerid][43] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 	    }
 	    case 13..24:
@@ -10462,8 +10792,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][44]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][44]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 3*pBet[playerid][44];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 3*pBet[playerid][44] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 	    }
 	    case 25..36:
@@ -10473,8 +10813,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][45]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][45]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 3*pBet[playerid][45];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 3*pBet[playerid][45] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
 	    }
 	}
@@ -10487,8 +10837,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][46]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][46]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 4*pBet[playerid][46];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 4*pBet[playerid][46] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
  	    }
  	    case 19..36:
@@ -10498,8 +10858,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][47]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][47]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 4*pBet[playerid][47];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 4*pBet[playerid][47] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
  	    }
  	}
@@ -10512,8 +10882,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][48]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][48]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 4*pBet[playerid][48];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 4*pBet[playerid][48] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
  	    }
  	    case 2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35:
@@ -10523,8 +10903,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][49]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][49]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 4*pBet[playerid][49];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 4*pBet[playerid][49] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
  	    }
  	}
@@ -10537,8 +10927,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][50]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][50]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 4*pBet[playerid][50];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 4*pBet[playerid][50] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
  	    }
  	    case 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35:
@@ -10548,8 +10948,18 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][51]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][51]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-	    		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= 4*pBet[playerid][51];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = 4*pBet[playerid][51] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
 			}
  	    }
  	}
@@ -11989,7 +12399,7 @@ public stockjobinfosave(stockjobinfoid)
 public UpdateMachineTD(playerid)
 {
 	static slot[3];
-	new string[64],moneyentrepriseid;
+	new string[64],count;
 	repeats[playerid] += 1;
 	if(repeats[playerid] <= 50)
 	{
@@ -12010,8 +12420,18 @@ public UpdateMachineTD(playerid)
 		{
 			GiveMoney(playerid, MONEY_WIN);
 			GameTextForPlayer(playerid, "~g~Vous avez gagner 10 fois votre mise!", 2000, 3);
-			argent_entreprise[moneyentrepriseid][argentmafiazone1] -= MONEY_WIN;
-			moneyentreprisesave(moneyentrepriseid);
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			{
+				new aye = MONEY_WIN / count;
+				if(FactionData[ii][factionacces][11] == 1)
+				{
+					FactionData[ii][factioncoffre] -= aye;
+					Faction_Save(ii);
+				}
+			}
 		}
 		else {GameTextForPlayer(playerid, "~r~Vous avez perdu!", 2000, 3);}
 		TogglePlayerControllable(playerid, 1);
@@ -12082,21 +12502,41 @@ public OnCasinoMessage(playerid, machineid, message[])
 }
 public OnCasinoMoney(playerid, machineid, amount, result)
 {
-	new message[128],moneyentrepriseid;
+	new message[128],count;
 	if (result == CASINO_MONEY_CHARGE)
 	{
 		GiveMoney(playerid, (amount * -1));
 		format(message, 128, "[CASINO]{FFFFFF}  Vous avez parier $%i", amount);
-		argent_entreprise[moneyentrepriseid][argentmafiazone1] += amount;
-		moneyentreprisesave(moneyentrepriseid);
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		{
+			new aye = amount / count;
+			if(FactionData[ii][factionacces][11] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 		AFKMin[playerid] = 0;
 	}
 	else if (result == CASINO_MONEY_WIN)
 	{
 		GiveMoney(playerid, amount);
 		format(message, 128, "[CASINO]{FFFFFF} Vous avez gagné $%i", amount);
-		argent_entreprise[moneyentrepriseid][argentmafiazone1] -= amount;
-		moneyentreprisesave(moneyentrepriseid);
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		{
+			new aye = amount / count;
+			if(FactionData[ii][factionacces][11] == 1)
+			{
+				FactionData[ii][factioncoffre] -= aye;
+				Faction_Save(ii);
+			}
+		}
 		AFKMin[playerid] = 0;
 	}
 	else if (result == CASINO_MONEY_NOTENOUGH)
@@ -12692,11 +13132,6 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
 	if(newtarget == actorvendeurbanque[1]){cmd_banque(playerid, "");}
 	if(newtarget == actorvendeurbanque[2]){cmd_banque(playerid, "");}
 	if(newtarget == actorvendeurbanque[3]){cmd_banque(playerid, "");}
-	//banque faction
-	if(newtarget == actorvendeurbanquef[0]){cmd_banquefaction(playerid, "");}
-	if(newtarget == actorvendeurbanquef[1]){cmd_banquefaction(playerid, "");}
-	if(newtarget == actorvendeurbanquef[2]){cmd_banquefaction(playerid, "");}
-	if(newtarget == actorvendeurbanquef[3]){cmd_banquefaction(playerid, "");}
 	//anpe
 	if(newtarget == actorvendeuranpe[0]){cmd_cv(playerid,"");}
 	//vote
@@ -12836,7 +13271,7 @@ public OnPlayerAirbreak(playerid)
 public commandlunch(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new commando,rand = random(3),moneyentrepriseid;
+	new commando,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
@@ -12851,14 +13286,24 @@ public commandlunch(playerid)
 		{ SendServerMessage(i, "RADIO: Des boites de matos a été livré a %s.", GetLocation(x,y,z)); }
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
 		{Faction_Save(ii);}
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		{
+			new aye = 5000 / count;
+			if(FactionData[ii][factionacces][5] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 	}
-	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
-	moneyentreprisesave(moneyentrepriseid);
 }
 public commandlunchkevlar(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new kev,rand = random(3),moneyentrepriseid;
+	new kev,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
@@ -12871,16 +13316,26 @@ public commandlunchkevlar(playerid)
 		{ SendServerMessage(i, "RADIO: Des kevlar a été livré a %s.", GetLocation(x,y,z)); }
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
 		{Faction_Save(ii);}
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		{
+			new aye = 5000 / count;
+			if(FactionData[ii][factionacces][5] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 	}
 	kev = DropItem("Gilet par balles","Commande",19142, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
-	moneyentreprisesave(moneyentrepriseid);
 }
 public commandlunchsoins(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new kev,rand = random(3),moneyentrepriseid;
+	new kev,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
@@ -12893,16 +13348,26 @@ public commandlunchsoins(playerid)
 		{ SendServerMessage(i, "RADIO: Des trousses de soins a été livré a %s.", GetLocation(x,y,z)); }
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
 		{Faction_Save(ii);}
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		{
+			new aye = 5000 / count;
+			if(FactionData[ii][factionacces][5] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+				Faction_Save(ii);
+			}
+		}
 	}
 	kev = DropItem("Trousse de soin","Commande",1580, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
-	moneyentreprisesave(moneyentrepriseid);
 }
 public commandlunchpaint(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new kev,rand = random(3),moneyentrepriseid;
+	new kev,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
@@ -12913,18 +13378,27 @@ public commandlunchpaint(playerid)
     	FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des bombonnes de peinture a été livré a %s.", GetLocation(x,y,z)); }
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		{
+			new aye = 5000 / count;
+			if(FactionData[ii][factionacces][5] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+			}
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+			{Faction_Save(ii);}
 	}
 	kev = DropItem("Bombe de peinture","Commande",365, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
-	{Faction_Save(ii);}
-	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
-	moneyentreprisesave(moneyentrepriseid);
 }
 public commandlunchoutils(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new kev,rand = random(3),moneyentrepriseid;
+	new kev,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
@@ -12935,18 +13409,27 @@ public commandlunchoutils(playerid)
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des boites à outils a été livré a %s.", GetLocation(x,y,z)); }
 		FactionData[facass1][factioncoffre] -= 5000;
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		{
+			new aye = 5000 / count;
+			if(FactionData[ii][factionacces][5] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+			}
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+			{Faction_Save(ii);}
 	}
 	kev = DropItem("Boite a outils","Commande",19921, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
-	{Faction_Save(ii);}
-	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
-	moneyentreprisesave(moneyentrepriseid);
 }
 public commandlunchnos(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new kev,rand = random(3),moneyentrepriseid;
+	new kev,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
@@ -12957,13 +13440,22 @@ public commandlunchnos(playerid)
 		FactionData[facass1][factioncoffre] -= 5000;
 		if(FactionData[facass1][factionacces][5] == 1)
 		{ SendServerMessage(i, "RADIO: Des bonbonnes de nos a été livré a %s.", GetLocation(x,y,z)); }
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			count++;
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		{
+			new aye = 5000 / count;
+			if(FactionData[ii][factionacces][5] == 1)
+			{
+				FactionData[ii][factioncoffre] += aye;
+			}
+		}
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
+			{Faction_Save(ii);}
 	}
 	kev = DropItem("Bonbonne de NOS","Commande",1010, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
-	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
-	{Faction_Save(ii);}
-	argent_entreprise[moneyentrepriseid][argentcourier] += 5000;
-	moneyentreprisesave(moneyentrepriseid);
 }
 public OnActorStreamIn(actorid, forplayerid)
 {
@@ -13545,7 +14037,7 @@ public HorseStartTimer()
 }
 public HorseAnimTimer()
 {
-	new string[12], HorseWon;
+	new string[12], HorseWon,count;
  	format(string, sizeof(string), "LD_OTB:hrs%i", HorseAnimCount);
  	HorseAnimCount++;
  	if (HorseAnimCount == 9) HorseAnimCount = 1;
@@ -13644,13 +14136,23 @@ public HorseAnimTimer()
 				{ SendServerMessage(i,"Cheval #4 a gagner!"); }
   				if (BetOnHorse[i] == HorseWon)
   				{
-					new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS],moneyentrepriseid;
+					new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
 			 		GetPlayerPos(i, X[i], Y[i], Z[i]);
 					PlayerPlaySound(i, 5448, X[i], Y[i], Z[i]);
 		        	SendServerMessage(i,"Vous avez gagné! Votre argent est doublez!");
 					GiveMoney(i, MoneyBet[i] * 2);
-					argent_entreprise[moneyentrepriseid][argentmafiazone1] -= MoneyBet[i];
-					moneyentreprisesave(moneyentrepriseid);
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+						count++;
+					}
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+					{
+						new aye = MoneyBet[i] / count;
+						if(FactionData[ii][factionacces][11] == 1)
+						{
+							FactionData[ii][factioncoffre] -= aye;
+							Faction_Save(ii);
+						}
+					}
 				}
 				else if (MoneyBet[i] != 0 && BetOnHorse[i] != HorseWon)
 				{
@@ -14712,7 +15214,7 @@ public blackjackcroupier(playerid)
 		}
 		else
 		{
-  			new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[4],moneyentrepriseid;
+  			new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[4],count;
     		SendBlackJackMessage(playerid,"Votre somme est de %d et le croupier est de %d",sommetotal,blackjackcroupierpoint2);
     		format(string, sizeof(string), "%d",blackjackcroupierpoint2);
     		if((sommetotal > blackjackcroupierpoint2) && blackjackcroupierpoint >= 21)
@@ -14721,8 +15223,18 @@ public blackjackcroupier(playerid)
     		    PlayerTextDrawSetString(playerid,BlackJackTD[18][playerid],string);
     		    PlayerTextDrawShow(playerid,BlackJackTD[18][playerid]);
     		    GiveMoney(playerid, 2*BlackJack[playerid][sommejouer]);
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] -= BlackJack[playerid][sommejouer];
-				moneyentreprisesave(moneyentrepriseid);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = BlackJack[playerid][sommejouer] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] -= aye;
+						Faction_Save(ii);
+					}
+				}
     		    //argent remis au joueur ou perdu a joueur x2
     		    SetTimerEx("finducroupier",5000,false,"d",playerid);
     		}
@@ -14732,8 +15244,19 @@ public blackjackcroupier(playerid)
     		    PlayerTextDrawSetString(playerid,BlackJackTD[18][playerid],string);
     		    PlayerTextDrawShow(playerid,BlackJackTD[18][playerid]);
     		    GiveMoney(playerid, -BlackJack[playerid][sommejouer]);
-				argent_entreprise[moneyentrepriseid][argentmafiazone1] += BlackJack[playerid][sommejouer];
-				moneyentreprisesave(moneyentrepriseid);
+    		    GiveMoney(playerid, 2*BlackJack[playerid][sommejouer]);
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					count++;
+				}
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				{
+					new aye = BlackJack[playerid][sommejouer] / count;
+					if(FactionData[ii][factionacces][11] == 1)
+					{
+						FactionData[ii][factioncoffre] += aye;
+						Faction_Save(ii);
+					}
+				}
     		    //argenr perdu du joueur a ajouter dans la banque truc
     		    SetTimerEx("finducroupier",5000,false,"d",playerid);
     		}
