@@ -1791,7 +1791,7 @@ public OnQueryFinished(extraid, threadid)
 					new factionid = PlayerData[extraid][pFaction];
 					if (FactionData[factionid][factionacces][0] == 1) {cop_nbrCops++;}
 					if (FactionData[factionid][factionacces][3] == 1) {swat_nbrCops++;}
-					if (FactionData[factionid][factionacces][5] == 1) {mercco++;}
+					if (FactionData[factionid][factionacces][5] == 1) {mercco++; SendServerMessage(extraid,"Livreur de marchandise connecté (toi)");}
 				}
 			}
 		}
@@ -7206,7 +7206,7 @@ public OnPlayerDisconnect(playerid, reason)
  	new facass = PlayerData[playerid][pFaction];
  	if (FactionData[facass][factionacces][0] == 1) {cop_nbrCops--;}
  	if (FactionData[facass][factionacces][3] == 1) {swat_nbrCops--;}
- 	if (FactionData[facass][factionacces][5] == 11) {mercco--;}
+ 	if (FactionData[facass][factionacces][5] == 1) {mercco--;}
  	Zavod[playerid] = 0;
 	ZavodIn[playerid] = 0;
 	ZavodIn1[playerid] = 0;
@@ -9636,7 +9636,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
 			- /reparermoteur pour la réparation de moteur,\n- /reparercaro pour la réparation de la carosserie,\n- /nitros pour installé de la nitro,\n- /appeler 1002 pour commander des pieces,\n\
 			- /remorquer pour remorquer un vehicule,\n- /untow pour enlever le vehicule remorquer,\n- /fourriere pour mettre en fourriere un vehicule,\n- /colorcar pour mettre une nouvelle couleur au vehicule,\n\
-			- /paintjob pour faire un paintjob,\n- /tunning pour faire un tunning,\n- /peindre pour peindre le vehicule,\n- /poserboite pour poser une boite de l'entrepot a du garage,\n- /salairemecano[1 a 4] pour gérer le salaire mécanicien, \
+			- /paintjob pour faire un paintjob,\n- /tunning pour faire un tunning,\n- /peindre pour peindre le vehicule,\n- /poserboite pour poser une boite de l'entrepot a du garage,\n- /salairefaction pour modifier le salaire des rangs, \
 			 ","Quitter","");
 			}
 			//san news
@@ -9644,7 +9644,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
+				- /fexclure exclure une personne,\n- /frang mettre un rang,\n- /salairefaction pour modifier le salaire des rangs\
 				- /radio pour parlé en radio IC,\n- /diffuser pour diffuser un show,\n- /bc pour parlé dans le show,\n- /inviterpersonne inviter une personne dans le show,\n- /enleverpersonne enlever une personne du show. \
 				 ","Quitter","");
 			}

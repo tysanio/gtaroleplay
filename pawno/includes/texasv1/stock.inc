@@ -9322,10 +9322,8 @@ Dialog:LockerMoneyRetirer(playerid,response,listitem,inputtext[])
 		return 0;
 	if (response)
 	{
-		if (amount < 1 || amount > FactionData[factionid][factioncoffre])
-		{
-			SendErrorMessage(playerid,"Vous n'avez pas asser d'argent dans le coffre vous avez %d",FactionData[factionid][factioncoffre]);
-		}
+		if (amount > GetMoney(playerid)) return SendErrorMessage(playerid, "Vous n'avez pas assez sur vous..");
+		if (amount < 1 || amount > FactionData[factionid][factioncoffre]) {SendErrorMessage(playerid,"Vous n'avez pas asser d'argent dans le coffre vous avez %d",FactionData[factionid][factioncoffre]);}
 		SendServerMessage(playerid,"Vous avez retirer %d du coffre faction.",amount);
 		FactionData[factionid][factioncoffre] -= amount;
 		GiveMoney(playerid, amount);
@@ -19255,7 +19253,7 @@ stock SetVehicleSpeed(vehicleid,mph)
 Dialog:commande(playerid, response, listitem, inputtext[])
 {
 	static Float:x,Float:y,Float:z,Float:a;
-	new rand = random(3),facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count,aye = 5000 / count;
+	new rand = random(3),facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count;
 	if (response)
 	{
 		for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
@@ -19278,19 +19276,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 9;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 1:
 				{
@@ -19305,19 +19290,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 10;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 2:
 				{
@@ -19332,19 +19304,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 11;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 3:
 				{
@@ -19358,20 +19317,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 12;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}				
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");			
 				}
 				case 4:
 				{
@@ -19385,20 +19331,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 13;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}			
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");			
 				}
 				case 5:
 				{
@@ -19412,20 +19345,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 14;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}			
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");		
 				}
 				case 6:
 				{
@@ -19440,19 +19360,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 15;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 7:
 				{
@@ -19467,19 +19374,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 16;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 8:
 				{
@@ -19494,19 +19388,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 17;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 9:
 				{
@@ -19521,19 +19402,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 18;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 10:
 				{
@@ -19548,19 +19416,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 19;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
-					FactionData[facass][factioncoffre] -= 5000;
-					Faction_Save(facass);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
-						count++;
-					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
-					{
-						if(FactionData[ii][factionacces][5] == 1)
-						{
-							FactionData[ii][factioncoffre] += aye;
-							Faction_Save(ii);
-						}
-					}
 				}
 				case 11:
 				{
@@ -19605,8 +19460,21 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 			CrateData[i][crateInterior] = 0;
 			CrateData[i][crateWorld] = 0;
 			Crate_Refresh(i);
-			if(FactionData[facass][factionacces][5] == 1)
-			{ SendServerMessage(playerid, "RADIO: Une boite qui a été commander sera livré a %s.", GetLocation(x,y,z));}
+			FactionData[facass][factioncoffre] -= 5000;
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+				count++;
+			}
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+			{
+				new aye = 5000 / count;
+				if(FactionData[ii][factionacces][5] == 1)
+				{
+					FactionData[ii][factioncoffre] += aye;
+					if(FactionData[ii][factionacces][5] == 1)
+					{ SendServerMessage(playerid,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
+					Faction_Save(ii);
+				}
+			}
 			return i;
 		}
 	}

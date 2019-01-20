@@ -299,7 +299,7 @@ CMD:caissedetat(playerid, params[])
 	if (PlayerData[playerid][pAdmin] < 1)
     	return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	new string[4096], moneyentrepriseid;
-	format(string, sizeof(string), "Police : %s{2EFE2E}${FFFFFF}\nFBI : %s{2EFE2E}${FFFFFF}\nSWAT : %s{2EFE2E}${FFFFFF}\nMédecin : %s{2EFE2E}${FFFFFF}\nMairie LS : %s{2EFE2E}${FFFFFF}\nFermier : %s{2EFE2E}${FFFFFF}\nBanque : %s{2EFE2E}${FFFFFF}",FormatNumber(argent_entreprise[moneyentrepriseid][argentpolice]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfbi]),FormatNumber(argent_entreprise[moneyentrepriseid][argentswat]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmedecin]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmairie]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfermier]),FormatNumber(argent_entreprise[moneyentrepriseid][argentbanque]));
+	format(string, sizeof(string), "{FFFFFF}Police : %s{2EFE2E}${FFFFFF}\nFBI : %s{2EFE2E}${FFFFFF}\nSWAT : %s{2EFE2E}${FFFFFF}\nMédecin : %s{2EFE2E}${FFFFFF}\nMairie LS : %s{2EFE2E}${FFFFFF}\nFermier : %s{2EFE2E}${FFFFFF}\nBanque : %s{2EFE2E}${FFFFFF}",FormatNumber(argent_entreprise[moneyentrepriseid][argentpolice]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfbi]),FormatNumber(argent_entreprise[moneyentrepriseid][argentswat]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmedecin]),FormatNumber(argent_entreprise[moneyentrepriseid][argentmairie]),FormatNumber(argent_entreprise[moneyentrepriseid][argentfermier]),FormatNumber(argent_entreprise[moneyentrepriseid][argentbanque]));
 	format(string, sizeof(string),"%s",string);
 	Dialog_Show(playerid, Caissedetat, DIALOG_STYLE_MSGBOX, "Les caisses des factions", string, " X ", "");
 	return 1;
@@ -12382,11 +12382,11 @@ CMD:salairefaction(playerid,params[])
 	static id,idd;
 	new factionid = PlayerData[playerid][pFaction];
 	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)  return SendErrorMessage(playerid,"Vous n'avez pas acces a cette option.");
-	if(sscanf(params, "dd",idd,id)) return SendClientMessage(playerid, -1, "Utilisation: /salaire1 rank entre 1 et 2500");
+	if(sscanf(params, "dd",idd,id)) return SendClientMessage(playerid, -1, "Utilisation: /salairefaction rank entre 1 et 2500");
 	if (idd < 1 || idd > 15) return SendErrorMessage(playerid,"Erreur Le rang est entre 1 et 15");
-	if (id < 1 || id > 2500) return SendErrorMessage(playerid,"Erreur le salaire du rang %d doit être comprie entre 1 et 2500$",idd+1);
+	if (id < 1 || id > 2500) return SendErrorMessage(playerid,"Erreur le salaire du rang %d doit être comprie entre 1 et 2500$",idd);
 	FactionData[factionid][factionsalaire][idd] = id;
-	SendServerMessage(playerid,"Vous avez modifier le salaire du rang %d a %d $",idd+1,id);
+	SendServerMessage(playerid,"Vous avez modifier le salaire du rang %d a %d $",idd,id);
 	Faction_Save(factionid);
 	return 1;
 }
