@@ -19275,7 +19275,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 9;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 1:
 				{
@@ -19289,7 +19289,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 10;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 2:
 				{
@@ -19303,7 +19303,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 11;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 3:
 				{
@@ -19317,7 +19317,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 12;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");			
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");			
 				}
 				case 4:
 				{
@@ -19331,7 +19331,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 13;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");			
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");			
 				}
 				case 5:
 				{
@@ -19345,7 +19345,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 14;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");		
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");		
 				}
 				case 6:
 				{
@@ -19359,7 +19359,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 15;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 7:
 				{
@@ -19373,7 +19373,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 16;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 8:
 				{
@@ -19387,7 +19387,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 17;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 9:
 				{
@@ -19401,7 +19401,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 18;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 10:
 				{
@@ -19415,7 +19415,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					else if(rand == 2)
 					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
 					CrateData[i][crateType] = 19;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 11:
 				{
@@ -19424,7 +19424,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchpaint",1000,0);
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 12:
 				{
@@ -19433,7 +19433,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchoutils",1000,0);
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 13:
 				{
@@ -19442,7 +19442,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (500$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchnos",1000,0);
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attender les livreurs.");
+					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
 				case 14:
 				{
@@ -19474,6 +19474,11 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					{ SendServerMessage(playerid,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
 					Faction_Save(ii);
 				}
+			}
+			foreach (new zzzzzz : Player)
+			{
+				if(FactionData[facass][factionacces][5] == 1)
+				{ SendServerMessage(zzzzzz,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
 			}
 			return i;
 		}
@@ -19561,8 +19566,11 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 					Faction_Save(ii);
 				}
 			}
-			if(FactionData[facass][factionacces][5] == 1)
-			{ SendServerMessage(playerid,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
+			foreach (new zzzzzz : Player)
+			{
+				if(FactionData[facass][factionacces][5] == 1)
+				{ SendServerMessage(zzzzzz,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
+			}
 			Faction_Save(facass);
 			return i;
 		}
