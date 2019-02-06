@@ -64,7 +64,7 @@ CMD:plaque(playerid, params[])
     new vehicleid,string[32],facass = PlayerData[playerid][pFaction];
     vehicleid = GetPlayerVehicleID(playerid);
 	if(!IsPlayerInAnyVehicle(playerid)) return SendErrorMessage(playerid, "Vous n'êtes pas dans un véhicule.");
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (!IsACruiser(GetPlayerVehicleID(playerid)))
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans une véhicule de police.");
 	if(vehiclecallsign[GetPlayerVehicleID(playerid)] == 1)
@@ -1757,13 +1757,13 @@ CMD:supmaison(playerid, params[])
 CMD:bizon(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[factionid][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	static bizid = -1;
 	if ((bizid = Business_Nearest(playerid)) != -1)
 	{
 		BusinessData[bizid][bizchancevole] = 0;
 		Business_Save(bizid);
-		if(FactionData[factionid][factionacces][0] == 1)
+		if(FactionData[factionid][factionacces][1] == 1)
 		{ SendServerMessage(playerid, "%s a réautorisé le biz %s a avoir des clients.",ReturnName(playerid),BusinessData[bizid][bizName]);}
 	}
 	return 1;
@@ -2098,7 +2098,7 @@ CMD:vendre(playerid, params[])
 	else if (!strcmp(type, "servicemecano3", true))
 	{
 		static price;
-		if (FactionData[facass][factionacces][8] == 0)
+		if (FactionData[facass][factionacces][9] == 0)
 			return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");		
 		if (sscanf(string, "d", price))
 			return SendSyntaxMessage(playerid, "/vendre [playerid/name] [servicemecano3] [prix]");
@@ -2112,7 +2112,7 @@ CMD:vendre(playerid, params[])
 	else if (!strcmp(type, "servicemecano4", true))
 	{
 		static price;
-		if (FactionData[facass][factionacces][8] == 0)
+		if (FactionData[facass][factionacces][9] == 0)
 			return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");		
 		if (sscanf(string, "d", price))
 			return SendSyntaxMessage(playerid, "/vendre [playerid/name] [servicemecano4] [prix]");
@@ -2237,13 +2237,13 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté une bouteille d'eau à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté une bouteille d'eau %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 				{
 					new aye = price / count;
-					if(FactionData[ii][factionacces][10] == 1)
+					if(FactionData[ii][factionacces][11] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -2258,13 +2258,13 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté une bouteille de soda à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté une bouteille de soda %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 				{
 					new aye = price / count;
-					if(FactionData[ii][factionacces][10] == 1)
+					if(FactionData[ii][factionacces][11] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -2279,13 +2279,13 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté un burger de %s pour à %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté le burger pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 				{
 					new aye = price / count;
-					if(FactionData[ii][factionacces][10] == 1)
+					if(FactionData[ii][factionacces][11] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -2300,13 +2300,13 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté une de pizza à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté la pizza pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 				{
 					new aye = price / count;
-					if(FactionData[ii][factionacces][10] == 1)
+					if(FactionData[ii][factionacces][11] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -2321,13 +2321,13 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté du poulet à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté le poulet pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 				{
 					new aye = price / count;
-					if(FactionData[ii][factionacces][10] == 1)
+					if(FactionData[ii][factionacces][11] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -2342,13 +2342,13 @@ CMD:accepter(playerid, params[])
 		        SendServerMessage(playerid, "Vous avez acheté un chargeur à %s pour %d$ (ajouter dans l'inventaire).", ReturnName(sellerid, 0), price);
 		        SendServerMessage(sellerid, "%s a acheté un chargeur pour %d$.", ReturnName(playerid, 0), price);
 		        GiveMoney(playerid, -price);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 				{
 					new aye = price / count;
-					if(FactionData[ii][factionacces][10] == 1)
+					if(FactionData[ii][factionacces][11] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -2466,9 +2466,9 @@ CMD:accepter(playerid, params[])
 		SendServerMessage(playerid, "Vous avez avec succès acheté un service mécanicien a %s pour %s $.", ReturnName(sellerid, 0), FormatNumber(price));
 		SendServerMessage(sellerid, "%s a avec succès acheté votre service mécanicien pour %s $.", ReturnName(playerid, 0), FormatNumber(price));
 		GiveMoney(playerid, -price);
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][13] == 1)
 		{
-			if(FactionData[ii][factionacces][13] == 1)
+			if(FactionData[ii][factionacces][14] == 1)
 			{
 				FactionData[ii][factioncoffre] += price;
 				Faction_Save(ii);
@@ -2486,9 +2486,9 @@ CMD:accepter(playerid, params[])
 		SendServerMessage(playerid, "Vous avez avec succès acheté un service mécanicien a %s pour %s $.", ReturnName(sellerid, 0), FormatNumber(price));
 		SendServerMessage(sellerid, "%s a avec succès acheté votre service mécanicien pour %s $.", ReturnName(playerid, 0), FormatNumber(price));
 		GiveMoney(playerid, -price);
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][13] == 1)
 		{
-			if(FactionData[ii][factionacces][13] == 1)
+			if(FactionData[ii][factionacces][14] == 1)
 			{
 				FactionData[ii][factioncoffre] += price;
 				Faction_Save(ii);
@@ -3753,7 +3753,7 @@ CMD:mcoffre(playerid, params[])
 {
 	static houseid = -1;
 	new facass = PlayerData[playerid][pFaction];
-	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1)) {
+	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1)) {
 	    House_OpenStorage(playerid, houseid);
 	}
 	else SendErrorMessage(playerid, "Vous n'êtes pas dans votre maison.");
@@ -3950,7 +3950,7 @@ CMD:prendrejob(playerid, params[])
 CMD:livrermarchandise(playerid, params[])
 {
 	new id = Business_NearestDeliver(playerid),vid = GetPlayerVehicleID(playerid),factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0)
+	if (FactionData[factionid][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
     if (id == -1)
 	    return SendErrorMessage(playerid, "Vous n'êtes proche de rien.");
@@ -4008,7 +4008,7 @@ CMD:livrermarchandise(playerid, params[])
 CMD:reparermoteur(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
@@ -4036,7 +4036,7 @@ CMD:reparermoteur(playerid, params[])
 CMD:reparercaro(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
@@ -4063,7 +4063,7 @@ CMD:reparercaro(playerid, params[])
 CMD:nitros(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
@@ -4087,7 +4087,7 @@ CMD:nitros(playerid, params[])
 CMD:peindre(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (PlayerData[playerid][pCuffed])
 	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
@@ -4109,7 +4109,7 @@ CMD:peindre(playerid, params[])
 CMD:acceptertaxi(playerid, params[])
 {
     new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][12] == 0)
+    if (FactionData[facass][factionacces][13] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (!PlayerData[playerid][pTaxiDuty])
 	    return SendErrorMessage(playerid, "Tu doit être dans un taxi et êtres en service (/taxi).");
@@ -4119,7 +4119,7 @@ CMD:acceptertaxi(playerid, params[])
 CMD:taxi(playerid, params[])
 {
 	new modelid = GetVehicleModel(GetPlayerVehicleID(playerid)),facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][12] == 0)
+    if (FactionData[facass][factionacces][13] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (modelid != 438 && modelid != 420)
 	    return SendErrorMessage(playerid, "Tu doit être dans un taxi.");
@@ -4335,7 +4335,7 @@ CMD:bucheron(playerid, params[])
 CMD:vendrefood(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][10] == 0)
+	if (FactionData[facass][factionacces][11] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 423 && GetVehicleModel(GetPlayerVehicleID(playerid)) != 588)
  		return SendErrorMessage(playerid, "Vous devez être à l'intérieur d'un food truck.");
@@ -4454,7 +4454,7 @@ CMD:boite(playerid, params[])
 CMD:creerarme(playerid, params[])
 {
 	new id = -1,facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0)
+	if (FactionData[facass][factionacces][13] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
     if ((id = Job_NearestPoint(playerid)) == -1 || JobData[id][jobType] != JOB_WEAPON_SMUGGLER)
 		return SendErrorMessage(playerid, "Vous n'êtes pas sur le point de création.");
@@ -4624,7 +4624,7 @@ CMD:open(playerid, params[])
 	}
 	else if (IsPlayerNearDynamicObject(playerid, PrisonData[prisonDoors][0]))
 	{
-	    if (FactionData[facass][factionacces][0] == 0)
+	    if (FactionData[facass][factionacces][1] == 0)
 	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte..");
 	    if (!PrisonData[prisonDoorOpened][0])
 		{
@@ -4641,7 +4641,7 @@ CMD:open(playerid, params[])
 	}
 	else if (IsPlayerNearDynamicObject(playerid, PrisonData[prisonDoors][1]))
 	{
-	    if (FactionData[facass][factionacces][0] == 0)
+	    if (FactionData[facass][factionacces][1] == 0)
 	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte..");
 	    if (!PrisonData[prisonDoorOpened][1])
 		{
@@ -4658,7 +4658,7 @@ CMD:open(playerid, params[])
 	}
 	else if (IsPlayerNearDynamicObject(playerid, PrisonData[prisonDoors][2]))
 	{
-	    if (FactionData[facass][factionacces][0] == 0)
+	    if (FactionData[facass][factionacces][1] == 0)
 	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte.");
 	    if (!PrisonData[prisonDoorOpened][2])
 		{
@@ -4675,7 +4675,7 @@ CMD:open(playerid, params[])
 	}
 	for (new i = 0; i < 24; i ++) if (IsPlayerNearDynamicObject(playerid, PrisonData[prisonCells][i], 3.0))
 	{
-	    if (FactionData[facass][factionacces][0] == 0)
+	    if (FactionData[facass][factionacces][1] == 0)
 	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte.");
 		if (!PrisonData[prisonCellOpened][i])
 		{
@@ -4742,7 +4742,7 @@ CMD:editfaction(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editfaction [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, models, locker, ranks, maxranks, acces[0 a 14]");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, models, locker, ranks, maxranks, acces[1 a 15]");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_FACTIONS) || !FactionData[id][factionExists])
@@ -4767,17 +4767,6 @@ CMD:editfaction(playerid, params[])
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté le maximum de rang dans la faction ID: %d a %d.", ReturnName(playerid, 0), id, ranks);
 	}
-	else if (!strcmp(type, "acces0", true))
-	{
-	    new acces;
-	    if (sscanf(string, "d", acces))
-	        return SendSyntaxMessage(playerid, "/editfaction [id] acces0 [o/n]");
-		if (acces < 0 || acces > 1)
-		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][0] = acces;
-	    Faction_Save(id);
-		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 0 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
-	}
 	else if (!strcmp(type, "acces1", true))
 	{
 	    new acces;
@@ -4785,7 +4774,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces1 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][1] = acces;
+	    FactionData[id][factionacces][2] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 1 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4796,7 +4785,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces2 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][2] = acces;
+	    FactionData[id][factionacces][3] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 2 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4807,7 +4796,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces3 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][3] = acces;
+	    FactionData[id][factionacces][4] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 3 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4818,7 +4807,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces4 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][4] = acces;
+	    FactionData[id][factionacces][5] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 4 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4829,7 +4818,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces5 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][5] = acces;
+	    FactionData[id][factionacces][6] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 5 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4840,7 +4829,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces6 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][6] = acces;
+	    FactionData[id][factionacces][7] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 6 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4851,7 +4840,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces7 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][7] = acces;
+	    FactionData[id][factionacces][8] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 7 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4862,7 +4851,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces8 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][8] = acces;
+	    FactionData[id][factionacces][9] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 8 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4873,7 +4862,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces9 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][9] = acces;
+	    FactionData[id][factionacces][10] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 9 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4884,7 +4873,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces10 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][10] = acces;
+	    FactionData[id][factionacces][11] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 10 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4895,7 +4884,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces11 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][11] = acces;
+	    FactionData[id][factionacces][12] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 11 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4906,7 +4895,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces12 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][12] = acces;
+	    FactionData[id][factionacces][13] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 12 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4917,7 +4906,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces13 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][13] = acces;
+	    FactionData[id][factionacces][14] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 13 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4928,7 +4917,18 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces14 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][14] = acces;
+	    FactionData[id][factionacces][15] = acces;
+	    Faction_Save(id);
+		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 14 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
+	}
+	else if (!strcmp(type, "acces15", true))
+	{
+	    new acces;
+	    if (sscanf(string, "d", acces))
+	        return SendSyntaxMessage(playerid, "/editfaction [id] acces15 [o/n]");
+		if (acces < 0 || acces > 1)
+		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
+	    FactionData[id][factionacces][15] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 14 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4967,7 +4967,7 @@ CMD:fequipement(playerid, params[])
 	    return SendErrorMessage(playerid, "Tu doit être dans une faction.");
 	if (!IsNearFactionLocker(playerid))
 	    return SendErrorMessage(playerid, "Vous n'êtes pas proche de votre point d'équipement.");
-	if (FactionData[factionid][factionacces][0] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][3] == 1)
+	if (FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][7] == 1 || FactionData[factionid][factionacces][4] == 1)
 		Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Se mettre en service\nVêtements\nArmes\nRegarder CV", "Valider", "Annuler");
 	else Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Vêtements\nArmes\nRegarder CV\nCoffre", "Valider", "Annuler");
 	return 1;
@@ -5139,7 +5139,7 @@ CMD:tazer(playerid, params[])
 	new facass = PlayerData[playerid][pFaction];
 	if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT || !IsPlayerSpawned(playerid))
 	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (!PlayerData[playerid][pTazer])
 	{
 	    PlayerData[playerid][pTazer] = 1;
@@ -5161,7 +5161,7 @@ CMD:flashball(playerid, params[])
 	new facass = PlayerData[playerid][pFaction];
 	if (GetPlayerState(playerid) != PLAYER_STATE_ONFOOT || !IsPlayerSpawned(playerid))
 	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (!PlayerData[playerid][pflashball])
 	{
 	    PlayerData[playerid][pflashball] = 1;
@@ -5181,7 +5181,7 @@ CMD:flashball(playerid, params[])
 CMD:menotter(playerid, params[])
 {
     new userid,facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/menotter [playerid/nom]");
 	if (!Inventory_HasItem(playerid, "Menottes"))
@@ -5219,7 +5219,7 @@ CMD:menotter(playerid, params[])
 CMD:demenotter(playerid, params[])
 {
     new userid,facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/demenotter [playerid/nom]");
 	if (userid == INVALID_PLAYER_ID)
@@ -5273,7 +5273,7 @@ CMD:trainer(playerid, params[])
 CMD:forcer(playerid, params[])
 {
 	new userid,vehicleid = GetNearestVehicle(playerid),facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/forcer [playerid/nom]");
 	if (userid == INVALID_PLAYER_ID)
@@ -5341,7 +5341,7 @@ CMD:suparrest(playerid, params[])
 CMD:mdc(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (!IsACruiser(GetPlayerVehicleID(playerid)))
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans une voiture de police.");
 	Dialog_Show(playerid, MainMDC, DIALOG_STYLE_LIST, "Mobile Data Computer", "Activer la recherche\nPlace charges\nVoir charges\nVoir amandes d'une personne", "Valider", "Annuler");
@@ -5351,7 +5351,7 @@ CMD:arrest(playerid, params[])
 {
 	static userid,time;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "ud", userid, time))
 	    return SendSyntaxMessage(playerid, "/arrest [playerid/name] [minutes]");
 	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -5379,7 +5379,7 @@ CMD:seizeplant(playerid, params[])
 {
 	static plantid;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if ((plantid = Plant_Nearest(playerid)) == -1)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas proche d'une plante.");
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s saisie la plante %s et peut voir %d de grammes.", ReturnName(playerid, 0), Plant_GetType(PlantData[plantid][plantType]), PlantData[plantid][plantDrugs]);
@@ -5402,7 +5402,7 @@ CMD:chargermalade(playerid, params[])
 {
 	static userid, seatid;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0)
+	if (FactionData[facass][factionacces][5] == 0)
 	    return SendErrorMessage(playerid, "Tu doit être cher les urgentiste.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/chargermalade [playerid/nom]");
@@ -5432,7 +5432,7 @@ CMD:dechargermalade(playerid, params[])
 {
 	static userid;
 	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][4] == 0)
+    if (FactionData[facass][factionacces][5] == 0)
 	    return SendErrorMessage(playerid, "Tu dois être dans la faction médical.");
     if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/dechargermalade [playerid/nom]");
@@ -5467,7 +5467,7 @@ CMD:dechargermalade(playerid, params[])
 CMD:m(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/(m)egaphone [message]");
 	if (strlen(params) > 64) {
@@ -5481,7 +5481,7 @@ CMD:bandage(playerid, params[])
 {
     static userid;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0)
+	if (FactionData[facass][factionacces][5] == 0)
 	    return SendErrorMessage(playerid, "Tu doit faire partie de la faction des médecin.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/bandage [playerid/nom]");
@@ -5501,7 +5501,7 @@ CMD:bandage(playerid, params[])
 CMD:diffuser(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
+	if (FactionData[facass][factionacces][10] == 0)
 		return SendErrorMessage(playerid, "Tu doit faire partie du san news.");
 	if (!IsNewsVehicle(GetPlayerVehicleID(playerid)))
 	    return SendErrorMessage(playerid, "Vous devez être à l'intérieur du van sand news.");
@@ -5525,7 +5525,7 @@ CMD:diffuser(playerid, params[])
 CMD:bc(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
+	if (FactionData[facass][factionacces][10] == 0)
 		return SendErrorMessage(playerid, "Tu doit faire partie du san news.");
     if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/bc [broadcast text]");
@@ -5550,7 +5550,7 @@ CMD:inviterpersonne(playerid, params[])
 {
 	static userid;
 	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][9] == 0)
+    if (FactionData[facass][factionacces][10] == 0)
 		return SendErrorMessage(playerid, "Tu doit faire partie du sand news.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/inviterpersonne [playerid/nom]");
@@ -5573,7 +5573,7 @@ CMD:enleverpersonne(playerid, params[])
 {
 	static userid;
 	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][9] == 0)
+    if (FactionData[facass][factionacces][10] == 0)
 		return SendErrorMessage(playerid, "Vous devez faire partie du sand news.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/enleverpersonne [playerid/nom]");
@@ -5629,9 +5629,9 @@ CMD:dept(playerid, params[])
 	foreach (new i : Player)
 	{
 		new factionid = PlayerData[i][pFaction];
-		if(FactionData[factionid][factionacces][0] == 0 || FactionData[factionid][factionacces][6] == 0 || FactionData[factionid][factionacces][2] == 0 || FactionData[factionid][factionacces][3] == 0 || FactionData[factionid][factionacces][4] == 0)
+		if(FactionData[factionid][factionacces][1] == 0 || FactionData[factionid][factionacces][7] == 0 || FactionData[factionid][factionacces][3] == 0 || FactionData[factionid][factionacces][4] == 0 || FactionData[factionid][factionacces][5] == 0)
 			return SendErrorMessage(playerid, "Tu doit être en dans une faction gourvernemental.");
-		if(FactionData[factionid][factionacces][0] == 1 ||FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)
+		if(FactionData[factionid][factionacces][1] == 1 ||FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][7] == 1 || FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionacces][4] == 1)
 		{
 			SendFactionMessage(i, COLOR_DEPARTMENT, "[%s] %s %s: %s", GetInitials(Faction_GetName(playerid)), Faction_GetRank(playerid), ReturnName(playerid, 0), params);
 		}
@@ -5639,25 +5639,10 @@ CMD:dept(playerid, params[])
 	}
 	return 1;
 }
-/*CMD:bbalise(playerid,params[])
-{
-	foreach (new i : Player)
-	{
-		new factionid = PlayerData[i][pFaction],Float:x, Float:y, Float:z;
-		GetPlayerPos(playerid,x,y,z);
-		SetFactionMarker(playerid, factionid, 0x00ffc5FF);
-		if(FactionData[factionid][factionacces][0] == 1 ||FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)
-		{
-			SendServerMessage(i,"{BABABA}%s demande du renfort. (Localisation: {FFFFFF}%s{BABABA})", ReturnName(playerid), GetLocation(x, y, z));
-		}
-		SendNearbyMessage(playerid, 10.0, COLOR_PURPLE, "** %s active sa balise.", ReturnName(playerid, 0));
-	}
-	return 1;
-}*/
 CMD:annonce(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
     if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/annonce [texte]");
 	if (strlen(params) > 64) {
@@ -5825,7 +5810,7 @@ CMD:amende(playerid, params[])
 {
 	static userid,price,reason[64];
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "uds[64]", userid, price, reason))
 		return SendSyntaxMessage(playerid, "/amende [Joueur ID/Nom] [prix] [raison]");
 	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -5860,7 +5845,7 @@ CMD:gouvretirer(playerid, params[])
 {
 	static amount;
 	new moneyentrepriseid,factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 	if (sscanf(params, "d", amount))
 		return SendSyntaxMessage(playerid, "/gouvretirer [montant] (%s valide)", FormatNumber(argent_entreprise[moneyentrepriseid][argentmairie]));
@@ -5882,7 +5867,7 @@ CMD:gouvdeposer(playerid, params[])
 {
 	static amount;
 	new moneyentrepriseid,factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas du gouvernement.");
 	if (sscanf(params, "d", amount))
 		return SendSyntaxMessage(playerid, "/gouvdeposer [montant] (%s valide)", FormatNumber(argent_entreprise[moneyentrepriseid][argentmairie]));
@@ -5903,7 +5888,7 @@ CMD:gouvdeposer(playerid, params[])
 CMD:herse(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (isnull(params))
  	{
 	 	SendSyntaxMessage(playerid, "/herse [option]");
@@ -6347,7 +6332,7 @@ CMD:udrogue(playerid, params[])
 CMD:analyser(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (PlayerData[playerid][pFingerTime] > 0)
 	    return SendErrorMessage(playerid, "Tu utilise déja le scanner d'empreinte digitale.");
     for (new i = 0; i != MAX_DROPPED_ITEMS; i ++) if (DroppedItems[i][droppedModel] && IsPlayerInRangeOfPoint(playerid, 1.5, DroppedItems[i][droppedPos][0], DroppedItems[i][droppedPos][1], DroppedItems[i][droppedPos][2])) {
@@ -6591,7 +6576,7 @@ CMD:vfourriere(playerid, params[])
 CMD:remorquer(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][8] == 0)
+    if (FactionData[facass][factionacces][9] == 0)
 		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
 	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 525)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans une dépanneuse.");
@@ -6609,7 +6594,7 @@ CMD:remorquer(playerid, params[])
 CMD:untow(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][8] == 0)
+    if (FactionData[facass][factionacces][9] == 0)
 		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
 	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 525)
 	    return SendErrorMessage(playerid, "Tu ne conduit pas un towtruck.");
@@ -6625,7 +6610,7 @@ CMD:untow(playerid, params[])
 CMD:fourriere(playerid, params[])
 {
 	new price,id = Impound_Nearest(playerid),vehicleid = GetPlayerVehicleID(playerid),facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][8] == 0)
+    if (FactionData[facass][factionacces][9] == 0)
 		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
     if (sscanf(params, "d", price))
         return SendSyntaxMessage(playerid, "/fourriere [prix]");
@@ -6678,7 +6663,7 @@ CMD:r(playerid, params[])
 	    return SendSyntaxMessage(playerid, "/r [Radio IC]");
     if (!Inventory_HasItem(playerid, "Talkie-Walkie"))
 	    return SendErrorMessage(playerid, "Vous devez avoir une radio portable.");
-	if(PlayerData[playerid][pChannel] == 911 && FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Ceci est la fréquence de département de la police seulement.");
+	if(PlayerData[playerid][pChannel] == 911 && FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Ceci est la fréquence de département de la police seulement.");
 	if (!PlayerData[playerid][pChannel])
 	    return SendErrorMessage(playerid, "Votre radio n'est pas configurée (/channel).");
 	static string[128];
@@ -6876,7 +6861,7 @@ CMD:asellbiz(playerid, params[])
 CMD:donnerlicense(playerid, params[])
 {
 	new userid,moneyentrepriseid,facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/donnerlicense [playerid/nom]");
 	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -6899,7 +6884,7 @@ CMD:donnerlicense(playerid, params[])
 CMD:enleverlicense(playerid, params[])
 {
     new userid,facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/enleverlicense [playerid/nom]");
 	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -7113,7 +7098,7 @@ CMD:supgarbage(playerid, params[])
 CMD:prendrepoubelle(playerid, params[])
 {
 	new id = Garbage_Nearest(playerid),string[64],factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (id == -1)
 	    return SendErrorMessage(playerid, "Vous n'êtes proche de rien.");
@@ -7134,7 +7119,7 @@ CMD:prendrepoubelle(playerid, params[])
 CMD:viderpoubelle(playerid, params[])
 {
 	new vehicleid = GetPlayerVehicleID(playerid),id = Job_NearestPoint(playerid, 5.0),factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (GetVehicleModel(vehicleid) != 408)
 	    return SendErrorMessage(playerid, "Tu doit conduire un camion poubelle.");
@@ -7890,7 +7875,7 @@ CMD:walk(playerid, params[])
 CMD:tunning(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (!IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un véhicule.");
@@ -7903,7 +7888,7 @@ CMD:colorcar(playerid, params[])
 {
 	static color1,color2;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (!IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un vehicule.");
@@ -7924,7 +7909,7 @@ CMD:paintjob(playerid, params[])
 {
 	static paintjobid;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (!IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un vehicule.");
@@ -8061,7 +8046,7 @@ CMD:adestroybox(playerid, params[])
 CMD:trouverpoubelle(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	new id = GetClosestGarbage(playerid);
 	if (id == -1)
@@ -8131,7 +8116,7 @@ CMD:searchbp(playerid, params[])
 CMD:confisquer(playerid, params[])
 {
 	new userid,string[128],facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/confisquer [playerid/nom]");
     if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -8160,7 +8145,7 @@ CMD:defoncerporte(playerid, params[])
 {
 	static id = -1;
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0)
+	if (FactionData[facass][factionacces][3] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas du FBI");
 	if ((id = House_Nearest(playerid)) != -1)
 	{
@@ -8408,7 +8393,7 @@ CMD:supperso(playerid, params[])
 CMD:stopchargement(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0)
+	if (FactionData[factionid][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (!PlayerData[playerid][pLoading] && !PlayerData[playerid][pLoadType])
 	    return SendErrorMessage(playerid, "Tu n'est pas entrain de chargé de la marchandise en se moment.");
@@ -8424,7 +8409,7 @@ CMD:stopchargement(playerid, params[])
 CMD:chargermarchandise(playerid, params[])
 {
  	new id = Job_NearestPoint(playerid),stockjobinfoid,factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0)
+	if (FactionData[factionid][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (id == -1 || JobData[id][jobType] != JOB_COURIER)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas proche de la position.");
@@ -8455,7 +8440,7 @@ CMD:accepterlivraison(playerid, params[])
 	    BusinessData[id][bizShipment] = 0;
 	    Business_Save(id);
 	    SendServerMessage(playerid, "votre magasin ne requiere plus de livraison.");
-		if(FactionData[facass][factionacces][5] == 1)
+		if(FactionData[facass][factionacces][6] == 1)
 		{ SendServerMessage(playerid, "** %s ne veux plus de livraison pour %s. **", ReturnName(playerid, 0), BusinessData[id][bizName]);}
 	}
 	else
@@ -8465,7 +8450,7 @@ CMD:accepterlivraison(playerid, params[])
 	    BusinessData[id][bizShipment] = 1;
 	    Business_Save(id);
 	    SendServerMessage(playerid, "Vous avez demander une livraison pour votre magasin.");
-		if(FactionData[facass][factionacces][5] == 1)
+		if(FactionData[facass][factionacces][6] == 1)
 		{ SendServerMessage(playerid, "** %s à demander une livraison pour sont magasin %s (/fairelivraison pour accepter). **", ReturnName(playerid, 0), BusinessData[id][bizName]);}
 	}
 	return 1;
@@ -8473,7 +8458,7 @@ CMD:accepterlivraison(playerid, params[])
 CMD:refuserlivraison(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0)
+	if (FactionData[factionid][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (PlayerData[playerid][pShipment] == -1)
 	    return SendErrorMessage(playerid, "Vous n'avez pas accepté de livraison.");
@@ -8484,7 +8469,7 @@ CMD:refuserlivraison(playerid, params[])
 CMD:fairelivraison(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-    if (FactionData[factionid][factionacces][5] == 0)
+    if (FactionData[factionid][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (PlayerData[playerid][pShipment] != -1)
 	    return SendErrorMessage(playerid, "Vous avez déja accepté une livraison (Tapez /refuserlivraison pour annuler).");
@@ -8933,7 +8918,7 @@ CMD:listguns(playerid, params[])
 CMD:gyrophare(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+	if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 	new vehicleid = GetPlayerVehicleID(playerid);
 	if (!IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous devez être a l'intérieur d'un vehicle.");
@@ -9081,7 +9066,7 @@ CMD:fspray(playerid, params[])
 	new id = Graffiti_Nearest(playerid),facass = PlayerData[playerid][pFaction];
 	if (id == -1)
 	    return SendErrorMessage(playerid, "Tu n'est pas proche de graffiti point.");
-	if (FactionData[facass][factionacces][7] == 1)
+	if (FactionData[facass][factionacces][8] == 1)
 	{
 		/*if (!Inventory_HasItem(playerid, "Bombe de peinture"))
 				return SendErrorMessage(playerid, "Vous n'avez pas de spray can sur vous.");*/
@@ -9369,7 +9354,7 @@ CMD:appeler(playerid, params[])
 	}
 	else if(number == 910)
     {
-		if (FactionData[factionid][factionacces][0] == 0)
+		if (FactionData[factionid][factionacces][1] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des kevlars.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9389,7 +9374,7 @@ CMD:appeler(playerid, params[])
 		foreach (new i : Player)
 		{
 			new facass1 = PlayerData[i][pFaction];
-			if(FactionData[facass1][factionacces][12] == 1)
+			if(FactionData[facass1][factionacces][13] == 1)
 			{ SendServerMessage(i, "** %s a appellé un taxi, il se trouve à %s (Tapez /acceptertaxi pour accepter).", ReturnName(playerid, 0), GetPlayerLocation(playerid));}
 		}
 		cmd_racrocher(playerid, "\1");
@@ -9402,7 +9387,7 @@ CMD:appeler(playerid, params[])
 		foreach (new i : Player)
 		{
 			new facass1 = PlayerData[i][pFaction];
-			if(FactionData[facass1][factionacces][13] == 1 || FactionData[facass1][factionacces][14] == 1)
+			if(FactionData[facass1][factionacces][14] == 1 || FactionData[facass1][factionacces][15] == 1)
 			{ SendServerMessage(i, "Une personne a besoin d'un mécanicien, utilisez /accepter mappel.");}
 		}
 		cmd_racrocher(playerid, "\1");
@@ -9441,7 +9426,7 @@ CMD:appeler(playerid, params[])
 	}
 	else if (number == 1001)
 	{	
-		if (FactionData[factionid][factionacces][5] == 0) return SendErrorMessage(playerid, "Vous n'est pas camionneur");
+		if (FactionData[factionid][factionacces][6] == 0) return SendErrorMessage(playerid, "Vous n'est pas camionneur");
 		DisablePlayerCheckpoint(playerid);
 		livraisonjob[playerid] = -1;
 		quantiterdejob[playerid] = 0;
@@ -9449,7 +9434,7 @@ CMD:appeler(playerid, params[])
 	}
 	else if (number == 1002)
 	{
-		if (FactionData[factionid][factionacces][13] == 0)
+		if (FactionData[factionid][factionacces][14] == 0)
 			return SendTelephoneMessage(playerid, "Téléphone : Vous êtes qui vous?");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des pièces.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9501,7 +9486,7 @@ CMD:appeler(playerid, params[])
 CMD:infob(playerid, params[])
 {
     new id = -1,factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][5] == 0) return SendErrorMessage(playerid, "Vous n'est pas camionneur");
+	if (FactionData[factionid][factionacces][6] == 0) return SendErrorMessage(playerid, "Vous n'est pas camionneur");
     if ((id = (Business_Inside(playerid) == -1) ? (Business_Nearest(playerid)) : (Business_Inside(playerid))) != -1) {
      	SendServerMessage(playerid, "ID: %d | Biz: %s | Produits: %d", id, BusinessData[id][bizName], BusinessData[id][bizProducts]);
 	}
@@ -9611,7 +9596,7 @@ CMD:camheli(playerid, params[])
 CMD:livrercourier(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-    if (FactionData[factionid][factionacces][5] == 0)
+    if (FactionData[factionid][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas de l'entreprise.");
     Dialog_Show(playerid,jobcoursier,DIALOG_STYLE_MSGBOX,"Bureau","Voulez vous commencez votre travail?","Oui","Non");
     return 1;
@@ -9619,7 +9604,7 @@ CMD:livrercourier(playerid, params[])
 CMD:gouvtaxe(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9629,7 +9614,7 @@ CMD:gouvtaxe(playerid, params[])
 CMD:gouvtaxeentreprise(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9639,7 +9624,7 @@ CMD:gouvtaxeentreprise(playerid, params[])
 CMD:gouvtaxerevenue(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9649,7 +9634,7 @@ CMD:gouvtaxerevenue(playerid, params[])
 CMD:gouvchommage(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9659,7 +9644,7 @@ CMD:gouvchommage(playerid, params[])
 CMD:gouvsubpolice(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9669,7 +9654,7 @@ CMD:gouvsubpolice(playerid, params[])
 CMD:gouvsubfbi(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9679,7 +9664,7 @@ CMD:gouvsubfbi(playerid, params[])
 CMD:gouvsuburgentiste(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9689,7 +9674,7 @@ CMD:gouvsuburgentiste(playerid, params[])
 CMD:gouvsubswat(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9699,7 +9684,7 @@ CMD:gouvsubswat(playerid, params[])
 CMD:gouvaidebanque(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9709,7 +9694,7 @@ CMD:gouvaidebanque(playerid, params[])
 CMD:gouvbizhouse(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9719,7 +9704,7 @@ CMD:gouvbizhouse(playerid, params[])
 CMD:gouvmaison(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9729,7 +9714,7 @@ CMD:gouvmaison(playerid, params[])
 CMD:gouvbiz(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
     if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9739,7 +9724,7 @@ CMD:gouvbiz(playerid, params[])
 CMD:taxe(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9890,7 +9875,7 @@ CMD:cv(playerid, params[])
 CMD:gouvrang1(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank1, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9898,7 +9883,7 @@ CMD:gouvrang1(playerid, params[])
 CMD:gouvrang2(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank2, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9906,7 +9891,7 @@ CMD:gouvrang2(playerid, params[])
 CMD:gouvrang3(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank3, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9914,7 +9899,7 @@ CMD:gouvrang3(playerid, params[])
 CMD:gouvrang4(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank4, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9922,7 +9907,7 @@ CMD:gouvrang4(playerid, params[])
 CMD:gouvrang5(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank5, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9930,7 +9915,7 @@ CMD:gouvrang5(playerid, params[])
 CMD:gouvrang6(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank6, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9938,7 +9923,7 @@ CMD:gouvrang6(playerid, params[])
 CMD:gouvrang7(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank7, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9946,7 +9931,7 @@ CMD:gouvrang7(playerid, params[])
 CMD:gouvrang8(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank8, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9954,7 +9939,7 @@ CMD:gouvrang8(playerid, params[])
 CMD:gouvrang9(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank9, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9962,7 +9947,7 @@ CMD:gouvrang9(playerid, params[])
 CMD:gouvrang10(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank10, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9970,7 +9955,7 @@ CMD:gouvrang10(playerid, params[])
 CMD:gouvrang11(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank11, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9978,7 +9963,7 @@ CMD:gouvrang11(playerid, params[])
 CMD:gouvrang12(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank12, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9986,7 +9971,7 @@ CMD:gouvrang12(playerid, params[])
 CMD:gouvrang13(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank13, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -9994,7 +9979,7 @@ CMD:gouvrang13(playerid, params[])
 CMD:gouvrang14(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank14, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10002,7 +9987,7 @@ CMD:gouvrang14(playerid, params[])
 CMD:gouvrang15(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du gouvernement ou le leader.");
 	Dialog_Show(playerid, GouvRank15, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10011,7 +9996,7 @@ CMD:gouvrang15(playerid, params[])
 CMD:fbirang1(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10019,7 +10004,7 @@ CMD:fbirang1(playerid, params[])
 CMD:fbirang2(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank2, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10027,7 +10012,7 @@ CMD:fbirang2(playerid, params[])
 CMD:fbirang3(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank3, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10035,7 +10020,7 @@ CMD:fbirang3(playerid, params[])
 CMD:fbirang4(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank4, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10043,7 +10028,7 @@ CMD:fbirang4(playerid, params[])
 CMD:fbirang5(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank5, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10051,7 +10036,7 @@ CMD:fbirang5(playerid, params[])
 CMD:fbirang6(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank6, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10059,7 +10044,7 @@ CMD:fbirang6(playerid, params[])
 CMD:fbirang7(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank7, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10067,7 +10052,7 @@ CMD:fbirang7(playerid, params[])
 CMD:fbirang8(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank8, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10075,7 +10060,7 @@ CMD:fbirang8(playerid, params[])
 CMD:fbirang9(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank9, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10083,7 +10068,7 @@ CMD:fbirang9(playerid, params[])
 CMD:fbirang10(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank10, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10091,7 +10076,7 @@ CMD:fbirang10(playerid, params[])
 CMD:fbirang11(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank11, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10099,7 +10084,7 @@ CMD:fbirang11(playerid, params[])
 CMD:fbirang12(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank12, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10107,7 +10092,7 @@ CMD:fbirang12(playerid, params[])
 CMD:fbirang13(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank13, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10115,7 +10100,7 @@ CMD:fbirang13(playerid, params[])
 CMD:fbirang14(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank14, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10123,7 +10108,7 @@ CMD:fbirang14(playerid, params[])
 CMD:fbirang15(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du F.B.I ou le leader.");
 	Dialog_Show(playerid, FBIRank15, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10132,7 +10117,7 @@ CMD:fbirang15(playerid, params[])
 CMD:policerang1(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank1, DIALOG_STYLE_INPUT, "Police Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10140,7 +10125,7 @@ CMD:policerang1(playerid, params[])
 CMD:policerang2(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank2, DIALOG_STYLE_INPUT, "Police Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10148,7 +10133,7 @@ CMD:policerang2(playerid, params[])
 CMD:policerang3(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank3, DIALOG_STYLE_INPUT, "Police Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10156,7 +10141,7 @@ CMD:policerang3(playerid, params[])
 CMD:policerang4(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank4, DIALOG_STYLE_INPUT, "Police Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10164,7 +10149,7 @@ CMD:policerang4(playerid, params[])
 CMD:policerang5(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank5, DIALOG_STYLE_INPUT, "Police Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10172,7 +10157,7 @@ CMD:policerang5(playerid, params[])
 CMD:policerang6(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank6, DIALOG_STYLE_INPUT, "Police Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10180,7 +10165,7 @@ CMD:policerang6(playerid, params[])
 CMD:policerang7(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank7, DIALOG_STYLE_INPUT, "Police Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10188,7 +10173,7 @@ CMD:policerang7(playerid, params[])
 CMD:policerang8(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank8, DIALOG_STYLE_INPUT, "Police Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10196,7 +10181,7 @@ CMD:policerang8(playerid, params[])
 CMD:policerang9(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank9, DIALOG_STYLE_INPUT, "Police Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10204,7 +10189,7 @@ CMD:policerang9(playerid, params[])
 CMD:policerang10(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank10, DIALOG_STYLE_INPUT, "Police Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10212,7 +10197,7 @@ CMD:policerang10(playerid, params[])
 CMD:policerang11(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank11, DIALOG_STYLE_INPUT, "Police Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10220,7 +10205,7 @@ CMD:policerang11(playerid, params[])
 CMD:policerang12(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank12, DIALOG_STYLE_INPUT, "Police Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10228,7 +10213,7 @@ CMD:policerang12(playerid, params[])
 CMD:policerang13(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank13, DIALOG_STYLE_INPUT, "Police Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10236,7 +10221,7 @@ CMD:policerang13(playerid, params[])
 CMD:policerang14(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank14, DIALOG_STYLE_INPUT, "Police Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10244,7 +10229,7 @@ CMD:policerang14(playerid, params[])
 CMD:policerang15(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du police ou le leader.");
 	Dialog_Show(playerid, policeRank15, DIALOG_STYLE_INPUT, "Police Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10252,7 +10237,7 @@ CMD:policerang15(playerid, params[])
 CMD:swatrang1(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank1, DIALOG_STYLE_INPUT, "swat Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10260,7 +10245,7 @@ CMD:swatrang1(playerid, params[])
 CMD:swatrang2(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank2, DIALOG_STYLE_INPUT, "swat Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10268,7 +10253,7 @@ CMD:swatrang2(playerid, params[])
 CMD:swatrang3(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank3, DIALOG_STYLE_INPUT, "swat Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10276,7 +10261,7 @@ CMD:swatrang3(playerid, params[])
 CMD:swatrang4(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank4, DIALOG_STYLE_INPUT, "swat Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10284,7 +10269,7 @@ CMD:swatrang4(playerid, params[])
 CMD:swatrang5(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank5, DIALOG_STYLE_INPUT, "swat Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10292,7 +10277,7 @@ CMD:swatrang5(playerid, params[])
 CMD:swatrang6(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank6, DIALOG_STYLE_INPUT, "swat Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10300,7 +10285,7 @@ CMD:swatrang6(playerid, params[])
 CMD:swatrang7(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank7, DIALOG_STYLE_INPUT, "swat Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10308,7 +10293,7 @@ CMD:swatrang7(playerid, params[])
 CMD:swatrang8(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank8, DIALOG_STYLE_INPUT, "swat Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10316,7 +10301,7 @@ CMD:swatrang8(playerid, params[])
 CMD:swatrang9(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank9, DIALOG_STYLE_INPUT, "swat Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10324,7 +10309,7 @@ CMD:swatrang9(playerid, params[])
 CMD:swatrang10(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank10, DIALOG_STYLE_INPUT, "swat Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10332,7 +10317,7 @@ CMD:swatrang10(playerid, params[])
 CMD:swatrang11(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank11, DIALOG_STYLE_INPUT, "swat Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10340,7 +10325,7 @@ CMD:swatrang11(playerid, params[])
 CMD:swatrang12(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank12, DIALOG_STYLE_INPUT, "swat Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10348,7 +10333,7 @@ CMD:swatrang12(playerid, params[])
 CMD:swatrang13(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank13, DIALOG_STYLE_INPUT, "swat Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10356,7 +10341,7 @@ CMD:swatrang13(playerid, params[])
 CMD:swatrang14(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank14, DIALOG_STYLE_INPUT, "swat Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10364,7 +10349,7 @@ CMD:swatrang14(playerid, params[])
 CMD:swatrang15(playerid, params[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du swat ou le leader.");
 	Dialog_Show(playerid, swatRank15, DIALOG_STYLE_INPUT, "swat Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10373,7 +10358,7 @@ CMD:swatrang15(playerid, params[])
 CMD:urgentisterang1(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank1, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 1", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10381,7 +10366,7 @@ CMD:urgentisterang1(playerid, params[])
 CMD:urgentisterang2(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank2, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 2", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10389,7 +10374,7 @@ CMD:urgentisterang2(playerid, params[])
 CMD:urgentisterang3(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank3, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 3", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10397,7 +10382,7 @@ CMD:urgentisterang3(playerid, params[])
 CMD:urgentisterang4(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank4, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 4", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10405,7 +10390,7 @@ CMD:urgentisterang4(playerid, params[])
 CMD:urgentisterang5(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank5, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 5", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10413,7 +10398,7 @@ CMD:urgentisterang5(playerid, params[])
 CMD:urgentisterang6(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank6, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 6", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10421,7 +10406,7 @@ CMD:urgentisterang6(playerid, params[])
 CMD:urgentisterang7(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank7, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 7", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10429,7 +10414,7 @@ CMD:urgentisterang7(playerid, params[])
 CMD:urgentisterang8(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank8, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 8", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10437,7 +10422,7 @@ CMD:urgentisterang8(playerid, params[])
 CMD:urgentisterang9(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank9, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 9", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10445,7 +10430,7 @@ CMD:urgentisterang9(playerid, params[])
 CMD:urgentisterang10(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank10, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 10", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10453,7 +10438,7 @@ CMD:urgentisterang10(playerid, params[])
 CMD:urgentisterang11(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank11, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 11", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10461,7 +10446,7 @@ CMD:urgentisterang11(playerid, params[])
 CMD:urgentisterang12(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank12, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 12", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10469,7 +10454,7 @@ CMD:urgentisterang12(playerid, params[])
 CMD:urgentisterang13(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank13, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 13", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10477,7 +10462,7 @@ CMD:urgentisterang13(playerid, params[])
 CMD:urgentisterang14(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank14, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 14", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10485,7 +10470,7 @@ CMD:urgentisterang14(playerid, params[])
 CMD:urgentisterang15(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return SendErrorMessage(playerid, "Tu n'est pas du urgentiste ou le leader.");
 	Dialog_Show(playerid, urgentisteRank15, DIALOG_STYLE_INPUT, "urgentiste Salaire Rang 15", "Entrée un montant pour le salaire:", "Continuer", " X ");
 	return 1;
@@ -10599,7 +10584,7 @@ CMD:ceinture(playerid, params[])
 CMD:mettrelefeu(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][7] == 0)
+	if (FactionData[facass][factionacces][8] == 0)
 	    return SendErrorMessage(playerid, "Tu n'est pas membre d'une faction illégale.");
 	if (!Inventory_HasItem(playerid, "Jerrican"))
 		return SendErrorMessage(playerid,"Tu n'a pas de jerrican.");
@@ -10621,10 +10606,10 @@ CMD:mettrelefeu(playerid, params[])
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
-			if (FactionData[facass][factionacces][4] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
+			if (FactionData[facass][factionacces][5] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
 		}
 		CreateExplosion(x, y, z, 12, 5.0);
-		if(FactionData[facass][factionacces][4] == 1)
+		if(FactionData[facass][factionacces][5] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 	}
 	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1393.7836,462.0495,20.3864)&& mission1[playerid] == 1)//feu 2
@@ -10638,10 +10623,10 @@ CMD:mettrelefeu(playerid, params[])
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
-			if (FactionData[facass][factionacces][4] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
+			if (FactionData[facass][factionacces][5] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
 		}
 		CreateExplosion(x, y, z, 12, 5.0);
-		if(FactionData[facass][factionacces][4] == 1)
+		if(FactionData[facass][factionacces][5] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 	}
 	if(IsPlayerInRangeOfPoint(playerid, 5.0, 245.1169,-43.5079,1.5853)&& mission1[playerid] == 1)//feu 3
@@ -10655,10 +10640,10 @@ CMD:mettrelefeu(playerid, params[])
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
-			if (FactionData[facass][factionacces][4] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
+			if (FactionData[facass][factionacces][5] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
 		}
 		CreateExplosion(x, y, z, 12, 5.0);
-		if(FactionData[facass][factionacces][4] == 1)
+		if(FactionData[facass][factionacces][5] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 
 	}
@@ -10676,10 +10661,10 @@ CMD:mettrelefeu(playerid, params[])
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
-			if (FactionData[facass][factionacces][4] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
+			if (FactionData[facass][factionacces][5] == 1) {Waypoint_Set(i, "AU FEU!", x, y, z);}
 		}
 		CreateExplosion(x, y, z, 12, 5.0);
-		if(FactionData[facass][factionacces][4] == 1)
+		if(FactionData[facass][factionacces][5] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 	}
 	return 1;
@@ -10707,7 +10692,7 @@ CMD:salaireanpe(playerid, params[])
 CMD:creermatos(playerid,params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][12] == 0)
+	if (FactionData[facass][factionacces][13] == 0)
 		return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if(!IsPlayerInRangeOfPoint(playerid, 8.0,2580.9214,-1219.2292,1022.0316)) return SendErrorMessage(playerid,"Vous n'est pas dans l'entrepòt.");
 	Dialog_Show(playerid,creermatos,DIALOG_STYLE_TABLIST,"Création d'arme la liste","{ffffff}AK-47: \t{ff3300}Matos : 200{ffffff}\n{ffffff}M4: \t{ff3300}Matos : 250{ffffff}\n{ffffff}MP5: \t{ff3300}Matos : 150{ffffff}\n{ffffff}Sniper: \t{ff3300}Matos : 550{ffffff}\n{ffffff}Rifle: \t{ff3300}Matos : 450{ffffff}\n{ffffff}Chargeur x 10: \t{ff3300}Matos : 100{ffffff}\n{ffffff}Boite de munitions x 10: \t{ff3300}Matos : 150{ffffff}\n{ffffff}Shot-Gun: \t{ff3300}Matos : 150{ffffff}\n{ffffff}Tec-9: \t{ff3300}Matos : 100{ffffff}\n{ffffff}UZI: \t{ff3300}Matos : 100{ffffff}\n{ffffff}Colt .45: \t{ff3300}Matos : 50{ffffff}\n{ffffff}Dynamite: \t{ff3300}Matos : 1000{ffffff}\n{ffffff}Decodeur: \t{ff3300}Matos : 1000{ffffff}","Créer","Fermer");	
@@ -10729,7 +10714,7 @@ CMD:credits(playerid,params[])
 CMD:tuning(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	{
 		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SendClientMessage(playerid, COLOR_GREY, "Vous n'êtes pas dans un véhicule.");
 		Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
@@ -10741,7 +10726,7 @@ CMD:tuning(playerid, params[])
 CMD:etuning(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	{
 		if(sscanf(params, "s[16]", params))
 		{
@@ -10832,7 +10817,7 @@ CMD:etuning(playerid, params[])
 CMD:rtuning(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	{
 		Tuning[playerid][FrontBumper] = 0;
 		Tuning[playerid][FrontBumperID] = 0;
@@ -11048,13 +11033,13 @@ CMD:louerveh(playerid, params[])
 	PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 	TSM(playerid, "~r~/delouerveh pour delouer le vehicule\n~w~Oublier pas de delouer quand vous avez fini avec!\nProche de l'auto-ecole", "Location", 5000, 0x00000088, 20.0000, 110.000000, 130.000000);
 	GiveMoney(playerid,-200);
-	for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists] && FactionData[i][factionacces][12] == 1) {
+	for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists] && FactionData[i][factionacces][13] == 1) {
 		count++;
 	}
-	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+	for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][13] == 1)
 	{
 		new aye = 200 / count;
-		if(FactionData[ii][factionacces][12] == 1)
+		if(FactionData[ii][factionacces][13] == 1)
 		{
 			FactionData[ii][factioncoffre] += aye;
 			Faction_Save(ii);
@@ -11093,7 +11078,7 @@ CMD:delouerveh(playerid, params[])
 CMD:micro(playerid, params[])
 {
 	new targetid,choose[30],factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][2] == 0) {ShowPlayerFooter(playerid, "Vous devez être un agent du FBI."); return 1;}
+	if (FactionData[factionid][factionacces][3] == 0) {ShowPlayerFooter(playerid, "Vous devez être un agent du FBI."); return 1;}
 	if(sscanf(params, "us[30]", targetid, choose)) SendSyntaxMessage(playerid, "{DEAD61}INFO: {FFFFFF}/micro <Prénom_Nom/ID> [on/off]");
 	else
 	{
@@ -11193,7 +11178,7 @@ CMD:sabot(playerid, params[])
 	new id = -1,prix,facass = PlayerData[playerid][pFaction];
 	if ((id = Car_Nearest(playerid)) != -1)
 	{
-		if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+		if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 
 		if (PlayerData[playerid][pFactionRank] < 3)
 		return SendErrorMessage(playerid, "Vous n'avez pas la permission d'utiliser cette commande, il faut être rang 3.");
@@ -11213,7 +11198,7 @@ CMD:sabot(playerid, params[])
 		CarData[id][carSabot] = 1;
 		CarData[id][carSabPri] = prix;
 		Car_Save(id);
-		if(FactionData[facass][factionacces][0] == 1)
+		if(FactionData[facass][factionacces][1] == 1)
 		{ SendServerMessage(playerid, "%s a placé un sabot sur le véhicule ID: %d.",ReturnName(playerid, 0), CarData[id][carVehicle]);}
 	}
 	else SendErrorMessage(playerid, "Vous n'êtes pas près d'un véhicule.");
@@ -11225,7 +11210,7 @@ CMD:rsabot(playerid, params[])
 	new id = -1,facass = PlayerData[playerid][pFaction];
 	if ((id = Car_Nearest(playerid)) != -1)
 	{
-		if (FactionData[facass][factionacces][0] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
+		if (FactionData[facass][factionacces][1] == 0) return SendErrorMessage(playerid, "Vous n'êtes n'avez pas l'acces a cette commande.");
 		if (PlayerData[playerid][pFactionRank] < 3)
 		return SendErrorMessage(playerid, "Vous n'avez pas la permission d'utiliser cette commande, il faut être rang 3.");
 		if (CarData[id][carSabot] == 0)
@@ -11233,7 +11218,7 @@ CMD:rsabot(playerid, params[])
 		CarData[id][carSabot] = 0;
 		CarData[id][carSabPri] = 0;
 		Car_Save(id);
-		if(FactionData[facass][factionacces][0] == 1)
+		if(FactionData[facass][factionacces][1] == 1)
 		{ SendServerMessage(playerid, "%s a retiré un sabot sur le véhicule ID: %d.",ReturnName(playerid, 0), CarData[id][carVehicle]);}
 	}
 	else SendErrorMessage(playerid, "Vous n'êtes pas près d'un véhicule.");
@@ -11249,7 +11234,7 @@ CMD:payersabot(playerid, params[])
 		return SendErrorMessage(playerid, "Vous n'avez pas assez d'argent pour payer.");
 		if (CarData[id][carSabot] == 0)
 		return SendErrorMessage(playerid, "Ce véhicule n'as pas de sabot");
-		for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[facass][factionacces][0] == 1) argent_entreprise[moneyentrepriseid][argentmairie] += CarData[id][carSabPri];
+		for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[facass][factionacces][1] == 1) argent_entreprise[moneyentrepriseid][argentmairie] += CarData[id][carSabPri];
 	    GiveMoney(playerid,-CarData[id][carSabPri]);
 		SendVehiculeMessage(playerid, "Vous avez payez le sabot pour %d$",CarData[id][carSabPri]);
 		CarData[id][carSabot] = 0;
@@ -11508,7 +11493,7 @@ CMD:recharger(playerid, params[])
 CMD:poserboite(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0)
+	if (FactionData[facass][factionacces][9] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (PlayerData[playerid][pCarryCrate] == -1)
 	    return SendErrorMessage(playerid, "Tu n'as pas de boite dans les mains.");
@@ -11560,7 +11545,7 @@ CMD:tmeoff(playerid, params[])
 CMD:barriere(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 && FactionData[facass][factionacces][4] == 0)
+	if (FactionData[facass][factionacces][1] == 0 && FactionData[facass][factionacces][5] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas de cette faction.");
 	if(IsPlayerInAnyVehicle(playerid))
 	{
@@ -11580,7 +11565,7 @@ CMD:barriere(playerid, params[])
 CMD:destroybarriere(playerid, params[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 && FactionData[facass][factionacces][4] == 0)
+	if (FactionData[facass][factionacces][1] == 0 && FactionData[facass][factionacces][5] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas de cette faction.");
 	if(IsPlayerInAnyVehicle(playerid))
 	{
@@ -11727,13 +11712,13 @@ CMD:parier(playerid, params[])
 				{
 					MoneyBet[playerid] = cash;
 					GiveMoney(playerid, -cash);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 						count++;
 					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 					{
 						new aye = cash / count;
-						if(FactionData[ii][factionacces][11] == 1)
+						if(FactionData[ii][factionacces][12] == 1)
 						{
 							FactionData[ii][factioncoffre] += aye;
 							Faction_Save(ii);
@@ -11948,7 +11933,7 @@ CMD:bbalise(playerid,params[])
 		new factionid = PlayerData[i][pFaction],Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid,x,y,z);
 		SetFactionMarker(playerid, factionid, 0x00ffc5FF);
-		if(FactionData[factionid][factionacces][0] == 1 ||FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)
+		if(FactionData[factionid][factionacces][1] == 1 ||FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][7] == 1 || FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionacces][4] == 1)
 		{
 			SendServerMessage(i,"{BABABA}%s demande du renfort. (Localisation: {FFFFFF}%s{BABABA})", ReturnName(playerid), GetLocation(x, y, z));
 		}
@@ -12252,12 +12237,12 @@ CMD:voleritem(playerid,params[])
 		}
 		foreach (new y : Player)
 		{
-			if (FactionData[facass][factionacces][0] == 1)
+			if (FactionData[facass][factionacces][1] == 1)
 			{
 				Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);
 			}
 		}
-		if(FactionData[facass][factionacces][0] == 1)
+		if(FactionData[facass][factionacces][1] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un vol de magasin au %s (marquée sur la carte).", BusinessData[bizid][bizName]);}
 	}
 	else return SendErrorMessage(playerid,"Vous n'est pas dans un magasin.");
@@ -12281,6 +12266,8 @@ CMD:abus(playerid,params[])
 }
 CMD:minutecheck(playerid,params[])
 {
+	if (PlayerData[playerid][pAdmin] < 4)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	MinuteCheck();
 	return 1;
 }
@@ -12382,6 +12369,7 @@ CMD:salairefaction(playerid,params[])
 	static id,idd;
 	new factionid = PlayerData[playerid][pFaction];
 	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)  return SendErrorMessage(playerid,"Vous n'avez pas acces a cette option.");
+	Dialog_Show(playerid,salairefaction,DIALOG_STYLE_TABLIST,"Salaire de votre faction","Salaire rang 1\t %d $/h\t","Valider","Fermer",FactionData[factionid][factionsalaire][1]);
 	if(sscanf(params, "dd",idd,id)) return SendClientMessage(playerid, -1, "Utilisation: /salairefaction rank entre 1 et 2500");
 	if (idd < 1 || idd > 15) return SendErrorMessage(playerid,"Erreur Le rang est entre 1 et 15");
 	if (id < 1 || id > 2500) return SendErrorMessage(playerid,"Erreur le salaire du rang %d doit être comprie entre 1 et 2500$",idd);

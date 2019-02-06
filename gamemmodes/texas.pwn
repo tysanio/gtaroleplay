@@ -23,6 +23,8 @@
 #include <streamer>
 #include <zcmd>
 #include <Encrypt> //truc a la con de marco
+#include <fcnpc>
+#include <mapandreas2>
 native IsValidVehicle(vehicleid);
 //Include texas
 #include <texasv1/extactor>
@@ -36,6 +38,7 @@ native IsValidVehicle(vehicleid);
 #include <texasv1/callback>
 #include <texasv1/bowling>
 #include <texasv1/GrimCasino>
+#include <texasv1/zombie>
 //#include <texasv1/vsync>
 main()
 {
@@ -284,7 +287,7 @@ public RandomFire()
 	foreach (new i : Player)
 	{
 		new facass = PlayerData[i][pFaction];
-		if (FactionData[facass][factionacces][4] == 1)
+		if (FactionData[facass][factionacces][5] == 1)
 		{
 			Waypoint_Set(i, "Au FEU!!", fX, fY, fZ);
 			SendServerMessage(i,"RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(fX, fY, fZ));
@@ -354,7 +357,7 @@ public Advertise(playerid)
 public KickHouse(playerid, id)
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 || House_Nearest(playerid) != id)
+	if (FactionData[facass][factionacces][3] == 0 || House_Nearest(playerid) != id)
 	    return 0;
 	switch (random(6))
 	{
@@ -376,7 +379,7 @@ public KickHouse(playerid, id)
 public KickBusiness(playerid, id)
 {
     new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 || Business_Nearest(playerid) != id)
+	if (FactionData[facass][factionacces][3] == 0 || Business_Nearest(playerid) != id)
 	    return 0;
 	switch (random(6))
 	{
@@ -438,7 +441,13 @@ public UpdateBooth(playerid, id)
 	        case 5:
 	        {
 	            Booth_Leave(playerid);
-	            SendServerMessage(playerid, "Vous avez terminé le défi de tir!");
+	            SendServerMessage(playerid, "Vous avez terminé le défi de tir! Vôtre maniment d'arme a augementé");
+				PlayerData[playerid][pSkill][3] +=10;
+				PlayerData[playerid][pSkill][4] +=10;
+				PlayerData[playerid][pSkill][6] +=10;
+				PlayerData[playerid][pSkill][7] +=10;
+				PlayerData[playerid][pSkill][8] +=10;
+				PlayerData[playerid][pSkill][9] +=10;
 	        }
 	    }
 	}
@@ -768,12 +777,10 @@ public Faction_Load()
 		    format(str, sizeof(str), "factionRank%d", j + 1);
 		    cache_get_field_content(i, str, FactionRanks[i][j], g_iHandle, 32);
 		}
-		for (new j = 0; j < 15; j ++) {
-		    format(str, sizeof(str), "factionacces%d", j + 1);
+		for (new j = 1; j < 15; j ++) {
+		    format(str, sizeof(str), "factionacces%d", j);
 		    FactionData[i][factionacces][j] = cache_get_field_int(i, str);
-		}
-		for (new j = 0; j < 15; j ++) {
-		    format(str, sizeof(str), "SalaireRank%d", j + 1);
+		    format(str, sizeof(str), "SalaireRank%d", j);
 		    FactionData[i][factionsalaire][j] = cache_get_field_int(i, str);
 		}
 		Faction_Refresh(i);
@@ -1317,7 +1324,6 @@ public CraftParts(playerid, crateid)
 	}
 	return 1;
 }
-
 public FirstAidUpdate(playerid)
 {
 	static Float:health;
@@ -1349,7 +1355,7 @@ public FirstAidUpdate(playerid)
 public RepairCarMoteur(playerid, vehicleid)
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0 && !IsPlayerNearHood(playerid, vehicleid)) {
+	if (FactionData[facass][factionacces][9] == 0 && !IsPlayerNearHood(playerid, vehicleid)) {
 		return 0;
 	}
 	SetVehicleHealth(vehicleid, 1000.0);
@@ -1363,7 +1369,7 @@ public RepairCarMoteur(playerid, vehicleid)
 public RepairCarCaro(playerid, vehicleid)
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][8] == 0 && !IsPlayerNearHood(playerid, vehicleid)) {
+	if (FactionData[facass][factionacces][9] == 0 && !IsPlayerNearHood(playerid, vehicleid)) {
 		return 0;
 	}
 	UpdateVehicleDamageStatus(vehicleid, 0, 0, 0, 0);
@@ -1702,6 +1708,7 @@ public OnQueryFinished(extraid, threadid)
 					PlayerData[extraid][prepetitions] = cache_get_field_int(0, "Repetition");
 					PlayerData[extraid][pparcouru] = cache_get_field_int(0, "Parcouru");
 					PlayerData[extraid][pNoob] = cache_get_field_int(0, "Noob");
+					PlayerData[extraid][pZombieKill] = cache_get_field_int(0, "ZombieKill");
 					cache_get_field_content(0, "Warn1", PlayerData[extraid][pWarn1], g_iHandle, 32);
 					cache_get_field_content(0, "Warn2", PlayerData[extraid][pWarn2], g_iHandle, 32);
 
@@ -1712,6 +1719,10 @@ public OnQueryFinished(extraid, threadid)
 			            format(query, sizeof(query), "Ammo%d", i + 1);
 			            PlayerData[extraid][pAmmo][i] = cache_get_field_int(0, query);
 			        }
+			        for (new j = 1; j < 10; j ++) {
+					    format(query, sizeof(query), "skill%d", j);
+					    PlayerData[extraid][pSkill][j] = cache_get_field_int(0, query);
+					}
 			        PlayerData[extraid][pGlasses] = cache_get_field_int(0, "Glasses");
 					PlayerData[extraid][pHat] = cache_get_field_int(0, "Hat");
 					PlayerData[extraid][pBandana] = cache_get_field_int(0, "Bandana");
@@ -1742,7 +1753,7 @@ public OnQueryFinished(extraid, threadid)
 				        SendAdminAction(extraid, "Vous avez le niveau admin %d.", PlayerData[extraid][pAdmin]);
 				    }
 				    PlayerData[extraid][pLogged] = 1;
-
+                    skill_set(extraid);
                     format(query, sizeof(query), "SELECT * FROM `inventory` WHERE `ID` = '%d'", PlayerData[extraid][pID]);
 					mysql_tquery(g_iHandle, query, "OnQueryFinished", "dd", extraid, THREAD_LOAD_INVENTORY);
 
@@ -1789,9 +1800,9 @@ public OnQueryFinished(extraid, threadid)
 				        SetTimerEx("SpawnTimer", 1000, false, "d", extraid);
 					}
 					new factionid = PlayerData[extraid][pFaction];
-					if (FactionData[factionid][factionacces][0] == 1) {cop_nbrCops++;}
-					if (FactionData[factionid][factionacces][3] == 1) {swat_nbrCops++;}
-					if (FactionData[factionid][factionacces][5] == 1) {mercco++; SendServerMessage(extraid,"Livreur de marchandise connecté (toi)");}
+					if (FactionData[factionid][factionacces][1] == 1) {cop_nbrCops++;}
+					if (FactionData[factionid][factionacces][4] == 1) {swat_nbrCops++;}
+					if (FactionData[factionid][factionacces][6] == 1) {mercco++; SendServerMessage(extraid,"Livreur de marchandise connecté (toi)");}
 				}
 			}
 		}
@@ -1937,7 +1948,7 @@ public OnQueryFinished(extraid, threadid)
 public OnViewCharges(extraid, name[])
 {
     new factionid = PlayerData[extraid][pFaction];
-	if (FactionData[factionid][factionacces][0] == 0)
+	if (FactionData[factionid][factionacces][1] == 0)
 	    return 0;
 
 	static rows,fields;
@@ -2464,12 +2475,12 @@ public MinuteCheck()
 				paycheck = info_gouvernementinfo[gouvernementinfoid][gouvernementchomage];
 				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
 			}
-			else if(FactionData[factionid][factionacces][7] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
+			else if(FactionData[factionid][factionacces][8] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
 			{
 				paycheck = info_gouvernementinfo[gouvernementinfoid][gouvernementchomage];
 				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
 			}
-            else if (FactionData[factionid][factionacces][0] == 1 && argent_entreprise[moneyentrepriseid][argentpolice] >= 0)
+            else if (FactionData[factionid][factionacces][1] == 1 && argent_entreprise[moneyentrepriseid][argentpolice] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
 				{ paycheck = info_salairepolice[rank][salairepolice1];
@@ -2519,7 +2530,7 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentpolice] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if (FactionData[factionid][factionacces][2] == 1 && argent_entreprise[moneyentrepriseid][argentfbi] >= 0)
+            else if (FactionData[factionid][factionacces][3] == 1 && argent_entreprise[moneyentrepriseid][argentfbi] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
 				{ paycheck = info_salairefbi[rank][salairefbi1];
@@ -2569,7 +2580,7 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentfbi] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if (FactionData[factionid][factionacces][3] == 1 && argent_entreprise[moneyentrepriseid][argentswat] >= 0)
+            else if (FactionData[factionid][factionacces][4] == 1 && argent_entreprise[moneyentrepriseid][argentswat] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
 				{ paycheck = info_salaireswat[rank][salaireswat1];
@@ -2619,7 +2630,7 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentswat] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if (FactionData[factionid][factionacces][4] == 1 && argent_entreprise[moneyentrepriseid][argentmedecin] >= 0)
+            else if (FactionData[factionid][factionacces][5] == 1 && argent_entreprise[moneyentrepriseid][argentmedecin] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
 				{ paycheck = info_salaireurgentiste[rank][salaireurgentiste1];
@@ -2669,7 +2680,7 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentmedecin] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if(FactionData[factionid][factionacces][6] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
+            else if(FactionData[factionid][factionacces][7] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
 			{
 	            if (PlayerData[i][pFactionRank] == 1)
 				{ paycheck = info_salairemairie[rank][salairemairie1];
@@ -2719,14 +2730,7 @@ public MinuteCheck()
 				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
-            else if (FactionData[factionid][factionacces][5] == 1 && FactionData[factionid][factioncoffre] >= 0)
-			{
-				paycheck = FactionData[factionid][factionsalaire][Derp];
-				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
-				FactionData[factionid][factioncoffre] -= paycheck;
-		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
-			}
-            else if (FactionData[factionid][factionacces][9] == 1 && FactionData[factionid][factioncoffre] >= 0)
+            else if (FactionData[factionid][factionacces][6] == 1 && FactionData[factionid][factioncoffre] >= 0)
 			{
 				paycheck = FactionData[factionid][factionsalaire][Derp];
 				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
@@ -2768,30 +2772,37 @@ public MinuteCheck()
 				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
+            else if (FactionData[factionid][factionacces][15] == 1 && FactionData[factionid][factioncoffre] >= 0)
+			{
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
+		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
+			}
 			//bracelet electronic
 			if (PlayerData[i][pBracelet] != 0)
 			{
-				foreach (new k : Player) if (FactionData[factionid][factionacces][0] == 1) {
+				foreach (new k : Player) if (FactionData[factionid][factionacces][1] == 1) {
 					new Float:x,Float:y,Float:z;
 					GetPlayerPos(i, x, y, z);
 					if (PlayerData[i][pBraceletProx] == 1 && GetPlayerDistanceFromComico(i) > 1500)
 					{
 						SendServerMessage(i, "Vous êtes à %.0f Mètre du comissariat faite attention vous avez dépassé la limite", GetPlayerDistanceFromComico(i));
-						if(FactionData[factionid][factionacces][0] == 1)
+						if(FactionData[factionid][factionacces][1] == 1)
 						{ SendServerMessage(i,"CENTRAL: (radio): %s s'est éloigné du périmètre déterminer il est à %s (%.0fMetre)",ReturnName(i, 0), GetLocation(x, y, z),GetPlayerDistanceFromComico(i));}
 						SetPlayerCheckpoint(k, x, y, z, 4.0);
 					}
 					if (PlayerData[i][pBraceletProx] == 2 && GetPlayerDistanceFromComico(i) > 2500)
 					{
 						SendServerMessage(i, "Vous êtes à %.0f Mètre du comissariat faite attention vous avez dépassé la limite", GetPlayerDistanceFromComico(i));
-						if(FactionData[factionid][factionacces][0] == 1)
+						if(FactionData[factionid][factionacces][1] == 1)
 						{ SendServerMessage(i,"CENTRAL: (radio): %s s'est éloigné du périmètre déterminer il est à %s (%.0fMetre)",ReturnName(i, 0), GetLocation(x, y, z),GetPlayerDistanceFromComico(i));}
 						SetPlayerCheckpoint(k, x, y, z, 4.0);
 					}
 					if (PlayerData[i][pBraceletProx] == 3 && GetPlayerDistanceFromComico(i) > 3500)
 					{
 						SendServerMessage(i, "Vous êtes à %.0f Mètre du comissariat faite attention vous avez dépassé la limite", GetPlayerDistanceFromComico(i));
-						if(FactionData[factionid][factionacces][0] == 1)
+						if(FactionData[factionid][factionacces][1] == 1)
 						{ SendServerMessage(i,"CENTRAL: (radio): %s s'est éloigné du périmètre déterminer il est à %s (%.0fMetre)",ReturnName(i, 0), GetLocation(x, y, z),GetPlayerDistanceFromComico(i));}
 						SetPlayerCheckpoint(k, x, y, z, 4.0);
 					}
@@ -2845,13 +2856,13 @@ public MinuteCheck()
 					{
 					    SendSalaireMessage(i, "Charges du vehicule louer {FF0000}-200$");
 					    PlayerData[i][pBankMoney] -= 200;
-						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][13] == 1) {
 							count++;
 						}
-						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][13] == 1)
 						{
 							new aye = 200 / count;
-							if(FactionData[ii][factionacces][12] == 1)
+							if(FactionData[ii][factionacces][13] == 1)
 							{
 								FactionData[ii][factioncoffre] += aye;
 								Faction_Save(ii);
@@ -2892,13 +2903,13 @@ public MinuteCheck()
 					{
 					    SendSalaireMessage(i, "Charges du vehicule louer {FF0000}-200$");
 					    PlayerData[i][pBankMoney] -= 200;
-						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 							count++;
 						}
-						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 						{
 							new aye = 200 / count;
-							if(FactionData[ii][factionacces][11] == 1)
+							if(FactionData[ii][factionacces][12] == 1)
 							{
 								FactionData[ii][factioncoffre] += aye;
 								Faction_Save(ii);
@@ -2938,13 +2949,13 @@ public MinuteCheck()
 			{
 			    SendSalaireMessage(i, "Charges du vehicule louer {FF0000}-200$");
 			    PlayerData[i][pBankMoney] -= 200;
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 200 / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -3017,7 +3028,7 @@ public PlayerCheck()
                 KickEx(i);
 			}
 		}
-		if(PlayerData[i][pChannel] == 911 && FactionData[factionid][factionacces][0] == 1) {PlayerData[i][pChannel] = 0;}
+		if(PlayerData[i][pChannel] == 911 && FactionData[factionid][factionacces][1] == 1) {PlayerData[i][pChannel] = 0;}
 		if (PlayerData[i][pPicking])
 		{
 			if ((id = PlayerData[i][pPickCar]) != -1)
@@ -3255,7 +3266,7 @@ public PlayerCheck()
 		        PlayerTextDrawHide(i, PlayerData[i][pTextdraws][70]);
 			}
 		}
-		else if (PlayerData[i][pTrackTime] > 0 && IsPlayerConnected(PlayerData[i][pMDCPlayer]) && FactionData[factionid][factionacces][0] == 1)
+		else if (PlayerData[i][pTrackTime] > 0 && IsPlayerConnected(PlayerData[i][pMDCPlayer]) && FactionData[factionid][factionacces][1] == 1)
 		{
 		    PlayerData[i][pTrackTime]--;
 		    if (!PlayerData[i][pTrackTime])
@@ -3916,7 +3927,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 		PlayerTextDrawSetString(playerid, PlayerData[playerid][pTextdraws][81], string);
 		SetTimerEx("UpdateBooth", 3000, false, "dd", playerid, PlayerData[playerid][pRangeBooth]);
 	}
-	if (weaponid == 23 && PlayerData[playerid][pTazer] && FactionData[factionid][factionacces][0] == 1) {
+	if (weaponid == 23 && PlayerData[playerid][pTazer] && FactionData[factionid][factionacces][1] == 1) {
 	    PlayerPlaySoundEx(playerid, 6003);
 	}
 	if ((weaponid >= 22 && weaponid <= 38) && hittype == BULLET_HIT_TYPE_PLAYER && hitid != INVALID_PLAYER_ID)
@@ -4016,7 +4027,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 		{
 		    SetPlayerHealth(damagedid, ReturnHealth(damagedid) - 6);
 		}
-        if (FactionData[factionid][factionacces][0] == 1 && PlayerData[playerid][pTazer] && PlayerData[damagedid][pStunned] < 1 && weaponid == 23)
+        if (FactionData[factionid][factionacces][1] == 1 && PlayerData[playerid][pTazer] && PlayerData[damagedid][pStunned] < 1 && weaponid == 23)
         {
 			if (GetPlayerState(damagedid) != PLAYER_STATE_ONFOOT)
 			    return SendErrorMessage(playerid, "Le joueur doit être debout pour être étourdis.");
@@ -4034,7 +4045,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 
 			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a étourdis %s avec sont tazer.", ReturnName(playerid, 0), ReturnName(damagedid, 0));
         }
-        if (FactionData[factionid][factionacces][0] == 1 && PlayerData[playerid][pflashball] && PlayerData[damagedid][pStunned] < 1 && weaponid == 25)
+        if (FactionData[factionid][factionacces][1] == 1 && PlayerData[playerid][pflashball] && PlayerData[damagedid][pStunned] < 1 && weaponid == 25)
         {
 			if (GetPlayerState(damagedid) != PLAYER_STATE_ONFOOT)
 			    return SendErrorMessage(playerid, "Le joueur doit être debout pour être étourdis.");
@@ -4055,11 +4066,11 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 	return 1;
 }
 //is a gang de caca
-public IsACop(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][0] == 1 && FactionData[facass][factionacces][3] == 1 && FactionData[facass][factionacces][2] == 1 && FactionData[facass][factionacces][6] == 1 && FactionData[facass][factionacces][4] == 1) return 1;return 0;}
-public IsACops(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][0] == 1) return 1;return 0;}
-public IsACopm(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][0] == 1 && FactionData[facass][factionacces][4] == 1) return 1;return 0;}
-public IsACopf(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][0] == 1 && FactionData[facass][factionacces][2] == 1) return 1;return 0;}
-public IsAGang(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][7] == 1) return 1; return 0;}
+public IsACop(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][4] == 1 && FactionData[facass][factionacces][3] == 1 && FactionData[facass][factionacces][7] == 1 && FactionData[facass][factionacces][5] == 1) return 1;return 0;}
+public IsACops(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1) return 1;return 0;}
+public IsACopm(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][5] == 1) return 1;return 0;}
+public IsACopf(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][3] == 1) return 1;return 0;}
+public IsAGang(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][8] == 1) return 1; return 0;}
 public OnPlayerDeath(playerid, killerid, reason)
 {
 	if (killerid != INVALID_PLAYER_ID)
@@ -4590,9 +4601,9 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(cop_nbrCops < COP_MIN_COPS_BRAQUAGE) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
 			foreach (new y : Player)
 			{
-				if (FactionData[facass][factionacces][0] == 1) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
+				if (FactionData[facass][factionacces][1] == 1) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
 			}
-			if(FactionData[facass][factionacces][0] == 1)
+			if(FactionData[facass][factionacces][1] == 1)
 			{ SendServerMessage(playerid,  "RADIO: Un vol de magasin au %s (marquée sur la carte).", BusinessData[bizid][bizName]);}
       		//static bizid = -1;
 			if ((bizid = Business_Inside(playerid)) != -1)
@@ -4629,13 +4640,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					{
 					    PlayerData[playerid][pVendorTime] = 3;
 					    GiveMoney(playerid, -3);
-						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 							count++;
 						}
-						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 						{
 							new aye = 3 / count;
-							if(FactionData[ii][factionacces][10] == 1)
+							if(FactionData[ii][factionacces][11] == 1)
 							{
 								FactionData[ii][factioncoffre] += aye;
 								Faction_Save(ii);
@@ -4673,13 +4684,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					{
                         PlayerData[playerid][pVendorTime] = 3;
 					    GiveMoney(playerid, -2);
-						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+						for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 							count++;
 						}
-						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
+						for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
 						{
 							new aye = 3 / count;
-							if(FactionData[ii][factionacces][10] == 1)
+							if(FactionData[ii][factionacces][11] == 1)
 							{
 								FactionData[ii][factioncoffre] += aye;
 								Faction_Save(ii);
@@ -5023,7 +5034,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     //anti bunny
     if ((newkeys & KEY_JUMP) && !(oldkeys & KEY_JUMP))
  	{
-  		if(!IsPlayerInAnyVehicle(playerid))
+  		if(!IsPlayerInAnyVehicle(playerid) && !PlayerToPoint(8900.0,playerid,-2146.2573, 323.5667,34.1228))
     	{
        		BunnyHop[playerid] += 1;
          	SetTimer("TimerBunnyHop", 2000, false);
@@ -5221,13 +5232,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	 		timerslot[playerid] = SetTimerEx("UpdateMachineTD", 100, 1, "d", playerid);
 	 		GiveMoney(playerid, -MONEY_COST);
 	 		TogglePlayerControllable(playerid, 0);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = MONEY_COST / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -5412,7 +5423,7 @@ public OnPlayerEnterCheckpoint(playerid)
 		    DisablePlayerCheckpoint(playerid);
 		    PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][69]);
 		}
-		else if (FactionData[facass][factionacces][5] == 1 && !IsPlayerInAnyVehicle(playerid))
+		else if (FactionData[facass][factionacces][6] == 1 && !IsPlayerInAnyVehicle(playerid))
 		{
 			if (PlayerData[playerid][pLoading] && !PlayerData[playerid][pLoadCrate] && Job_NearestPoint(playerid) != -1)
 			{
@@ -6559,7 +6570,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	}
 	else if (newstate == PLAYER_STATE_DRIVER)
 	{
-		if (FactionData[facass][factionacces][6] == 1 && GetVehicleModel(vehicleid) == 408 && CoreVehicles[vehicleid][vehTrash] > 0)
+		if (FactionData[facass][factionacces][7] == 1 && GetVehicleModel(vehicleid) == 408 && CoreVehicles[vehicleid][vehTrash] > 0)
 		{
 		    new pointid = -1;
 		    if ((pointid = GetClosestJobPoint(playerid, 7)) != -1)
@@ -6569,7 +6580,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		    	SendServerMessage(playerid, "Ce véhicule est chargé avec %d sacs de poubelles (point pour décharger).", CoreVehicles[vehicleid][vehTrash]);
 		    }
 		}
-		if (FactionData[facass][factionacces][5] == 11 && IsLoadableVehicle(vehicleid) && CoreVehicles[vehicleid][vehLoads] > 0)
+		if (FactionData[facass][factionacces][6] == 11 && IsLoadableVehicle(vehicleid) && CoreVehicles[vehicleid][vehLoads] > 0)
 		{
 		    if (PlayerData[playerid][pLoading])
 		    {
@@ -7094,6 +7105,12 @@ public OnPlayerUpdate(playerid)
 			return 1;
 		}
 	}
+	if (Inventory_HasItem(playerid,"object contaminer"))
+	{
+	    SendServerMessage(playerid,"Vous vous sentez faible quelque chose ne tourne pas rond.");
+	    SetPlayerDrunkLevel(playerid, 15000);
+	    return 1;
+	}
 	return 1;
 }
 public OnPlayerConnect(playerid)
@@ -7204,9 +7221,9 @@ public OnPlayerDisconnect(playerid, reason)
     PlayerData[playerid][pLogged] = 0;
  	TerminateConnection(playerid);
  	new facass = PlayerData[playerid][pFaction];
- 	if (FactionData[facass][factionacces][0] == 1) {cop_nbrCops--;}
- 	if (FactionData[facass][factionacces][3] == 1) {swat_nbrCops--;}
- 	if (FactionData[facass][factionacces][5] == 1) {mercco--;}
+ 	if (FactionData[facass][factionacces][1] == 1) {cop_nbrCops--;}
+ 	if (FactionData[facass][factionacces][4] == 1) {swat_nbrCops--;}
+ 	if (FactionData[facass][factionacces][6] == 1) {mercco--;}
  	Zavod[playerid] = 0;
 	ZavodIn[playerid] = 0;
 	ZavodIn1[playerid] = 0;
@@ -7287,6 +7304,10 @@ public OnGameModeInit()
     SendRconCommand("unloadfs soccer");
     SendRconCommand("loadfs soccer");
     //fin des fs oubliger
+    //zombie + radiation
+	ZombiesTimer = SetTimer("CreateZombies", 50, true);
+	SetTimer("UpdateRadiation",5000, 1);
+	//fin zombie
     AntiDeAMX();
 	static arrVirtualWorlds[2000]; /*id = -1;*/
 	WeatherRotator();
@@ -8001,11 +8022,6 @@ public OnPlayerRequestClass(playerid, classid)
 }
 public OnPlayerSpawn(playerid)
 {
-    // Skill levels
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, 200);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_MICRO_UZI, 200);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_SPAS12_SHOTGUN, 200);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_SAWNOFF_SHOTGUN, 200);
 	if (PlayerData[playerid][pHUD])
 	{
 	 	TextDrawShowForPlayer(playerid, gServerTextdraws[0]);
@@ -8309,7 +8325,7 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 	//salaire faction
  	if (strcmp("/salairegouv", cmdtext, true) == 0)
 	{
-	    if (FactionData[factionid][factionacces][6] == 0)
+	    if (FactionData[factionid][factionacces][7] == 0)
 	    	return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -8324,7 +8340,7 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 	}
  	if (strcmp("/salairefbi", cmdtext, true) == 0)
 	{
-	    if (FactionData[factionid][factionacces][6] == 0)
+	    if (FactionData[factionid][factionacces][7] == 0)
 	    	return SendErrorMessage(playerid, "Tu n'est pas du gouvernement");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -8338,7 +8354,7 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 	}
  	if (strcmp("/salairepolice", cmdtext, true) == 0)
 	{
-	    if (FactionData[factionid][factionacces][6] == 0)
+	    if (FactionData[factionid][factionacces][7] == 0)
 	    	return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -8352,7 +8368,7 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 	}
 	if (strcmp("/salaireswat", cmdtext, true) == 0)
 	{
-	    if (FactionData[factionid][factionacces][6] == 0)
+	    if (FactionData[factionid][factionacces][7] == 0)
 	    	return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -8366,7 +8382,7 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 	}
 	if (strcmp("/salaireurgentiste", cmdtext, true) == 0)
 	{
-	    if (FactionData[factionid][factionacces][6] == 0)
+	    if (FactionData[factionid][factionacces][7] == 0)
 	    	return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -8558,11 +8574,11 @@ public OnPlayerText(playerid, text[])
 				foreach (new i : Player)
 				{
 					new facass1 = PlayerData[i][pFaction];
-					if(FactionData[facass1][factionacces][0] == 1)
+					if(FactionData[facass1][factionacces][1] == 1)
 					{
 						SendServerMessage(i,"911 APPEL: %s (%s)", ReturnName(playerid, 0),GetPlayerLocation(playerid));
 						SendServerMessage(i,"DESCRIPTION: %s", text);
-						SetFactionMarker(playerid, FactionData[facass1][factionacces][0] == 1, 0x00ffc5FF);
+						SetFactionMarker(playerid, FactionData[facass1][factionacces][1] == 1, 0x00ffc5FF);
 			    		SendClientMessage(playerid, COLOR_LIGHTBLUE, "[OPÉRATEUR]:{FFFFFF} Nous avons alerté tout les policier qui son dans le secteur.");
 			    		cmd_racrocher(playerid, "\1");
 			    		cmd_racrocher(playerid, "\1");
@@ -8574,13 +8590,13 @@ public OnPlayerText(playerid, text[])
 				foreach (new i : Player)
 				{
 					new facass1 = PlayerData[i][pFaction];
-					if(FactionData[facass1][factionacces][4] == 1)
+					if(FactionData[facass1][factionacces][5] == 1)
 					{
 						SendServerMessage(playerid, "911 APPEL: %s (%s)", ReturnName(playerid, 0), GetPlayerLocation(playerid));
 						SendServerMessage(playerid, "DESCRIPTION: %s", text);
 						SendClientMessage(playerid, COLOR_LIGHTBLUE, "[OPÉRATEUR]:{FFFFFF} Nous avons alerté tout les policier qui son dans le secteur.");
 			    		cmd_racrocher(playerid, "\1");
-						SetFactionMarker(playerid, FactionData[facass][factionacces][4] == 1, 0x00D700FF);
+						SetFactionMarker(playerid, FactionData[facass][factionacces][5] == 1, 0x00D700FF);
 					}
 				}
 			}
@@ -9532,19 +9548,39 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	if(clickedid == AideMenu3)
 	{
 	    jagawaa(playerid);
-	    Dialog_Show(playerid,aidemaison,DIALOG_STYLE_MSGBOX,"Aide pour la maison","- /vendre pour vendre une maison,\n- /abandonner Pour abandonner votre maison sans gagner d'argent dessus\n- /porte Pour fermer la porte de la maison,\n- /mcoffre Pour voir le coffre de la maison\n- /fourniture Pour pouvoir bouger vos meubles\n- /acheteretagere Pour acheter une étagére\n- /armeetagere Pour poser une arme sur une étagére\n- /supetagere Pour supprimer une étagére\n- /sonner Pour sonner à la porte d'une maison\n- /lumiere Pour allumer la lumiére dans la maison\n- /cuisiner pour cuisiner un repas congelé\n- /locamax pour définir le max de locataire\n- /locaprix pour définir le prix de la locations\n- /(de)louermaison pour louer une maison ou délouer celle-ci","Quitter","");
+	    Dialog_Show(playerid,aidemaison,DIALOG_STYLE_MSGBOX,"Aide pour la maison","- /vendre pour vendre une maison,\
+		\n- /abandonner Pour abandonner votre maison sans gagner d'argent dessus\n- /porte Pour fermer la porte de la maison,\
+		\n- /mcoffre Pour voir le coffre de la maison\n- /fourniture Pour pouvoir bouger vos meubles\
+		\n- /acheteretagere Pour acheter une étagére\n- /armeetagere Pour poser une arme sur une étagére\
+		\n- /supetagere Pour supprimer une étagére\n- /sonner Pour sonner à la porte d'une maison\
+		\n- /lumiere Pour allumer la lumiére dans la maison\n- /cuisiner pour cuisiner un repas congelé\
+		\n- /locamax pour définir le max de locataire\n- /locaprix pour définir le prix de la locations\
+		\n- /(de)louermaison pour louer une maison ou délouer celle-ci","Quitter","");
 	}
 	if(clickedid == AideMenu4)
 	{
 	    jagawaa(playerid);
-	    Dialog_Show(playerid,aidebiz,DIALOG_STYLE_MSGBOX,"Aide pour le magasin","- /vendre pour vendre un magasin,\n- /abandonner Pour abandonner votre magasin sans gagner d'argent dessus\n- /porte Pour fermer la porte du magasin,\n- /bcoffre Pour voir le coffre du magasin\n- /produits Pour changer les prix des marchandises\n- /binfo Pour voir l'information du magasin\n- /bnom Pour changer le nom du magasin\n- /bmessage Pour changer le message du magasin\n- /accepterlivraison Faire une livraison de votre biz\n- /bheures définir les heures d'ouverture de votre magasin","Quitter","");
+	    Dialog_Show(playerid,aidebiz,DIALOG_STYLE_MSGBOX,"Aide pour le magasin","- /vendre pour vendre un magasin,\n- \
+		/abandonner Pour abandonner votre magasin sans gagner d'argent dessus\n- /porte Pour fermer la porte du magasin,\
+		\n- /bcoffre Pour voir le coffre du magasin\n- /produits Pour changer les prix des marchandises\
+		\n- /binfo Pour voir l'information du magasin\n- /bnom Pour changer le nom du magasin\
+		\n- /bmessage Pour changer le message du magasin\n- /accepterlivraison Faire une livraison de votre biz\
+		\n- /bheures définir les heures d'ouverture de votre magasin","Quitter","");
 	}
 	if(clickedid == AideMenu5)
 	{
 	    jagawaa(playerid);
-		Dialog_Show(playerid,aidevehicule,DIALOG_STYLE_MSGBOX,"Aide pour le véhicule","- /porte Pour fermer les portes du véhicule\n- /vendre pour vendre un véhicule,\n- /abandonner Pour abandonner votre véhicule sans gagner d'argent dessus\n- /remplir Pour faire le plein de votre véhicule\n\
-		- /jerrican Pour vous servir du jerrican\n- /enlevertunning Pour enlever le tuning du véhicule\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour démarrer le moteur du véhicule\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n\
-		- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenêtre du véhicule\n- /ceinture pour attacher votre ceinture\n- /setradio pour écouter la radio dans le véhicule,\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un vehicule,\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela,\n - /vpreter voir le vehicule qu'on vous a prêter,\n - /vdouble Pour prêter les clés de votre véhicule,\n - /vjeter pour jetter le double des clés prêter,\n - /payersabot pour payer le sabot du vehicule","Quitter","");
+		Dialog_Show(playerid,aidevehicule,DIALOG_STYLE_MSGBOX,"Aide pour le véhicule","- /porte Pour fermer les portes du véhicule \
+		\n- /vendre pour vendre un véhicule,\n- /abandonner Pour abandonner votre véhicule sans gagner d'argent dessus\n- /remplir Pour faire le plein de votre véhicule\n\
+		- /jerrican Pour vous servir du jerrican\n- /enlevertunning Pour enlever le tuning du véhicule\
+		\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour démarrer le moteur du véhicule\
+		\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n\
+		- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenêtre du véhicule\
+		\n- /ceinture pour attacher votre ceinture\n- /setradio pour écouter la radio dans le véhicule,\
+		\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un vehicule,\
+		\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela,\
+		\n - /vpreter voir le vehicule qu'on vous a prêter,\n - /vdouble Pour prêter les clés de votre véhicule,\
+		\n - /vjeter pour jetter le double des clés prêter,\n - /payersabot pour payer le sabot du vehicule","Quitter","");
 	}
 	if(clickedid == AideMenu6)
 	{// a mettre -/mettrelefeu pour mettre le feu (en mission)
@@ -9553,7 +9589,9 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	    new facass = PlayerData[playerid][pFaction];
 		if (PlayerData[playerid][pFaction] != -1)
 		{
-			if (FactionData[facass][factionacces][0] == 1){
+
+			if (FactionData[facass][factionacces][1] == 1){
+
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				 - /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9564,11 +9602,13 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 - /amende pour poser une amande,\n- /herse pour poser une herse,\n - /bbalise pour activer la balise,\n\
 				 - /analyser pour analyser un objet au sol,\n- /enleverlicense pour enlever la lisence d'arme,\n- /donnerlicense pour donner la lisence d'arme.\n \
 				 - /confisquer pour confisquer tout le sac,\n- /gyrophare pour mettre le giro,\n- /annonce pour mettre une annonce,\n- /camheli Être en vue de caméra sur l'hélicoptère,\n\
-				 - /flashball pour sortir un shotgun en caoutchouc,\n- /plaque pour afficher une plaque perso,\n- /blocaliser pour localiser un bracelet electronic,\n- /bracelet pour mettre un bracelet electronic,\n- /ebracelet pour enlever un bracelet electronic,\n - /sabot pour mettre un sabot sur un vehicule,\n - /rsabot pour enlever un sabot d'un vehicule\n\
+				 - /flashball pour sortir un shotgun en caoutchouc,\n- /plaque pour afficher une plaque perso,\n- /blocaliser pour localiser un bracelet electronic,\n\
+				 - /bracelet pour mettre un bracelet electronic,\n- /ebracelet pour enlever un bracelet electronic,\n - /sabot pour mettre un sabot sur un vehicule,\n - /rsabot pour enlever un sabot d'un vehicule\n\
 				 - /barriere pour placer un type de barrage,\n- /destroybarriere pour détruire les barrages placé avec le /barriere,\n- /bizon réautorisé un biz a avoir des clients.\
 				 ","Quitter","");
+
 			}
-			if (FactionData[facass][factionacces][2] == 1) {//fbi
+			if (FactionData[facass][factionacces][3] == 1) {//fbi
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				 - /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9578,7 +9618,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 - /defoncerporte pour défoncé une porte,\n- /micro pour poser un micro sur quelqu'un,\n\
 				 ","Quitter","");
 			}
-			if (FactionData[facass][factionacces][3] == 1) {//swat
+			if (FactionData[facass][factionacces][4] == 1) {//swat
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				 - /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9588,7 +9628,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 ","Quitter","");
 			}
 			//hosto
-			if (FactionData[facass][factionacces][4] == 1) {
+			if (FactionData[facass][factionacces][5] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9598,7 +9638,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				","Quitter","");
 			}
 			//camionneur
-			if (FactionData[facass][factionacces][5] == 1) {
+			if (FactionData[facass][factionacces][6] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9609,7 +9649,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 ","Quitter","");
 			}
 			//gouvernement
-	        if (FactionData[facass][factionacces][6] == 1) {
+	        if (FactionData[facass][factionacces][7] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9620,7 +9660,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				","Quitter","");
 			}
 			//gang
-			if (FactionData[facass][factionacces][7] == 1) {
+			if (FactionData[facass][factionacces][8] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9629,7 +9669,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 ","Quitter","");
 			}
 			//mecano
-			if (FactionData[facass][factionacces][8] == 1) {
+			if (FactionData[facass][factionacces][9] == 1) {
 			Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 			"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 			- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9640,7 +9680,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			 ","Quitter","");
 			}
 			//san news
-			if (FactionData[facass][factionacces][9] == 1) {
+			if (FactionData[facass][factionacces][10] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9649,7 +9689,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 ","Quitter","");
 			}
 			//vendeur de rue
-			if (FactionData[facass][factionacces][10] == 1) {
+			if (FactionData[facass][factionacces][11] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9658,7 +9698,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 ","Quitter","");
 			}
 			//mafia caison
-			if (FactionData[facass][factionacces][11] == 1) {
+			if (FactionData[facass][factionacces][12] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9666,7 +9706,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				 ","Quitter","");
 			}
 			//mafia taxi
-		    if (FactionData[facass][factionacces][12] == 1) {
+		    if (FactionData[facass][factionacces][13] == 1) {
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
@@ -9936,13 +9976,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 					return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 				pBet[playerid][i] += Frist_Bet_Value;
 				GiveMoney(playerid,-Frist_Bet_Value);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = Frist_Bet_Value / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -9955,13 +9995,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 					return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 				pBet[playerid][i] += Second_Bet_Value;
 				GiveMoney(playerid,-Second_Bet_Value);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = Second_Bet_Value / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -9985,13 +10025,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][40] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10004,13 +10044,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][40] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10034,13 +10074,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][41] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10053,13 +10093,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][41] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10083,13 +10123,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][42] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10102,13 +10142,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][42] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10132,13 +10172,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][43] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10151,13 +10191,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][43] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10181,13 +10221,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][44] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10200,13 +10240,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][44] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10229,13 +10269,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
    			if(GetPlayerMoney(playerid) < 10)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][45] += Frist_Bet_Value;
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10248,13 +10288,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][45] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10278,13 +10318,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][46] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10297,13 +10337,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][46] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10327,13 +10367,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][47] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10346,13 +10386,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][47] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10376,13 +10416,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][48] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10395,13 +10435,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][48] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10425,13 +10465,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][49] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10444,13 +10484,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][49] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10474,13 +10514,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][50] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10493,13 +10533,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][50] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10523,13 +10563,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][51] += Frist_Bet_Value;
 			GiveMoney(playerid,-Frist_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Frist_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10542,13 +10582,13 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				return SendErrorMessage(playerid,"Vous n'avez pas assez d'argent!");
 			pBet[playerid][51] += Second_Bet_Value;
 			GiveMoney(playerid,-Second_Bet_Value);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = Second_Bet_Value / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -10683,13 +10723,13 @@ public CheckPlayer(playerid,number)
 	    GiveMoney(playerid,10*pBet[playerid][number]);
 	    format(str,sizeof(str),"~g~GAGNE $%d",10*pBet[playerid][number]);
 	    GameTextForPlayer(playerid,str,5000,4);
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 		{
 			new aye = 10*pBet[playerid][number] / count;
-			if(FactionData[ii][factionacces][11] == 1)
+			if(FactionData[ii][factionacces][12] == 1)
 			{
 				FactionData[ii][factioncoffre] -= aye;
 				Faction_Save(ii);
@@ -10705,13 +10745,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][42]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][42]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 3*pBet[playerid][42] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10726,13 +10766,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][41]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][41]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 3*pBet[playerid][41] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10747,13 +10787,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][40]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][40]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 3*pBet[playerid][40] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10771,13 +10811,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][43]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][43]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 3*pBet[playerid][43] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10792,13 +10832,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][44]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][44]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 3*pBet[playerid][44] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10813,13 +10853,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,3*pBet[playerid][45]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",3*pBet[playerid][45]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 3*pBet[playerid][45] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10837,13 +10877,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][46]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][46]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 4*pBet[playerid][46] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10858,13 +10898,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][47]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][47]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 4*pBet[playerid][47] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10882,13 +10922,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][48]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][48]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 4*pBet[playerid][48] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10903,13 +10943,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][49]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][49]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 4*pBet[playerid][49] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10927,13 +10967,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][50]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][50]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 4*pBet[playerid][50] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -10948,13 +10988,13 @@ public CheckPlayer(playerid,number)
 	    		GiveMoney(playerid,4*pBet[playerid][51]);
 	    		format(str,sizeof(str),"~g~GAGNE $%d",4*pBet[playerid][51]);
 	    		GameTextForPlayer(playerid,str,5000,4);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = 4*pBet[playerid][51] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -12420,13 +12460,13 @@ public UpdateMachineTD(playerid)
 		{
 			GiveMoney(playerid, MONEY_WIN);
 			GameTextForPlayer(playerid, "~g~Vous avez gagner 10 fois votre mise!", 2000, 3);
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 			{
 				new aye = MONEY_WIN / count;
-				if(FactionData[ii][factionacces][11] == 1)
+				if(FactionData[ii][factionacces][12] == 1)
 				{
 					FactionData[ii][factioncoffre] -= aye;
 					Faction_Save(ii);
@@ -12507,13 +12547,13 @@ public OnCasinoMoney(playerid, machineid, amount, result)
 	{
 		GiveMoney(playerid, (amount * -1));
 		format(message, 128, "[CASINO]{FFFFFF}  Vous avez parier $%i", amount);
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 		{
 			new aye = amount / count;
-			if(FactionData[ii][factionacces][11] == 1)
+			if(FactionData[ii][factionacces][12] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);
@@ -12525,13 +12565,13 @@ public OnCasinoMoney(playerid, machineid, amount, result)
 	{
 		GiveMoney(playerid, amount);
 		format(message, 128, "[CASINO]{FFFFFF} Vous avez gagné $%i", amount);
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 		{
 			new aye = amount / count;
-			if(FactionData[ii][factionacces][11] == 1)
+			if(FactionData[ii][factionacces][12] == 1)
 			{
 				FactionData[ii][factioncoffre] -= aye;
 				Faction_Save(ii);
@@ -12680,7 +12720,14 @@ public tuningload()
 public tuningsave(tuningid)
 {
     new query[1500];
-    mysql_format(g_iHandle, query, sizeof(query),"INSERT INTO tuning SET vehicule=%d,FrontBumperID=%d,FrontBumperX=%f,FrontBumperY=%f,FrontBumperZ=%f,FrontBumperRX=%f,FrontBumperRY=%f,FrontBumperRZ=%f,RearBumperID=%d,RearBumperX=%f,RearBumperY=%f,RearBumperZ=%f,RearBumperRX=%f,RearBumperRY=%f,RearBumperRZ=%f,RoofID=%d,RoofX=%f,RoofY=%f,RoofZ=%f,RoofRX=%f,RoofRY=%f,RoofRZ=%f,HoodID=%d,HoodX=%f,HoodY=%f,HoodZ=%f,HoodRX=%f,HoodRY=%f,HoodRZ=%f,SpoilerID=%d,SpoilerX=%f,SpoilerY=%f,SpoilerZ=%f,SpoilerRX=%f,SpoilerRY=%f,SpoilerRZ=%f,WheelID=%d,WheelX=%f,WheelY=%f,WheelZ=%f,WheelRX=%f,WheelRY=%f,WheelRZ=%f,SideSkirt1ID=%d,SideSkirt1X=%f,SideSkirt1Y=%f,SideSkirt1Z=%f,SideSkirt1RX=%f,SideSkirt1RY=%f,SideSkirt1RZ=%f,SideSkirt2ID=%d,SideSkirt2X=%f,SideSkirt2Y=%f,SideSkirt2Z=%f,SideSkirt2RX=%f,SideSkirt2RY=%f,SideSkirt2RZ=%f, EditingPart=%d",
+    mysql_format(g_iHandle, query, sizeof(query),"INSERT INTO tuning SET vehicule=%d,FrontBumperID=%d\
+	,FrontBumperX=%f,FrontBumperY=%f,FrontBumperZ=%f,FrontBumperRX=%f,FrontBumperRY=%f,FrontBumperRZ=%f\
+	,RearBumperID=%d,RearBumperX=%f,RearBumperY=%f,RearBumperZ=%f,RearBumperRX=%f,RearBumperRY=%f,\
+	RearBumperRZ=%f,RoofID=%d,RoofX=%f,RoofY=%f,RoofZ=%f,RoofRX=%f,RoofRY=%f,RoofRZ=%f,HoodID=%d,HoodX=%f,\
+	HoodY=%f,HoodZ=%f,HoodRX=%f,HoodRY=%f,HoodRZ=%f,SpoilerID=%d,SpoilerX=%f,SpoilerY=%f,SpoilerZ=%f,SpoilerRX=%f,\
+	SpoilerRY=%f,SpoilerRZ=%f,WheelID=%d,WheelX=%f,WheelY=%f,WheelZ=%f,WheelRX=%f,WheelRY=%f,WheelRZ=%f,SideSkirt1ID=%d,\
+	SideSkirt1X=%f,SideSkirt1Y=%f,SideSkirt1Z=%f,SideSkirt1RX=%f,SideSkirt1RY=%f,SideSkirt1RZ=%f,SideSkirt2ID=%d,\
+	SideSkirt2X=%f,SideSkirt2Y=%f,SideSkirt2Z=%f,SideSkirt2RX=%f,SideSkirt2RY=%f,SideSkirt2RZ=%f, EditingPart=%d",
 	Tuning[tuningid][PlayerVehicle],
     Tuning[tuningid][FrontBumperID],
     Tuning[tuningid][FrontBumperX],
@@ -12961,7 +13008,7 @@ public startonboom(playerid)
 		{
 			new bizid = Entrance_Inside(playerid);
 			if (IsACopm(i)) {Waypoint_Set(i, "Explosion a une banque", EntranceData[bizid][entrancePos][0], EntranceData[bizid][entrancePos][1], EntranceData[bizid][entrancePos][2]);}
-			if(FactionData[factionid][factionacces][0] == 1)
+			if(FactionData[factionid][factionacces][1] == 1)
 			{
 				SendServerMessage(playerid,"RADIO: Une explosion c'est fait entendre à %s (marquée sur la carte).", EntranceData[bizid][entranceName]);
 			}
@@ -13020,9 +13067,9 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
     new facass = PlayerData[playerid][pFaction],moneyentrepriseid;
     if (newtarget == missionactor)
     {
-	    if (FactionData[facass][factionacces][7] == 0)
+	    if (FactionData[facass][factionacces][8] == 0)
 	    	return SendClientMessage(playerid, COLOR_WHITE,"Albert : Tu veux quoi toi?");
-		if (FactionData[facass][factionacces][7] == 1 && mission[playerid] == 0)
+		if (FactionData[facass][factionacces][8] == 1 && mission[playerid] == 0)
 			return Dialog_Show(playerid, Mission, DIALOG_STYLE_MSGBOX, "Mission", "Salut toi, Tu veux avoir un peut d'argent?\nRapporte moi une caise de type Six\nSi tu veux tu peut gardé la marchandise ou\nme la rapporté pour avoir de l'argent", "Valider", "Quitter");
 		else SendClientMessage(playerid,COLOR_WHITE,"Albert : Tu veux quoi?");
 		if (mission[playerid] == 1 && Inventory_Count(playerid, "Graine marijuana") < 20 && Inventory_Count(playerid, "Graine cocaine") < 20 && Inventory_Count(playerid, "Graine Heroin Opium") < 10 && Inventory_Count(playerid, "Steroids") < 5)
@@ -13056,9 +13103,9 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if(newtarget == missionactor1)
     {
-	    if (FactionData[facass][factionacces][7] == 0)
+	    if (FactionData[facass][factionacces][8] == 0)
 	    	return SendClientMessage(playerid, COLOR_WHITE,"James : Tu veux quoi toi?");
-		if (FactionData[facass][factionacces][7] == 1 && mission1[playerid] == 0)
+		if (FactionData[facass][factionacces][8] == 1 && mission1[playerid] == 0)
 			return Dialog_Show(playerid, Mission1, DIALOG_STYLE_MSGBOX, "Mission", "Salut toi, Tu veux avoir un peut d'argent?\nVa mettre le feu a une place", "Valider", "Quitter");
 		else SendClientMessage(playerid,COLOR_WHITE,"James : Tu veux quoi?");
 		if (mission1[playerid] == 1)
@@ -13145,13 +13192,13 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
 	}
     if(newtarget == armespolice)
     {
-		if (FactionData[facass][factionacces][0] == 0)
+		if (FactionData[facass][factionacces][1] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
 		Dialog_Show(playerid, armepolice, DIALOG_STYLE_MSGBOX,"Jeff","Est-ce que vous vouler que je nettoye votre arme?", "Oui", "Non");
 	}
     if(newtarget == soinbot)
     {
-		if (FactionData[facass][factionacces][4] == 0)
+		if (FactionData[facass][factionacces][5] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des trouse de soins.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -13162,7 +13209,7 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
 	}
     if(newtarget == piececaisse)
     {
-	    if (FactionData[facass][factionacces][12] == 0)
+	    if (FactionData[facass][factionacces][13] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
 		if (FactionData[facass][factioncoffre] < 7500)
 		    return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (minimum 7500$)");
@@ -13179,7 +13226,7 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
     if (oldtarget != INVALID_ACTOR_ID) {ClearActorAnimations(oldtarget);}
 	return 1;
 }
-public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
+public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z)
 {
     if(GetVehicleDistanceFromPoint(vehicleid, new_x, new_y, new_z) > 3)
     {
@@ -13282,17 +13329,17 @@ public commandlunch(playerid)
     {
     	new facass1 = PlayerData[i][pFaction];
     	FactionData[facass1][factioncoffre] -= 5000;
-		if(FactionData[facass1][factionacces][5] == 1)
+		if(FactionData[facass1][factionacces][6] == 1)
 		{ SendServerMessage(i, "RADIO: Des boites de matos a été livré a %s.", GetLocation(x,y,z)); }
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
 		{Faction_Save(ii);}
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 		{
 			new aye = 5000 / count;
-			if(FactionData[ii][factionacces][5] == 1)
+			if(FactionData[ii][factionacces][6] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);
@@ -13312,17 +13359,17 @@ public commandlunchkevlar(playerid)
     {
     	new facass1 = PlayerData[i][pFaction];
     	FactionData[facass1][factioncoffre] -= 5000;
-		if(FactionData[facass1][factionacces][5] == 1)
+		if(FactionData[facass1][factionacces][6] == 1)
 		{ SendServerMessage(i, "RADIO: Des kevlar a été livré a %s.", GetLocation(x,y,z)); }
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
 		{Faction_Save(ii);}
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 		{
 			new aye = 5000 / count;
-			if(FactionData[ii][factionacces][5] == 1)
+			if(FactionData[ii][factionacces][6] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);
@@ -13344,17 +13391,17 @@ public commandlunchsoins(playerid)
     {
     	new facass1 = PlayerData[i][pFaction];
     	FactionData[facass1][factioncoffre] -= 5000;
-		if(FactionData[facass1][factionacces][5] == 1)
+		if(FactionData[facass1][factionacces][6] == 1)
 		{ SendServerMessage(i, "RADIO: Des trousses de soins a été livré a %s.", GetLocation(x,y,z)); }
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists])
 		{Faction_Save(ii);}
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 		{
 			new aye = 5000 / count;
-			if(FactionData[ii][factionacces][5] == 1)
+			if(FactionData[ii][factionacces][6] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);
@@ -13376,15 +13423,15 @@ public commandlunchpaint(playerid)
     {
     	new facass1 = PlayerData[i][pFaction];
     	FactionData[facass1][factioncoffre] -= 5000;
-		if(FactionData[facass1][factionacces][5] == 1)
+		if(FactionData[facass1][factionacces][6] == 1)
 		{ SendServerMessage(i, "RADIO: Des bombonnes de peinture a été livré a %s.", GetLocation(x,y,z)); }
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 		{
 			new aye = 5000 / count;
-			if(FactionData[ii][factionacces][5] == 1)
+			if(FactionData[ii][factionacces][6] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 			}
@@ -13406,16 +13453,16 @@ public commandlunchoutils(playerid)
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
-		if(FactionData[facass1][factionacces][5] == 1)
+		if(FactionData[facass1][factionacces][6] == 1)
 		{ SendServerMessage(i, "RADIO: Des boites à outils a été livré a %s.", GetLocation(x,y,z)); }
 		FactionData[facass1][factioncoffre] -= 5000;
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 		{
 			new aye = 5000 / count;
-			if(FactionData[ii][factionacces][5] == 1)
+			if(FactionData[ii][factionacces][6] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 			}
@@ -13438,15 +13485,15 @@ public commandlunchnos(playerid)
     {
     	new facass1 = PlayerData[i][pFaction];
 		FactionData[facass1][factioncoffre] -= 5000;
-		if(FactionData[facass1][factionacces][5] == 1)
+		if(FactionData[facass1][factionacces][6] == 1)
 		{ SendServerMessage(i, "RADIO: Des bonbonnes de nos a été livré a %s.", GetLocation(x,y,z)); }
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 		{
 			new aye = 5000 / count;
-			if(FactionData[ii][factionacces][5] == 1)
+			if(FactionData[ii][factionacces][6] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 			}
@@ -14141,13 +14188,13 @@ public HorseAnimTimer()
 					PlayerPlaySound(i, 5448, X[i], Y[i], Z[i]);
 		        	SendServerMessage(i,"Vous avez gagné! Votre argent est doublez!");
 					GiveMoney(i, MoneyBet[i] * 2);
-					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 						count++;
 					}
-					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+					for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 					{
 						new aye = MoneyBet[i] / count;
-						if(FactionData[ii][factionacces][11] == 1)
+						if(FactionData[ii][factionacces][12] == 1)
 						{
 							FactionData[ii][factioncoffre] -= aye;
 							Faction_Save(ii);
@@ -15223,13 +15270,13 @@ public blackjackcroupier(playerid)
     		    PlayerTextDrawSetString(playerid,BlackJackTD[18][playerid],string);
     		    PlayerTextDrawShow(playerid,BlackJackTD[18][playerid]);
     		    GiveMoney(playerid, 2*BlackJack[playerid][sommejouer]);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = BlackJack[playerid][sommejouer] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] -= aye;
 						Faction_Save(ii);
@@ -15245,13 +15292,13 @@ public blackjackcroupier(playerid)
     		    PlayerTextDrawShow(playerid,BlackJackTD[18][playerid]);
     		    GiveMoney(playerid, -BlackJack[playerid][sommejouer]);
     		    GiveMoney(playerid, 2*BlackJack[playerid][sommejouer]);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 					count++;
 				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 				{
 					new aye = BlackJack[playerid][sommejouer] / count;
-					if(FactionData[ii][factionacces][11] == 1)
+					if(FactionData[ii][factionacces][12] == 1)
 					{
 						FactionData[ii][factioncoffre] += aye;
 						Faction_Save(ii);
@@ -15344,6 +15391,7 @@ public OnPlayerStopBurn(playerid)
     RemovePlayerAttachedObject(playerid, 9);
 	return 1;
 }
+//antideamx a la fin
 AntiDeAMX()
 {
 	new b;

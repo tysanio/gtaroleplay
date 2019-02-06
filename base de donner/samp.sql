@@ -439,7 +439,18 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `Strike` int(4) NOT NULL DEFAULT '0',
   `Repetition` int(8) NOT NULL DEFAULT '0',
   `Parcouru` int(8) NOT NULL DEFAULT '0',
-  `Noob` int(4) NOT NULL DEFAULT '1'
+  `Noob` int(4) NOT NULL DEFAULT '1',
+  `ZombieKill` int(4) NOT NULL DEFAULT '0',
+  `skill1` int(4) NOT NULL DEFAULT '0',
+  `skill2` int(4) NOT NULL DEFAULT '0',
+  `skill3` int(4) NOT NULL DEFAULT '0',
+  `skill4` int(4) NOT NULL DEFAULT '0',
+  `skill5` int(4) NOT NULL DEFAULT '0',
+  `skill6` int(4) NOT NULL DEFAULT '0',
+  `skill7` int(4) NOT NULL DEFAULT '0',
+  `skill8` int(4) NOT NULL DEFAULT '0',
+  `skill9` int(4) NOT NULL DEFAULT '0',
+  `skill10` int(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB AUTO_INCREMENT=299 DEFAULT CHARSET=latin1;
 
 

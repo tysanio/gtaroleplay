@@ -61,7 +61,7 @@ SQL_SaveCharacter(playerid)
 {
 	if (!PlayerData[playerid][pLogged] && !PlayerData[playerid][pCharacter])
 		return 0;
-	new query[2048];
+	new query[2176];
 	if (GetPlayerState(playerid) != PLAYER_STATE_SPECTATING && !PlayerData[playerid][pDrivingTest])
 	{
 	    PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
@@ -129,7 +129,7 @@ SQL_SaveCharacter(playerid)
 		PlayerData[playerid][pSpawnPoint],
 		PlayerData[playerid][pLogged]
 	);
-	format(query, sizeof(query), "%s, `Warnings` = '%d', `Warn1` = '%s', `Warn2` = '%s', `MaskID` = '%d', `FactionMod` = '%d', `Capacity` = '%d', `bracelet` = '%d', `braceletdist` = '%d', `LocaID` = '%d', `CarD` = '%d',`LocaMaisonID` = '%d', `baterietel` = '%d',`BestScore` = '%d',`Strike` = '%d',`Repetition` = '%d',`Parcouru` = '%d', `Noob` = '%d'",
+	format(query, sizeof(query), "%s, `Warnings` = '%d', `Warn1` = '%s', `Warn2` = '%s', `MaskID` = '%d', `FactionMod` = '%d', `Capacity` = '%d', `bracelet` = '%d', `braceletdist` = '%d', `LocaID` = '%d', `CarD` = '%d',`LocaMaisonID` = '%d', `baterietel` = '%d',`BestScore` = '%d',`Strike` = '%d',`Repetition` = '%d',`Parcouru` = '%d', `Noob` = '%d', `ZombieKill` = '%d'",
 	    query,
 	    PlayerData[playerid][pWarnings],
 	    SQL_ReturnEscaped(PlayerData[playerid][pWarn1]),
@@ -147,8 +147,12 @@ SQL_SaveCharacter(playerid)
 		PlayerData[playerid][pStrike],
 		PlayerData[playerid][prepetitions],
 		PlayerData[playerid][pparcouru],
-		PlayerData[playerid][pNoob]
+		PlayerData[playerid][pNoob],
+		PlayerData[playerid][pZombieKill]
 	);
+	for (new i = 1; i < 10; i ++) {
+		format(query, sizeof(query), "%s, `skill%d` = '%d'",query,i,PlayerData[playerid][pSkill][i],i);
+	}
 	format(query, sizeof(query), "%s, `Glasses` = '%d', `Hat` = '%d', `Bandana` = '%d', `GlassesPos` = '%.4f|%.4f|%.4f|%.4f|%.4f|%.4f|%.4f|%.4f|%.4f'",
 	    query,
 	    PlayerData[playerid][pGlasses],
@@ -213,11 +217,7 @@ stock GetInitials(const string[])
 stock GetDistance(Float:x1, Float:y1, Float:z1, Float:x2, Float:y2, Float:z2) {return floatround(floatsqroot(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)) + ((z1 - z2) * (z1 - z2))));}
 stock Float:DistanceCameraTargetToLocation(Float:fCameraX, Float:fCameraY, Float:fCameraZ, Float:fObjectX, Float:fObjectY, Float:fObjectZ, Float:fVectorX, Float:fVectorY, Float:fVectorZ)
 {
-	new
-		Float:fX,
-		Float:fY,
-		Float:fZ,
-		Float:fDistance;
+	new Float:fX,Float:fY,Float:fZ,Float:fDistance;
 	fDistance = GetDistance(fCameraX, fCameraY, fCameraZ, fObjectX, fObjectY, fObjectZ);
 	fX = fVectorX * fDistance + fCameraX;
 	fY = fVectorY * fDistance + fCameraY;
@@ -359,10 +359,7 @@ stock IsBleedableWeapon(weaponid)
 }
 stock CreateBlood(playerid)
 {
-	new
-	    Float:x,
-	    Float:y,
-	    Float:z;
+	new Float:x,Float:y,Float:z;
 	GetPlayerPos(playerid, x, y, z);
 	SetTimerEx("DestroyBlood", 1500, false, "d", CreateDynamicObject(18668, x, y, z - 1.5, 0.0, 0.0, 0.0));
 	return 1;
@@ -684,7 +681,7 @@ stock IsShipmentAccepted(businessid)
 	foreach (new i : Player)
 	{
 		new factionid = PlayerData[i][pFaction];
-		if (FactionData[factionid][factionacces][5] == 1  && PlayerData[i][pShipment] == businessid)
+		if (FactionData[factionid][factionacces][6] == 1  && PlayerData[i][pShipment] == businessid)
 		{return 1;}
 	}
 	return 0;
@@ -2625,13 +2622,13 @@ stock LeaveTaxi(playerid, driverid)
 	{
 		new count;
 	    GiveMoney(playerid, -PlayerData[playerid][pTaxiFee]);
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][13] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][13] == 1)
 		{
 			new aye = 200 / count;
-			if(FactionData[ii][factionacces][12] == 1)
+			if(FactionData[ii][factionacces][13] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);
@@ -3058,12 +3055,12 @@ PickupItem(playerid, itemid)
 	}
 	return 1;
 }
-SetFactionMarker(playerid, type, color)
+SetFactionMarker(playerid,setrucmedonnedelurticaire,color)
 {
     foreach (new i : Player) 
 	{
 		new facass = PlayerData[i][pFaction];
-		if(FactionData[facass][factionacces][4] == 1 || FactionData[facass][factionacces][0] == 1 || FactionData[facass][factionacces][1] == 1 || FactionData[facass][factionacces][3] == 1 || FactionData[facass][factionacces][6] == 1)
+		if(FactionData[facass][factionacces][5] == 1 || FactionData[facass][factionacces][1] == 1 || FactionData[facass][factionacces][2] == 1 || FactionData[facass][factionacces][4] == 1 || FactionData[facass][factionacces][7] == 1)
 		{
 			SetPlayerMarkerForPlayer(i, playerid, color);
 		}
@@ -3287,7 +3284,7 @@ Rack_Refresh(rackid)
 		    DestroyDynamic3DTextLabel(RackData[rackid][rackText3D]);
 		}
 		format(str, sizeof(str), "[Etagère %d]\n{FFFFFF}/armeetagere pour utiliser l'étagère.", rackid);
-		RackData[rackid][rackText3D] = CreateDynamic3DTextLabel(str, COLOR_DARKBLUE, RackData[rackid][rackPos][0], RackData[rackid][rackPos][1], RackData[rackid][rackPos][2] + 1.2, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, RackData[rackid][rackWorld], RackData[rackid][rackInterior]);
+		RackData[rackid][rackText3D] = CreateDynamic3DTextLabel(str, COLOR_DARKBLUE, RackData[rackid][rackPos][0], RackData[rackid][rackPos][1], RackData[rackid][rackPos][2] + 1.2, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, RackData[rackid][rackWorld], RackData[rackid][rackInterior]);
 		Rack_RefreshGuns(rackid);
         RackData[rackid][rackObjects][4] = CreateDynamicObject(2475, RackData[rackid][rackPos][0], RackData[rackid][rackPos][1], RackData[rackid][rackPos][2], 0.0, 0.0, RackData[rackid][rackPos][3], RackData[rackid][rackWorld], RackData[rackid][rackInterior]);
 	}
@@ -3766,13 +3763,13 @@ Faction_Save(factionid)
 		else
 			format(query, sizeof(query), "%s, `factionWeapon%d` = '%d', `factionAmmo%d` = '%d'", query, i + 1, FactionData[factionid][factionWeapons][i], i + 1, FactionData[factionid][factionAmmo][i]);
 	}
-	for (new i = 0; i < 15; i ++)
+	for (new i = 1; i < 15; i ++)
 	{
-		format(query, sizeof(query), "%s, `factionacces%d` = '%d'", query, i + 1, FactionData[factionid][factionacces][i], i + 1);
+		format(query, sizeof(query), "%s, `factionacces%d` = '%d'", query, i, FactionData[factionid][factionacces][i], i);
 	}
-	for (new i = 0; i < 15; i ++)
+	for (new i = 1; i < 15; i ++)
 	{
-		format(query, sizeof(query), "%s, `SalaireRank%d` = '%d'", query, i + 1, FactionData[factionid][factionsalaire][i], i + 1);
+		format(query, sizeof(query), "%s, `SalaireRank%d` = '%d'", query, i, FactionData[factionid][factionsalaire][i], i);
 	}
 	format(query, sizeof(query), "%s WHERE `factionID` = '%d'",
 		query,
@@ -6054,7 +6051,7 @@ Dialog:HouseWeapons(playerid, response, listitem, inputtext[])
 {
 	static houseid = -1;
 	new facass = PlayerData[playerid][pFaction];
-    if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1))
+    if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1))
 	{
 		if (response)
 		{
@@ -6108,7 +6105,7 @@ Dialog:HouseDeposit(playerid, response, listitem, inputtext[])
 {
 	static houseid = -1,string[32];
 	new facass = PlayerData[playerid][pFaction];
-    if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1))
+    if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1))
 	{
 	    strunpack(string, InventoryData[playerid][PlayerData[playerid][pInventoryItem]][invItem]);
 
@@ -6134,7 +6131,7 @@ Dialog:HouseTake(playerid, response, listitem, inputtext[])
 {
 	static houseid = -1,string[32];
 	new facass = PlayerData[playerid][pFaction];
-    if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1))
+    if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1))
 	{
 	    strunpack(string, HouseStorage[houseid][PlayerData[playerid][pStorageItem]][hItemName]);
 
@@ -6245,7 +6242,7 @@ Dialog:HouseItems(playerid, response, listitem, inputtext[])
 {
     static houseid = -1,string[64];
 	new facass = PlayerData[playerid][pFaction];	
-	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1))
+	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1))
 	{
 		if (response)
 		{
@@ -6273,7 +6270,7 @@ Dialog:HouseStorage(playerid, response, listitem, inputtext[])
 {
 	static houseid = -1;
 	new facass = PlayerData[playerid][pFaction];
-	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1))
+	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1))
 	{
 		if (response)
 		{
@@ -6295,7 +6292,7 @@ Dialog:StorageOptions(playerid, response, listitem, inputtext[])
 {
     static houseid = -1,itemid = -1,backpack = -1,string[32];
 	new facass = PlayerData[playerid][pFaction];
-	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][0] == 1))
+	if ((houseid = House_Inside(playerid)) != -1 && (House_IsOwner(playerid, houseid) || FactionData[facass][factionacces][1] == 1))
 	{
 	    itemid = PlayerData[playerid][pStorageItem];
 
@@ -6855,13 +6852,13 @@ Dialog:MyBillboardUnrent(playerid, response, listitem, inputtext[]) {
 	{
 		new bbid = PlayerData[playerid][pOwnsBillboard],count;
 		GiveMoney(playerid, BillBoardData[bbid][bbPrice]/2);
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][9] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][9] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
 		{
 			new aye = -BillBoardData[bbid][bbPrice]/2 / count;
-			if(FactionData[ii][factionacces][9] == 1)
+			if(FactionData[ii][factionacces][10] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);
@@ -6890,13 +6887,13 @@ Dialog:BillboardRent(playerid, response, listitem, inputtext[]) {
 	    {
 			PlayerData[playerid][pBankMoney] -= BillBoardData[playerid][bbPrice];
 			
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][9] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][10] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][9] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][10] == 1)
 			{
 				new aye = BillBoardData[playerid][bbPrice] / count;
-				if(FactionData[ii][factionacces][9] == 1)
+				if(FactionData[ii][factionacces][10] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -7996,7 +7993,7 @@ Dialog:RackWeapons(playerid, response, listitem, inputtext[])
 Dialog:TakeItems(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 || PlayerData[playerid][pTakeItems] == INVALID_PLAYER_ID)
+	if (FactionData[facass][factionacces][1] == 1 || PlayerData[playerid][pTakeItems] == INVALID_PLAYER_ID)
 	    return 0;
 	if (response)
 	{
@@ -8821,7 +8818,7 @@ Dialog:LocationInfo(playerid, response, listitem, inputtext[])
 Dialog:Warrants(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
 	    return 0;
 
 	if (response)
@@ -8847,7 +8844,7 @@ Dialog:Warrants(playerid, response, listitem, inputtext[])
 Dialog:WarrantList(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)) || PlayerData[playerid][pMDCPlayer] == INVALID_PLAYER_ID)
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)) || PlayerData[playerid][pMDCPlayer] == INVALID_PLAYER_ID)
 	    return 0;
 	if (response)
 	{
@@ -8877,7 +8874,7 @@ Dialog:WarrantList(playerid, response, listitem, inputtext[])
 Dialog:ChargeName(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
 	    return 0;
 	if (response)
 	{
@@ -8901,7 +8898,7 @@ Dialog:ChargeName(playerid, response, listitem, inputtext[])
 Dialog:PlaceCharge(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)) || PlayerData[playerid][pMDCPlayer] == INVALID_PLAYER_ID)
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)) || PlayerData[playerid][pMDCPlayer] == INVALID_PLAYER_ID)
 	    return 0;
 	if (response)
 	{
@@ -8926,7 +8923,7 @@ Dialog:PlaceCharge(playerid, response, listitem, inputtext[])
 Dialog:MainMDC(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
 	    return 0;
 	if (response)
 	{
@@ -8954,8 +8951,8 @@ Dialog:MainMDC(playerid, response, listitem, inputtext[])
 Dialog:ViewCharges(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
 	    return 0;
 
 	if (response)
@@ -8979,7 +8976,7 @@ Dialog:ViewCharges(playerid, response, listitem, inputtext[])
 Dialog:ViewAmendes(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
+	if (FactionData[facass][factionacces][1] == 0 || !IsACruiser(GetPlayerVehicleID(playerid)))
 	    return 0;
 	if (response)
 	{
@@ -8999,7 +8996,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 	{
 	    static skins[8], string[512];
 		string[0] = 0;
-		if (FactionData[factionid][factionacces][0] == 1 || FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][3] == 1)
+		if (FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][7] == 1 || FactionData[factionid][factionacces][4] == 1)
 	    {
 	        switch (listitem)
 	        {
@@ -9011,19 +9008,19 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						foreach (new i : Player)
 						{
 							new facass = PlayerData[i][pFaction];
-							if (FactionData[facass][factionacces][0] == 1) {cop_nbrCops++;}
-							if (FactionData[facass][factionacces][3] == 1) {swat_nbrCops++;}
+							if (FactionData[facass][factionacces][1] == 1) {cop_nbrCops++;}
+							if (FactionData[facass][factionacces][4] == 1) {swat_nbrCops++;}
 						}
 	                    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a pointé son entrée.", ReturnName(playerid, 0));
 						if (Inventory_Items(playerid) >= MAX_INVENTORY - 1)
 							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de palce dans l'inventaire)");
-						if (FactionData[factionid][factionacces][0] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][2] == 1)Inventory_Add(playerid, "Menottes",19418, 1);
+						if (FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)Inventory_Add(playerid, "Menottes",19418, 1);
 	                }
 	                else
 	                {
 	                    PlayerData[playerid][pOnDuty] = false;
-						if (FactionData[factionid][factionacces][0] == 1) {cop_nbrCops--;}
-						if (FactionData[factionid][factionacces][3] == 1) {swat_nbrCops--;}
+						if (FactionData[factionid][factionacces][1] == 1) {cop_nbrCops--;}
+						if (FactionData[factionid][factionacces][4] == 1) {swat_nbrCops--;}
 	                    SetPlayerSkin(playerid,PlayerData[playerid][pSkin]);
 	                    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a pointé sa sortie.", ReturnName(playerid, 0));
 	                }
@@ -9047,7 +9044,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 				}
 				case 3:
 				{
-					if (FactionData[factionid][factionacces][0] == 1)
+					if (FactionData[factionid][factionacces][1] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9065,7 +9062,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, policecv1, DIALOG_STYLE_MSGBOX, "C.V - police", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][2] == 1)
+					else if (FactionData[factionid][factionacces][3] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);	
@@ -9083,7 +9080,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, fbicv1, DIALOG_STYLE_MSGBOX, "C.V - F.B.I", szString, "Ok", "Supprimer");
 						}		
 					}
-					else if (FactionData[factionid][factionacces][3] == 1)
+					else if (FactionData[factionid][factionacces][4] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9101,7 +9098,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, swatcv1, DIALOG_STYLE_MSGBOX, "C.V - swat", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][4] == 1)
+					else if (FactionData[factionid][factionacces][5] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9119,7 +9116,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, urgentistecv1, DIALOG_STYLE_MSGBOX, "C.V - Urgentiste", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][6] == 1)
+					else if (FactionData[factionid][factionacces][7] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 						return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9155,10 +9152,10 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 				{
 				    for (new i = 0; i < 10; i ++)
 					{
-				        if (FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][9] == 0 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][11] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][12] == 1 && FactionData[factionid][factionacces][13] == 1|| FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][14] == 1)
+				        if (FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][10] == 0 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][12] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][13] == 1 && FactionData[factionid][factionacces][14] == 1|| FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][15] == 1)
 							format(string, sizeof(string), "%s Arme %d: %s\n", string, i + 1, ReturnWeaponName(FactionData[factionid][factionWeapons][i]));
 
-						else if (FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][9] == 0 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][11] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][12] == 1 && FactionData[factionid][factionacces][13] == 1|| FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][14] == 1)
+						else if (FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][10] == 0 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][12] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][13] == 1 && FactionData[factionid][factionacces][14] == 1|| FactionData[factionid][factionWeapons][i] && FactionData[factionid][factionacces][15] == 1)
 							format(string, sizeof(string), "%s Arme %d: %s (%d ammo)\n", string, i + 1, ReturnWeaponName(FactionData[factionid][factionWeapons][i]), FactionData[factionid][factionAmmo][i]);
 
 						else format(string, sizeof(string), "%s Espace Vide\n", string);
@@ -9167,7 +9164,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 				}
 				case 2:
 				{
-					if (FactionData[factionid][factionacces][8] == 1)
+					if (FactionData[factionid][factionacces][9] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9185,7 +9182,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, mecanozone3cv1, DIALOG_STYLE_MSGBOX, "C.V - mecanozone3", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][9] == 1)
+					else if (FactionData[factionid][factionacces][10] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9203,7 +9200,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, journalistecv1, DIALOG_STYLE_MSGBOX, "C.V - Journaliste", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][8] == 1)
+					else if (FactionData[factionid][factionacces][9] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 						return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9221,7 +9218,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, mecanozone4cv1, DIALOG_STYLE_MSGBOX, "C.V - mecanozone4", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][5] == 1)
+					else if (FactionData[factionid][factionacces][6] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9239,7 +9236,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, livraisonbizcv1, DIALOG_STYLE_MSGBOX, "C.V - livraison magasin", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][12] == 1)
+					else if (FactionData[factionid][factionacces][13] == 1)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 							return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9257,7 +9254,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 							Dialog_Show(playerid, taxicv1, DIALOG_STYLE_MSGBOX, "C.V - taxi", szString, "Ok", "Supprimer");
 						}
 					}
-					else if (FactionData[factionid][factionacces][10] == 0)
+					else if (FactionData[factionid][factionacces][11] == 0)
 					{
 						if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 						return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -9365,7 +9362,7 @@ Dialog:LockerWeapons(playerid, response, listitem, inputtext[])
 
 	        GiveWeaponToPlayer(playerid, weaponid, ammo);
 	        SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s cherche dans le casier et s'équipe à l'aide de sa main d'un(e) %s.", ReturnName(playerid, 0), ReturnWeaponName(weaponid));
-			if (FactionData[factionid][factionacces][7] == 1|| FactionData[factionid][factionacces][11] == 1|| FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionacces][12] == 1 || FactionData[factionid][factionacces][8] == 1)
+			if (FactionData[factionid][factionacces][8] == 1|| FactionData[factionid][factionacces][12] == 1|| FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][13] == 1 || FactionData[factionid][factionacces][9] == 1)
 		    {
 		        FactionData[factionid][factionWeapons][listitem] = 0;
 		        FactionData[factionid][factionAmmo][listitem] = 0;
@@ -9374,7 +9371,7 @@ Dialog:LockerWeapons(playerid, response, listitem, inputtext[])
 		}
 		else
 		{
-		    if (FactionData[factionid][factionacces][7] == 1|| FactionData[factionid][factionacces][11] == 1|| FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionacces][12] == 1 || FactionData[factionid][factionacces][8] == 1)
+		    if (FactionData[factionid][factionacces][8] == 1|| FactionData[factionid][factionacces][12] == 1|| FactionData[factionid][factionacces][6] == 1 || FactionData[factionid][factionacces][13] == 1 || FactionData[factionid][factionacces][9] == 1)
 		    {
 		        if ((weaponid = GetWeapon(playerid)) == 0)
 		            return SendErrorMessage(playerid, "Vous n'avez pas d'arme sur toi.");
@@ -15445,7 +15442,7 @@ Dialog:jobcoursier(playerid, response, listitem, inputtext[])
 Dialog:GouvTaxe(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15463,7 +15460,7 @@ Dialog:GouvTaxe(playerid, response, listitem, inputtext[])
 Dialog:GouvTaxeEntreprise(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15481,7 +15478,7 @@ Dialog:GouvTaxeEntreprise(playerid, response, listitem, inputtext[])
 Dialog:GouvTaxeRevenue(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15499,7 +15496,7 @@ Dialog:GouvTaxeRevenue(playerid, response, listitem, inputtext[])
 Dialog:GouvChommage(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15517,7 +15514,7 @@ Dialog:GouvChommage(playerid, response, listitem, inputtext[])
 Dialog:GouvSubPolice(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15535,7 +15532,7 @@ Dialog:GouvSubPolice(playerid, response, listitem, inputtext[])
 Dialog:GouvSubFBI(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15553,7 +15550,7 @@ Dialog:GouvSubFBI(playerid, response, listitem, inputtext[])
 Dialog:GouvSubUrgentiste(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15571,7 +15568,7 @@ Dialog:GouvSubUrgentiste(playerid, response, listitem, inputtext[])
 Dialog:GouvSubSwat(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15589,7 +15586,7 @@ Dialog:GouvSubSwat(playerid, response, listitem, inputtext[])
 Dialog:GouvAideBanque(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15607,7 +15604,7 @@ Dialog:GouvAideBanque(playerid, response, listitem, inputtext[])
 Dialog:gouvebizhouse(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15625,7 +15622,7 @@ Dialog:gouvebizhouse(playerid, response, listitem, inputtext[])
 Dialog:gouvebiz(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15643,7 +15640,7 @@ Dialog:gouvebiz(playerid, response, listitem, inputtext[])
 Dialog:gouvehouse(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+	if (FactionData[factionid][factionacces][7] == 0)
 	    return 0;
 	if (response)
 	{
@@ -15759,7 +15756,7 @@ Dialog:Salairegouv(playerid, response, listitem, inputtext[])
 Dialog:GouvRank1(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15777,7 +15774,7 @@ Dialog:GouvRank1(playerid, response, listitem, inputtext[])
 Dialog:GouvRank2(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15795,7 +15792,7 @@ Dialog:GouvRank2(playerid, response, listitem, inputtext[])
 Dialog:GouvRank3(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15813,7 +15810,7 @@ Dialog:GouvRank3(playerid, response, listitem, inputtext[])
 Dialog:GouvRank4(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15831,7 +15828,7 @@ Dialog:GouvRank4(playerid, response, listitem, inputtext[])
 Dialog:GouvRank5(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15849,7 +15846,7 @@ Dialog:GouvRank5(playerid, response, listitem, inputtext[])
 Dialog:GouvRank6(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15867,7 +15864,7 @@ Dialog:GouvRank6(playerid, response, listitem, inputtext[])
 Dialog:GouvRank7(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15885,7 +15882,7 @@ Dialog:GouvRank7(playerid, response, listitem, inputtext[])
 Dialog:GouvRank8(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15903,7 +15900,7 @@ Dialog:GouvRank8(playerid, response, listitem, inputtext[])
 Dialog:GouvRank9(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15921,7 +15918,7 @@ Dialog:GouvRank9(playerid, response, listitem, inputtext[])
 Dialog:GouvRank10(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15939,7 +15936,7 @@ Dialog:GouvRank10(playerid, response, listitem, inputtext[])
 Dialog:GouvRank11(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15957,7 +15954,7 @@ Dialog:GouvRank11(playerid, response, listitem, inputtext[])
 Dialog:GouvRank12(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15975,7 +15972,7 @@ Dialog:GouvRank12(playerid, response, listitem, inputtext[])
 Dialog:GouvRank13(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -15993,7 +15990,7 @@ Dialog:GouvRank13(playerid, response, listitem, inputtext[])
 Dialog:GouvRank14(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16011,7 +16008,7 @@ Dialog:GouvRank14(playerid, response, listitem, inputtext[])
 Dialog:GouvRank15(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16056,7 +16053,7 @@ Dialog:Salairefbi(playerid, response, listitem, inputtext[])
 Dialog:FBIRank1(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16074,7 +16071,7 @@ Dialog:FBIRank1(playerid, response, listitem, inputtext[])
 Dialog:FBIRank2(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16092,7 +16089,7 @@ Dialog:FBIRank2(playerid, response, listitem, inputtext[])
 Dialog:FBIRank3(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16110,7 +16107,7 @@ Dialog:FBIRank3(playerid, response, listitem, inputtext[])
 Dialog:FBIRank4(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16128,7 +16125,7 @@ Dialog:FBIRank4(playerid, response, listitem, inputtext[])
 Dialog:FBIRank5(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16146,7 +16143,7 @@ Dialog:FBIRank5(playerid, response, listitem, inputtext[])
 Dialog:FBIRank6(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16164,7 +16161,7 @@ Dialog:FBIRank6(playerid, response, listitem, inputtext[])
 Dialog:FBIRank7(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16182,7 +16179,7 @@ Dialog:FBIRank7(playerid, response, listitem, inputtext[])
 Dialog:FBIRank8(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16200,7 +16197,7 @@ Dialog:FBIRank8(playerid, response, listitem, inputtext[])
 Dialog:FBIRank9(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16218,7 +16215,7 @@ Dialog:FBIRank9(playerid, response, listitem, inputtext[])
 Dialog:FBIRank10(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16236,7 +16233,7 @@ Dialog:FBIRank10(playerid, response, listitem, inputtext[])
 Dialog:FBIRank11(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16254,7 +16251,7 @@ Dialog:FBIRank11(playerid, response, listitem, inputtext[])
 Dialog:FBIRank12(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16272,7 +16269,7 @@ Dialog:FBIRank12(playerid, response, listitem, inputtext[])
 Dialog:FBIRank13(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16290,7 +16287,7 @@ Dialog:FBIRank13(playerid, response, listitem, inputtext[])
 Dialog:FBIRank14(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16308,7 +16305,7 @@ Dialog:FBIRank14(playerid, response, listitem, inputtext[])
 Dialog:FBIRank15(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][2] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16354,7 +16351,7 @@ Dialog:Salairepolice(playerid, response, listitem, inputtext[])
 Dialog:policeRank1(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16372,7 +16369,7 @@ Dialog:policeRank1(playerid, response, listitem, inputtext[])
 Dialog:policeRank2(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16390,7 +16387,7 @@ Dialog:policeRank2(playerid, response, listitem, inputtext[])
 Dialog:policeRank3(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16408,7 +16405,7 @@ Dialog:policeRank3(playerid, response, listitem, inputtext[])
 Dialog:policeRank4(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16426,7 +16423,7 @@ Dialog:policeRank4(playerid, response, listitem, inputtext[])
 Dialog:policeRank5(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16444,7 +16441,7 @@ Dialog:policeRank5(playerid, response, listitem, inputtext[])
 Dialog:policeRank6(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16462,7 +16459,7 @@ Dialog:policeRank6(playerid, response, listitem, inputtext[])
 Dialog:policeRank7(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16480,7 +16477,7 @@ Dialog:policeRank7(playerid, response, listitem, inputtext[])
 Dialog:policeRank8(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16498,7 +16495,7 @@ Dialog:policeRank8(playerid, response, listitem, inputtext[])
 Dialog:policeRank9(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16516,7 +16513,7 @@ Dialog:policeRank9(playerid, response, listitem, inputtext[])
 Dialog:policeRank10(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16534,7 +16531,7 @@ Dialog:policeRank10(playerid, response, listitem, inputtext[])
 Dialog:policeRank11(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16552,7 +16549,7 @@ Dialog:policeRank11(playerid, response, listitem, inputtext[])
 Dialog:policeRank12(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16570,7 +16567,7 @@ Dialog:policeRank12(playerid, response, listitem, inputtext[])
 Dialog:policeRank13(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16588,7 +16585,7 @@ Dialog:policeRank13(playerid, response, listitem, inputtext[])
 Dialog:policeRank14(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16606,7 +16603,7 @@ Dialog:policeRank14(playerid, response, listitem, inputtext[])
 Dialog:policeRank15(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][0] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][1] == 1 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16651,7 +16648,7 @@ Dialog:Salaireswat(playerid, response, listitem, inputtext[])
 Dialog:swatRank1(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16669,7 +16666,7 @@ Dialog:swatRank1(playerid, response, listitem, inputtext[])
 Dialog:swatRank2(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16687,7 +16684,7 @@ Dialog:swatRank2(playerid, response, listitem, inputtext[])
 Dialog:swatRank3(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16705,7 +16702,7 @@ Dialog:swatRank3(playerid, response, listitem, inputtext[])
 Dialog:swatRank4(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16723,7 +16720,7 @@ Dialog:swatRank4(playerid, response, listitem, inputtext[])
 Dialog:swatRank5(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16741,7 +16738,7 @@ Dialog:swatRank5(playerid, response, listitem, inputtext[])
 Dialog:swatRank6(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16759,7 +16756,7 @@ Dialog:swatRank6(playerid, response, listitem, inputtext[])
 Dialog:swatRank7(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16777,7 +16774,7 @@ Dialog:swatRank7(playerid, response, listitem, inputtext[])
 Dialog:swatRank8(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16795,7 +16792,7 @@ Dialog:swatRank8(playerid, response, listitem, inputtext[])
 Dialog:swatRank9(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16813,7 +16810,7 @@ Dialog:swatRank9(playerid, response, listitem, inputtext[])
 Dialog:swatRank10(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16831,7 +16828,7 @@ Dialog:swatRank10(playerid, response, listitem, inputtext[])
 Dialog:swatRank11(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16849,7 +16846,7 @@ Dialog:swatRank11(playerid, response, listitem, inputtext[])
 Dialog:swatRank12(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16867,7 +16864,7 @@ Dialog:swatRank12(playerid, response, listitem, inputtext[])
 Dialog:swatRank13(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16885,7 +16882,7 @@ Dialog:swatRank13(playerid, response, listitem, inputtext[])
 Dialog:swatRank14(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16903,7 +16900,7 @@ Dialog:swatRank14(playerid, response, listitem, inputtext[])
 Dialog:swatRank15(playerid, response, listitem, inputtext[])
 {
 	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][3] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[factionid][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16948,7 +16945,7 @@ Dialog:Salaireurgentiste(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank1(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16966,7 +16963,7 @@ Dialog:urgentisteRank1(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank2(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -16984,7 +16981,7 @@ Dialog:urgentisteRank2(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank3(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17002,7 +16999,7 @@ Dialog:urgentisteRank3(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank4(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17020,7 +17017,7 @@ Dialog:urgentisteRank4(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank5(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17038,7 +17035,7 @@ Dialog:urgentisteRank5(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank6(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17056,7 +17053,7 @@ Dialog:urgentisteRank6(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank7(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];	
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17074,7 +17071,7 @@ Dialog:urgentisteRank7(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank8(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17092,7 +17089,7 @@ Dialog:urgentisteRank8(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank9(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17110,7 +17107,7 @@ Dialog:urgentisteRank9(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank10(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17128,7 +17125,7 @@ Dialog:urgentisteRank10(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank11(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17146,7 +17143,7 @@ Dialog:urgentisteRank11(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank12(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17164,7 +17161,7 @@ Dialog:urgentisteRank12(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank13(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17182,7 +17179,7 @@ Dialog:urgentisteRank13(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank14(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17200,7 +17197,7 @@ Dialog:urgentisteRank14(playerid, response, listitem, inputtext[])
 Dialog:urgentisteRank15(playerid, response, listitem, inputtext[])
 {
 	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][4] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	if (FactionData[facass][factionacces][5] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    return 0;
 	if (response)
 	{
@@ -17817,7 +17814,7 @@ Dialog:Mission(playerid, response, listitem, inputtext[])
 				CrateData[i][crateWorld] = GetPlayerVirtualWorld(playerid);
 				Crate_Refresh(i);
 				mission[playerid] = 1;
-				if(FactionData[factionid][factionacces][7] == 1)
+				if(FactionData[factionid][factionacces][8] == 1)
 				{ 
 					SendServerMessage(playerid,  "Albert : Ya une caisse a cherche dans une ville proche d'ici va me la trouver s'il te plait et ramene moi son contenu ou garde le.");
 					Waypoint_Set(playerid, "Caisse", x, y, z);
@@ -18631,7 +18628,7 @@ Dialog:decodeur(playerid, response, listitem, inputtext[])
 							{
 								new bizid = Entrance_Inside(playerid),factionid = PlayerData[playerid][pFaction];
 								if(PlayerData[playerid][pHideTags] > 0) return SendErrorMessage(playerid,"Vous devez encore attendre quelque temps avant de refaire cela.");
-								if(FactionData[factionid][factionacces][0] == 1)
+								if(FactionData[factionid][factionacces][1] == 1)
 								{ SendServerMessage(playerid, "RADIO: Quelqu'un a essayer de forcé le code de la porte a %s (marquée sur la carte).",EntranceData[bizid][entranceName]);}
 								foreach (new i : Player)
 								{
@@ -18663,7 +18660,7 @@ Dialog:decodeur(playerid, response, listitem, inputtext[])
 				GetPlayerPos(playerid,x,y,z);
 				argent_entreprise[moneyentrepriseid][argentbanque] -= money;
 				moneyentreprisesave(moneyentrepriseid);
-				if(FactionData[facass][factionacces][0] == 1)
+				if(FactionData[facass][factionacces][1] == 1)
 				{ SendServerMessage(playerid, "RADIO: Un vole d'atm a été signalé vers %s.", GetLocation(x,y,z));}
 				SendServerMessage(playerid,"Vous aver voler un atm et vous avez prit %d$",money);
 				//generateur
@@ -19017,7 +19014,7 @@ stock SendMicMes(playerid,string[])
 	new facass = PlayerData[playerid][pFaction];
 	if(micro[playerid] == 1)
 	{
-		if(IsPlayerConnected(micropl[playerid]) && FactionData[facass][factionacces][2] == 1)
+		if(IsPlayerConnected(micropl[playerid]) && FactionData[facass][factionacces][3] == 1)
 		{
 			SendClientMessageEx(micropl[playerid],COLOR_LIGHTBLUE,"* (MICRO) %s *",string);
 		}
@@ -19461,23 +19458,23 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 			CrateData[i][crateWorld] = 0;
 			Crate_Refresh(i);
 			FactionData[facass][factioncoffre] -= 5000;
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 			{
 				new aye = 5000 / count;
-				if(FactionData[ii][factionacces][5] == 1)
+				if(FactionData[ii][factionacces][6] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
-					if(FactionData[ii][factionacces][5] == 1)
+					if(FactionData[ii][factionacces][6] == 1)
 					{ SendServerMessage(playerid,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
 					Faction_Save(ii);
 				}
 			}
 			foreach (new zzzzzz : Player)
 			{
-				if(FactionData[facass][factionacces][5] == 1)
+				if(FactionData[facass][factionacces][6] == 1)
 				{ SendServerMessage(zzzzzz,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
 			}
 			return i;
@@ -19535,7 +19532,7 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 				}
 				case 5:
 				{
-					if (FactionData[facass][factionacces][12] == 0)
+					if (FactionData[facass][factionacces][13] == 0)
 						return SendServerMessage(playerid, "Vous êtes qui vous?");
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 7500)
@@ -19554,13 +19551,13 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 			CrateData[i][crateWorld] = 0;
 			Crate_Refresh(i);
 			FactionData[facass][factioncoffre] -= 7500;
-			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][5] == 1) {
+			for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][6] == 1) {
 				count++;
 			}
-			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][5] == 1)
+			for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][6] == 1)
 			{
 				new aye = 7500 / count;
-				if(FactionData[ii][factionacces][5] == 1)
+				if(FactionData[ii][factionacces][6] == 1)
 				{
 					FactionData[ii][factioncoffre] += aye;
 					Faction_Save(ii);
@@ -19568,7 +19565,7 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 			}
 			foreach (new zzzzzz : Player)
 			{
-				if(FactionData[facass][factionacces][5] == 1)
+				if(FactionData[facass][factionacces][6] == 1)
 				{ SendServerMessage(zzzzzz,  "RADIO:Une boite a été livré a %s.", GetLocation(x,y,z));}
 			}
 			Faction_Save(facass);
@@ -19582,7 +19579,7 @@ Dialog:kevlar(playerid,response,listitem,inputtext[])
 	if(response)
 	{
 		new moneyentrepriseid,facass = PlayerData[playerid][pFaction];
-		if (FactionData[facass][factionacces][0] == 0)
+		if (FactionData[facass][factionacces][1] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
 		if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 		if (argent_entreprise[moneyentrepriseid][argentpolice] < 5000)
@@ -19598,7 +19595,7 @@ Dialog:soinssoins(playerid,response,listitem,inputtext[])
 	if(response)
 	{
 		new moneyentrepriseid,facass = PlayerData[playerid][pFaction];
-		if (FactionData[facass][factionacces][4] == 0)
+		if (FactionData[facass][factionacces][5] == 0)
 			return SendServerMessage(playerid, "Vous êtes qui vous?");
 		if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 		if (argent_entreprise[moneyentrepriseid][argentmedecin] < 5000)
@@ -21554,13 +21551,13 @@ Dialog:BlackJackMiser(playerid, response, listitem, inputtext[])
 	    PlayerTextDrawShow(playerid,BlackJackTD[10][playerid]);
 	    //ici a mettre pour retirer l'argent
 		GiveMoney(playerid, -misejb);
-		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
+		for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
 			count++;
 		}
-		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
+		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][12] == 1)
 		{
 			new aye = misejb / count;
-			if(FactionData[ii][factionacces][11] == 1)
+			if(FactionData[ii][factionacces][12] == 1)
 			{
 				FactionData[ii][factioncoffre] += aye;
 				Faction_Save(ii);

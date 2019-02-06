@@ -288,7 +288,11 @@ enum playerData {
 	pparcouru,
 	pck,
 	//non faction payday de merde
-	pNoob
+	pNoob,
+	pSkill[11],
+	pMalade,
+	pRadiation,
+	pZombieKill
 };
 enum prisonData {
 	prisonDoors[3],
@@ -536,9 +540,9 @@ enum factionData {
 	factionAmmo[10],
 	Text3D:factionText3D,
 	factionPickup,
-	factionacces[15],
+	factionacces[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
 	factioncoffre,
-	factionsalaire[15]
+	factionsalaire[16] // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
 };
 enum arrestPoints {
 	arrestID,
@@ -902,7 +906,8 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"steak cru",19882},
 	{"steak cuit",19882},
 	{"sandwich a la viande",2880},
-	{"sandwich au jambon",2880}
+	{"sandwich au jambon",2880},
+	{"object contaminer",1576}
 	
 };
 /*new const Float:arrHospitalDeliver[2][3] = { //vc
