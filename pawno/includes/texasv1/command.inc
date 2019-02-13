@@ -8624,7 +8624,6 @@ CMD:clearinventory(playerid, params[])
 	SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer l'invtaire de %s.", ReturnName(playerid, 0), ReturnName(userid, 0));
 	return 1;
 }
-
 CMD:etape(playerid, params[])
 {
 	if (!IsTaskActive(playerid))

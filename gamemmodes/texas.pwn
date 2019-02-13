@@ -24,7 +24,7 @@
 #include <zcmd>
 #include <Encrypt> //truc a la con de marco
 #include <fcnpc>
-#include <mapandreas2>
+#include <colandreas>
 native IsValidVehicle(vehicleid);
 //Include texas
 #include <texasv1/extactor>
@@ -3028,7 +3028,7 @@ public PlayerCheck()
                 KickEx(i);
 			}
 		}
-		if(PlayerData[i][pChannel] == 911 && FactionData[factionid][factionacces][1] == 1) {PlayerData[i][pChannel] = 0;}
+		if(PlayerData[i][pChannel] == 911 && FactionData[factionid][factionacces][1] == 0) {PlayerData[i][pChannel] = 0;}
 		if (PlayerData[i][pPicking])
 		{
 			if ((id = PlayerData[i][pPickCar]) != -1)
@@ -3087,7 +3087,7 @@ public PlayerCheck()
 			    TogglePlayerControllable(i, 1);
 			    SetCameraBehindPlayer(i);
 			    SetPlayerVirtualWorld(i, PlayerData[i][pHospital] + 5000);
-			    SendServerMessage(i, "Vous avez été Reçus au plus proche d'un hopital.");
+			    SendServerMessage(i, "Vous avez été reçus au plus proche d'un hopital.");
 			    GameTextForPlayer(i, " ", 1, 3);
 			    ShowHungerTextdraw(i, 1);
 			    PlayerData[i][pHospitalInt] = PlayerData[i][pHospital];
@@ -3665,6 +3665,9 @@ public OnPlayerUseItem(playerid, itemid, name[])
 	else if (!strcmp(name, "Chargeur", true)) {
 	    cmd_usemag(playerid, "\1");
 	}
+	else if (!strcmp(name, "Munition", true)) {
+	    cmd_chargeur(playerid, "\1");
+	}
 	else if (!strcmp(name, "Boombox", true)) {
 	    cmd_boombox(playerid, "place");
 	}
@@ -4134,70 +4137,49 @@ public OnPlayerDeath(playerid, killerid, reason)
 	BlackJack[playerid][somme3] = 0;
 	BlackJack[playerid][somme4] = 0;
 	BlackJack[playerid][somme5] = 0;
-	PlayerTextDrawHide(playerid,BlackJackTD[0][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[1][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[2][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[3][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[4][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[5][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[6][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[7][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[8][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[9][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[10][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[11][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[12][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[13][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[14][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[15][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[16][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[17][playerid]);
-	PlayerTextDrawHide(playerid,BlackJackTD[18][playerid]);
+	for(new i = 0; i < 19; i++)
+    {
+		PlayerTextDrawHide(playerid,BlackJackTD[i][playerid]);
+	}
 	return 1;
 }
 //gym je sais pas pk mais voila ou il doit etre pour que sa fonctionne
-stock static Float:
-	run_machine_pos[ ][ ] =
+stock static Float:run_machine_pos[ ][ ] =
 {
 	{ 773.4922, -2.6016,  1000.7209,180.00000 }, // Los Santos Gym's bench.
 	{ 759.6328, -48.1250, 1000.7209,180.00000}, // San Fierro Gym's bench.
 	{ 758.3828, -65.5078, 1000.7209,180.00000} // Las Venturas Gym's bench
 };
-stock static Float: bike_pos[ ][ ] =
+stock static Float:bike_pos[ ][ ] =
 {
 	{772.172,9.41406,1000.0,90.0}, // Los Santos Gym's Bake
 	{769.242,-47.8984,1000.0,90.0}, // San Fierro Gym's Bake
 	{774.625,-68.6406,1000.0,90.0} // Las Venturas Gym's Bake
 };
-stock static Float:
-	bench_pos[ ][ ] =
+stock static Float:bench_pos[ ][ ] =
 {
 	{ 773.0491,1.4285,1000.7209, 269.2024 }, // Los Santos Gym's bench.
 	{ 766.3170,-47.3574,1000.5859, 179.2983 }, // San Fierro Gym's bench.
 	{ 764.9001,-60.5580,1000.6563, 1.9500 } // Las Venturas Gym's bench
 };
-stock static Float:
-	barbell_pos[ ][ ] =
+stock static Float:barbell_pos[ ][ ] =
 {
 	{ 774.42907715,1.88309872,1000.48834229,0.00000000,270.00000000,87.99966431 }, // Los Santos Gym's BarBell
 	{ 765.85528564,-48.86857224,1000.64093018,0.00000000,89.49993896,0.00000000 }, // San Fierro Gym's BarBell.
 	{ 765.34039307,-59.18271637,1000.63793945,0.00000000,89.49993896,181.25012207 } // Las Venturas Gym's BarBell
 };
-stock static Float:
-	dumb_pos[ ][ ] =
+stock static Float:dumb_pos[ ][ ] =
 {
 	{772.992,5.38281,999.727,270.0}, // Los Santos Gym's dumb
 	{756.406,-47.9219,999.727,90.0}, // San Fierro Gym's dumb.
 	{759.18,-60.0625,999.727,90.0} // Las Venturas Gym's dumb
 };
-stock static Float:
-	dumb_bell_right_pos[ ][ ] =
+stock static Float:dumb_bell_right_pos[ ][ ] =
 {
 	{772.992,5.18281,999.927,0.0,90.0,90.0} // Los Santos Gym's dumb right
 	//{759.18,-60.0625,999.727,90.0} // Las Venturas Gym's dumb
 };
-stock static Float:
-	dumb_bell_left_pos[ ][ ] =
+stock static Float:dumb_bell_left_pos[ ][ ] =
 {
 	{772.992,5.62738,999.927,0.0,90.0,90.0} // Los Santos Gym's dumb left
 	//{759.18,-60.0625,999.727,90.0} // Las Venturas Gym's dumb
@@ -7304,6 +7286,7 @@ public OnGameModeInit()
     SendRconCommand("unloadfs soccer");
     SendRconCommand("loadfs soccer");
     //fin des fs oubliger
+    CA_Init();
     //zombie + radiation
 	ZombiesTimer = SetTimer("CreateZombies", 50, true);
 	SetTimer("UpdateRadiation",5000, 1);

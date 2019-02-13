@@ -1,8 +1,7 @@
-//zombie
+//zombie include
 #define MAX_ZOMBIES 250 // change this to whatever number you want
-//zombie
 new SpawnedZombies=0, ZombiesTimer,ZombieIsAttack[MAX_PLAYERS];
-//zombie
+new z_zombieskin[] = {20012, 20013, 20014, 20015, 20016, 20017, 20018};
 script CreateZombies()
 {
 	new str[50];
@@ -11,7 +10,8 @@ script CreateZombies()
 		new thenpc_;
 		format(str,sizeof(str),"Zombie[%d]",MAX_PLAYERS-(SpawnedZombies));
 		thenpc_ = FCNPC_Create(str);
-		FCNPC_Spawn(thenpc_,162,-2106.8979+random(250)-random(250),51.3692+random(500)-random(500),35.1641);
+		FCNPC_Spawn(thenpc_,z_zombieskin[random(sizeof(z_zombieskin))],-2106.8979+random(500)-random(500),51.3692+random(1000)-random(1000),35.1641);
+		//FCNPC_Spawn(thenpc_,index,2485.1643+random(5),-1668.8185+random(5),13.3438);//groove
 		FCNPC_SetWeapon(thenpc_, 0);
 		FCNPC_SetHealth(thenpc_, 100);
 		SetTimerEx("ZombieMove",500,true,"d",thenpc_);
@@ -33,54 +33,55 @@ public FCNPC_OnDeath(npcid, killerid, reason)
 	PlayerData[killerid][pZombieKill] +=1;
 	if (reason == 22)
 	{
-		switch(random(10))
+		switch(random(5))
 		{case 0: PlayerData[killerid][pSkill][1] +=1;}
 	}
 	if (reason == 23)
 	{
-		switch(random(10))
+		switch(random(5))
 		{case 1: PlayerData[killerid][pSkill][2] +=1;}
 	}
 	if (reason == 24)
 	{
-		switch(random(10))
+		switch(random(5))
 		{case 2: PlayerData[killerid][pSkill][3] +=1;}
 	}
 	if (reason == 25)
 	{
-		switch(random(10))
+		switch(random(5))
 		{case 3: PlayerData[killerid][pSkill][4] +=1;}
 	}
 	if (reason == 26)
 	{
-		switch(random(10))
+		switch(random(5))
 		{case 4: PlayerData[killerid][pSkill][5] +=1;}
 	}
 	if (reason == 27)
 	{
-		switch(random(10))
-		{case 5: PlayerData[killerid][pSkill][6] +=1;}
+		switch(random(5))
+		{case 0: PlayerData[killerid][pSkill][6] +=1;}
 	}
 	if (reason == 28 || reason == 32)
 	{
-		switch(random(10))
-		{case 6: PlayerData[killerid][pSkill][7] +=1;}
+		switch(random(5))
+		{case 1: PlayerData[killerid][pSkill][7] +=1;}
 	}
 	if (reason == 29)
 	{
-		switch(random(10))
-		{case 7: PlayerData[killerid][pSkill][8] +=1;}
+		switch(random(5))
+		{case 2: PlayerData[killerid][pSkill][8] +=1;}
 	}
 	if (reason == 30)
 	{
-		switch(random(10))
-		{case 8: PlayerData[killerid][pSkill][9] +=1;}
+		switch(random(5))
+		{case 3: PlayerData[killerid][pSkill][9] +=1;}
 	}
 	if (reason == 31)
 	{
-		switch(random(10))
-		{case 09: PlayerData[killerid][pSkill][10] +=1;}
+		switch(random(5))
+		{case 4: PlayerData[killerid][pSkill][10] +=1;}
 	}
+	Log_Write("logs/zombiekill.txt", "[%s] %s a tué le zombie id : %d avec un %s.", ReturnDate(), ReturnName(killerid, 0),npcid,reason);
 	return 1;
 }
 public FCNPC_OnTakeDamage(npcid, issuerid, Float:amount, weaponid, bodypart)
@@ -99,18 +100,18 @@ script ZombieMove(zombieid)
 		{
 			ZombieIsAttack[zombieid] = 2;
 			FCNPC_MeleeAttack(zombieid,100);
+			FCNPC_SetMinHeightPosCall(zombieid, 0.2);
 			break;
 		}
 		else if(IsPlayerInRangeOfPoint(zombieid,10.0,xa,ya,za))
 		{
-			if(ZombieIsAttack[zombieid] == 2)
+			if(ZombieIsAttack[zombieid] == 2 || PlayerData[playerid][pInjured] == 1)
 			{
 				FCNPC_Stop(zombieid);
 				FCNPC_StopAttack(zombieid);
 			}
 			ZombieIsAttack[zombieid] = 1;
 			FCNPC_GoTo(zombieid,xa,ya,za,FCNPC_MOVE_TYPE_RUN,0.4, true);
-
 			break;
 		}
 		else if(IsPlayerInRangeOfPoint(zombieid,25.0,xa,ya,za))
@@ -139,7 +140,7 @@ stock FCNPC_GoToPlayerEx(npcid, playerid, Float:dist, Float:rangle, movetype = F
 	rangle += fa;
 	xa = (xa + dist * floatsin(-rangle,degrees));
 	ya = (ya + dist * floatcos(-rangle,degrees));
-    FCNPC_GoTo(npcid,xa,ya,za,movetype,0.4, true);
+    FCNPC_GoTo(npcid,xa,ya,za,movetype,0.4,FCNPC_MOVE_MODE_COLANDREAS);
     return 1;
 }
 script OnPlayerKillZombie(playerid,zombieid)
@@ -158,10 +159,14 @@ public FCNPC_OnRespawn(npcid)
 	FCNPC_SetWeapon(npcid,0);
 	FCNPC_ApplyAnimation(npcid, "PED", "WALK_DRUNK", 4.1, 1, 1,  1,  0,  0);
 	FCNPC_SetAmmo(npcid,1);
-	FCNPC_SetPosition(npcid,-2106.8979+random(250)-random(250),51.3692+random(500)-random(500),35.1641);
+	FCNPC_Stop(npcid);
+	FCNPC_StopAttack(npcid);
+	FCNPC_SetMinHeightPosCall(npcid, 0.2);
+	FCNPC_SetPosition(npcid,-2106.8979+random(500)-random(500),51.3692+random(1000)-random(1000),35.1641+FCNPC_GetMinHeightPosCall(npcid));
+	//FCNPC_SetPosition(npcid,2485.1643+random(10),-1668.8185+random(10),13.3438);//groove
 	return 1;
 }
- //code de radiation a LV
+//code de radiation a LV
 script PlayerToPoint(Float:radi, playerid, Float:x, Float:y, Float:z)
 {
     if(IsPlayerConnected(playerid))
@@ -213,4 +218,9 @@ script skill_set(playerid)
 	SetPlayerSkillLevel(playerid, WEAPONSKILL_AK47, PlayerData[playerid][pSkill][9]);
 	SetPlayerSkillLevel(playerid, WEAPONSKILL_M4, PlayerData[playerid][pSkill][10]);
 	return false;
+}
+CMD:zkill(playerid,params[])
+{
+	SendServerMessage(playerid,"Zombies tuer : %s",PlayerData[playerid][pZombieKill]);
+	return 1;
 }
