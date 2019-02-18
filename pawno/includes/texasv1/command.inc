@@ -598,9 +598,12 @@ CMD:rapport(playerid, params[])
 			if(PlayerData[i][pTester] > 0){
 				SendClientMessageEx(i, COLOR_PINK, "[RAPPORT %d]: %s (ID: %d) reporte: %s", reportid, ReturnName(playerid, 0), playerid, params);
 			}
+			if(PlayerData[i][pDiscordChat] == 1){
+			SendDC(CHANNEL_ID, "[RAPPORT %d]: %s (ID: %d) reporte: %s",reportid, ReturnName(playerid, 0), playerid, params);
+			}
 		}
 		PlayerData[playerid][pReportTime] = gettime() + 60;
-		SendServerMessage(playerid, "Rapport envoyé aux admins connectés.");
+		SendServerMessage(playerid, "Rapport envoyé aux admins connectés et sur discord si vous avez activé l'option.");
 	}
 	else {SendErrorMessage(playerid, "La liste de rapport est pleine veuiller attendre.");}
 	return 1;
@@ -639,6 +642,8 @@ CMD:ar(playerid, params[])
 	ShowPlayerFooter(playerid, string);
 	SendAdminAction(ReportData[reportid][rPlayer], "%s (ID: %d) accepte votre rapport.", ReturnName(playerid, 0), playerid);
 	SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s à accepté le rapport de %s.", ReturnName(playerid, 0), ReturnName(ReportData[reportid][rPlayer], 0));
+	if(PlayerData[playerid][pDiscordChat] == 1){
+	SendDC(CHANNEL_ID,"[ADMIN]: %s à accepté le rapport de %s.", ReturnName(playerid, 0), ReturnName(ReportData[reportid][rPlayer], 0));}
 	Report_Remove(reportid);
 	return 1;
 }
@@ -648,15 +653,15 @@ CMD:dr(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/dr [rapport id] (/rapports pour la liste)");
-	new
-		reportid = strval(params),
-		string[64];
+	new reportid = strval(params),string[64];
 	if ((reportid < 0 || reportid >= MAX_REPORTS) || !ReportData[reportid][rExists])
 	    return SendErrorMessage(playerid, "RID invalide, choisir un RID allant de 0 à %d.", MAX_REPORTS);
 	format(string, sizeof(string), "Vous avez ~r~decliner~w~ rapport (ID: %d.)", reportid);
 	ShowPlayerFooter(playerid, string);
 	SendAdminAction(ReportData[reportid][rPlayer], "%s (ID: %d) a décliné votre rapport.", ReturnName(playerid, 0), playerid);
     SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a décliné le rapport de %s'.", ReturnName(playerid, 0), ReturnName(ReportData[reportid][rPlayer], 0));
+	if(PlayerData[playerid][pDiscordChat] == 1){
+	SendDC(CHANNEL_ID,"[ADMIN]: %s a décliné le rapport de %s'.", ReturnName(playerid, 0), ReturnName(ReportData[reportid][rPlayer], 0));}
     Report_Remove(reportid);
 	return 1;
 }
@@ -10707,6 +10712,18 @@ CMD:rem(playerid,params[])
 CMD:credits(playerid,params[])
 {
 	Dialog_Show(playerid,CREDITS,DIALOG_STYLE_MSGBOX,"Crédits","Script South-Central 0.21 par Emmet\nModification Fait par Tysanio & Thecycy2a \nAnciennement cjeje84 Communauté russe et autre qui on aidé par le passé","Fermer","");
+	return 1;
+}
+//tune
+CMD:tune(playerid, params[])
+{
+	new playerstate = GetPlayerState(playerid);
+	if(playerstate == PLAYER_STATE_DRIVER)
+	{
+		Dialog_Show(playerid,DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
+		return 1;
+	}
+	else {SendClientMessage(playerid, COLOR_RED, "[ERROR] You cannot modify/tune a car unless you are the driver.");}
 	return 1;
 }
 //tuning

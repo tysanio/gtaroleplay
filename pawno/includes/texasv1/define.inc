@@ -7,7 +7,6 @@
 #define SQL_DATABASE 															"samp2"
 //#define SQL_DATABASE 															"test"
 #define SQL_PASSWORD															""
-//#define SQL_PASSWORD															""
 
 //Information serveur
 #define SERVER_NAME 	 														"[0.3.dl] TEST[RP]" //pour le nom du serveur
@@ -105,16 +104,16 @@
 
 //Maximum par joueur
 #define MAX_BILLBOARDS 															(50)
-#define MAX_REPORTS 															(25)
+#define MAX_REPORTS 															(20)
 #define MAX_INVENTORY 															(24)
 #define MAX_HOUSES 																(750)
 #define MAX_HOUSE_STORAGE 														(10)
 #define MAX_BUSINESSES 															(150)
 #define MAX_DROPPED_ITEMS 														(4000)
-#define MAX_ENTRANCES 															(100)
+#define MAX_ENTRANCES 															(75)
 #define MAX_DEALERSHIP_CARS 													(40)
 #define MAX_DYNAMIC_CARS 														(1500)
-#define MAX_GAS_PUMPS 															(50)
+#define MAX_GAS_PUMPS 															(20)
 #define MAX_FURNITURE 															(15555)
 #define MAX_HOUSE_FURNITURE 													(100)
 #define MAX_DYNAMIC_JOBS 														(20)
@@ -123,14 +122,14 @@
 #define MAX_CAR_STORAGE 														(10)
 #define MAX_CRATES 																(100)
 #define MAX_DRUG_PLANTS 														(100)
-#define MAX_FACTIONS 															(30)
+#define MAX_FACTIONS 															(20)
 #define MAX_ARREST_POINTS 														(5)
 #define MAX_PLAYER_TICKETS 														(10)
 #define MAX_BARRICADES 															(25)
 #define MAX_BOOTHS 																(8)
 #define MAX_GATES 																(200)
 #define MAX_batiementS															(250)
-#define MAX_IMPOUND_LOTS 														(150)
+#define MAX_IMPOUND_LOTS 														(125)
 #define MAX_ATM_MACHINES 														(75)
 #define MAX_GARBAGE_BINS 														(150)
 #define MAX_VENDORS 															(75)
@@ -147,7 +146,7 @@
 #define MAX_BACKPACK_CAPACITY 													(5)
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 															(301)
-#define MAXACTORS               												(100) //Max bots
+#define MAXACTORS               												(50) //Max bots
 #define MAX_MACHINES 															(10)
 #define MAX_caisseS 															(250)
 //Prison
@@ -217,7 +216,6 @@
 #define BALL_SPEED 5.0
 #define BALL_RUN_TIME 1950
 //horse
-#define ORANGE 0xF97804FF
 #define TimerTextDrawLocX 547
 #define TimerTextDrawLocY 2
 #define CashLowerBounds 100
@@ -226,3 +224,6 @@
 #define CameraAngles
 //define forward fuck you
 #define script%0(%1) forward%0(%1); public%0(%1)
+//discord chat
+//#define CHANNEL_ID "545331377139351563" // Change this to your channel id
+#define CHANNEL_ID "545679302587318304" // Change this to your channel id

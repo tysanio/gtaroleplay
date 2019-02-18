@@ -292,7 +292,8 @@ enum playerData {
 	pSkill[11],
 	pMalade,
 	pRadiation,
-	pZombieKill
+	pZombieKill,
+	pDiscordChat
 };
 enum prisonData {
 	prisonDoors[3],
@@ -2620,3 +2621,6 @@ new BlackJack[MAX_PLAYERS][blackjack];
 new PlayerText:BlackJackTD[21][MAX_PLAYERS];
 //event
 new event=0;
+//tunning
+new pvehicleid[MAX_PLAYERS]; // array containing players vehicle id (loaded when player enters as driver)
+new pmodelid[MAX_PLAYERS]; // array containing players vehicle MODEL id (loaded when player enters as driver)

@@ -81,7 +81,7 @@ public FCNPC_OnDeath(npcid, killerid, reason)
 		switch(random(5))
 		{case 4: PlayerData[killerid][pSkill][10] +=1;}
 	}
-	Log_Write("logs/zombiekill.txt", "[%s] %s a tué le zombie id : %d avec un %s.", ReturnDate(), ReturnName(killerid, 0),npcid,reason);
+	Log_Write("logs/zombiekill.txt", "[%s] %s a tué le zombie id : %d avec un %s.", ReturnDate(), ReturnName(killerid), npcid, ReturnWeaponName(reason));
 	return 1;
 }
 public FCNPC_OnTakeDamage(npcid, issuerid, Float:amount, weaponid, bodypart)

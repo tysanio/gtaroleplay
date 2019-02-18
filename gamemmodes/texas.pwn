@@ -25,13 +25,13 @@
 #include <Encrypt> //truc a la con de marco
 #include <fcnpc>
 #include <colandreas>
+#include <texasv1/discord-connector>
 native IsValidVehicle(vehicleid);
 //Include texas
 #include <texasv1/extactor>
 #include <texasv1/LB_TDBox>
 #include <texasv1/define>
 #include <texasv1/vars>
-#include <texasv1/forward>
 #include <texasv1/stock>
 #include <texasv1/command>
 #include <texasv1/pop>
@@ -39,6 +39,7 @@ native IsValidVehicle(vehicleid);
 #include <texasv1/bowling>
 #include <texasv1/GrimCasino>
 #include <texasv1/zombie>
+#include <texasv1/discordchat>
 //#include <texasv1/vsync>
 main()
 {
@@ -49,7 +50,7 @@ main()
 	print("88  Yb  YbodP  88ood8 888888 88     88ood8 dP\"\"\"\"Yb  dP");
     print(" ");
 }
-public OnJailAccount(index)
+script OnJailAccount(index)
 {
 	new string[128],name[24],rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -66,7 +67,7 @@ public OnJailAccount(index)
 	DeletePVar(index, "OnJailAccount");
 	return 1;
 }
-public OnBillboardCreated(bizid)
+script OnBillboardCreated(bizid)
 {
 	if (bizid == -1 || !BillBoardData[bizid][bbExists])
 	    return 0;
@@ -74,7 +75,7 @@ public OnBillboardCreated(bizid)
 	Billboard_Save(bizid);
 	return 1;
 }
-public Billboard_Load()
+script Billboard_Load()
 {
     new rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -94,7 +95,7 @@ public Billboard_Load()
 	}
 	return 1;
 }
-public OnViewBillboards(extraid, name[])
+script OnViewBillboards(extraid, name[])
 {
 	new string[5000],desc[5000],rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -109,7 +110,7 @@ public OnViewBillboards(extraid, name[])
 	Dialog_Show(extraid, Billboards, DIALOG_STYLE_LIST, desc, string, "Fermer", "");
 	return 1;
 }
-public DestroyWater(objectid)
+script DestroyWater(objectid)
 {
 	if (IsValidDynamicObject(objectid))
 	    DestroyDynamicObject(objectid);
@@ -118,7 +119,7 @@ public DestroyWater(objectid)
 	moneyentreprisesave(moneyentrepriseid);
 	return 0;
 }
-public RandomFire()
+script RandomFire()
 {
 	for (new i = 0; i < sizeof(g_aFireObjects); i ++)
 	{
@@ -296,7 +297,7 @@ public RandomFire()
 	CreateExplosion(fX, fY, fZ, 12, 5.0);
 	return 1;
 }
-public BreakCuffs(playerid, userid)
+script BreakCuffs(playerid, userid)
 {
 	if (PlayerData[playerid][pCuffed] || PlayerData[playerid][pInjured] || !IsPlayerSpawned(playerid) || !Inventory_HasItem(playerid, "Pied de biche") || !IsPlayerNearPlayer(playerid, userid, 6.0) || !PlayerData[userid][pCuffed])
 	    return 1;
@@ -314,27 +315,27 @@ public BreakCuffs(playerid, userid)
 	}
 	return 1;
 }
-public SpawnTimer(playerid)
+script SpawnTimer(playerid)
 {
 	if (SQL_IsLogged(playerid)) {TogglePlayerControllable(playerid, 1);}
 	return 1;
 }
-public RemoveAttachedObject(playerid, slot)
+script RemoveAttachedObject(playerid, slot)
 {
 	if (IsPlayerConnected(playerid) && IsPlayerAttachedObjectSlotUsed(playerid, slot)) {RemovePlayerAttachedObject(playerid, slot);}
 	return 1;
 }
-public MineTime(playerid) {PlayerData[playerid][pMineTime] = 0;}
-public WoodTime(playerid) {PlayerData[playerid][pWoodTime] = 0;}
-public DestroyBlood(objectid) {DestroyDynamicObject(objectid);}
-public ExpireMarker(playerid)
+script MineTime(playerid) {PlayerData[playerid][pMineTime] = 0;}
+script WoodTime(playerid) {PlayerData[playerid][pWoodTime] = 0;}
+script DestroyBlood(objectid) {DestroyDynamicObject(objectid);}
+script ExpireMarker(playerid)
 {
 	if (!PlayerData[playerid][pMarker])
 	    return 0;
 	else SetPlayerColor(playerid, DEFAULT_COLOR);
 	return 1;
 }
-public HidePlayerBox(playerid, PlayerText:boxid)
+script HidePlayerBox(playerid, PlayerText:boxid)
 {
 	if (!IsPlayerConnected(playerid) || !SQL_IsLogged(playerid))
 	    return 0;
@@ -342,7 +343,7 @@ public HidePlayerBox(playerid, PlayerText:boxid)
 	PlayerTextDrawDestroy(playerid, boxid);
 	return 1;
 }
-public Advertise(playerid)
+script Advertise(playerid)
 {
 	if (!SQL_IsLogged(playerid) || !strlen(PlayerData[playerid][pAdvertise]))
 	    return 0;
@@ -354,7 +355,7 @@ public Advertise(playerid)
 	PlayerData[playerid][pAdvertise][0] = 0;
 	return 1;
 }
-public KickHouse(playerid, id)
+script KickHouse(playerid, id)
 {
 	new facass = PlayerData[playerid][pFaction];
 	if (FactionData[facass][factionacces][3] == 0 || House_Nearest(playerid) != id)
@@ -376,7 +377,7 @@ public KickHouse(playerid, id)
 	}
 	return 1;
 }
-public KickBusiness(playerid, id)
+script KickBusiness(playerid, id)
 {
     new facass = PlayerData[playerid][pFaction];
 	if (FactionData[facass][factionacces][3] == 0 || Business_Nearest(playerid) != id)
@@ -399,7 +400,7 @@ public KickBusiness(playerid, id)
 	}
 	return 1;
 }
-public UpdateBooth(playerid, id)
+script UpdateBooth(playerid, id)
 {
 	if (PlayerData[playerid][pRangeBooth] != id || !g_BoothUsed[id])
 	    return 0;
@@ -454,7 +455,7 @@ public UpdateBooth(playerid, id)
 	Booth_Refresh(playerid);
 	return 1;
 }
-public CloseGate(gateid, linkid, Float:fX, Float:fY, Float:fZ, Float:speed, Float:fRotX, Float:fRotY, Float:fRotZ)
+script CloseGate(gateid, linkid, Float:fX, Float:fY, Float:fZ, Float:speed, Float:fRotX, Float:fRotY, Float:fRotZ)
 {
 	new id = -1;
 	if (GateData[gateid][gateExists] && GateData[gateid][gateOpened])
@@ -467,7 +468,7 @@ public CloseGate(gateid, linkid, Float:fX, Float:fY, Float:fZ, Float:speed, Floa
 	}
 	return 0;
 }
-public SetPlayerToUnfreeze(playerid, Float:x, Float:y, Float:z)
+script SetPlayerToUnfreeze(playerid, Float:x, Float:y, Float:z)
 {
 	if (!IsPlayerInRangeOfPoint(playerid, 15.0, x, y, z))
 	    return 0;
@@ -476,7 +477,7 @@ public SetPlayerToUnfreeze(playerid, Float:x, Float:y, Float:z)
 	TogglePlayerControllable(playerid, 1);
 	return 1;
 }
-public RefillUpdate(playerid, vehicleid)
+script RefillUpdate(playerid, vehicleid)
 {
     new idk = Car_GetID(vehicleid);
 	if (!PlayerData[playerid][pFuelCan] || GetNearestVehicle(playerid) != vehicleid)
@@ -487,7 +488,7 @@ public RefillUpdate(playerid, vehicleid)
 	SendVehiculeMessage(playerid, "Vous avez rempli votre véhicule avec un jerrican d'essence.");
 	return 1;
 }
-public Detector_Load()
+script Detector_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -505,7 +506,7 @@ public Detector_Load()
 	}
 	return 1;
 }
-public Graffiti_Load()
+script Graffiti_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -523,7 +524,7 @@ public Graffiti_Load()
 	}
 	return 1;
 }
-public Speed_Load()
+script Speed_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -541,7 +542,7 @@ public Speed_Load()
 	}
 	return 1;
 }
-public Rack_Load()
+script Rack_Load()
 {
     static rows,fields,str[24];
 	cache_get_data(rows, fields, g_iHandle);
@@ -566,7 +567,7 @@ public Rack_Load()
 	}
 	return 1;
 }
-public Vendor_Load()
+script Vendor_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -585,7 +586,7 @@ public Vendor_Load()
 	}
 	return 1;
 }
-public Garbage_Load()
+script Garbage_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -605,7 +606,7 @@ public Garbage_Load()
 	}
 	return 1;
 }
-public ATM_Load()
+script ATM_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -624,7 +625,7 @@ public ATM_Load()
 	return 1;
 }
 
-public Impound_Load()
+script Impound_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -643,7 +644,7 @@ public Impound_Load()
 	}
 	return 1;
 }
-public Backpack_Load()
+script Backpack_Load()
 {
     static rows,fields,str[64];
 	cache_get_data(rows, fields, g_iHandle);
@@ -671,7 +672,7 @@ public Backpack_Load()
 	}
 	return 1;
 }
-public Gate_Load()
+script Gate_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -705,7 +706,7 @@ public Gate_Load()
 	}
 	return 1;
 }
-public batiement_Load()
+script batiement_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -726,7 +727,7 @@ public batiement_Load()
 	}
 	return 1;
 }
-public Arrest_Load()
+script Arrest_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -745,7 +746,7 @@ public Arrest_Load()
 	}
 	return 1;
 }
-public Faction_Load()
+script Faction_Load()
 {
 	static rows,fields,str[32];
 	cache_get_data(rows, fields, g_iHandle);
@@ -788,7 +789,7 @@ public Faction_Load()
 	return 1;
 }
 
-public Plant_Load()
+script Plant_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -809,7 +810,7 @@ public Plant_Load()
 	return 1;
 }
 
-public Crate_Load()
+script Crate_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -830,7 +831,7 @@ public Crate_Load()
 	return 1;
 }
 
-public Job_Load()
+script Job_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -856,7 +857,7 @@ public Job_Load()
 	}
 	return 1;
 }
-public Entrance_Load()
+script Entrance_Load()
 {
     static rows,fields;
     cache_get_data(rows, fields, g_iHandle);
@@ -894,7 +895,7 @@ public Entrance_Load()
 	return 1;
 }
 
-public Dropped_Load()
+script Dropped_Load()
 {
 	static rows,fields;
     cache_get_data(rows, fields, g_iHandle);
@@ -926,7 +927,7 @@ public Dropped_Load()
 	return 1;
 }
 
-public Business_Load()
+script Business_Load()
 {
     static rows,fields,str[64];
 	cache_get_data(rows, fields, g_iHandle);
@@ -986,7 +987,7 @@ public Business_Load()
 	}
 	return 1;
 }
-public House_Load()
+script House_Load()
 {
 	static rows,fields,str[128];
 	cache_get_data(rows, fields, g_iHandle);
@@ -1035,7 +1036,7 @@ public House_Load()
 	}
 	return 1;
 }
-public Car_Load()
+script Car_Load()
 {
 	static rows,fields,str[128];
 	cache_get_data(rows, fields, g_iHandle);
@@ -1087,7 +1088,7 @@ public Car_Load()
 	}
 	return 1;
 }
-public HarvestPlant(playerid, plantid)
+script HarvestPlant(playerid, plantid)
 {
 	PlayerData[playerid][pHarvesting] = 0;
 	if (Plant_Nearest(playerid) != plantid || GetPlayerSpecialAction(playerid) != SPECIAL_ACTION_DUCK || !PlantData[plantid][plantExists])
@@ -1120,7 +1121,7 @@ public HarvestPlant(playerid, plantid)
 	return 1;
 }
 
-public OpenCrate(playerid, crateid)
+script OpenCrate(playerid, crateid)
 {
 	if (Crate_Nearest(playerid) != crateid || !CrateData[crateid][crateExists] || !IsPlayerSpawned(playerid) || !PlayerData[playerid][pOpeningCrate])
 	    return 0;
@@ -1138,7 +1139,7 @@ public OpenCrate(playerid, crateid)
 	return 1;
 }
 
-public CraftParts(playerid, crateid)
+script CraftParts(playerid, crateid)
 {
 	if (PlayerData[playerid][pCarryCrate] != crateid || !CrateData[crateid][crateExists] || !IsPlayerSpawned(playerid) || !PlayerData[playerid][pCrafting])
 	    return 0;
@@ -1324,7 +1325,7 @@ public CraftParts(playerid, crateid)
 	}
 	return 1;
 }
-public FirstAidUpdate(playerid)
+script FirstAidUpdate(playerid)
 {
 	static Float:health;
 	GetPlayerHealth(playerid, health);
@@ -1352,7 +1353,7 @@ public FirstAidUpdate(playerid)
 	}
 	return 1;
 }
-public RepairCarMoteur(playerid, vehicleid)
+script RepairCarMoteur(playerid, vehicleid)
 {
 	new facass = PlayerData[playerid][pFaction];
 	if (FactionData[facass][factionacces][9] == 0 && !IsPlayerNearHood(playerid, vehicleid)) {
@@ -1366,7 +1367,7 @@ public RepairCarMoteur(playerid, vehicleid)
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a réussi à réparer le moteur du véhicule.", ReturnName(playerid, 0));
 	return 1;
 }
-public RepairCarCaro(playerid, vehicleid)
+script RepairCarCaro(playerid, vehicleid)
 {
 	new facass = PlayerData[playerid][pFaction];
 	if (FactionData[facass][factionacces][9] == 0 && !IsPlayerNearHood(playerid, vehicleid)) {
@@ -1378,7 +1379,7 @@ public RepairCarCaro(playerid, vehicleid)
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a réussi à réparer la carrosserie du véhicule.", ReturnName(playerid, 0));
 	return 1;
 }
-public Business_LoadCars(bizid)
+script Business_LoadCars(bizid)
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -1389,7 +1390,7 @@ public Business_LoadCars(bizid)
 	}
 	return 1;
 }
-public OnLoadFurniture(houseid)
+script OnLoadFurniture(houseid)
 {
 	static rows,fields,id = -1;
 	cache_get_data(rows, fields, g_iHandle);
@@ -1409,7 +1410,7 @@ public OnLoadFurniture(houseid)
 	}
 	return 1;
 }
-public OnLoadCarStorage(carid)
+script OnLoadCarStorage(carid)
 {
 	static rows,fields,str[32];
 	cache_get_data(rows, fields, g_iHandle);
@@ -1423,7 +1424,7 @@ public OnLoadCarStorage(carid)
 	}
 	return 1;
 }
-public OnLoadStorage(houseid)
+script OnLoadStorage(houseid)
 {
 	static rows,fields,str[32];
 	cache_get_data(rows, fields, g_iHandle);
@@ -1437,7 +1438,7 @@ public OnLoadStorage(houseid)
 	}
 	return 1;
 }
-public OnLoadBackpack(id)
+script OnLoadBackpack(id)
 {
 	static rows,fields,itemid = -1;
 	cache_get_data(rows, fields, g_iHandle);
@@ -1452,7 +1453,7 @@ public OnLoadBackpack(id)
 	}
 	return 1;
 }
-public Pump_Load(bizid)
+script Pump_Load(bizid)
 {
 	static rows,fields,id = -1;
 	cache_get_data(rows, fields, g_iHandle);
@@ -1472,7 +1473,7 @@ public Pump_Load(bizid)
 	}
 	return 1;
 }
-public OpenInventory(playerid)
+script OpenInventory(playerid)
 {
     if (!IsPlayerConnected(playerid) || !PlayerData[playerid][pCharacter])
 	    return 0;
@@ -1491,13 +1492,13 @@ public OpenInventory(playerid)
 	PlayerData[playerid][pStorageSelect] = 0;
 	return ShowModelSelectionMenu(playerid, "Inventaire", MODEL_SELECTION_INVENTORY, items, sizeof(items), 0.0, 0.0, 0.0, 1.0, -1, true, amounts);
 }
-public SelectTD(playerid)
+script SelectTD(playerid)
 {
 	if (!IsPlayerConnected(playerid))
 	    return 0;
 	return SelectTextDraw(playerid, -1);
 }
-public DragUpdate(playerid, targetid)
+script DragUpdate(playerid, targetid)
 {
 	if (PlayerData[targetid][pDragged] && PlayerData[targetid][pDraggedBy] == playerid)
 	{
@@ -1512,12 +1513,12 @@ public DragUpdate(playerid, targetid)
 	}
 	return 1;
 }
-public KickTimer(playerid)
+script KickTimer(playerid)
 {
 	if (PlayerData[playerid][pKicked]) {return Kick(playerid);}
 	return 0;
 }
-public HidePlayerFooter(playerid) {
+script HidePlayerFooter(playerid) {
 
 	if (!PlayerData[playerid][pShowFooter])
 	    return 0;
@@ -1525,7 +1526,7 @@ public HidePlayerFooter(playerid) {
 	PlayerData[playerid][pShowFooter] = false;
 	return PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][39]);
 }
-public OnQueryExecute(playerid, query[])
+script OnQueryExecute(playerid, query[])
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -1536,7 +1537,7 @@ public OnQueryExecute(playerid, query[])
 	PlayerData[playerid][pExecute] = 0;
 	return 1;
 }
-public OnQueryError(errorid, error[], callback[], query[], connectionHandle)
+script OnQueryError(errorid, error[], callback[], query[], connectionHandle)
 {
 	foreach (new i : Player)
 	{
@@ -1551,7 +1552,7 @@ public OnQueryError(errorid, error[], callback[], query[], connectionHandle)
 	Log_Write("logs/mysql_log.txt", "[%s] %s: %s", ReturnDate(), (callback[0]) ? (callback) : ("n/a"), error);
 	return 1;
 }
-public OnQueryFinished(extraid, threadid)
+script OnQueryFinished(extraid, threadid)
 {
 	if (!IsPlayerConnected(extraid))
 	    return 0;
@@ -1944,13 +1945,11 @@ public OnQueryFinished(extraid, threadid)
 	}
 	return 1;
 }
-
-public OnViewCharges(extraid, name[])
+script OnViewCharges(extraid, name[])
 {
     new factionid = PlayerData[extraid][pFaction];
 	if (FactionData[factionid][factionacces][1] == 0)
 	    return 0;
-
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
 	if (!rows)
@@ -1969,13 +1968,13 @@ public OnViewCharges(extraid, name[])
 	Dialog_Show(extraid, ChargeList, DIALOG_STYLE_LIST, desc, string, "Fermer", "");
 	return 1;
 }
-public AccountCheck(playerid)
+script AccountCheck(playerid)
 {
 	SetCameraData(playerid);
 	SQL_CheckAccount(playerid);
 	return 1;
 }
-public OnResolveUsername(extraid, character[])
+script OnResolveUsername(extraid, character[])
 {
     new rows,fields,name[24];
 	cache_get_data(rows, fields, g_iHandle);
@@ -1987,75 +1986,59 @@ public OnResolveUsername(extraid, character[])
 	return 1;
 }
 
-public OnLoginDate(extraid, username[])
+script OnLoginDate(extraid, username[])
 {
     if (!IsPlayerConnected(extraid))
 	    return 0;
-
 	static rows,fields,date[36];
-
 	cache_get_data(rows, fields, g_iHandle);
-
 	if (rows) {
 	    cache_get_row(0, 0, date, g_iHandle);
-
 	    SendServerMessage(extraid, "%s's dernière connexion remonte le: %s.", username, date);
 	}
-	else {
-	    SendErrorMessage(extraid, "Nom d'utilisateur spécifié invalide.");
-	}
+	else {SendErrorMessage(extraid, "Nom d'utilisateur spécifié invalide.");}
 	return 1;
 }
-
-public OnCarStorageAdd(carid, itemid)
+script OnCarStorageAdd(carid, itemid)
 {
 	CarStorage[carid][itemid][cItemID] = cache_insert_id(g_iHandle);
 	return 1;
 }
-
-public OnStorageAdd(houseid, itemid)
+script OnStorageAdd(houseid, itemid)
 {
 	HouseStorage[houseid][itemid][hItemID] = cache_insert_id(g_iHandle);
 	return 1;
 }
-
-public OnDealerCarCreated(bizid, slotid)
+script OnDealerCarCreated(bizid, slotid)
 {
 	DealershipCars[bizid][slotid][vehID] = cache_insert_id(g_iHandle);
 	return 1;
 }
-
-public OnFurnitureCreated(furnitureid)
+script OnFurnitureCreated(furnitureid)
 {
 	FurnitureData[furnitureid][furnitureID] = cache_insert_id(g_iHandle);
 	Furniture_Save(furnitureid);
 	return 1;
 }
-
-public OnContactAdd(playerid, id)
+script OnContactAdd(playerid, id)
 {
 	ContactData[playerid][id][contactID] = cache_insert_id(g_iHandle);
 	return 1;
 }
-
-public OnInventoryAdd(playerid, itemid)
+script OnInventoryAdd(playerid, itemid)
 {
 	InventoryData[playerid][itemid][invID] = cache_insert_id(g_iHandle);
 	return 1;
 }
-
-public OnBanLookup(playerid, username[])
+script OnBanLookup(playerid, username[])
 {
 	if (!IsPlayerConnected(playerid))
 	    return 0;
-
 	static rows,fields,reason[128],date[36];
 	cache_get_data(rows, fields, g_iHandle);
-
 	if (rows) {
 	    cache_get_field_content(0, "Reason", reason, g_iHandle);
 	    cache_get_field_content(0, "Date", date, g_iHandle);
-
 		SendServerMessage(playerid, "%s a été banni le %s, raison: %s", username, date, reason);
 	}
 	else {
@@ -2063,8 +2046,7 @@ public OnBanLookup(playerid, username[])
 	}
 	return 1;
 }
-
-public OnVerifyNameChange(playerid, newname[])
+script OnVerifyNameChange(playerid, newname[])
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -2080,50 +2062,38 @@ public OnVerifyNameChange(playerid, newname[])
 	return 1;
 }
 
-public OnDeleteCharacter(playerid, name[])
+script OnDeleteCharacter(playerid, name[])
 {
 	static rows,fields,query[128],id = -1;
     cache_get_data(rows, fields, g_iHandle);
 	if (!rows)
 	    return SendErrorMessage(playerid, "Le personnage \"%s\" est lié à aucun comptes.", name);
-
 	if (cache_get_field_int(0, "Admin") > PlayerData[playerid][pAdmin])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à supprimer le caractère d'un administrateur supérieur.");
-
 	id = cache_get_field_int(0, "ID");
-
 	if (id) {
 	    format(query, sizeof(query), "DELETE FROM `contacts` WHERE `ID` = '%d'", id);
      	mysql_tquery(g_iHandle, query);
-
 		format(query, sizeof(query), "DELETE FROM `gps` WHERE `ID` = '%d'", id);
   		mysql_tquery(g_iHandle, query);
-
 		format(query, sizeof(query), "DELETE FROM `inventory` WHERE `ID` = '%d'", id);
 		mysql_tquery(g_iHandle, query);
-
 		format(query, sizeof(query), "DELETE FROM `tickets` WHERE `ID` = '%d'", id);
   		mysql_tquery(g_iHandle, query);
-
 	    format(query, sizeof(query), "DELETE FROM `characters` WHERE `ID` = '%d'", id);
   		mysql_tquery(g_iHandle, query);
-
   		SendServerMessage(playerid, "Vous avez supprimé \"%s\" avec succé.", name);
 	}
 	return 1;
 }
 
-public OnDeleteAccount(playerid, name[])
+script OnDeleteAccount(playerid, name[])
 {
 	static rows,fields,id = -1;
-
 	cache_get_data(rows, fields, g_iHandle);
-
 	if (!rows)
 	    return SendErrorMessage(playerid, "Le nom d'utilisateur \"%s\" n'existe pas.", name);
-
 	static query[128];
-
 	for (new i = 0; i < rows; i ++)
 	{
 	    if ((id = cache_get_field_int(i, "ID")))
@@ -2151,7 +2121,7 @@ public OnDeleteAccount(playerid, name[])
     return 1;
 }
 
-public OnNameChange(playerid, userid, newname[])
+script OnNameChange(playerid, userid, newname[])
 {
 	if (!IsPlayerConnected(playerid) || !IsPlayerConnected(userid))
 	    return 0;
@@ -2173,13 +2143,13 @@ public OnNameChange(playerid, userid, newname[])
 	return 1;
 }
 
-public OnTicketCreated(playerid, ticketid)
+script OnTicketCreated(playerid, ticketid)
 {
 	TicketData[playerid][ticketid][ticketID] = cache_insert_id(g_iHandle);
 	return 1;
 }
 
-public OnRackCreated(rackid)
+script OnRackCreated(rackid)
 {
 	if (rackid == -1 || !RackData[rackid][rackExists])
 	    return 0;
@@ -2187,7 +2157,7 @@ public OnRackCreated(rackid)
 	Rack_Save(rackid);
 	return 1;
 }
-public OnGateCreated(gateid)
+script OnGateCreated(gateid)
 {
 	if (gateid == -1 || !GateData[gateid][gateExists])
 	    return 0;
@@ -2195,7 +2165,7 @@ public OnGateCreated(gateid)
 	Gate_Save(gateid);
 	return 1;
 }
-public OnbatiementCreated(batiementid)
+script OnbatiementCreated(batiementid)
 {
 	if (batiementid == -1 || !batiementData[batiementid][batiementExists])
 	    return 0;
@@ -2205,7 +2175,7 @@ public OnbatiementCreated(batiementid)
 
 	return 1;
 }
-public OnBusinessCreated(bizid)
+script OnBusinessCreated(bizid)
 {
 	if (bizid == -1 || !BusinessData[bizid][bizExists])
 	    return 0;
@@ -2213,7 +2183,7 @@ public OnBusinessCreated(bizid)
 	Business_Save(bizid);
 	return 1;
 }
-public OnEntranceCreated(entranceid)
+script OnEntranceCreated(entranceid)
 {
 	if (entranceid == -1 || !EntranceData[entranceid][entranceExists])
 	    return 0;
@@ -2222,7 +2192,7 @@ public OnEntranceCreated(entranceid)
 	Entrance_Save(entranceid);
 	return 1;
 }
-public OnCarCreated(carid)
+script OnCarCreated(carid)
 {
 	if (carid == -1 || !CarData[carid][carExists])
 	    return 0;
@@ -2231,13 +2201,13 @@ public OnCarCreated(carid)
 	Car_Save(carid);
 	return 1;
 }
-public OnPumpCreated(pumpid)
+script OnPumpCreated(pumpid)
 {
     PumpData[pumpid][pumpID] = cache_insert_id(g_iHandle);
 	Pump_Save(pumpid);
 	return 1;
 }
-public OnArrestCreated(arrestid)
+script OnArrestCreated(arrestid)
 {
 	if (arrestid == -1 || !ArrestData[arrestid][arrestExists])
 	    return 0;
@@ -2245,7 +2215,7 @@ public OnArrestCreated(arrestid)
 	Arrest_Save(arrestid);
 	return 1;
 }
-public OnPlantCreated(plantid)
+script OnPlantCreated(plantid)
 {
 	if (plantid == -1 || !PlantData[plantid][plantExists])
 	    return 0;
@@ -2253,7 +2223,7 @@ public OnPlantCreated(plantid)
 	Plant_Save(plantid);
 	return 1;
 }
-public OnCrateCreated(crateid)
+script OnCrateCreated(crateid)
 {
 	if (crateid == -1 || !CrateData[crateid][crateExists])
 	    return 0;
@@ -2261,7 +2231,7 @@ public OnCrateCreated(crateid)
 	Crate_Save(crateid);
 	return 1;
 }
-public OnFactionCreated(factionid)
+script OnFactionCreated(factionid)
 {
 	if (factionid == -1 || !FactionData[factionid][factionExists])
 	    return 0;
@@ -2270,7 +2240,7 @@ public OnFactionCreated(factionid)
 	Faction_SaveRanks(factionid);
 	return 1;
 }
-public OnBackpackCreated(id)
+script OnBackpackCreated(id)
 {
 	if (id == -1 || !BackpackData[id][backpackExists])
 	    return 0;
@@ -2278,7 +2248,7 @@ public OnBackpackCreated(id)
 	Backpack_Save(id);
 	return 1;
 }
-public OnATMCreated(atmid)
+script OnATMCreated(atmid)
 {
     if (atmid == -1 || !ATMData[atmid][atmExists])
 		return 0;
@@ -2286,7 +2256,7 @@ public OnATMCreated(atmid)
  	ATM_Save(atmid);
 	return 1;
 }
-public OnImpoundCreated(impoundid)
+script OnImpoundCreated(impoundid)
 {
 	if (impoundid == -1 || !ImpoundData[impoundid][impoundExists])
 	    return 0;
@@ -2294,18 +2264,18 @@ public OnImpoundCreated(impoundid)
 	Impound_Save(impoundid);
 	return 1;
 }
-public OnGraffitiCreated(id)
+script OnGraffitiCreated(id)
 {
 	GraffitiData[id][graffitiID] = cache_insert_id(g_iHandle);
 	Graffiti_Save(id);
 	return 1;
 }
-public OnDetectorCreated(id)
+script OnDetectorCreated(id)
 {
 	MetalDetectors[id][detectorID] = cache_insert_id(g_iHandle);
 	return 1;
 }
-public OnGarbageCreated(garbageid)
+script OnGarbageCreated(garbageid)
 {
 	if (garbageid == -1 || !GarbageData[garbageid][garbageExists])
 	    return 0;
@@ -2313,7 +2283,7 @@ public OnGarbageCreated(garbageid)
 	Garbage_Save(garbageid);
 	return 1;
 }
-public OnVendorCreated(vendorid)
+script OnVendorCreated(vendorid)
 {
 	if (vendorid == -1 || !VendorData[vendorid][vendorExists])
 	    return 0;
@@ -2321,7 +2291,7 @@ public OnVendorCreated(vendorid)
 	Vendor_Save(vendorid);
 	return 1;
 }
-public OnSpeedCreated(speedid)
+script OnSpeedCreated(speedid)
 {
 	if (speedid == -1 || !SpeedData[speedid][speedExists])
 	    return 0;
@@ -2329,7 +2299,7 @@ public OnSpeedCreated(speedid)
 	Speed_Save(speedid);
 	return 1;
 }
-public OnHouseCreated(houseid)
+script OnHouseCreated(houseid)
 {
 	if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
@@ -2340,7 +2310,7 @@ public OnHouseCreated(houseid)
 	return 1;
 }
 
-public OnDroppedItem(itemid)
+script OnDroppedItem(itemid)
 {
 	if (itemid == -1 || !DroppedItems[itemid][droppedModel])
 	    return 0;
@@ -2349,7 +2319,7 @@ public OnDroppedItem(itemid)
 	return 1;
 }
 
-public OnJobCreated(jobid)
+script OnJobCreated(jobid)
 {
 	if (jobid == -1 || !JobData[jobid][jobExists])
 	    return 0;
@@ -2360,7 +2330,7 @@ public OnJobCreated(jobid)
 	return 1;
 }
 
-public OnCharacterLookup(extraid, id, character[])
+script OnCharacterLookup(extraid, id, character[])
 {
 	if (!IsPlayerConnected(extraid))
 	    return 0;
@@ -2402,7 +2372,7 @@ public OnCharacterLookup(extraid, id, character[])
 	return 1;
 }
 
-public OnCharacterCheck(extraid, character[])
+script OnCharacterCheck(extraid, character[])
 {
 	if (!IsPlayerConnected(extraid))
 	    return 0;
@@ -2427,7 +2397,7 @@ public OnCharacterCheck(extraid, character[])
 	}
 	return 1;
 }
-public FlashShowTextDrawEx(playerid, PlayerText:textid, amount)
+script FlashShowTextDrawEx(playerid, PlayerText:textid, amount)
 {
     if ((IsPlayerConnected(playerid) && PlayerData[playerid][pLogged] && PlayerData[playerid][pCharacter] != 0 && PlayerData[playerid][pHospital] == -1) && IsPlayerSpawned(playerid)) {
 	    PlayerTextDrawShow(playerid, textid);
@@ -2436,7 +2406,7 @@ public FlashShowTextDrawEx(playerid, PlayerText:textid, amount)
 	}
 	return 1;
 }
-public HideTextDrawEx(playerid, PlayerText:textid, amount)
+script HideTextDrawEx(playerid, PlayerText:textid, amount)
 {
     if ((IsPlayerConnected(playerid) && PlayerData[playerid][pLogged] && PlayerData[playerid][pCharacter] != 0 && PlayerData[playerid][pHospital] == -1) && IsPlayerSpawned(playerid)) {
 	    PlayerTextDrawHide(playerid, textid);
@@ -2445,14 +2415,14 @@ public HideTextDrawEx(playerid, PlayerText:textid, amount)
 	}
 	return 1;
 }
-public FlashShowTextDraw(playerid, PlayerText:textid)
+script FlashShowTextDraw(playerid, PlayerText:textid)
 {
 	if ((IsPlayerConnected(playerid) && PlayerData[playerid][pLogged] && PlayerData[playerid][pCharacter] != 0 && PlayerData[playerid][pHospital] == -1) && IsPlayerSpawned(playerid)) {
 	    PlayerTextDrawShow(playerid, textid);
 	}
 	return 1;
 }
-public MinuteCheck()
+script MinuteCheck()
 {
 	static Float:hp,gouvernementinfoid;
     foreach (new i : Player)
@@ -2981,7 +2951,7 @@ public MinuteCheck()
 	}
 	return 1;
 }
-public PlayerCheck()
+script PlayerCheck()
 {
 	static str[128],Float:health,id = -1;
 	TotalledCheck();
@@ -3450,7 +3420,7 @@ public PlayerCheck()
 	return 1;
 }
 
-public UpdateTime1()
+script UpdateTime1()
 {
 	static time[3],string[64];
 	gettime(time[0], time[1], time[2]);
@@ -3471,7 +3441,7 @@ public UpdateTime1()
 	}
 	SetTimer("UpdateTime1", 30000, false);
 }
-public RefuelCheck()
+script RefuelCheck()
 {
 	new string[128];
  	foreach (new i : Player)
@@ -3511,7 +3481,7 @@ public RefuelCheck()
  	}
 	return 1;
 }
-public FuelUpdate()
+script FuelUpdate()
 {
 	for (new i = 1; i != MAX_VEHICLES; i ++) if (IsEngineVehicle(i) && GetEngineStatus(i))
 	{
@@ -3532,7 +3502,7 @@ public FuelUpdate()
 		}
 	}
 }
-public OnVehicleDeath(vehicleid)
+script OnVehicleDeath(vehicleid)
 {
 	if (CoreVehicles[vehicleid][vehTemporary])
 	{
@@ -3599,7 +3569,7 @@ public OnVehicleSpawn(vehicleid)
 	ResetVehicle(vehicleid);
 	return 1;
 }
-public OnRconLoginAttempt(ip[], password[], success)
+script OnRconLoginAttempt(ip[], password[], success)
 {
 	if (!success)
 	{
@@ -3620,7 +3590,7 @@ public OnRconLoginAttempt(ip[], password[], success)
 	}
 	return 1;
 }
-public OnPlayerStreamIn(playerid, forplayerid)
+script OnPlayerStreamIn(playerid, forplayerid)
 {
     if (PlayerData[playerid][pMaskOn])
 		ShowPlayerNameTagForPlayer(forplayerid, playerid, 0);
@@ -3629,7 +3599,7 @@ public OnPlayerStreamIn(playerid, forplayerid)
 	return 1;
 }
 
-public OnPlayerUseItem(playerid, itemid, name[])
+script OnPlayerUseItem(playerid, itemid, name[])
 {
     if (IsFurnitureItem(name))
 	{
@@ -3917,7 +3887,7 @@ public OnPlayerUseItem(playerid, itemid, name[])
     }
     return 1;
 }
-public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
+script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
     new factionid = PlayerData[playerid][pFaction];
 	if ((weaponid >= 22 && weaponid <= 38) && hittype == BULLET_HIT_TYPE_OBJECT && PlayerData[playerid][pRangeBooth] != -1 && hitid == g_BoothObject[PlayerData[playerid][pRangeBooth]])
@@ -3988,7 +3958,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 	return 1;
 }
 
-public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid)
+script OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid)
 {
 	if (PlayerData[playerid][pFirstAid])
 	{
@@ -4007,7 +3977,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid)
 	return 1;
 }
 
-public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
+script OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 {
     new factionid = PlayerData[playerid][pFaction];
 	if (damagedid != INVALID_PLAYER_ID)
@@ -4069,24 +4039,19 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 	return 1;
 }
 //is a gang de caca
-public IsACop(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][4] == 1 && FactionData[facass][factionacces][3] == 1 && FactionData[facass][factionacces][7] == 1 && FactionData[facass][factionacces][5] == 1) return 1;return 0;}
-public IsACops(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1) return 1;return 0;}
-public IsACopm(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][5] == 1) return 1;return 0;}
-public IsACopf(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][3] == 1) return 1;return 0;}
-public IsAGang(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][8] == 1) return 1; return 0;}
-public OnPlayerDeath(playerid, killerid, reason)
+script IsACop(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][4] == 1 && FactionData[facass][factionacces][3] == 1 && FactionData[facass][factionacces][7] == 1 && FactionData[facass][factionacces][5] == 1) return 1;return 0;}
+script IsACops(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1) return 1;return 0;}
+script IsACopm(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][5] == 1) return 1;return 0;}
+script IsACopf(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][1] == 1 && FactionData[facass][factionacces][3] == 1) return 1;return 0;}
+script IsAGang(playerid) {new facass = PlayerData[playerid][pFaction]; if (FactionData[facass][factionacces][8] == 1) return 1; return 0;}
+script OnPlayerDeath(playerid, killerid, reason)
 {
-	if (killerid != INVALID_PLAYER_ID)
+	if (killerid != INVALID_PLAYER_ID && !IsPlayerNPC(playerid))
 	{
-	    if (1 <= reason <= 46)
-			Log_Write("logs/kill_log.txt", "[%s] %s a tué %s (%s).", ReturnDate(), ReturnName(killerid), ReturnName(playerid), ReturnWeaponName(reason));
-
-		else
-			Log_Write("logs/kill_log.txt", "[%s] %s a tué %s (raison %d).", ReturnDate(), ReturnName(killerid), ReturnName(playerid), reason);
-
+	    if (0 <= reason <= 46) Log_Write("logs/kill_log.txt", "[%s] %s a tué %s (%s).", ReturnDate(), ReturnName(killerid), ReturnName(playerid), ReturnWeaponName(reason));
+		else Log_Write("logs/kill_log.txt", "[%s] %s a tué %s (raison %d).", ReturnDate(), ReturnName(killerid), ReturnName(playerid), reason);
 		if (reason == 50 && killerid != INVALID_PLAYER_ID)
 		    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a tué %s par hélicoptère à roues alignées.", ReturnName(killerid, 0), ReturnName(playerid, 0));
-
         if (reason == 29 && killerid != INVALID_PLAYER_ID && GetPlayerState(killerid) == PLAYER_STATE_DRIVER)
 		    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a tué %s par des tirs de pilote.", ReturnName(killerid, 0), ReturnName(playerid, 0));
 	}
@@ -4200,7 +4165,7 @@ new bool:BAR_CAN_BE_USED[MAX_PLAYERS]=false;
 new barbell_objects[sizeof barbell_pos];
 new dumbell_right_objects[sizeof dumb_bell_right_pos];
 new dumbell_left_objects[sizeof dumb_bell_left_pos];
-public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if (PlayerData[playerid][pTutorial] || PlayerData[playerid][pHospital] != -1 || !IsPlayerSpawned(playerid) || PlayerData[playerid][pInjured])
 	    return 0;
@@ -5231,7 +5196,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	}
 	return 1;
 }
-public PutInsideVehicle(playerid, vehicleid)
+script PutInsideVehicle(playerid, vehicleid)
 {
 	if (!PlayerData[playerid][pDrivingTest])
 	    return 0;
@@ -5239,7 +5204,7 @@ public PutInsideVehicle(playerid, vehicleid)
     PutPlayerInVehicle(playerid, vehicleid, 0);
     return 1;
 }
-public OnPlayerExitVehicle(playerid, vehicleid)
+script OnPlayerExitVehicle(playerid, vehicleid)
 {
     if (IsPlayerNPC(playerid)) return 1;
 	if (PlayerData[playerid][pTaxiDuty])
@@ -5274,7 +5239,7 @@ public OnPlayerExitVehicle(playerid, vehicleid)
 	}
 	return 1;
 }
-public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+script OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
     if (IsPlayerNPC(playerid))return 1;
 	if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED || GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CARRY || PlayerData[playerid][pInjured] || PlayerData[playerid][pFirstAid]) {
@@ -5296,7 +5261,7 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 	SeatbeltStatus[playerid] = 0;
 	return 1;
 }
-public OnPlayerEnterCheckpoint(playerid)
+script OnPlayerEnterCheckpoint(playerid)
 {
 	if (PlayerData[playerid][pTutorialStage])
 	{
@@ -6184,7 +6149,7 @@ public OnPlayerEnterCheckpoint(playerid)
 	}*/
 	return 1;
 }
-public jobchargement(playerid)
+script jobchargement(playerid)
 {
     new stockjobinfoid,moneyentrepriseid,facass = PlayerData[playerid][pFaction];
     if(livraisonjob[playerid] == 0)//bois
@@ -6500,10 +6465,10 @@ public jobchargement(playerid)
 	}
 	return 1;
 }
-public OnPlayerStateChange(playerid, newstate, oldstate)
+script OnPlayerStateChange(playerid, newstate, oldstate)
 {
     if (IsPlayerNPC(playerid)) return 1;
-	new vehicleid = GetPlayerVehicleID(playerid),facass = PlayerData[playerid][pFaction];
+	new vehicleid = GetPlayerVehicleID(playerid),facass = PlayerData[playerid][pFaction],reason;
 	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1)
 	{
 	    /*for (new i = 34; i < 39; i ++) {
@@ -6520,13 +6485,17 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	    ResetWeapons(playerid);
 	    ResetPlayer(playerid);
 	    PlayerData[playerid][pKilled] = 1;
+	    ReturnWeaponName(reason);
 	    if (!PlayerData[playerid][pInjured])
 		{
 	        PlayerData[playerid][pInjured] = 1;
+	        
 	        PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
 	    	PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 	    	GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 	    	GetPlayerFacingAngle(playerid, PlayerData[playerid][pPos][3]);
+			if (0 <= reason <= 8 || 10 <= reason <= 15)
+				SetTimerEx("TimerNotDeadYet",120000, false, "d", playerid);
 		}
 		else
 		{
@@ -6717,9 +6686,17 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         TrafiqueFilsTimer[playerid] = 0;
         ShowPlayerFooter(playerid, "Le trafique a été annulé.");
 	}
+	if(newstate == PLAYER_STATE_DRIVER) {
+	    pvehicleid[playerid] = GetPlayerVehicleID(playerid);
+	    pmodelid[playerid] = GetVehicleModel(pvehicleid[playerid]);
+	}
+	else {
+	    pvehicleid[playerid] = 0;
+	    pmodelid[playerid] = 0;
+	}
 	return 1;
 }
-public OnPlayerUpdate(playerid)
+script OnPlayerUpdate(playerid)
 {
 	new zping = GetPlayerPing(playerid),Float:animX, Float:animY, Float:animZ,anim = GetPlayerAnimationIndex(playerid),serveursettinginfoid;
 	if(zping >= 1500)
@@ -7095,7 +7072,7 @@ public OnPlayerUpdate(playerid)
 	}
 	return 1;
 }
-public OnPlayerConnect(playerid)
+script OnPlayerConnect(playerid)
 {
     //Actived[playerid] = 0;
     IsInBus[playerid] = 0;
@@ -7187,16 +7164,22 @@ public OnPlayerConnect(playerid)
 	AbleToPlay[playerid] = 0;
 	PlayersBowlingScore[playerid] = 0;
 	PinsLeft[1][playerid] = 0;
+	//discord chat
+	PlayerData[playerid][pDiscordChat] = 0;
+	//tunning
+    pvehicleid[playerid] = GetPlayerVehicleID(playerid);
+	pvehicleid[playerid] = 0;
+    pmodelid[playerid] = 0;
 	return 1;
 }
-public OnPlayerFinishedDownloading(playerid, virtualworld)
+script OnPlayerFinishedDownloading(playerid, virtualworld)
 {
     new str[128];
 	format(str, sizeof(str), "SELECT * FROM `blacklist` WHERE `Username` = '%s' OR `IP` = '%s'", ReturnName(playerid), PlayerData[playerid][pIP]);
 	mysql_tquery(g_iHandle, str, "OnQueryFinished", "dd", playerid, THREAD_BAN_LOOKUP);
 	return 1;
 }
-public OnPlayerDisconnect(playerid, reason)
+script OnPlayerDisconnect(playerid, reason)
 {
 	PlayerData[playerid][pLeaveTime] = GetTickCount();
 	format(PlayerData[playerid][pLeaveIP], 16, PlayerData[playerid][pIP]);
@@ -7210,6 +7193,7 @@ public OnPlayerDisconnect(playerid, reason)
 	ZavodIn[playerid] = 0;
 	ZavodIn1[playerid] = 0;
 	IsInBus[playerid] = 0;
+	PlayerData[playerid][pDiscordChat] = 0;
     new nameStr[MAX_PLAYER_NAME],string[96];
     GetPlayerName(playerid,nameStr,sizeof(nameStr));
     //DestroyTextDraws(playerid);
@@ -7278,7 +7262,7 @@ public OnPlayerDisconnect(playerid, reason)
 	organisateur[playerid] = 0;
     return 1;
 }
-public OnGameModeInit()
+script OnGameModeInit()
 {
 	//partie fs oubliger
 	SendRconCommand("unloadfs pool");
@@ -7897,7 +7881,7 @@ public OnGameModeInit()
 	SendRconCommand(rcon);
 	return 1;
 }
-public OnGameModeExit()
+script OnGameModeExit()
 {
     foreach (new i : Player) {SQL_SaveCharacter(i);}
     //job generator
@@ -7934,12 +7918,12 @@ public OnGameModeExit()
     TextDrawDestroy(ContestText);
 	return 1;
 }
-public WeatherRotator()
+script WeatherRotator()
 {
 	new index = random(sizeof(g_aWeatherRotations));
 	SetWeather(g_aWeatherRotations[index]);
 }
-public LotteryUpdate()
+script LotteryUpdate()
 {
 	new number = random(60) + 1,jackpot = random(10000) + 100,moneyentrepriseid,gouvernementinfoid;
 	foreach (new i : Player)
@@ -7989,7 +7973,7 @@ public LotteryUpdate()
 	return 1;
 }
 
-public OnPlayerRequestClass(playerid, classid)
+script OnPlayerRequestClass(playerid, classid)
 {
 	if (!PlayerData[playerid][pAccount] && !PlayerData[playerid][pKicked])
 	{
@@ -8003,7 +7987,7 @@ public OnPlayerRequestClass(playerid, classid)
 	}
 	return 1;
 }
-public OnPlayerSpawn(playerid)
+script OnPlayerSpawn(playerid)
 {
 	if (PlayerData[playerid][pHUD])
 	{
@@ -8072,6 +8056,7 @@ public OnPlayerSpawn(playerid)
 
 			TextDrawShowForPlayer(playerid, gServerTextdraws[2]);
 			SendClientMessage(playerid, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Vous êtes blessé vous avez besoin d'attention médical (/appeler 911).");
+            SendClientMessage(playerid, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Si vous êtes blessé par arme autre que qu'une arme a feu attendez 2 minutes.");
 
 			ApplyAnimation(playerid, "CRACK", "null", 4.0, 0, 0, 0, 1, 0, 1);
 			ApplyAnimation(playerid, "CRACK", "crckdeth4", 4.0, 0, 0, 0, 1, 0, 1);
@@ -8096,7 +8081,7 @@ public OnPlayerSpawn(playerid)
 	SendAnnonceMessage(playerid, "%s.", info_serveursettinginfo[serveursettinginfoid][settingmotd]);
 	return 1;
 }
-public OnPlayerCommandReceived(playerid, cmdtext[])
+script OnPlayerCommandReceived(playerid, cmdtext[])
 {
 	if (!SQL_IsLogged(playerid) || (PlayerData[playerid][pTutorial] > 0 || PlayerData[playerid][pTutorialStage] > 0 || PlayerData[playerid][pKilled] > 0 || PlayerData[playerid][pHospital] != -1))
 	    return 0;
@@ -8124,7 +8109,7 @@ public OnPlayerCommandReceived(playerid, cmdtext[])
 	AFKMin[playerid] = 0;
 	return 1;
 }
-public OnPlayerCommandTextEx(playerid, cmdtext[])
+script OnPlayerCommandTextEx(playerid, cmdtext[])
 {
     new factionid = PlayerData[playerid][pFaction];
 	//afk
@@ -8496,12 +8481,12 @@ public OnPlayerCommandTextEx(playerid, cmdtext[])
 	SendErrorMessage(playerid, "La commande est inexistante, tapez /aide.");
 	return 1;
 }
-public OnPlayerCommandPerformed(playerid, cmdtext[], success)
+script OnPlayerCommandPerformed(playerid, cmdtext[], success)
 {
     if(!success) success = OnPlayerCommandTextEx(playerid,cmdtext);
     return success;
 }
-public OnPlayerText(playerid, text[])
+script OnPlayerText(playerid, text[])
 {
     new facass = PlayerData[playerid][pFaction];
 	if ((!PlayerData[playerid][pLogged] && !PlayerData[playerid][pCharacter]) || PlayerData[playerid][pTutorial] > 0 || PlayerData[playerid][pTutorialStage] > 0 || PlayerData[playerid][pHospital] != -1)
@@ -8598,7 +8583,7 @@ public OnPlayerText(playerid, text[])
 					else
 					{
 						PlayerData[playerid][pPlaceAd] = 2;
-						SendClientMessage(playerid, COLOR_CYAN, "[OPÉRATEUR]:{FFFFFF} S'il vous plaît spécifier Votre publicité et nous allons l'annoncer.");
+						SendClientMessage(playerid, COLOR_CYAN, "[OPÉRATEUR]:{FFFFFF} S'il vous plaît spécifier Votre scriptité et nous allons l'annoncer.");
 					}
 				}
 			}
@@ -8618,7 +8603,7 @@ public OnPlayerText(playerid, text[])
 				    SetTimerEx("Advertise", 3000, false, "d", playerid);
                     PlayerData[playerid][pAdTime] = 120;
 				    strpack(PlayerData[playerid][pAdvertise], text, 128 char);
-        	        SendClientMessage(playerid, COLOR_CYAN, "[OPÉRATEUR]:{FFFFFF} Votre publicité va être diffusé sous peu.");
+        	        SendClientMessage(playerid, COLOR_CYAN, "[OPÉRATEUR]:{FFFFFF} Votre scriptité va être diffusé sous peu.");
 				    cmd_racrocher(playerid, "\1");
 				}
 			}
@@ -8646,7 +8631,7 @@ public OnPlayerText(playerid, text[])
 	AFKMin[playerid] = 0;
 	return 0;
 }
-public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
+script OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
 	if (response == EDIT_RESPONSE_FINAL)
 	{
@@ -8830,7 +8815,7 @@ public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y,
     }
 	return 1;
 }
-public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ)
+script OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ)
 {
 	if (response)
 	{
@@ -8912,7 +8897,7 @@ public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Fl
 	}
 	return 1;
 }
-public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
+script OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 {
 	if ((extraid >= MODEL_SELECTION_GLASSES && extraid <= MODEL_SELECTION_BANDANAS) && !PlayerData[playerid][pCreated] && !response)
 	{
@@ -9508,7 +9493,7 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 	return 1;
 }
 
-public ResprayCar(playerid, vehicleid, color)
+script ResprayCar(playerid, vehicleid, color)
 {
 	if (!PlayerData[playerid][pLogged] || GetNearestVehicle(playerid) != vehicleid)
 	    return 0;
@@ -9521,7 +9506,7 @@ public ResprayCar(playerid, vehicleid, color)
 	return 1;
 }
 
-public OnPlayerClickTextDraw(playerid, Text:clickedid)
+script OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
 	if(clickedid == AideMenu2)
 	{
@@ -9734,7 +9719,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	}
 	return 0;
 }
-public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
+script OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 {
 	if (!Dialog_Opened(playerid))
 	{
@@ -10628,7 +10613,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	}
 	return 1;
 }
-public StartRulet(playerid)
+script StartRulet(playerid)
 {
 	new rand,string[128];
 	rand = randomEx(0,36);
@@ -10657,7 +10642,7 @@ public StartRulet(playerid)
 	}
 	LastNumber[playerid] = rand;
 }
-public StopRulet(playerid)
+script StopRulet(playerid)
 {
     new string[128];
     format(string,sizeof(string),"%d",LastNumber[playerid]);
@@ -10698,7 +10683,7 @@ public StopRulet(playerid)
 	KillTimer(StartTimery[playerid]);
 	KillTimer(StopTimery[playerid]);
 }
-public CheckPlayer(playerid,number)
+script CheckPlayer(playerid,number)
 {
 	new str[128],count;
 	if(PlayerData[playerid][Number] == number)
@@ -10988,7 +10973,7 @@ public CheckPlayer(playerid,number)
  	}
  	for(new i;i<60;i++) {pBet[playerid][i] = 0;}
 }
-public ForkliftUpdate(playerid, vehid)
+script ForkliftUpdate(playerid, vehid)
 {
 	if (PlayerData[playerid][pJob] != JOB_UNLOADER || GetVehicleModel(vehid) != 530 || !IsPlayerInWarehouse(playerid) || !PlayerData[playerid][pLoading]) {
 	    return 0;
@@ -11003,7 +10988,7 @@ public ForkliftUpdate(playerid, vehid)
 	SendServerMessage(playerid, "Veuillez livréer la caisse sur le marqueur.");
 	return 1;
 }
-public OnPlayerEnterDynamicArea(playerid,areaid)
+script OnPlayerEnterDynamicArea(playerid,areaid)
 {
 	new string[128];
     if(areaid >= Sphere[0] && areaid <= Sphere[2] && Voting[playerid])
@@ -11019,7 +11004,7 @@ public OnPlayerEnterDynamicArea(playerid,areaid)
 	return 1;
 }
 //job meuble
-public CantidadTroncos()
+script CantidadTroncos()
 {
 	new stringi20[600],stockjobinfoid;
     new infostockboismeuble = info_stockjobinfo[stockjobinfoid][stockjobinfoboismeuble];
@@ -11027,7 +11012,7 @@ public CantidadTroncos()
     SetDynamicObjectMaterialText(stockinfoboismenuiserie, 0, stringi20, OBJECT_MATERIAL_SIZE_256x128,"Arial", 22, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 	return 1;
 }
-public Tronco(playerid)
+script Tronco(playerid)
 {
     new stockjobinfoid;
 	if(Cantidad <= 0) return 1;
@@ -11045,7 +11030,7 @@ public Tronco(playerid)
 	}
 	return 1;
 }
-public TerminarMueble(playerid)
+script TerminarMueble(playerid)
 {
 	if(IsPlayerAttachedObjectSlotUsed(playerid, 3)) RemovePlayerAttachedObject(playerid, 3);
 	TogglePlayerControllable(playerid,1);
@@ -11054,7 +11039,7 @@ public TerminarMueble(playerid)
 	SetPlayerCheckpoint(playerid, 1599.3877,-1812.6261,13.4234, 1.5);
 	SendClientMessage(playerid, -1, "{c7a24a}»{FFFFFF} Votre meuble est prêt à être livré.");
 }
-public moneyentrepriseload()
+script moneyentrepriseload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM banqueentreprise");
@@ -11080,7 +11065,7 @@ public moneyentrepriseload()
 	cache_delete(result);
 	print("Chargement argent_entreprise");
 }
-public moneyentreprisesave(moneyentrepriseid)
+script moneyentreprisesave(moneyentrepriseid)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE banqueentreprise SET mecanozone3=%d, mecanozone4=%d, livraisonzone1=%d, mafiazone1=%d, mafiazone4=%d, police=%d, fbi=%d, swat=%d, mairiels=%d, medecin=%d, fermier=%d, vendeur=%d, journaliste=%d, banque=%d WHERE id='1'",
@@ -11101,7 +11086,7 @@ public moneyentreprisesave(moneyentrepriseid)
     mysql_tquery(g_iHandle, query);
 }
 //camera helico
-public THERMALON( playerid, veh )
+script THERMALON( playerid, veh )
 {
 	TextDrawDestroy( crosshair[playerid] ); //Détruire le réticule
 	crosshair[playerid] = TextDrawCreate( 306.0, 218.0, "+" ); // Création de la croix
@@ -11115,7 +11100,7 @@ public THERMALON( playerid, veh )
 	playerveh[playerid] = veh; // Stockage de l'identification du véhicule dans une variable
 	return 1;
 }
-public THERMALOFF(playerid)
+script THERMALOFF(playerid)
 {
 	TextDrawDestroy( crosshair[playerid] ); // Détruire le réticule
 	new vehid = playerveh[playerid];
@@ -11126,7 +11111,7 @@ public THERMALOFF(playerid)
 	return 1;
 }
 //anti toit
-public NoRoof(playerid)
+script NoRoof(playerid)
 {
     new carid = GetPlayerSurfingVehicleID(playerid);
     if(carid != INVALID_VEHICLE_ID ) 
@@ -11152,13 +11137,13 @@ public NoRoof(playerid)
     }
     return 1;
 }
-public anim2(playerid)
+script anim2(playerid)
 {
         ApplyAnimation(playerid, "ped", "getup", 4.0, 0, 1, 0, 0, 0,0);
         return 1;
 }
 //gouvernement
-public gouvernementinfoload()
+script gouvernementinfoload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM gouvernement");
@@ -11183,7 +11168,7 @@ public gouvernementinfoload()
 	cache_delete(result);
 	print("Chargement argent_gouvernement");
 }
-public gouvernementinfosave(gouvernementinfoid)
+script gouvernementinfosave(gouvernementinfoid)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE gouvernement SET taxe=%d, taxerevenue=%d, taxeentreprise=%d, chomage=%d, subventionpolice=%d, subventionfbi=%d, subventionmedecin=%d, subventionswat=%d, aidebanque=%d, bizhouse=%d, maison=%d, magasin=%d WHERE id='1'",
@@ -11202,7 +11187,7 @@ public gouvernementinfosave(gouvernementinfoid)
     mysql_tquery(g_iHandle, query);
 }
 //cv des entreprise
-public cvfbiidload()
+script cvfbiidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvfbi");
@@ -11220,7 +11205,7 @@ public cvfbiidload()
 	}
 	cache_delete(result);
 }
-public cvjournalisteidload()
+script cvjournalisteidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvjournaliste");
@@ -11236,7 +11221,7 @@ public cvjournalisteidload()
 	}
 	cache_delete(result);
 }
-public cvurgentisteidload()
+script cvurgentisteidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvurgentiste");
@@ -11252,7 +11237,7 @@ public cvurgentisteidload()
 	}
 	cache_delete(result);
 }
-public cvlivraisonbizidload()
+script cvlivraisonbizidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvlivraisonbiz");
@@ -11268,7 +11253,7 @@ public cvlivraisonbizidload()
 	}
 	cache_delete(result);
 }
-public cvmairieidload()
+script cvmairieidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvmairie");
@@ -11284,7 +11269,7 @@ public cvmairieidload()
 	}
 	cache_delete(result);
 }
-public cvmecanozone3idload()
+script cvmecanozone3idload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvmecanozone3");
@@ -11300,7 +11285,7 @@ public cvmecanozone3idload()
 	}
 	cache_delete(result);
 }
-public cvmecanozone4idload()
+script cvmecanozone4idload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvmecanozone4");
@@ -11316,7 +11301,7 @@ public cvmecanozone4idload()
 	}
 	cache_delete(result);
 }
-public cvpoliceidload()
+script cvpoliceidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvpolice");
@@ -11332,7 +11317,7 @@ public cvpoliceidload()
 	}
 	cache_delete(result);
 }
-public cvswatidload()
+script cvswatidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvswat");
@@ -11348,7 +11333,7 @@ public cvswatidload()
 	}
 	cache_delete(result);
 }
-public cvtaxiidload()
+script cvtaxiidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvtaxi");
@@ -11364,7 +11349,7 @@ public cvtaxiidload()
 	}
 	cache_delete(result);
 }
-public cvvendeurrueidload()
+script cvvendeurrueidload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM cvvendeurrue");
@@ -11381,7 +11366,7 @@ public cvvendeurrueidload()
 	cache_delete(result);
 }
 //salaire mairie
-public salairemairie(rank)
+script salairemairie(rank)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairemairie SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
@@ -11402,7 +11387,7 @@ public salairemairie(rank)
 	    info_salairemairie[rank][salairemairie15]);
     mysql_tquery(g_iHandle, query);
 }
-public salairemairieload()
+script salairemairieload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairemairie");
@@ -11428,7 +11413,7 @@ public salairemairieload()
 	}
 	cache_delete(result);
 }
-public salairefbi(rank)
+script salairefbi(rank)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairefbi SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
@@ -11450,7 +11435,7 @@ public salairefbi(rank)
     mysql_tquery(g_iHandle, query);
 }
 
-public salairefbiload()
+script salairefbiload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairefbi");
@@ -11476,7 +11461,7 @@ public salairefbiload()
 	}
 	cache_delete(result);
 }
-public salairepolice(rank)
+script salairepolice(rank)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairepolice SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
@@ -11498,7 +11483,7 @@ public salairepolice(rank)
     mysql_tquery(g_iHandle, query);
 }
 
-public salairepoliceload()
+script salairepoliceload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairepolice");
@@ -11524,7 +11509,7 @@ public salairepoliceload()
 	}
 	cache_delete(result);
 }
-public salaireswat(rank)
+script salaireswat(rank)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE salaireswat SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
@@ -11546,7 +11531,7 @@ public salaireswat(rank)
     mysql_tquery(g_iHandle, query);
 }
 
-public salaireswatload()
+script salaireswatload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salaireswat");
@@ -11572,7 +11557,7 @@ public salaireswatload()
 	}
 	cache_delete(result);
 }
-public salaireurgentiste(rank)
+script salaireurgentiste(rank)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE salaireurgentiste SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
@@ -11594,7 +11579,7 @@ public salaireurgentiste(rank)
     mysql_tquery(g_iHandle, query);
 }
 
-public salaireurgentisteload()
+script salaireurgentisteload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salaireurgentiste");
@@ -11620,7 +11605,7 @@ public salaireurgentisteload()
 	}
 	cache_delete(result);
 }
-public jagawaa(playerid)
+script jagawaa(playerid)
 {
 	if(Showing[playerid] == 1)
 	{
@@ -11654,7 +11639,7 @@ public jagawaa(playerid)
 	}
 }
 //vehicule doamge
-public OnPlayerShootVehiclePart(playerid, weaponid, vehicleid,hittype)
+script OnPlayerShootVehiclePart(playerid, weaponid, vehicleid,hittype)
 {
     new Float:carhp;
     new veh = GetPlayerVehicleID(playerid);
@@ -11713,7 +11698,7 @@ public OnPlayerShootVehiclePart(playerid, weaponid, vehicleid,hittype)
 	return 1;
 }
 //limitation de vitesse sur un véhicule abimer
-public BadEngine()
+script BadEngine()
 {
     new veh, Float:spd[3], Float:hls;
     for(new i; i != GetMaxPlayers(); i++)
@@ -11746,7 +11731,7 @@ public BadEngine()
     }
 }
 //Usure du moteur
-public SystemPolomka()
+script SystemPolomka()
 {
 	new Float:carhealth, vehicle;
  	for(new i = 0; i < GetMaxPlayers(); i++)
@@ -11769,7 +11754,7 @@ public SystemPolomka()
  	}
  	return 1;
 }
-public OnPlayerPickUpDynamicPickup(playerid, pickupid)
+script OnPlayerPickUpDynamicPickup(playerid, pickupid)
 {
     //info maison pickup
     static houseid = -1,stringm[256],st[101];
@@ -12130,7 +12115,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 	PickupBowlingHelp(playerid,pickupid);
 	return 1;
 }
-public Gunjobanim(playerid)
+script Gunjobanim(playerid)
 {
 	RemovePlayerAttachedObject(playerid,3);
 	ApplyAnimation(playerid,"PED","IDLE_tired",4.1,0,1,1,0,1);
@@ -12142,7 +12127,7 @@ public Gunjobanim(playerid)
 	return 1;
 }
 //Job boucher
-public meattimer(playerid)
+script meattimer(playerid)
 {
 	ApplyAnimation(playerid,"CARRY","crry_prtial",4.1,0,1,1,1,1);
 	SetPlayerAttachedObject(playerid, 6, 2804, 5, 0.01, 0.1, 0.2, 100, 10, 85);
@@ -12153,7 +12138,7 @@ public meattimer(playerid)
 	return 1;
 }
 //bots a mettre dans vw et int 0 car sinon fonctionne pas
-public LoadActors()
+script LoadActors()
 {
     new rows,fields,temp[50];
     cache_get_data(rows, fields);
@@ -12172,20 +12157,20 @@ public LoadActors()
     return true;
 }
 //anti bunny
-public SlapPlayer(playerid)
+script SlapPlayer(playerid)
 {
     ApplyAnimation(playerid, "GHANDS", "gsign2", 4.1, 0, 0, 0, 0, 0, 1);
 	BunnyHop[playerid] = 0;
 	SendServerMessage(playerid,"Le Bunny Hopping {FF0000}est interdit.");
 	return 1;
 }
-public TimerBunnyHop(playerid)
+script TimerBunnyHop(playerid)
 {
 	BunnyHop[playerid] = 0;
 	return 1;
 }
 //job usine
-public UnivPub(playerid)
+script UnivPub(playerid)
 {
     ClearAnimations(playerid);
     DestroyDynamicObject(ZavodObj[playerid]);
@@ -12198,7 +12183,7 @@ public UnivPub(playerid)
     ZavodObj[playerid] = 0;
 }
 //job generator
-public ThreeSecondTimer()
+script ThreeSecondTimer()
 {
 	for(new i = 0; i < GetMaxPlayers(); i++)
 	{
@@ -12305,7 +12290,7 @@ public ThreeSecondTimer()
 	return 1;
 }
 //job petrolier
-public PreWoodLoaded(playerid)
+script PreWoodLoaded(playerid)
 {
     GameTextForPlayer(playerid, "~g~S'il-Vous-Plait, Attendez", 1000,3);
     RemovePlayerAttachedObject(playerid,6);
@@ -12317,7 +12302,7 @@ public PreWoodLoaded(playerid)
     return 1;
 }
 //job electricien
-public ElektrikbyLev(playerid)
+script ElektrikbyLev(playerid)
 {
     new x = random(3),salairejobinfoid,electricienprix = info_salairejobinfo[salairejobinfoid][salairejobinfoelectricien];
     switch(x)
@@ -12343,7 +12328,7 @@ public ElektrikbyLev(playerid)
 	ApplyAnimation(playerid,"CARRY","crry_prtial",4.0,0,0,0,0,0,1);
 }
 //stock job
-public stockjobinfoload()
+script stockjobinfoload()
 {
     new query[900];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM factorystock");
@@ -12383,7 +12368,7 @@ public stockjobinfoload()
 	}
 	cache_delete(result);
 }
-public stockjobinfosave(stockjobinfoid)
+script stockjobinfosave(stockjobinfoid)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE `factorystock` SET `bois`='%d', `viande`='%d', `meuble`='%d', `central1`='%d', `central2`='%d', `central3`='%d', `central4`='%d', `central5`='%d', `electronic`='%d', `petrol`='%d', `essencegenerator`=%d, `boismeuble`=%d, `magasinstock`=%d, `dockstock`=%d, `manutentionnairestock`=%d, `caristestock`=%d, `minerstock`=%d, `armesstock`=%d,`frontbumper`=%d, rearbumper=%d, roof=%d, hood=%d, spoiler=%d, sideskirt1=%d, sideskirt2=%d, wheel=%d, hydrolic=%d, roue=%d, caro=%d WHERE id='1'",
@@ -12419,7 +12404,7 @@ public stockjobinfosave(stockjobinfoid)
     mysql_tquery(g_iHandle, query);
 }
 //slot machine
-public UpdateMachineTD(playerid)
+script UpdateMachineTD(playerid)
 {
 	static slot[3];
 	new string[64],count;
@@ -12462,7 +12447,7 @@ public UpdateMachineTD(playerid)
 	}
 	return 1;
 }
-public slotmachineload()
+script slotmachineload()
 {
     new query[600],string2[64];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM slotmachine");
@@ -12487,7 +12472,7 @@ public slotmachineload()
 	cache_delete(result);
 }
 //video pocker
-public OnCasinoStart(playerid, machineid)
+script OnCasinoStart(playerid, machineid)
 {
 	new _type,stockjobinfoid;
 	if (GetMachineType(machineid, _type))
@@ -12512,18 +12497,18 @@ public OnCasinoStart(playerid, machineid)
 	}
 	return 1;
 }
-public OnCasinoEnd(playerid, machineid)
+script OnCasinoEnd(playerid, machineid)
 {
 	SendClientMessage(playerid, 0xFF9900AA, "[CASINO]{FFFFFF} Au revoir, Merci d'avoir jouer sur cette machine!");
 	AFKMin[playerid] = 0;
 }
-public OnCasinoMessage(playerid, machineid, message[])
+script OnCasinoMessage(playerid, machineid, message[])
 {
 	new _msg[128];
 	format(_msg, 128, "[CASINO] %s", message);
 	SendClientMessage(playerid, 0xFF9900AA, _msg);
 }
-public OnCasinoMoney(playerid, machineid, amount, result)
+script OnCasinoMoney(playerid, machineid, amount, result)
 {
 	new message[128],count;
 	if (result == CASINO_MONEY_CHARGE)
@@ -12570,7 +12555,7 @@ public OnCasinoMoney(playerid, machineid, amount, result)
 	SendClientMessage(playerid, 0xFF9900AA, message);
 }
 //salaire des job
-public salairejobinfoload()
+script salairejobinfoload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairejob");
@@ -12593,7 +12578,7 @@ public salairejobinfoload()
 	}
 	cache_delete(result);
 }
-public salairejobinfosave(salairejobinfoid)
+script salairejobinfosave(salairejobinfoid)
 {
 	new query[900];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairejob SET salairecariste=%d, salairemanutentionnaire=%d, salairedock=%d, salaireminer=%d, salaireusineelectronic=%d, salairebucheron=%d, salairemenuisier=%d, salairegenerateur=%d, salaireelectricien=%d, salairearme=%d, salairepetrolier=%d, salaireboucher=%d WHERE id='1'",
@@ -12612,7 +12597,7 @@ public salairejobinfosave(salairejobinfoid)
     mysql_tquery(g_iHandle, query);
 }
 
-public tuningload()
+script tuningload()
 {
     new query[750],VEH;
     foreach(Player, i){VEH = Car_GetRealID(i);}
@@ -12700,7 +12685,7 @@ public tuningload()
 	cache_delete(result);
 	print("Chargement Tuning");
 }
-public tuningsave(tuningid)
+script tuningsave(tuningid)
 {
     new query[1500];
     mysql_format(g_iHandle, query, sizeof(query),"INSERT INTO tuning SET vehicule=%d,FrontBumperID=%d\
@@ -12771,7 +12756,7 @@ public tuningsave(tuningid)
 	Tuning[tuningid][EditingPart]);
     mysql_tquery(g_iHandle, query);
 }
-public GetKeys(playerid)
+script GetKeys(playerid)
 {
 	new Keys, ud;
 	Tuning[playerid][AddSpeed] = 0.005;
@@ -12931,11 +12916,11 @@ public GetKeys(playerid)
     return 1;
 }
 //afk
-public AFK()
+script AFK()
 {
 	new Float:x,Float:y,Float:z;
  	new serveursettinginfoid;
-	for(new i=0;i<MAX_PLAYERS;i++)
+	foreach (new i : Player)
 	{
 	    if(IsPlayerConnected(i))
 	    {
@@ -12967,7 +12952,7 @@ public AFK()
 	return 1;
 }
 //dynamite boom
-public DynamiteTime(){
+script DynamiteTime(){
     CreateExplosion(Float:dx, Float:dy, Float:dz, 0, 15.0);
     CreateExplosion(Float:dx, Float:dy, Float:dz, 1, 15.0);
     CreateExplosion(Float:dx+3.5, Float:dy+3.5, Float:dz+3.5, 1, 15.0);
@@ -12977,7 +12962,7 @@ public DynamiteTime(){
     DestroyDynamicObject(dynamiteobject);
 }
 //bank
-public startonboom(playerid)
+script startonboom(playerid)
 {
     new Float:oobjx, Float:oobjy, Float:oobjz,Float:ooobjx, Float:ooobjy, Float:ooobjz,factionid = PlayerData[playerid][pFaction];
     if(IsPlayerInRangeOfPoint(playerid,30.0,1435.4064,-981.1826,983.6462))
@@ -13002,14 +12987,14 @@ public startonboom(playerid)
     DestroyDynamicObject(objectbank[playerid]);
     SetTimerEx("vaultdoors",300000,0,"d",playerid);
 }
-public vaultdoors(playerid)
+script vaultdoors(playerid)
 {
 	vaultdoor = CreateDynamicObject(2634, 1435.35193, -980.29688, 984.21887, 0.00000, 0.00000, 179.04001);
 	portevol = 1;
 	SetTimer("volok",3600000,false);
 }
-public volok(){portevol = 0; print("Vol de banque mis a zero");}
-public remplissagesac(playerid)
+script volok(){portevol = 0; print("Vol de banque mis a zero");}
+script remplissagesac(playerid)
 {
     if (ReturnHealth(playerid) < 0) return SendServerMessage(playerid,"Vous êtes mort donc le braquage s'arrete la."); start1[playerid] = 0;
 	new moneyentrepriseid;
@@ -13025,7 +13010,7 @@ public remplissagesac(playerid)
 	return 1;
 }
 //vole veh
-public TrafiqueFils(playerid)
+script TrafiqueFils(playerid)
 {
 	if(TrafiqueFilsTimer[playerid] > 1)
 	{
@@ -13045,7 +13030,7 @@ public TrafiqueFils(playerid)
    		TrafiqueFilsTimer[playerid] = 0;
 	}
 }
-public OnPlayerTargetActor(playerid, newtarget, oldtarget)
+script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 {
     new facass = PlayerData[playerid][pFaction],moneyentrepriseid;
     if (newtarget == missionactor)
@@ -13209,7 +13194,7 @@ public OnPlayerTargetActor(playerid, newtarget, oldtarget)
     if (oldtarget != INVALID_ACTOR_ID) {ClearActorAnimations(oldtarget);}
 	return 1;
 }
-public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z)
+script OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z)
 {
     if(GetVehicleDistanceFromPoint(vehicleid, new_x, new_y, new_z) > 3)
     {
@@ -13228,7 +13213,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 }
 //VOTAGE
 forward OnPlayerVoting(playerid);
-public OnPlayerVoting(playerid)
+script OnPlayerVoting(playerid)
 {
     if(cache_get_row_count()) return SendErrorMessage(playerid, "Vous avez déja voté");
     ApplyAnimation(playerid, "CRIB", "CRIB_Use_Switch", 4.0, 0, 0, 0, 0, 0);
@@ -13238,7 +13223,7 @@ public OnPlayerVoting(playerid)
 	return 1;
 }
 forward LoadCandidates();
-public LoadCandidates()
+script LoadCandidates()
 {
     NumberOfCandidates = cache_get_row_count();
     if(NumberOfCandidates > MAX_CANDIDATES) NumberOfCandidates = MAX_CANDIDATES;
@@ -13248,7 +13233,7 @@ public LoadCandidates()
     	Votes[i] = cache_get_field_content_int(i, "Votes", g_iHandle);
 	}
 }
-public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float: amount, weaponid, bodypart)
+script OnPlayerGiveDamageActor(playerid, damaged_actorid, Float: amount, weaponid, bodypart)
 {
     new attacker[MAX_PLAYER_NAME],weaponname[24];
     GetPlayerName(playerid, attacker, sizeof (attacker));
@@ -13257,7 +13242,7 @@ public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float: amount, weaponi
     return 1;
 }
 //baterie telephone
-public Timephone()
+script Timephone()
 {
     foreach(Player, i)
     {
@@ -13281,7 +13266,7 @@ public Timephone()
     return 1;
 }
 //airbreak
-public OnPlayerAirbreak(playerid)
+script OnPlayerAirbreak(playerid)
 {
     if (IsPlayerInAnyVehicle(playerid))
     {
@@ -13298,7 +13283,7 @@ public OnPlayerAirbreak(playerid)
     return 1;
 }
 //bot command
-public commandlunch(playerid)
+script commandlunch(playerid)
 {
     static Float:x,Float:y,Float:z;
 	new commando,rand = random(3),count;
@@ -13330,7 +13315,7 @@ public commandlunch(playerid)
 		}
 	}
 }
-public commandlunchkevlar(playerid)
+script commandlunchkevlar(playerid)
 {
     static Float:x,Float:y,Float:z;
 	new kev,rand = random(3),count;
@@ -13362,7 +13347,7 @@ public commandlunchkevlar(playerid)
 	kev = DropItem("Gilet par balles","Commande",19142, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
 }
-public commandlunchsoins(playerid)
+script commandlunchsoins(playerid)
 {
     static Float:x,Float:y,Float:z;
 	new kev,rand = random(3),count;
@@ -13394,7 +13379,7 @@ public commandlunchsoins(playerid)
 	kev = DropItem("Trousse de soin","Commande",1580, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
 }
-public commandlunchpaint(playerid)
+script commandlunchpaint(playerid)
 {
     static Float:x,Float:y,Float:z;
 	new kev,rand = random(3),count;
@@ -13425,7 +13410,7 @@ public commandlunchpaint(playerid)
 	kev = DropItem("Bombe de peinture","Commande",365, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
 }
-public commandlunchoutils(playerid)
+script commandlunchoutils(playerid)
 {
     static Float:x,Float:y,Float:z;
 	new kev,rand = random(3),count;
@@ -13456,7 +13441,7 @@ public commandlunchoutils(playerid)
 	kev = DropItem("Boite a outils","Commande",19921, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
 }
-public commandlunchnos(playerid)
+script commandlunchnos(playerid)
 {
     static Float:x,Float:y,Float:z;
 	new kev,rand = random(3),count;
@@ -13487,7 +13472,7 @@ public commandlunchnos(playerid)
 	kev = DropItem("Bonbonne de NOS","Commande",1010, 1,x,y,z+0.1, 0,0);
 	DroppedItems[kev][droppedQuantity] = 10;
 }
-public OnActorStreamIn(actorid, forplayerid)
+script OnActorStreamIn(actorid, forplayerid)
 {
 	SetActorInvulnerable(actorid, true);
 	//ResyncActor(actorid);
@@ -13495,7 +13480,7 @@ public OnActorStreamIn(actorid, forplayerid)
     return 1;
 }
 //bowling
-public PinsWaitTimer(playerid)
+script PinsWaitTimer(playerid)
 {
     new Float:x,Float:y,Float:z;
     for(new pin=0; pin<=MAX_PINS; pin++)
@@ -13508,8 +13493,8 @@ public PinsWaitTimer(playerid)
 		}
 	}
 }
-public PinsWaitEnd(playerid) {BowlingStatus[playerid]=F_BOWLING_THROW;}
-public BowlingCountDown(playerid)
+script PinsWaitEnd(playerid) {BowlingStatus[playerid]=F_BOWLING_THROW;}
+script BowlingCountDown(playerid)
 {
 
 	        BowlingSeconds[playerid] -= 1;
@@ -13596,13 +13581,13 @@ public BowlingCountDown(playerid)
 			}
 			return 1;
 }
-public BallGoingTimer(playerid)
+script BallGoingTimer(playerid)
 {
     MoveBall(playerid);
     BallRun[playerid] = SetTimerEx("BallRunTimer",BALL_RUN_TIME,false,"d",playerid);
 	return 1;
 }
-public BallRunTimer(playerid)
+script BallRunTimer(playerid)
 {
 	if(BowlingStatus[playerid]==F_BOWLING_THROW)
     {
@@ -13619,7 +13604,7 @@ public BallRunTimer(playerid)
 	return 1;
 }
 //serveur setting
-public serveursettinginfoload()
+script serveursettinginfoload()
 {
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM serveursetting");
@@ -13641,7 +13626,7 @@ public serveursettinginfoload()
 	}
 	cache_delete(result);
 }
-public serveursettinginfosave(serveursettinginfoid)
+script serveursettinginfosave(serveursettinginfoid)
 {
 	new query[600];
     mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d WHERE id='1'",
@@ -13658,7 +13643,7 @@ public serveursettinginfosave(serveursettinginfoid)
     mysql_tquery(g_iHandle, query);
 }
 //caisse
-public caisse_Load()
+script caisse_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
@@ -13678,7 +13663,7 @@ public caisse_Load()
 	}
 	return 1;
 }
-public OncaisseCreated(caisseid)
+script OncaisseCreated(caisseid)
 {
 	if (caisseid == -1 || !caisseMachineData[caisseid][caisseExists])
 	    return 0;
@@ -13687,7 +13672,7 @@ public OncaisseCreated(caisseid)
 	return 1;
 }
 //gym
-public DUMB_START(playerid)
+script DUMB_START(playerid)
 {
 	BAR_CAN_BE_USED[playerid]=true;
 	SetPlayerAttachedObject(playerid,5, 3072, 5);//left hand
@@ -13700,7 +13685,7 @@ public DUMB_START(playerid)
 	TextDrawShowForPlayer( playerid, gym_repslabel[playerid]);
 	PLAYER_DUMB_TIMER[playerid]=SetTimerEx( "GYM_CHECK", 500,true,"i", playerid );
 }
-public BIKE_START(playerid)
+script BIKE_START(playerid)
 {
 	BAR_CAN_BE_USED[playerid]=true;
 	ApplyAnimation( playerid, "GYMNASIUM", "bike_start", 1, 1, 0, 0, 1, 0, 1);
@@ -13710,7 +13695,7 @@ public BIKE_START(playerid)
 	TextDrawShowForPlayer( playerid, gym_deslabel[playerid]);
 	PLAYER_BIKE_TIMER[playerid]=SetTimerEx( "GYM_CHECK", 500, 1, "i", playerid );
 }
-public TREAM_START(playerid)
+script TREAM_START(playerid)
 {
 	BAR_CAN_BE_USED[playerid]=true;
 	ApplyAnimation( playerid, "GYMNASIUM", "gym_tread_sprint", 1, 1, 0, 0, 1, 0, 1);
@@ -13720,7 +13705,7 @@ public TREAM_START(playerid)
 	TextDrawShowForPlayer( playerid, gym_deslabel[playerid]);
 	PLAYER_TREAD_TIMER[playerid]=SetTimerEx( "GYM_CHECK", 500, 1, "i", playerid );
 }
-public BENCH_START(playerid)
+script BENCH_START(playerid)
 {
 	BAR_CAN_BE_USED[playerid]=true;
 	SetPlayerAttachedObject(playerid, 5, 2913, 6);
@@ -13731,7 +13716,7 @@ public BENCH_START(playerid)
 	TextDrawShowForPlayer( playerid, gym_deslabel[playerid]);
 	PLAYER_BENCH_TIMER[playerid]=SetTimerEx( "GYM_CHECK", 500,true,"i", playerid );
 }
-public GYM_CHECK(playerid)
+script GYM_CHECK(playerid)
 {
 	if(PLAYER_INTREAM[playerid]==true)
 	{TREAM_CHECK(playerid);}
@@ -13783,12 +13768,12 @@ BENCH_CHECK(playerid)
 		SetTimerEx( "BENCH_SET_AIMSTOP",2000, false, "i", playerid);
 	}
 }
-public DUMB_SET_AIMSTOP(playerid)
+script DUMB_SET_AIMSTOP(playerid)
 {
 	ApplyAnimation( playerid, "freeweights", "gym_free_down", 1, 0, 0, 0, 1, 0, 1 );
 	UpdateAntoineBar(player_gym_progress[playerid],playerid);
 }
-public BENCH_SET_AIMSTOP(playerid)
+script BENCH_SET_AIMSTOP(playerid)
 {
 	ApplyAnimation( playerid, "benchpress", "gym_bp_down", 1, 0, 0, 0, 1, 0, 1 );
 	UpdateAntoineBar(player_gym_progress[playerid],playerid);
@@ -13864,7 +13849,7 @@ GetOffBIKE(playerid)
 	TextDrawHideForPlayer(playerid,gym_deslabel[playerid]);
 	SetTimerEx( "REST_PLAYER", 2000, false, "i", playerid);
 }
-public REST_PLAYER(playerid)
+script REST_PLAYER(playerid)
 {
 	ClearAnimations(playerid,1);
 	SetCameraBehindPlayer(playerid);
@@ -13897,7 +13882,7 @@ public REST_PLAYER(playerid)
     	RemovePlayerAttachedObject(playerid,6);
   	}
 }
-public starter(playerid)
+script starter(playerid)
 {
     new vehicleid = GetPlayerVehicleID(playerid);
 	switch (GetEngineStatus(vehicleid))
@@ -13910,23 +13895,23 @@ public starter(playerid)
 	}
 }
 //horse
-public GameTimeTimer2()
+script GameTimeTimer2()
 {
-	for(new i = 0; i < MAX_PLAYERS; i++)
+	foreach (new i : Player)
  	{
 		if(IsPlayerInPMU(i))
 		{
 		    SendServerMessage(i, "La course va commencé dans 15 minutes! Plus aucun pari ne peut etre accepté!");
-			new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
-	 		GetPlayerPos(i, X[i], Y[i], Z[i]);
-			PlayerPlaySound(i, 5410, X[i], Y[i], Z[i]);
+			new Float:X, Float:Y, Float:Z;
+	 		GetPlayerPos(i, X, Y, Z);
+			PlayerPlaySound(i, 5410, X, Y, Z);
 		}
 	}
 	RaceStarted = 1;
 	Prepared = 1;
 	SetTimer("HorseStartTimer", 900000,0);
 }
-public GameTimeTimeTimer2()
+script GameTimeTimeTimer2()
 {
 	HorseCD = 3;
 	HorseStop = 0;
@@ -14001,19 +13986,19 @@ public GameTimeTimeTimer2()
 
 	HorseAnimCount = 1;
 	Prepared = 0;
-	for(new i = 0; i < MAX_PLAYERS; i++)
+	foreach (new i : Player)
  	{
 		if(IsPlayerInPMU(i))
 		{
-			new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
- 			GetPlayerPos(i, X[i], Y[i], Z[i]);
-			PlayerPlaySound(i, 5401, X[i], Y[i], Z[i]);
+			new Float:X,Float:Y,Float:Z;
+ 			GetPlayerPos(i,X,Y,Z);
+			PlayerPlaySound(i, 5401,X,Y,Z);
 			SendServerMessage(i,"1 heure avant la course! Vous pouvez pariez avec /parier sur votre cheval !");
 		}
 	}
 	SetTimer("GameTimeTimer2", 3600000, 0);
 }
-public HorseStartTimer()
+script HorseStartTimer()
 {
 	if (HorseCD > 0)
 	{
@@ -14021,7 +14006,7 @@ public HorseStartTimer()
 		format(string, sizeof(string), "%d",HorseCD);
 		if (Horsemsg == 1)
 		{
-			for(new i = 0; i < MAX_PLAYERS; i++)
+			foreach (new i : Player)
  			{
 				if(IsPlayerInPMU(i))
 				{SendServerMessage(i, "La course a commencer /regardercourse pour regarder la course!");}
@@ -14029,13 +14014,13 @@ public HorseStartTimer()
 			Horsemsg = 0;
 		}
 		HorseCD -= 1;
-		for(new i = 0; i < MAX_PLAYERS; i++)
+		foreach (new i : Player)
 		{
 			if(IsPlayerInPMU(i))
 			{
-				new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
-				GetPlayerPos(i, X[i], Y[i], Z[i]);
-				PlayerPlaySound(i, 3200, X[i], Y[i], Z[i]);
+				new Float:X, Float:Y, Float:Z;
+				GetPlayerPos(i, X, Y, Z);
+				PlayerPlaySound(i, 3200, X, Y, Z);
 				TextDrawColor(CDTextDraw,0xff0000ff);
 				TextDrawSetString(CDTextDraw, string);
 			}
@@ -14051,9 +14036,9 @@ public HorseStartTimer()
 			{
         		if (Watching[i] == 1)
         		{
-		    		new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
-		    		GetPlayerPos(i, X[i], Y[i], Z[i]);
-					PlayerPlaySound(i, 3201, X[i], Y[i], Z[i]);
+					new Float:X, Float:Y, Float:Z;
+					GetPlayerPos(i, X, Y, Z);
+					PlayerPlaySound(i, 3201, X, Y, Z);
 					TextDrawColor(CDTextDraw,0x00ff00ff);
 					TextDrawSetString(CDTextDraw, "Go!");
 				}
@@ -14065,7 +14050,7 @@ public HorseStartTimer()
 	SetTimer("HorseStartHideTimer", 1000, 0);
 	return 1;
 }
-public HorseAnimTimer()
+script HorseAnimTimer()
 {
 	new string[12], HorseWon,count;
  	format(string, sizeof(string), "LD_OTB:hrs%i", HorseAnimCount);
@@ -14166,9 +14151,9 @@ public HorseAnimTimer()
 				{ SendServerMessage(i,"Cheval #4 a gagner!"); }
   				if (BetOnHorse[i] == HorseWon)
   				{
-					new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
-			 		GetPlayerPos(i, X[i], Y[i], Z[i]);
-					PlayerPlaySound(i, 5448, X[i], Y[i], Z[i]);
+					new Float:X, Float:Y, Float:Z;
+					GetPlayerPos(i, X, Y, Z);
+					PlayerPlaySound(i, 5448, X, Y, Z);
 		        	SendServerMessage(i,"Vous avez gagné! Votre argent est doublez!");
 					GiveMoney(i, MoneyBet[i] * 2);
 					for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][12] == 1) {
@@ -14187,9 +14172,9 @@ public HorseAnimTimer()
 				else if (MoneyBet[i] != 0 && BetOnHorse[i] != HorseWon)
 				{
   					SendServerMessage(i,"Vous n'avez pas gagné.");
-					new Float:X[MAX_PLAYERS], Float:Y[MAX_PLAYERS], Float:Z[MAX_PLAYERS];
-				 	GetPlayerPos(i, X[i], Y[i], Z[i]);
-					PlayerPlaySound(i, 5453, X[i], Y[i], Z[i]);
+					new Float:X, Float:Y, Float:Z;
+					GetPlayerPos(i, X, Y, Z);
+					PlayerPlaySound(i, 5453, X, Y, Z);
 				}
 				if (Watching[i] == 1) {TogglePlayerControllable(i, 1);}
 				MoneyBet[i] = 0;
@@ -14201,9 +14186,9 @@ public HorseAnimTimer()
 		SetTimer("GameTimeTimeTimer2", 3600000, 0);
 	}
 }
-public HorseStartHideTimer() {TextDrawHideForAll(CDTextDraw);}
+script HorseStartHideTimer() {TextDrawHideForAll(CDTextDraw);}
 //lowrider
-public SendNoteForPlayer(playerid) {
+script SendNoteForPlayer(playerid) {
 	new array[128],earned,note,randomcamera;
 	PlayerPlaySound(playerid, 1130, 0.0, 0.0, 10.0);
 	TextDrawHideForPlayer(playerid, ContestText);
@@ -14264,7 +14249,7 @@ public SendNoteForPlayer(playerid) {
 	TextDrawShowForPlayer(playerid, ContestText);
 	return 1;
 }
-public OnPlayerShootDynamicObject(playerid, weaponid, objectid, Float:x, Float:y, Float:z)
+script OnPlayerShootDynamicObject(playerid, weaponid, objectid, Float:x, Float:y, Float:z)
 {
  	if((0 <= weaponid <= 9) && Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_MODEL_ID) == 2942)
 	{
@@ -14290,7 +14275,7 @@ public OnPlayerShootDynamicObject(playerid, weaponid, objectid, Float:x, Float:y
 	return 1;
 }
 //blackjack
-public blackjackstart1(playerid)
+script blackjackstart1(playerid)
 {
     new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
     SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
@@ -14471,7 +14456,7 @@ public blackjackstart1(playerid)
 	}
 	return 1;
 }
-public blackjackstart2(playerid)
+script blackjackstart2(playerid)
 {
     new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
     SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
@@ -14652,7 +14637,7 @@ public blackjackstart2(playerid)
 	}
 	return 1;
 }
-public blackjackstart3(playerid)
+script blackjackstart3(playerid)
 {
     new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
     SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
@@ -14697,7 +14682,7 @@ public blackjackstart3(playerid)
 	}
     return 1;
 }
-public blackjackcarte1(playerid)
+script blackjackcarte1(playerid)
 {
     switch (random(13))
 	{
@@ -14873,7 +14858,7 @@ public blackjackcarte1(playerid)
 	}
 	return 1;
 }
-public blackjackcarte2(playerid)
+script blackjackcarte2(playerid)
 {
     switch (random(13))
 	{
@@ -15049,7 +15034,7 @@ public blackjackcarte2(playerid)
 	}
 	return 1;
 }
-public blackjackcarte3(playerid)
+script blackjackcarte3(playerid)
 {
     switch (random(13))
 	{
@@ -15225,7 +15210,7 @@ public blackjackcarte3(playerid)
 	}
 	return 1;
 }
-public blackjackcroupier(playerid)
+script blackjackcroupier(playerid)
 {
 	BlackJack[playerid][dealercarte1] = random(10);
 	new blackjackcroupierpoint = BlackJack[playerid][dealercarte2] = random(10) + BlackJack[playerid][dealercarte1];
@@ -15294,7 +15279,7 @@ public blackjackcroupier(playerid)
 	}
 	return 1;
 }
-public finducroupier(playerid)
+script finducroupier(playerid)
 {
     PlayerTextDrawHide(playerid,BlackJackTD[1][playerid]);
 	PlayerTextDrawHide(playerid,BlackJackTD[2][playerid]);
@@ -15313,7 +15298,7 @@ public finducroupier(playerid)
 	return 1;
 }
 //autre fonction utilise du callback include A METTRE A LA FIN DU GM
-public OnPlayerHoldingKey(playerid,keys)
+script OnPlayerHoldingKey(playerid,keys)
 {
 	if ((keys ==  KEY_FIRE) && GetPlayerWeapon(playerid) == 42)
 	{
@@ -15352,26 +15337,441 @@ public OnPlayerHoldingKey(playerid,keys)
 	}
 	return 1;
 }
-public OnPlayerPause(playerid)
+script OnPlayerPause(playerid)
 {
     //afk
     AFKMin[playerid] = 0;
 	return 1;
 }
-public OnPlayerResume(playerid,time)
+script OnPlayerResume(playerid,time)
 {
 	SendServerMessage(playerid,"Anti AFK remis à 0.");
 	AFKMin[playerid] = 0;
 	return 1;
 }
-public OnPlayerStartBurn(playerid)
+script OnPlayerStartBurn(playerid)
 {
     SetPlayerAttachedObject(playerid, 9, 18689, 2, 0.101, -0.0, 0.0, 4.50, 84.60, 83.7, 1, 1, 1);
     return 1;
 }
-public OnPlayerStopBurn(playerid)
+script OnPlayerStopBurn(playerid)
 {
     RemovePlayerAttachedObject(playerid, 9);
+	return 1;
+}
+script SendAdminAlert(color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 8)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 8); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit LOAD.S.pri 8
+		#emit ADD.C 4
+		#emit PUSH.pri
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+        foreach (new i : Player)
+		{
+			if (PlayerData[i][pTester] >= 1 || PlayerData[i][pAdmin] > 0){
+  				SendClientMessage(i, color, string);
+			}
+		}
+		return 1;
+	}
+	foreach (new i : Player)
+	{
+		if (PlayerData[i][pAdmin] >= 1) {
+			SendClientMessage(i, color, str);
+		}
+	}
+	return 1;
+}
+script SendNearbyMessage(playerid, Float:radius, color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 16)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 16); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit LOAD.S.pri 8
+		#emit CONST.alt 4
+		#emit SUB
+		#emit PUSH.pri
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+        foreach (new i : Player)
+		{
+			if (IsPlayerNearPlayer(i, playerid, radius)) {
+  				SendClientMessage(i, color, string);
+			}
+		}
+		return 1;
+	}
+	foreach (new i : Player)
+	{
+		if (IsPlayerNearPlayer(i, playerid, radius)) {
+			SendClientMessage(i, color, str);
+		}
+	}
+	return 1;
+}
+script SendFactionAlert(color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 8)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 8); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit LOAD.S.pri 8
+		#emit ADD.C 4
+		#emit PUSH.pri
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+        foreach (new i : Player)
+		{
+			if (PlayerData[i][pAdmin] >= 1 || PlayerData[i][pFactionMod] > 0) {
+  				SendClientMessage(i, color, string);
+			}
+		}
+		return 1;
+	}
+	foreach (new i : Player)
+	{
+		if (PlayerData[i][pAdmin] >= 1 || PlayerData[i][pFactionMod] > 0) {
+			SendClientMessage(i, color, str);
+		}
+	}
+	return 1;
+}
+script SendTesterMessage(color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 8)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 8); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit LOAD.S.pri 8
+		#emit ADD.C 4
+		#emit PUSH.pri
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+        foreach (new i : Player)
+		{
+			if ((!PlayerData[i][pDisableTester]) && (PlayerData[i][pTester] >= 1 || PlayerData[i][pAdmin] > 0)) {
+  				SendClientMessage(i, color, string);
+			}
+		}
+		return 1;
+	}
+	foreach (new i : Player)
+	{
+		if ((!PlayerData[i][pDisableTester]) && (PlayerData[i][pTester] >= 1 || PlayerData[i][pAdmin] > 0)) {
+			SendClientMessage(i, color, str);
+		}
+	}
+	return 1;
+}
+script SendHelperMessage(color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 8)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 8); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit LOAD.S.pri 8
+		#emit ADD.C 4
+		#emit PUSH.pri
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+        foreach (new i : Player)
+		{
+  				SendClientMessage(i, color, string);
+		}
+		return 1;
+	}
+	foreach (new i : Player)
+	{
+			SendClientMessage(i, color, str);
+	}
+	return 1;
+}
+script SendFactionMessage(factionid, color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 12)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 12); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit PUSH.C args
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+		foreach (new i : Player) if (PlayerData[i][pFaction] == factionid && !PlayerData[i][pDisableFaction]) {
+		    SendClientMessage(i, color, string);
+		}
+		return 1;
+	}
+	foreach (new i : Player) if (PlayerData[i][pFaction] == factionid && !PlayerData[i][pDisableFaction]) {
+ 		SendClientMessage(i, color, str);
+	}
+	return 1;
+}
+script SendJobMessage(jobid, color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 12)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 12); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit PUSH.C args
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+		foreach (new i : Player) if (PlayerData[i][pJob] == jobid) {
+		    SendClientMessage(i, color, string);
+		}
+		return 1;
+	}
+	foreach (new i : Player) if (PlayerData[i][pJob] == jobid) {
+ 		SendClientMessage(i, color, str);
+	}
+	return 1;
+}
+script SendVehicleMessage(vehicleid, color, const str[], {Float,_}:...)
+{
+	static args, start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 12)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 12); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit PUSH.C args
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+		foreach (new i : Player) if (GetPlayerVehicleID(i) == vehicleid) {
+		    SendClientMessage(i, color, string);
+		}
+		return 1;
+	}
+	foreach (new i : Player) if (GetPlayerVehicleID(i) == vehicleid) {
+ 		SendClientMessage(i, color, string);
+	}
+	return 1;
+}
+script SendRadioMessage(frequency, color, const str[], {Float,_}:...)
+{
+	static args,start,end,string[144];
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	if (args > 12)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 12); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+		#emit PUSH.C args
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+		foreach (new i : Player) if (Inventory_HasItem(i, "Talkie-Walkie") && PlayerData[i][pChannel] == frequency) {
+		    SendClientMessage(i, color, string);
+		}
+		return 1;
+	}
+	foreach (new i : Player) if (Inventory_HasItem(i, "Talkie-Walkie") && PlayerData[i][pChannel] == frequency) {
+ 		SendClientMessage(i, color, str);
+	}
+	return 1;
+}
+script SendClientMessageEx(playerid, color, const text[], {Float, _}:...)
+{
+	static args,str[144];
+	if ((args = numargs()) == 3) {SendClientMessage(playerid, color, text);}
+	else
+	{
+		while (--args >= 3)
+		{
+			#emit LCTRL 5
+			#emit LOAD.alt args
+			#emit SHL.C.alt 2
+			#emit ADD.C 12
+			#emit ADD
+			#emit LOAD.I
+			#emit PUSH.pri
+		}
+		#emit PUSH.S text
+		#emit PUSH.C 144
+		#emit PUSH.C str
+		#emit PUSH.S 8
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+		SendClientMessage(playerid, color, str);
+		#emit RETN
+	}
+	return 1;
+}
+script SendClientMessageToAllEx(color, const text[], {Float, _}:...)
+{
+	static args, str[144];
+	if ((args = numargs()) == 2) {SendClientMessageToAll(color, text);}
+	else
+	{
+		while (--args >= 2)
+		{
+			#emit LCTRL 5
+			#emit LOAD.alt args
+			#emit SHL.C.alt 2
+			#emit ADD.C 12
+			#emit ADD
+			#emit LOAD.I
+			#emit PUSH.pri
+		}
+		#emit PUSH.S text
+		#emit PUSH.C 144
+		#emit PUSH.C str
+		#emit LOAD.S.pri 8
+		#emit ADD.C 4
+		#emit PUSH.pri
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+		SendClientMessageToAll(color, str);
+		#emit RETN
+	}
+	return 1;
+}
+script Log_Write(const path[], const str[], {Float,_}:...)
+{
+	static args,start,end,File:file,string[1024];
+	if ((start = strfind(path, "/")) != -1) {
+	    strmid(string, path, 0, start + 1);
+
+	    if (!fexist(string))
+	        return printf("** Warning: Directory \"%s\" doesn't exist.", string);
+	}
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+	file = fopen(path, io_append);
+	if (!file)
+	    return 0;
+	if (args > 8)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+	    for (end = start + (args - 8); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 1024
+		#emit PUSH.C string
+		#emit PUSH.C args
+		#emit SYSREQ.C format
+		fwrite(file, string);
+		fwrite(file, "\r\n");
+		fclose(file);
+		#emit LCTRL 5
+		#emit SCTRL 4
+		#emit RETN
+	}
+	fwrite(file, str);
+	fwrite(file, "\r\n");
+	fclose(file);
+
 	return 1;
 }
 //antideamx a la fin
