@@ -219,7 +219,7 @@ CMD:aide(playerid, params[])
 {
 	if (PlayerData[playerid][pFactionMod])
 	    SendClientMessage(playerid, COLOR_CLIENT, "FACTION:{FFFFFF} /creerfaction, /editfaction, /supfaction.");
-    if (PlayerData[playerid][pTester] > 0) {SendClientMessage(playerid, COLOR_CLIENT, "SUPPORTER:{FFFFFF} /a, /tduty, /ar, /dr, /kick, /jail,/rapports, /spec");}
+    if (PlayerData[playerid][pTester] > 0) {SendClientMessage(playerid, COLOR_CLIENT, "SUPPORTER:{FFFFFF} /a, /tduty, /ar, /dr, /jail,/rapports, /spec");}
 	if (PlayerData[playerid][pAdmin] > 0) {SendClientMessage(playerid, COLOR_CLIENT, "STAFF:{FFFFFF} /(a)dmin, /ahelp.");}
 	if(Showing[playerid] == 1)
 	{
@@ -259,25 +259,23 @@ CMD:ahelp(playerid, params[])
 	if (!PlayerData[playerid][pAdmin])
 	    return SendErrorMessage(playerid, "Tu n'est pas dans les admins.");
 	if (PlayerData[playerid][pAdmin] >= 1) {
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /a, /rapports, /spec, /jail, /dejail, /kick, /mute, /unmute, /freeze, /unfreeze.");
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /aduty, /ban, /goto, /aremovecall, /gotoactor");
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /warn, /checkstats, /shooter, /goto, /amener, /setint, /setvw.");
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /envoyera, /clearchat, /refill, /1up, /aslap, /acceptname, /declinename, /atalk.");
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /masked, /listguns, /amenerveh, /gotocar.");
+	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /a, /rapports, /spec, /jail, /dejail, /aduty, /ban, /aremovecall, /gotoactor");
+	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /warn, /shooter, /goto, /setint, /setvw ,/envoyera, /clearchat, /refill");
+	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /masked, /amenerveh, /acceptname, /declinename, /a.");
 		SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /x /y /z /renvoyer, /caissedetat ,/stockdetat");
  	}
 	if (PlayerData[playerid][pAdmin] >= 2) {
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /unban, /blacklist, /vie, /armure, /resetweps, /listwarns.");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber, /saignement.");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /unban, /blacklist, /vie, /armure.");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber.");
 	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /addseat.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 3) {
-        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /givewep, /sethelpeur, /getip, /baninfo, /setname, /asetfaction, /asetrank, /setitem.");
+        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /givewep, /sethelpeur, /baninfo, /setname, /asetfaction, /asetrank, /setitem.");
         SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /asellmaison, /asellbiz, /jetpack, /setweather, /setfuel, /setcarhp, /spawnitem.");
         SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /setquantity, /supitem, /setplayer, /asetleader, /setinventory, /arepair.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 4) {
-        SendClientMessage(playerid, COLOR_BLUE, "[LEVEL 4]:{FFFFFF} /dynamichelp, /clearinventory, /clearwarns, /restart, /mcreate");
+        SendClientMessage(playerid, COLOR_BLUE, "[LEVEL 4]:{FFFFFF} /dynamichelp, /restart, /mcreate");
 		SendClientMessage(playerid, COLOR_BLUE, "[LEVEL 4]:{FFFFFF} /salaireanpe, /mettreadmin, /supaccount, /supperso, /factionmod, /panel, /serveur.");
 	}
 	return 1;
@@ -553,7 +551,9 @@ CMD:n(playerid, params[])
 	    if (PlayerData[playerid][pAdmin] || PlayerData[playerid][pTester] || PlayerData[playerid][pPlayingHours] <= 5)
 	    	SendHelperMessage(COLOR_LIGHTRED, "** [Aide]  %s: %s", ReturnName(playerid, 0), params);
 	}
-	Log_Write("logs/nouveau_log.txt", "[%s] %s : %s", ReturnDate(),ReturnName(playerid),params);
+	SendServerMessage(playerid,"Message envoyer au discord, /discordchat pour avoir une réponse!");
+	SendDC(CHANNEL_ID, "[Canal Aide]  %s: %s", ReturnName(playerid, 0), params);
+	Log_Write("logs/nouveau_log.txt", "[%s] %s : %.100s", ReturnDate(),ReturnName(playerid),params);
 	return 1;
 }
 CMD:aduty(playerid, params[])
@@ -752,149 +752,6 @@ CMD:dejail(playerid, params[])
 	Log_Write("logs/jail_log.txt", "[%s] %s a libéré %s .", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0));
 	return 1;
 }
-CMD:saignement(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 2)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/saignement [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	switch (PlayerData[userid][pBleeding])
-	{
-	    case 0:
-	    {
-	        PlayerData[userid][pBleeding] = 1;
-	        PlayerData[userid][pBleedTime] = 10;
-            CreateBlood(userid);
-			SetTimerEx("HidePlayerBox", 500, false, "dd", userid, _:ShowPlayerBox(userid, 0xFF000066));
-			SendServerMessage(playerid, "Vous avez saigné %s.", ReturnName(userid, 0));
-		}
-		case 1:
-	    {
-	        PlayerData[userid][pBleeding] = 0;
-	        PlayerData[userid][pBleedTime] = 0;
-			SendServerMessage(playerid, "Vous avez enlever le saignement à %s.", ReturnName(userid, 0));
-		}
-	}
-	return 1;
-}
-CMD:aslap(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/aslap  [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	static Float:x,Float:y,Float:z;
-	GetPlayerPos(userid, x, y, z);
-	SetPlayerPosEx(userid, x, y, z + 5);
-	PlayerPlaySound(userid, 1130, 0.0, 0.0, 0.0);
-	SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s à slappé %s.", ReturnName(playerid, 0), ReturnName(userid, 0));
-	return 1;
-}
-CMD:kick(playerid, params[])
-{
-	static userid,reason[128];
-    if (PlayerData[playerid][pAdmin] < 1 && PlayerData[playerid][pTester] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "us[128]", userid, reason))
-	    return SendSyntaxMessage(playerid, "/kick [playerid/nom] [raison]");
-	if (userid == INVALID_PLAYER_ID || (IsPlayerConnected(userid) && PlayerData[userid][pKicked]))
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-    if (PlayerData[userid][pAdmin] > PlayerData[playerid][pAdmin])
-	    return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
-	SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a kické %s raison: %s.", ReturnName(playerid, 0), ReturnName(userid, 0), reason);
-	Log_Write("logs/kick_log.txt", "[%s] %s a kické %s raison: %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0), reason);
-	KickEx(userid);
-	return 1;
-}
-CMD:mute(playerid, params[])
-{
-    static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/mute [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (userid == playerid)
-	    return SendErrorMessage(playerid, "Tu ne peut te muter");
-	if (PlayerData[userid][pMuted])
-	    return SendErrorMessage(playerid, "Le joueur est déja mute.");
-    if (PlayerData[userid][pAdmin] > PlayerData[playerid][pAdmin])
-	    return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
-	PlayerData[userid][pMuted] = 1;
-	SendAdminAction(userid, "Vous avez été mute par %s.", ReturnName(playerid, 0));
-	SendAdminAction(playerid, "Vous avez mute %s.", ReturnName(userid, 0));
-	return 1;
-}
-CMD:unmute(playerid, params[])
-{
-    static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/unmute [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (!PlayerData[userid][pMuted])
-	    return SendErrorMessage(playerid, "Ce joueur n'est pas muté");
-	PlayerData[userid][pMuted] = 0;
-	SendAdminAction(userid, "Vous avez été démute par %s", ReturnName(playerid, 0));
-	SendAdminAction(playerid, "Vous avez démute %s.", ReturnName(userid, 0));
-	return 1;
-}
-CMD:freeze(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/freeze [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	TogglePlayerControllable(userid, 0);
-	SendAdminAction(playerid, "Vous vener de freeze %s", ReturnName(userid, 0));
-	return 1;
-}
-CMD:unfreeze(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/unfreeze [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-    PlayerData[userid][pFreeze] = 0;
-	TogglePlayerControllable(userid, 1);
-	SendAdminAction(playerid, "Vous venez de defreeze %s.", ReturnName(userid, 0));
-	return 1;
-}
-
-CMD:1up(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/1up [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (!PlayerData[userid][pInjured])
-	    return SendErrorMessage(playerid, "Ce joueur n'est pas blessé.");
-	ShowHungerTextdraw(userid, 1);
-	PlayerData[userid][pInjured] = 0;
-	ClearAnimations(userid);
-	TextDrawHideForPlayer(userid, gServerTextdraws[2]);
-	SendAdminAction(playerid, "Vous avez 1up %s.", ReturnName(userid, 0));
-	SendAdminAction(userid, "%s vous a réanimé.", ReturnName(playerid, 0));
-	return 1;
-}
 CMD:respawn(playerid, params[])
 {
 	static userid;
@@ -966,24 +823,9 @@ CMD:stats(playerid, params[])
 	ShowStatsForPlayer(playerid, playerid);
 	return 1;
 }
-CMD:checkstats(playerid, params[])
-{
-    static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/checkstats [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (!PlayerData[userid][pLogged] && !PlayerData[userid][pCharacter])
-	    return SendErrorMessage(playerid, "Ce joueur n'est pas loggé.");
-	ShowStatsForPlayer(playerid, userid);
-	SendAdminAction(playerid, "Vous regardez les stats du joueur %s utiliser /stats pour fermer.", ReturnName(userid, 0));
-	return 1;
-}
 CMD:acc(playerid, params[])
 {
-	new string[128];
+	new string[96];
 	format(string, sizeof(string), "Lunette: %s\nChapeau: %s\nBandana: %s", (PlayerData[playerid][pGlasses]) ? ("Oui") : ("Non"), (PlayerData[playerid][pHat]) ? ("Oui") : ("Non"), (PlayerData[playerid][pBandana]) ? ("Oui") : ("Non"));
 	Dialog_Show(playerid, Accessory, DIALOG_STYLE_LIST, "Accessoires", string, "Valider", "Annuler");
 	return 1;
@@ -1010,7 +852,7 @@ CMD:goto(playerid, params[])
 	if (sscanf(params, "u", id))
  	{
 	 	SendSyntaxMessage(playerid, "/goto [playerid/nom]");
-		SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} spawn, prison, house, business, entrance, job, gate, interior, billboard");
+		SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} car, prison, house, business, entrance, job, gate, interior, billboard");
 		return 1;
 	}
     if (id == INVALID_PLAYER_ID)
@@ -1018,7 +860,7 @@ CMD:goto(playerid, params[])
 	    if (sscanf(params, "s[24]S()[64]", type, string))
 		{
 		    SendSyntaxMessage(playerid, "/goto [player or name]");
-			SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} spawn, prison, house, business, entrance, job, gate, interior, billboard");
+			SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} car, prison, house, business, entrance, job, gate, interior, billboard");
 			return 1;
 	    }
 		else if (!strcmp(type, "prison", true))
@@ -1028,6 +870,18 @@ CMD:goto(playerid, params[])
 	        SetPlayerInterior(playerid, 0);
 	        SetPlayerVirtualWorld(playerid, 0);
 	        return SendServerMessage(playerid, "Vous avez été téléporté a la prison.");
+		}
+		else if (!strcmp(type, "car", true))
+		{
+			new vehicleid;
+		    if (sscanf(string, "d", id))
+		        return SendSyntaxMessage(playerid, "/goto [car] [CAR ID]");
+			if (vehicleid < 1 || vehicleid > MAX_VEHICLES || !IsValidVehicle(vehicleid))
+				return SendErrorMessage(playerid, "ID de vehicule invalide.");
+			static Float:x,Float:y,Float:z;
+			GetVehiclePos(vehicleid, x, y, z);
+			SetPlayerPosEx(playerid, x, y - 2, z + 2);
+			Log_Write("logs/vehicule.txt", "[%s] %s cest tp au vehicule id %d.", ReturnDate(), ReturnName(playerid),vehicleid);
 		}
 		else if (!strcmp(type, "billboard", true))
 		{
@@ -1163,21 +1017,6 @@ CMD:renvoyer(playerid, params[])
 		SendServerMessage(playerid, "Vous avez téléporté %s a la prison.", ReturnName(userid, 0));
 		SendServerMessage(userid, "%s vous a téléporté a la prison.", ReturnName(playerid, 0));
 	}
-	return 1;
-}
-CMD:amener(playerid, params[])
-{
-	static userid;
-	if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/amener [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (!IsPlayerSpawned(userid))
-		return SendErrorMessage(playerid, "Se joueur n'est pas spawn.");
-	SendPlayerToPlayer(userid, playerid);
-	SendServerMessage(playerid, "Vous avez téléporté %s à vous.", ReturnName(userid, 0));
 	return 1;
 }
 
@@ -1318,19 +1157,6 @@ CMD:blacklist(playerid, params[])
 	}
 	return 1;
 }
-CMD:getip(playerid, params[])
-{
-	static
-	    userid;
-    if (PlayerData[playerid][pAdmin] < 3)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/getip [playerid/nom]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	SendServerMessage(playerid, "%s IP est %s.", ReturnName(userid, 0), PlayerData[userid][pIP]);
-	return 1;
-}
 CMD:togooc(playerid, params[])
 {
     if (PlayerData[playerid][pAdmin] < 2)
@@ -1376,20 +1202,6 @@ CMD:armure(playerid, params[])
 	SendServerMessage(playerid, "Vous avez mis l'armure %s a %.2f.", ReturnName(userid, 0), amount);
 	return 1;
 }
-CMD:resetweps(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 2)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/resetweps [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	ResetWeapons(userid);
-	SendAdminAction(playerid, "Vous avez reset %s weapons.", ReturnName(userid, 0));
-	return 1;
-}
-
 CMD:arepair(playerid, params[])
 {
     new vehicleid = GetPlayerVehicleID(playerid);
@@ -1445,21 +1257,6 @@ CMD:entercar(playerid, params[])
 	    return SendErrorMessage(playerid, "There are no seats left a enter.");*/
 	PutPlayerInVehicle(playerid, vehicleid, seatid);
 	Log_Write("logs/vehicule.txt", "[%s] %s a entercar le vehicule id %d.", ReturnDate(), ReturnName(playerid),vehicleid);
-	return 1;
-}
-CMD:gotocar(playerid, params[])
-{
-	new vehicleid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "d", vehicleid))
-	    return SendSyntaxMessage(playerid, "/gotocar [veh]");
-	if (vehicleid < 1 || vehicleid > MAX_VEHICLES || !IsValidVehicle(vehicleid))
-		return SendErrorMessage(playerid, "ID de vehicule invalide.");
-	static Float:x,Float:y,Float:z;
-	GetVehiclePos(vehicleid, x, y, z);
-	SetPlayerPosEx(playerid, x, y - 2, z + 2);
-	Log_Write("logs/vehicule.txt", "[%s] %s cest tp au vehicule id %d.", ReturnDate(), ReturnName(playerid),vehicleid);
 	return 1;
 }
 CMD:givewep(playerid, params[])
@@ -8614,21 +8411,6 @@ CMD:usemag(playerid, params[])
 	}
 	return 1;
 }
-CMD:clearinventory(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 4)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/clearinventory [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	Inventory_Clear(userid);
-	SendAdminAction(playerid, "Vous avez supprimer a %s son inventaire.", ReturnName(userid, 0));
-	SendAdminAction(userid, "%s a supprimer tout votre inventaire.", ReturnName(playerid, 0));
-	SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer l'invtaire de %s.", ReturnName(playerid, 0), ReturnName(userid, 0));
-	return 1;
-}
 CMD:etape(playerid, params[])
 {
 	if (!IsTaskActive(playerid))
@@ -8651,24 +8433,6 @@ CMD:warnings(playerid, params[])
         SendClientMessageEx(playerid, COLOR_WHITE, "* 1er Warning: \"%s\"", PlayerData[playerid][pWarn1]);
     if (PlayerData[playerid][pWarnings] >= 2 && strlen(PlayerData[playerid][pWarn2]))
         SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[playerid][pWarn2]);
-    SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-	return 1;
-}
-CMD:listwarns(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 2)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/listwarns [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-    SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-    SendClientMessageEx(playerid, COLOR_LIGHTRED, "%s Warnings (%d/2)", ReturnName(userid, 0), PlayerData[userid][pWarnings]);
-    if (PlayerData[userid][pWarnings] >= 1 && strlen(PlayerData[userid][pWarn1]))
-        SendClientMessageEx(playerid, COLOR_WHITE, "* 1er Warning: \"%s\"", PlayerData[userid][pWarn1]);
-    if (PlayerData[userid][pWarnings] >= 2 && strlen(PlayerData[userid][pWarn2]))
-        SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[userid][pWarn2]);
     SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
 	return 1;
 }
@@ -8711,22 +8475,6 @@ CMD:warn(playerid, params[])
 	Log_Write("logs/warn_log.txt", "[%s] %s a warned %s pour %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0), reason);
 	return 1;
 }
-CMD:clearwarns(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 4)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/clearwarns [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	ResetWarnings(userid);
-	SendAdminAction(playerid, "Vous avez supprimer a %s ces warn.", ReturnName(userid, 0));
-	SendAdminAction(userid, "%s a supprimer vos warning.", ReturnName(playerid, 0));
-	SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer les warn de %s.", ReturnName(playerid, 0), ReturnName(userid, 0));
-	return 1;
-}
-
 CMD:trier(playerid, params[])
 {
 	new id = -1;
@@ -8891,30 +8639,6 @@ CMD:masked(playerid, params[])
     foreach (new i : Player) if (PlayerData[i][pMaskOn]) {
         GetPlayerName(i, name, sizeof(name));
         SendClientMessageEx(playerid, COLOR_WHITE, "* %s (#%d)", name, PlayerData[i][pMaskID]);
-	}
-	SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-	return 1;
-}
-CMD:listguns(playerid, params[])
-{
-	new userid;
-	if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/listguns [playerid/nom]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Le numéro du player est déconnecté.");
-	new
-	    weaponid,
-	    ammo;
-    SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-    SendClientMessageEx(playerid, COLOR_LIGHTRED, "%s Arme:", ReturnName(userid, 0));
-	for (new i = 0; i < 13; i ++)
-	{
-		GetPlayerWeaponData(userid, i, weaponid, ammo);
-
-		if (weaponid > 0)
-		    SendClientMessageEx(playerid, COLOR_WHITE, "* %s (%d ammo)", ReturnWeaponName(weaponid), ammo);
 	}
 	SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
 	return 1;

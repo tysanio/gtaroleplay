@@ -4978,16 +4978,6 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             return PlayerCheckPointToMeat(playerid);
         }
     }
-    //anti bunny
-    if ((newkeys & KEY_JUMP) && !(oldkeys & KEY_JUMP))
- 	{
-  		if(!IsPlayerInAnyVehicle(playerid) && !PlayerToPoint(8900.0,playerid,-2146.2573, 323.5667,34.1228))
-    	{
-       		BunnyHop[playerid] += 1;
-         	SetTimer("TimerBunnyHop", 2000, false);
-         	if(BunnyHop[playerid] == 5) return SlapPlayer(playerid); //Le numéro 2 signifie que si il appuyez 2 fois dans un changement de ligne, il recevra une gifle, vous pouvez l'augmenter à plus si vous voulez.
-		}
-	}
 	//job doc fortcarson
 	if(newkeys & KEY_JUMP || newkeys & KEY_SECONDARY_ATTACK || newkeys & KEY_FIRE || newkeys & KEY_SUBMISSION || newkeys & KEY_SPRINT)
  	{
@@ -7264,11 +7254,12 @@ script OnPlayerDisconnect(playerid, reason)
 }
 script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	if(PlayerData[playerid][pAdmin] >= 1)
+	if(PlayerData[playerid][pAdmin] >= 1 || PlayerData[playerid][pTester] > 0)
 	{
 		SendServerMessage(playerid,"Vous avez clicker sur %s",ReturnName(clickedplayerid));
 		AdminTarget[playerid] = clickedplayerid;
-		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi","Valider","Annuler");
+		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\
+		\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire sainger se joueur ou pas\nModifier les stats de se joueur","Valider","Annuler");
 	}
 	else return SendErrorMessage(playerid, "Vous n'êtes pas autorisé.");
 	return 1;
@@ -12168,19 +12159,6 @@ script LoadActors()
 		TotalActors++;
     }
     return true;
-}
-//anti bunny
-script SlapPlayer(playerid)
-{
-    ApplyAnimation(playerid, "GHANDS", "gsign2", 4.1, 0, 0, 0, 0, 0, 1);
-	BunnyHop[playerid] = 0;
-	SendServerMessage(playerid,"Le Bunny Hopping {FF0000}est interdit.");
-	return 1;
-}
-script TimerBunnyHop(playerid)
-{
-	BunnyHop[playerid] = 0;
-	return 1;
 }
 //job usine
 script UnivPub(playerid)

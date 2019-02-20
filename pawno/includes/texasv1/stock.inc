@@ -14292,8 +14292,6 @@ ResetStatistics(playerid)
 	PlayerInJob[playerid] = 0;
 	//centure
 	SeatbeltStatus[playerid] = 0;
-	//anti bunny
-	BunnyHop[playerid] = 0;
 	//job generator
 	OnGener[playerid] = 0;
 	OnBenz[playerid] = 0;
@@ -24778,14 +24776,14 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
        	    case 0:
        	    {
 				TogglePlayerControllable(AdminTarget[playerid], 0);
-				SendAdminAction(playerid, "Vous vener de freeze %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze","Valider","Annuler");
+				SendAdminAction(playerid, "Vous venez de freeze %s", ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur","Valider","Annuler");
 			}
 			case 1:
 			{
 				TogglePlayerControllable(AdminTarget[playerid], 1);
-				SendAdminAction(playerid, "Vous vener d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze","Valider","Annuler");				
+				SendAdminAction(playerid, "Vous venez d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur","Valider","Annuler");
 			}
 			case 2:
 			{
@@ -24797,6 +24795,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 			}
 			case 3:
 			{
+				if (!PlayerData[playerid][pAdmin])
+					return SendErrorMessage(playerid, "Tu n'as pas acces a cette commande.");
 				if (AdminTarget[playerid] == playerid)
 					return SendErrorMessage(playerid, "Tu ne peut te ban toi-même du serveur.");
 				if (PlayerData[AdminTarget[playerid]][pAdmin] > PlayerData[playerid][pAdmin])
@@ -24825,6 +24825,154 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Se joueur n'est pas spawn.");
 				SendPlayerToPlayer(AdminTarget[playerid], playerid);
 				SendServerMessage(playerid, "Vous avez téléporté %s à vous.", ReturnName(AdminTarget[playerid], 0));			
+			}
+			case 6:
+			{
+				if (!PlayerData[AdminTarget[playerid]][pInjured])
+					return SendErrorMessage(playerid, "Ce joueur n'est pas blessé.");
+				ShowHungerTextdraw(AdminTarget[playerid], 1);
+				PlayerData[AdminTarget[playerid]][pInjured] = 0;
+				ClearAnimations(AdminTarget[playerid]);
+				TextDrawHideForPlayer(AdminTarget[playerid], gServerTextdraws[2]);
+				SendAdminAction(playerid, "Vous avez 1up %s.", ReturnName(AdminTarget[playerid], 0));
+				SendAdminAction(AdminTarget[playerid], "%s vous a réanimé.", ReturnName(playerid, 0));
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur","Valider","Annuler");			
+			}
+			case 7:
+			{
+				if (AdminTarget[playerid] == playerid)
+					return SendErrorMessage(playerid, "Tu ne peut te muter");
+				if (PlayerData[AdminTarget[playerid]][pAdmin] > PlayerData[playerid][pAdmin])
+					return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
+				if(PlayerData[AdminTarget[playerid]][pMuted] == 0)
+				{
+					PlayerData[AdminTarget[playerid]][pMuted] = 1;
+					SendAdminAction(AdminTarget[playerid], "Vous avez été mute par %s.", ReturnName(playerid, 0));
+					SendAdminAction(playerid, "Vous avez mute %s.", ReturnName(AdminTarget[playerid], 0));
+				}
+				if (PlayerData[AdminTarget[playerid]][pMuted] == 1)
+				{
+					PlayerData[AdminTarget[playerid]][pMuted] = 0;
+					SendAdminAction(AdminTarget[playerid], "Vous avez été démute par %s", ReturnName(playerid, 0));
+					SendAdminAction(playerid, "Vous avez démute %s.", ReturnName(AdminTarget[playerid], 0));	
+				} 
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur","Valider","Annuler");				
+			}
+			case 8:
+			{
+				static Float:x,Float:y,Float:z;
+				GetPlayerPos(AdminTarget[playerid], x, y, z);
+				SetPlayerPosEx(AdminTarget[playerid], x, y, z + 5);
+				PlayerPlaySound(AdminTarget[playerid], 1130, 0.0, 0.0, 0.0);
+				SendServerMessage(AdminTarget[playerid],"Vous avez été slap par %s.",ReturnName(playerid,0));
+				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s à slappé %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur","Valider","Annuler");		
+			}
+			case 9:
+			{
+				switch (PlayerData[AdminTarget[playerid]][pBleeding])
+				{
+					case 0:
+					{
+						PlayerData[AdminTarget[playerid]][pBleeding] = 1;
+						PlayerData[AdminTarget[playerid]][pBleedTime] = 10;
+						CreateBlood(AdminTarget[playerid]);
+						SetTimerEx("HidePlayerBox", 500, false, "dd", AdminTarget[playerid], _:ShowPlayerBox(AdminTarget[playerid], 0xFF000066));
+						SendServerMessage(playerid, "Vous avez saigné %s.", ReturnName(AdminTarget[playerid], 0));
+					}
+					case 1:
+					{
+						PlayerData[AdminTarget[playerid]][pBleeding] = 0;
+						PlayerData[AdminTarget[playerid]][pBleedTime] = 0;
+						SendServerMessage(playerid, "Vous avez enlever le saignement à %s.", ReturnName(AdminTarget[playerid], 0));
+					}
+				}
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur","Valider","Annuler");
+			}
+			case 10:
+			{
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+		}
+	}
+	return 1;
+}
+Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire sainger se joueur ou pas\nModifier les stats de se joueur","Valider","Annuler");
+    if(response)
+    {
+       	switch(listitem)
+       	{
+       	    case 0:
+       	    {
+				if (!PlayerData[AdminTarget[playerid]][pLogged] && !PlayerData[AdminTarget[playerid]][pCharacter])
+					return SendErrorMessage(playerid, "Ce joueur n'est pas loggé.");
+				ShowStatsForPlayer(playerid, AdminTarget[playerid]);
+				SendAdminAction(playerid, "Vous regardez les stats du joueur %s.", ReturnName(AdminTarget[playerid],0));
+			}
+			case 1:
+			{
+				SetPlayerVirtualWorld(AdminTarget[playerid],0);
+				SetPlayerInterior(AdminTarget[playerid],0);
+				SendServerMessage(playerid, "Vous avez mit l'interieur et le virtualworld a 0 pour le joueur %s.",ReturnName(AdminTarget[playerid],0));
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+			case 2:
+			{
+				new weaponid,ammo;
+				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
+				SendClientMessageEx(playerid, COLOR_LIGHTRED, "%s Armes:", ReturnName(AdminTarget[playerid], 0));
+				for (new i = 0; i < 13; i ++)
+				{
+					GetPlayerWeaponData(AdminTarget[playerid], i, weaponid, ammo);
+					if (weaponid > 0)
+					SendClientMessageEx(playerid, COLOR_WHITE, "* %s (%d ammo)", ReturnWeaponName(weaponid), ammo);
+				}
+				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+			case 3:
+			{
+				ResetWeapons(AdminTarget[playerid]);
+				SendAdminAction(playerid, "Vous avez reset %s weapons.", ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+			case 4:
+			{
+				if (PlayerData[playerid][pAdmin] < 2)
+					return SendErrorMessage(playerid, "Tu n'as pas acces a cette commande.");
+				SendServerMessage(playerid, "%s IP est %s.", ReturnName(AdminTarget[playerid], 0), PlayerData[AdminTarget[playerid]][pIP]);
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+			case 5:
+			{
+				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
+				SendClientMessageEx(playerid, COLOR_LIGHTRED, "%s Warnings (%d/2)", ReturnName(AdminTarget[playerid], 0), PlayerData[AdminTarget[playerid]][pWarnings]);
+				if (PlayerData[AdminTarget[playerid]][pWarnings] >= 1 && strlen(PlayerData[AdminTarget[playerid]][pWarn1]))
+					SendClientMessageEx(playerid, COLOR_WHITE, "* 1er Warning: \"%s\"", PlayerData[AdminTarget[playerid]][pWarn1]);
+				if (PlayerData[AdminTarget[playerid]][pWarnings] >= 2 && strlen(PlayerData[AdminTarget[playerid]][pWarn2]))
+					SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[AdminTarget[playerid]][pWarn2]);
+				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+			case 6:
+			{
+				if (PlayerData[playerid][pAdmin] < 3)
+					return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
+				ResetWarnings(AdminTarget[playerid]);
+				SendAdminAction(playerid, "Vous avez supprimer a %s ces warn(s).", ReturnName(AdminTarget[playerid], 0));
+				SendAdminAction(AdminTarget[playerid], "%s a supprimer vos warning.", ReturnName(playerid, 0));
+				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer les warn de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
+			}
+			case 7:
+			{
+				Inventory_Clear(AdminTarget[playerid]);
+				SendAdminAction(playerid, "Vous avez supprimer a %s son inventaire.", ReturnName(AdminTarget[playerid], 0));
+				SendAdminAction(AdminTarget[playerid], "%s a supprimer tout votre inventaire.", ReturnName(playerid, 0));
+				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer l'invtaire de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire","Valider","Annuler");
 			}
 		}
 	}
