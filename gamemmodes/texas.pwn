@@ -97,7 +97,7 @@ script Billboard_Load()
 }
 script OnViewBillboards(extraid, name[])
 {
-	new string[5000],desc[5000],rows,fields;
+	new string[250],desc[250],rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
 	if (!rows)
 	    return SendErrorMessage(extraid, "Pas de panneaux trouvé!");
@@ -7262,6 +7262,17 @@ script OnPlayerDisconnect(playerid, reason)
 	organisateur[playerid] = 0;
     return 1;
 }
+script OnPlayerClickPlayer(playerid, clickedplayerid, source)
+{
+	if(PlayerData[playerid][pAdmin] >= 1)
+	{
+		SendServerMessage(playerid,"Vous avez clicker sur %s",ReturnName(clickedplayerid));
+		AdminTarget[playerid] = clickedplayerid;
+		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi","Valider","Annuler");
+	}
+	else return SendErrorMessage(playerid, "Vous n'êtes pas autorisé.");
+	return 1;
+}
 script OnGameModeInit()
 {
 	//partie fs oubliger
@@ -9511,7 +9522,9 @@ script OnPlayerClickTextDraw(playerid, Text:clickedid)
 	if(clickedid == AideMenu2)
 	{
 	    jagawaa(playerid);
-	    Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour le chat","- /me Sert à effectuer une action,\n- /do Sert pour confirmer ou décrire une action,\n- /(c)rier Sert à crier\n- /(o)oc Sert à parlez en Out of Character,\n- /decrocher Sert à décrocher son téléphone\n- /racrocher Sert à racrocher son téléphone","Quitter","");
+	    Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour le chat","- /me Sert à effectuer une action,\
+		\n- /do Sert pour confirmer ou décrire une action,\n- /(c)rier Sert à crier\n- /(o)oc Sert à parlez en Out of Character,\
+		\n- /decrocher Sert à décrocher son téléphone\n- /racrocher Sert à racrocher son téléphone\n- /dc pour le chat discord\n- /discordchat pour activé le chat","Quitter","");
 	}
 	if(clickedid == AideMenu3)
 	{

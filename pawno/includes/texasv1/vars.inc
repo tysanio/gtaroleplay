@@ -2624,3 +2624,5 @@ new event=0;
 //tunning
 new pvehicleid[MAX_PLAYERS]; // array containing players vehicle id (loaded when player enters as driver)
 new pmodelid[MAX_PLAYERS]; // array containing players vehicle MODEL id (loaded when player enters as driver)
+//clickplayer
+new AdminTarget[MAX_PLAYERS];

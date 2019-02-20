@@ -4184,11 +4184,11 @@ Billboard_Refresh(bizid)
 		static string[128];
 		if (!BillBoardData[bizid][bbOwner]) {
 			format(string, sizeof(string), "[%i] - [%s]\n%s", bizid, FormatNumber(BillBoardData[bizid][bbPrice]), BillBoardData[bizid][bbName]);
-            BillBoardData[bizid][bbText3D] = CreateDynamic3DTextLabel(string, 0x33AA33FF, BillBoardData[bizid][bbPos][0], BillBoardData[bizid][bbPos][1], BillBoardData[bizid][bbPos][2], BillBoardData[bizid][bbRange], INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0);
+            BillBoardData[bizid][bbText3D] = CreateDynamic3DTextLabel(string, 0x33AA33FF, BillBoardData[bizid][bbPos][0], BillBoardData[bizid][bbPos][1], BillBoardData[bizid][bbPos][2], BillBoardData[bizid][bbRange], INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1);
 		}
 		else if (BillBoardData[bizid][bbOwner]) {
 			format(string, sizeof(string), "[%i]\n%s\n%s", bizid, BillBoardData[bizid][bbName], BillBoardData[bizid][bbMessage]);
-            BillBoardData[bizid][bbText3D] = CreateDynamic3DTextLabel(string, 0x33AA33FF, BillBoardData[bizid][bbPos][0], BillBoardData[bizid][bbPos][1], BillBoardData[bizid][bbPos][2], BillBoardData[bizid][bbRange], INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0);
+            BillBoardData[bizid][bbText3D] = CreateDynamic3DTextLabel(string, 0x33AA33FF, BillBoardData[bizid][bbPos][0], BillBoardData[bizid][bbPos][1], BillBoardData[bizid][bbPos][2], BillBoardData[bizid][bbRange], INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1);
 		}
 	}
 	return 1;
@@ -6662,7 +6662,7 @@ Dialog:DateBirth(playerid, response, listitem, inputtext[])
 	    if (sscanf(inputtext, "p</>ddd", iDay, iMonth, iYear)) {
 	        Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
-		else if (iYear < 1930 || iYear > 1998) {
+		else if (iYear < 1945 || iYear > 2000) {
 		    Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iMonth < 1 || iMonth > 12) {
@@ -22226,7 +22226,7 @@ Dialog:DIALOG_TYPE_NITRO(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	                SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	                SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
         			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
 				}
 			}
@@ -22242,7 +22242,7 @@ Dialog:DIALOG_TYPE_NITRO(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
            			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
 				}
 			}
@@ -22258,7 +22258,7 @@ Dialog:DIALOG_TYPE_NITRO(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_NITRO, DIALOG_STYLE_LIST, "Nitrous Oxide", "2x Nitrous\n5x Nitrous\n10x Nitrous\n \nBack", "Apply", "Close");
 				}
 			}
@@ -22937,6 +22937,7 @@ Dialog:DIALOG_TYPE_HOODS(playerid, response, listitem, inputtext[])
 }
 Dialog:DIALOG_TYPE_HYDRAULICS(playerid, response, listitem, inputtext[])
 {
+	new stockinfo;
     if(!response) {SetCameraBehindPlayer(playerid);}
     if(response)
     {
@@ -22944,7 +22945,7 @@ Dialog:DIALOG_TYPE_HYDRAULICS(playerid, response, listitem, inputtext[])
        	{
        	    case 0:
        	    {
-                if(GetPlayerMoney(playerid) >= 0)
+                if(info_stockjobinfo[stockinfo][stocktunninghydrolic] >= 0)
 		        {
 		            new car = GetPlayerVehicleID(playerid);
 		            AddVehicleComponent(car,1087);
@@ -22954,7 +22955,7 @@ Dialog:DIALOG_TYPE_HYDRAULICS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	                SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	                SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_HYDRAULICS, DIALOG_STYLE_LIST, "Hydaulics", "Hydaulics\n \nBack", "Apply", "Close");
 			    }
        	    }
@@ -22983,7 +22984,7 @@ Dialog:DIALOG_TYPE_CSTEREO(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	                SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	                SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_CSTEREO, DIALOG_STYLE_LIST, "Car Stereo", "Bass Boost\n \nBack", "Apply", "Close");
 			    }
        	    }
@@ -22995,14 +22996,15 @@ Dialog:DIALOG_TYPE_CSTEREO(playerid, response, listitem, inputtext[])
 }
 Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 {
+	new stockjobinfoid;
     if(!response) {SetCameraBehindPlayer(playerid);}
 	if(response)
     {
-        switch(listitem)// Checking which list item was selected
+		switch(listitem)// Checking which list item was selected
         {
         	case 0:
         	{
-                if(GetPlayerMoney(playerid) >= 0)
+                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 		        {
 		            new car = GetPlayerVehicleID(playerid);
 		            AddVehicleComponent(car,1025);
@@ -23012,13 +23014,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
         	case 1:
         	{
-                if(GetPlayerMoney(playerid) >= 0)
+                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1074);
@@ -23028,13 +23030,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
         	case 2:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 	                AddVehicleComponent(car,1076);
@@ -23044,13 +23046,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 3:
         	{
-                if(GetPlayerMoney(playerid) >= 0)
+                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1078);
@@ -23060,13 +23062,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	      		 	SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	      		 	SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 4:
         	{
-                if(GetPlayerMoney(playerid) >= 0)
+                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1081);
@@ -23076,13 +23078,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 5:
         	{
-                if(GetPlayerMoney(playerid) >= 0)
+                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 	                AddVehicleComponent(car,1082);
@@ -23092,13 +23094,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 6:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 				{
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1085);
@@ -23108,13 +23110,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 7:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1096);
@@ -23124,13 +23126,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 8:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1097);
@@ -23140,13 +23142,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 9:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1098);
@@ -23156,13 +23158,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 10:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 		        {
 		            new car = GetPlayerVehicleID(playerid);
 		            AddVehicleComponent(car,1084);
@@ -23172,13 +23174,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 11:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 				{
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1073);
@@ -23188,13 +23190,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 12:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 	                AddVehicleComponent(car,1075);
@@ -23204,13 +23206,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	      	 		SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	      	 		SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 13:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1077);
@@ -23220,13 +23222,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 14:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1079);
@@ -23236,13 +23238,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-	       			SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 15:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 	                AddVehicleComponent(car,1080);
@@ -23252,13 +23254,13 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
 			case 16:
         	{
-				if(GetPlayerMoney(playerid) >= 0)
+				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
 			    {
 			        new car = GetPlayerVehicleID(playerid);
 			        AddVehicleComponent(car,1083);
@@ -23268,7 +23270,7 @@ Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
 				}
 				else
 				{
-				    SendClientMessage(playerid,COLOR_RED,"Not enough money!");
+				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
 				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
 				}
         	}
@@ -24762,6 +24764,68 @@ Dialog:DIALOG_TYPE_SPOILERS(playerid, response, listitem, inputtext[])
         	{
             	Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
     	    }
+		}
+	}
+	return 1;
+}
+Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
+{
+	if(!response) {SetCameraBehindPlayer(playerid);}
+    if(response)
+    {
+       	switch(listitem)
+       	{
+       	    case 0:
+       	    {
+				TogglePlayerControllable(AdminTarget[playerid], 0);
+				SendAdminAction(playerid, "Vous vener de freeze %s", ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze","Valider","Annuler");
+			}
+			case 1:
+			{
+				TogglePlayerControllable(AdminTarget[playerid], 1);
+				SendAdminAction(playerid, "Vous vener d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze","Valider","Annuler");				
+			}
+			case 2:
+			{
+				if (PlayerData[AdminTarget[playerid]][pAdmin] > PlayerData[playerid][pAdmin])
+					return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
+				SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a kické %s via tabclick.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
+				Log_Write("logs/kick_log.txt", "[%s] %s a kické %s via tabclick", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
+				KickEx(AdminTarget[playerid]);
+			}
+			case 3:
+			{
+				if (AdminTarget[playerid] == playerid)
+					return SendErrorMessage(playerid, "Tu ne peut te ban toi-même du serveur.");
+				if (PlayerData[AdminTarget[playerid]][pAdmin] > PlayerData[playerid][pAdmin])
+					return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
+				foreach (new i : Player) {
+					if (!strcmp(PlayerData[i][pIP], PlayerData[AdminTarget[playerid]][pIP]) && i != AdminTarget[playerid]) {
+						KickEx(i);
+					}
+				}
+				Dialog_Show(AdminTarget[playerid], ShowOnly, DIALOG_STYLE_MSGBOX, "Ban", "Tu a été bannie.\nJoueur: %s\nVia le tabckick\nL'admin qui ta ban: %s\n\nAppuyer F8 si c'est une erreur.", "Fermer", "", ReturnName(AdminTarget[playerid],0),ReturnName(playerid, 0));
+				SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a été banni par %s via tabclick.", PlayerData[AdminTarget[playerid]][pUsername], ReturnName(playerid, 0));
+				Log_Write("logs/ban_log.txt", "[%s] %s a été banni par %s via tabclick.",ReturnDate(),PlayerData[AdminTarget[playerid]][pUsername],ReturnName(playerid, 0));
+				Blacklist_Add(PlayerData[AdminTarget[playerid]][pIP], PlayerData[AdminTarget[playerid]][pUsername], PlayerData[playerid][pUsername],"Via tabclic");
+				KickEx(AdminTarget[playerid]);
+			}
+			case 4:
+			{
+				if (!IsPlayerSpawned(AdminTarget[playerid]))
+					return SendErrorMessage(playerid, "Tu ne peut teleport à un joueur qui spawn.");
+				SendPlayerToPlayer(playerid, AdminTarget[playerid]);
+				SendServerMessage(playerid, "Vous vous êtes téléporté à %s.", ReturnName(AdminTarget[playerid], 0));
+			}
+			case 5:
+			{
+				if (!IsPlayerSpawned(AdminTarget[playerid]))
+					return SendErrorMessage(playerid, "Se joueur n'est pas spawn.");
+				SendPlayerToPlayer(AdminTarget[playerid], playerid);
+				SendServerMessage(playerid, "Vous avez téléporté %s à vous.", ReturnName(AdminTarget[playerid], 0));			
+			}
 		}
 	}
 	return 1;
