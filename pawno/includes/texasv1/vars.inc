@@ -887,6 +887,10 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"kebab",2769},
 	{"jambon",2804},
 	{"orange",19574},
+	{"pomme verte",19576},
+	{"pomme rouge",19575},
+	{"caisse pomme verte",19637},
+	{"caisse pomme rouge",19636},
 	{"jus de pomme",19564},
 	{"jus dorange",19563},
 	{"donuts",2222},
@@ -894,12 +898,9 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"carte de quelque chose",19792},
 	{"argent sale",1212},
 	{"gold bar",19941},
-	{"montre en or",19039},
 	{"roche",905},
 	{"Permis de chasse",19792},
 	{"cafe",19835},
-	{"piece de Sawn Off-1",2034},
-	{"piece de Sawn Off-2",2033},
 	{"douille de shotgun",2038},
 	{"sandwich au poulet",2880},
 	{"pain",19579},
@@ -987,7 +988,30 @@ enum houseInteriors {
 	Float:eHouseZ,
 	Float:eHouseAngle
 };
-
+Job_GetName(type)
+{
+	static str[200];
+	switch (type)
+	{
+	    case 1: str = "Courier";
+		case 2: str = "Cariste";
+		case 3: str = "Mineur";
+		case 4: str = "Manutentionnaire";
+		case 5: str = "Weapon Smuggler";
+		case 6: str = "Menuisier";
+		case 7: str = "Fabrication d'arme";
+		case 8: str = "Bucheron";
+		case 9: str = "Boucher";
+		case 10: str = "Technicien generateur";
+		case 11: str = "Petrolier";
+		case 12: str = "Electricien";
+		case 13: str = "Doc port";
+		case 14: str = "Usine electronique";
+		case 15: str = "Garbage Man";
+	    default: str = "Aucun Job";
+	}
+	return str;
+}
 new const Float:arrHouseInteriors[16][houseInteriors] = {
 	{12,-17.7247,1493.8525,994.3759,0.0},	
 	{10,1364.9424,-807.2983,1090.8774,0.0},
@@ -1936,18 +1960,6 @@ new info_salaireurgentiste[MAX_FACTIONS][salaireurgentisted];
 new UCL[MAX_VEHICLES];
 new gelblicht1[MAX_VEHICLES];
 new gelblicht2[MAX_VEHICLES];
-//aidemenu
-new Showing[MAX_PLAYERS];
-new Text:AideMenu0;
-new Text:AideMenu1;
-new Text:AideMenu2;
-new Text:AideMenu3;
-new Text:AideMenu4;
-new Text:AideMenu5;
-new Text:AideMenu6;
-new Text:AideMenu7;
-new Text:AideMenu8;
-new Text:AideMenu9;
 //limitation de vitesse sur un véhicule abimer
 new const BE_Bad_Vehs[] = {
 460, 464, 476, 511, 512, 513, 519, 520, 539, 553, 577, 592, 593, // planes
@@ -1979,8 +1991,6 @@ new ActorInfo[MAXACTORS][ainfo];
 //ceinture
 new SeatbeltStatus[MAX_PLAYERS]; // Variable qui est va tenir le statut de la ceinture de sécurité.
 new Float:CarHealth[MAX_PLAYERS];
-//anti bunny
-new BunnyHop[MAX_PLAYERS];
 //job usine
 new Sklad;
 new brat[9];
@@ -2084,9 +2094,7 @@ enum stockjobinfo
 	stocktunningroof,
 	stocktunninghood,
 	stocktunningspoiler,
-	stocktunningsideskirt1,
-	stocktunningsideskirt2,
-	stocktunningwheel,
+	stocktunningsideskirt,
 	stocktunninghydrolic,
 	stocktunningroue,
 	stocktunningcaro
@@ -2149,292 +2157,6 @@ new stockinfominer;
 new stockinfoarme;
 new infojobsalaire;
 new infojobsalaire2;
-//tuning
-new FrontBumperID1[MAX_VEHICLES];
-new RearBumperID1[MAX_VEHICLES];
-new RoofID1[MAX_VEHICLES];
-new HoodID1[MAX_VEHICLES];
-new SpoilerID1[MAX_VEHICLES];
-new WheelID1[MAX_VEHICLES];
-new SideSkirt1ID1[MAX_VEHICLES];
-new SideSkirt2ID1[MAX_VEHICLES];
-enum tuning_info
-{
-	tuningidid,
-	Float:AddSpeed,
-	Float:FrontBumperX,
-	Float:FrontBumperY,
-	Float:FrontBumperZ,
-	Float:FrontBumperRX,
-	Float:FrontBumperRY,
-	Float:FrontBumperRZ,
-	FrontBumperID,
-	FrontBumper,
-	Float:RearBumperX,
-	Float:RearBumperY,
-	Float:RearBumperZ,
-	Float:RearBumperRX,
-	Float:RearBumperRY,
-	Float:RearBumperRZ,
-	RearBumperID,
-	RearBumper,
-	Float:RoofX,
-	Float:RoofY,
-	Float:RoofZ,
-	Float:RoofRX,
-	Float:RoofRY,
-	Float:RoofRZ,
-	RoofID,
-	Roof,
-	Float:HoodX,
-	Float:HoodY,
-	Float:HoodZ,
-	Float:HoodRX,
-	Float:HoodRY,
-	Float:HoodRZ,
-	HoodID,
-	Hood,
-	Float:SpoilerX,
-	Float:SpoilerY,
-	Float:SpoilerZ,
-	Float:SpoilerRX,
-	Float:SpoilerRY,
-	Float:SpoilerRZ,
-	SpoilerID,
-	Spoiler,
-	Float:WheelX,
-	Float:WheelY,
-	Float:WheelZ,
-	Float:WheelRX,
-	Float:WheelRY,
-	Float:WheelRZ,
-	WheelID,
-	Wheel,
-	Float:SideSkirt1X,
-	Float:SideSkirt1Y,
-	Float:SideSkirt1Z,
-	Float:SideSkirt1RX,
-	Float:SideSkirt1RY,
-	Float:SideSkirt1RZ,
-	SideSkirt1ID,
-	SideSkirt1,
-	Float:SideSkirt2X,
-	Float:SideSkirt2Y,
-	Float:SideSkirt2Z,
-	Float:SideSkirt2RX,
-	Float:SideSkirt2RY,
-	Float:SideSkirt2RZ,
-	SideSkirt2ID,
-	SideSkirt2,
-	EditingPart,
-	PlayerVehicle,
-	LeftRight,
-	EditStatus,
-	EditingTimer,
-}
-new Tuning[MAX_PLAYERS][tuning_info];
-new g_FrontBumpers[24] = {
-	1115,
-	1116,
-	1117,
-	1152,
-	1153,
-	1155,
-	1157,
-	1160,
-	1165,
-	1166,
-	1170,
-	1171,
-	1172,
-	1173,
-	1174,
-	1176,
-	1179,
-	1181,
-	1182,
-	1185,
-	1188,
-	1189,
-	1190,
-	1191
-};
-new g_RearBumpers[24] = {
-	1109,
-	1110,
-	1140,
-	1141,
-	1148,
-	1149,
-	1150,
-	1151,
-	1154,
-	1156,
-	1159,
-	1161,
-	1167,
-	1168,
-	1175,
-	1177,
-	1178,
-	1180,
-	1183,
-	1184,
-	1186,
-	1187,
-	1192,
-	1193
-};
-new g_Roofs[17] = {
-	1006,
-	1032,
-	1033,
-	1035,
-	1038,
-	1053,
-	1054,
-	1055,
-	1061,
-	1067,
-	1068,
-	1088,
-	1091,
-	1103,
-	1128,
-	1130,
-	1131
-};
-new g_Hoods[4] = {
-	1004,
-	1005,
-	1011,
-	1012
-};
-new g_Spoiler[20] = {
-	1000,
-	1001,
-	1002,
-	1003,
-	1014,
-	1015,
-	1016,
-	1023,
-	1049,
-	1050,
-	1058,
-	1060,
-	1138,
-	1139,
-	1146,
-	1147,
-	1158,
-	1162,
-	1163,
-	1164
-};
-new g_SideSkirt1[40] = {
-	1007,
-	1017,
-	1026,
-	1027,
-	1030,
-	1031,
-	1036,
-	1039,
-	1040,
-	1041,
-	1042,
-	1047,
-	1048,
-	1051,
-	1052,
-	1056,
-	1057,
-	1062,
-	1063,
-	1069,
-	1070,
-	1071,
-	1072,
-	1090,
-	1093,
-	1094,
-	1095,
-	1099,
-	1106,
-	1107,
-	1108,
-	1118,
-	1119,
-	1120,
-	1121,
-	1122,
-	1124,
-	1133,
-	1134,
-	1137
-};
-new g_SideSkirt2[40] = {
-	1007,
-	1017,
-	1026,
-	1027,
-	1030,
-	1031,
-	1036,
-	1039,
-	1040,
-	1041,
-	1042,
-	1047,
-	1048,
-	1051,
-	1052,
-	1056,
-	1057,
-	1062,
-	1063,
-	1069,
-	1070,
-	1071,
-	1072,
-	1090,
-	1093,
-	1094,
-	1095,
-	1099,
-	1106,
-	1107,
-	1108,
-	1118,
-	1119,
-	1120,
-	1121,
-	1122,
-	1124,
-	1133,
-	1134,
-	1137
-};
-new g_roue[17] = {
-	1025,
-	1073,
-	1074,
-	1075,
-	1076,
-	1077,
-	1078,
-	1079,
-	1080,
-	1081,
-	1082,
-	1083,
-	1084,
-	1085,
-	1096,
-	1097,
-	1098
-};
 //afk
 new AFKTimer;
 new AFKMin[MAX_PLAYERS];

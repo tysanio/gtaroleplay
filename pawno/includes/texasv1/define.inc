@@ -7,6 +7,7 @@
 #define SQL_DATABASE 															"samp2"
 //#define SQL_DATABASE 															"test"
 #define SQL_PASSWORD															""
+//#define SQL_PASSWORD															""
 
 //Information serveur
 #define SERVER_NAME 	 														"[0.3.dl] TEST[RP]" //pour le nom du serveur
@@ -74,33 +75,25 @@
 #define MODEL_SELECTION_FACTION_SKIN 											(14)
 #define MODEL_SELECTION_WHEELS 													(15)
 #define MODEL_SELECTION_FRISK 													(16)
-#define MODEL_SELECTION_FRONTBUMPERS                                            (17)
-#define MODEL_SELECTION_REARBUMPERS                                             (18)
-#define MODEL_SELECTION_ROOFS                                                   (19)
-#define MODEL_SELECTION_HOODS                                                   (20)
-#define MODEL_SELECTION_SPOILERS                                                (21)
-#define MODEL_SELECTION_SIDESKIRTS1                                             (22)
-#define MODEL_SELECTION_SIDESKIRTS2                                             (23)
-#define MODEL_SELECTION_ROUE                                                    (24)
-#define MODEL_SELECTION_VET														(25)
+#define MODEL_SELECTION_VET														(17)
 
 //Job
 #define JOB_CHOMEUR																(0)
 #define JOB_COURIER 															(1)//itawiwi
-#define JOB_UNLOADER 															(4)//fait livreur
-#define JOB_MINER 																(5)//fait livreur
-#define JOB_GARBAGE 															(7)//mairie
-#define JOB_SORTER 																(8)//fait livreur
-#define JOB_WEAPON_SMUGGLER 													(9)//mafia4
-#define JOB_MEUBLE 																(10)//fait livreur
-#define JOB_FRABRIEARME                                                         (11)//fait livreur
-#define JOB_BUCHERON                                                         	(12)//fait livreur
-#define JOB_BOUCHER                                                         	(13)//fait livreur
-#define JOB_GENERATEUR                                                        	(15)//fait livreur
-#define JOB_PETROLIER                                                        	(16)
-#define JOB_ELECTRICIEN                                                        	(17)//fait
-#define JOB_DOC                                                        			(18)
-#define JOB_USINE                                                               (19)
+#define JOB_UNLOADER 															(2)//fait livreur
+#define JOB_MINER 																(3)//fait livreur
+#define JOB_SORTER 																(4)//fait livreur
+#define JOB_WEAPON_SMUGGLER 													(5)//mafia4
+#define JOB_MEUBLE 																(6)//fait livreur
+#define JOB_FRABRIEARME                                                         (7)//fait livreur
+#define JOB_BUCHERON                                                         	(8)//fait livreur
+#define JOB_BOUCHER                                                         	(9)//fait livreur
+#define JOB_GENERATEUR                                                        	(10)//fait livreur
+#define JOB_PETROLIER                                                        	(11)
+#define JOB_ELECTRICIEN                                                        	(12)//fait
+#define JOB_DOC                                                        			(13)
+#define JOB_USINE                                                               (14)
+#define JOB_GARBAGE																(15)
 
 //Maximum par joueur
 #define MAX_BILLBOARDS 															(50)
@@ -109,12 +102,12 @@
 #define MAX_HOUSES 																(750)
 #define MAX_HOUSE_STORAGE 														(10)
 #define MAX_BUSINESSES 															(150)
-#define MAX_DROPPED_ITEMS 														(4000)
+#define MAX_DROPPED_ITEMS 														(3500)
 #define MAX_ENTRANCES 															(75)
 #define MAX_DEALERSHIP_CARS 													(40)
 #define MAX_DYNAMIC_CARS 														(1500)
 #define MAX_GAS_PUMPS 															(20)
-#define MAX_FURNITURE 															(15555)
+#define MAX_FURNITURE 															(7500)
 #define MAX_HOUSE_FURNITURE 													(100)
 #define MAX_DYNAMIC_JOBS 														(20)
 #define MAX_CONTACTS 															(20)
@@ -129,7 +122,7 @@
 #define MAX_BOOTHS 																(8)
 #define MAX_GATES 																(200)
 #define MAX_batiementS															(250)
-#define MAX_IMPOUND_LOTS 														(125)
+#define MAX_IMPOUND_LOTS 														(100)
 #define MAX_ATM_MACHINES 														(75)
 #define MAX_GARBAGE_BINS 														(150)
 #define MAX_VENDORS 															(75)

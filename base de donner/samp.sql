@@ -908,9 +908,7 @@ CREATE TABLE IF NOT EXISTS `factorystock` (
   `roof` int(11) NOT NULL,
   `hood` int(11) NOT NULL,
   `spoiler` int(11) NOT NULL,
-  `sideskirt1` int(11) NOT NULL,
-  `sideskirt2` int(11) NOT NULL,
-  `wheel` int(11) NOT NULL,
+  `sideskirt1 int(11) NOT NULL,
   `hydrolic` int(11) NOT NULL,
   `roue` int(11) NOT NULL,
   `caro` int(11) NOT NULL
@@ -920,8 +918,8 @@ CREATE TABLE IF NOT EXISTS `factorystock` (
 -- Contenu de la table `factorystock`
 --
 
-INSERT INTO `factorystock` (`id`, `bois`, `viande`, `meuble`, `central1`, `central2`, `central3`, `central4`, `central5`, `electronic`, `petrol`, `essencegenerator`, `boismeuble`, `magasinstock`, `dockstock`, `manutentionnairestock`, `caristestock`, `minerstock`, `armesstock`, `frontbumper`, `rearbumper`, `roof`, `hood`, `spoiler`, `sideskirt1`, `sideskirt2`, `wheel`, `hydrolic`, `roue`, `caro`) VALUES
-(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `factorystock` (`id`, `bois`, `viande`, `meuble`, `central1`, `central2`, `central3`, `central4`, `central5`, `electronic`, `petrol`, `essencegenerator`, `boismeuble`, `magasinstock`, `dockstock`, `manutentionnairestock`, `caristestock`, `minerstock`, `armesstock`, `frontbumper`, `rearbumper`, `roof`, `hood`, `spoiler`, `sideskirt`,`hydrolic`, `roue`, `caro`) VALUES
+(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1623,75 +1621,6 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `ticketDate` varchar(36) DEFAULT NULL,
   `ticketReason` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=426 DEFAULT CHARSET=latin1;
-
-
---
--- Structure de la table `tuning`
---
-
-CREATE TABLE IF NOT EXISTS `tuning` (
-`id` int(12) NOT NULL,
-  `vehicule` int(11) NOT NULL,
-  `FrontBumperID` int(11) NOT NULL,
-  `FrontBumperX` float NOT NULL,
-  `FrontBumperY` float NOT NULL,
-  `FrontBumperZ` float NOT NULL,
-  `FrontBumperRX` float NOT NULL,
-  `FrontBumperRY` float NOT NULL,
-  `FrontBumperRZ` float NOT NULL,
-  `RearBumperID` int(11) NOT NULL,
-  `RearBumperX` float NOT NULL,
-  `RearBumperY` float NOT NULL,
-  `RearBumperZ` float NOT NULL,
-  `RearBumperRX` float NOT NULL,
-  `RearBumperRY` float NOT NULL,
-  `RearBumperRZ` float NOT NULL,
-  `RoofID` int(11) NOT NULL,
-  `RoofX` float NOT NULL,
-  `RoofY` float NOT NULL,
-  `RoofZ` float NOT NULL,
-  `RoofRX` float NOT NULL,
-  `RoofRY` float NOT NULL,
-  `RoofRZ` float NOT NULL,
-  `HoodID` int(11) NOT NULL,
-  `HoodX` float NOT NULL,
-  `HoodY` float NOT NULL,
-  `HoodZ` float NOT NULL,
-  `HoodRX` float NOT NULL,
-  `HoodRY` float NOT NULL,
-  `HoodRZ` float NOT NULL,
-  `SpoilerID` int(11) NOT NULL,
-  `SpoilerX` float NOT NULL,
-  `SpoilerY` float NOT NULL,
-  `SpoilerZ` float NOT NULL,
-  `SpoilerRX` float NOT NULL,
-  `SpoilerRY` float NOT NULL,
-  `SpoilerRZ` float NOT NULL,
-  `WheelID` int(11) NOT NULL,
-  `WheelX` float NOT NULL,
-  `WheelY` float NOT NULL,
-  `WheelZ` float NOT NULL,
-  `WheelRX` float NOT NULL,
-  `WheelRY` float NOT NULL,
-  `WheelRZ` float NOT NULL,
-  `SideSkirt1ID` int(11) NOT NULL,
-  `SideSkirt1X` float NOT NULL,
-  `SideSkirt1Y` float NOT NULL,
-  `SideSkirt1Z` float NOT NULL,
-  `SideSkirt1RX` float NOT NULL,
-  `SideSkirt1RY` float NOT NULL,
-  `SideSkirt1RZ` float NOT NULL,
-  `SideSkirt2ID` int(11) NOT NULL,
-  `SideSkirt2X` float NOT NULL,
-  `SideSkirt2Y` float NOT NULL,
-  `SideSkirt2Z` float NOT NULL,
-  `SideSkirt2RX` float NOT NULL,
-  `SideSkirt2RY` float NOT NULL,
-  `SideSkirt2RZ` float NOT NULL,
-  `EditingPart` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `vendors`
@@ -2461,11 +2390,7 @@ MODIFY `speedID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=351;
 --
 ALTER TABLE `tickets`
 MODIFY `ticketID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=426;
---
--- AUTO_INCREMENT pour la table `tuning`
---
-ALTER TABLE `tuning`
-MODIFY `id` int(12) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `vendors`
 --

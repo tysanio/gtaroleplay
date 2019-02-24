@@ -219,39 +219,9 @@ CMD:aide(playerid, params[])
 {
 	if (PlayerData[playerid][pFactionMod])
 	    SendClientMessage(playerid, COLOR_CLIENT, "FACTION:{FFFFFF} /creerfaction, /editfaction, /supfaction.");
-    if (PlayerData[playerid][pTester] > 0) {SendClientMessage(playerid, COLOR_CLIENT, "SUPPORTER:{FFFFFF} /a, /tduty, /ar, /dr, /jail,/rapports, /spec");}
+    if (PlayerData[playerid][pTester] > 0) {SendClientMessage(playerid, COLOR_CLIENT, "SUPPORTER:{FFFFFF} /a, /tduty, /ar, /dr, /jail, /rapports, /spec");}
 	if (PlayerData[playerid][pAdmin] > 0) {SendClientMessage(playerid, COLOR_CLIENT, "STAFF:{FFFFFF} /(a)dmin, /ahelp.");}
-	if(Showing[playerid] == 1)
-	{
-		Showing[playerid] = 0;
-		TextDrawHideForPlayer(playerid, AideMenu0);
-		TextDrawHideForPlayer(playerid, AideMenu1);
-		TextDrawHideForPlayer(playerid, AideMenu2);
-		TextDrawHideForPlayer(playerid, AideMenu2);
-		TextDrawHideForPlayer(playerid, AideMenu3);
-		TextDrawHideForPlayer(playerid, AideMenu4);
-		TextDrawHideForPlayer(playerid, AideMenu5);
-		TextDrawHideForPlayer(playerid, AideMenu6);
-		TextDrawHideForPlayer(playerid, AideMenu7);
-		TextDrawHideForPlayer(playerid, AideMenu8);
-		TextDrawHideForPlayer(playerid, AideMenu9);
-		CancelSelectTextDraw(playerid);
-	}
-	else
-	{
-		Showing[playerid] = 1;
-		TextDrawShowForPlayer(playerid, AideMenu0);
-		TextDrawShowForPlayer(playerid, AideMenu1);
-		TextDrawShowForPlayer(playerid, AideMenu2);
-		TextDrawShowForPlayer(playerid, AideMenu3);
-		TextDrawShowForPlayer(playerid, AideMenu4);
-		TextDrawShowForPlayer(playerid, AideMenu5);
-		TextDrawShowForPlayer(playerid, AideMenu6);
-		TextDrawShowForPlayer(playerid, AideMenu7);
-		TextDrawShowForPlayer(playerid, AideMenu8);
-		TextDrawShowForPlayer(playerid, AideMenu9);
-		SelectTextDraw(playerid, 0x2E2EFEDD);
-	}
+	Dialog_Show(playerid,aidemenu,DIALOG_STYLE_LIST,"Menu d'aide","Aide Chat\nAide Maison\nAide Magasin\nAide Vehicule\nAide Faction\nAide Divers\nAide General","Quitter","");
 	return 1;
 }
 CMD:ahelp(playerid, params[])
@@ -259,24 +229,22 @@ CMD:ahelp(playerid, params[])
 	if (!PlayerData[playerid][pAdmin])
 	    return SendErrorMessage(playerid, "Tu n'est pas dans les admins.");
 	if (PlayerData[playerid][pAdmin] >= 1) {
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /a, /rapports, /spec, /jail, /dejail, /aduty, /ban, /aremovecall, /gotoactor");
-	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /warn, /shooter, /goto, /setint, /setvw ,/envoyera, /clearchat, /refill");
+	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /a, /rapports, /spec, /jail, /dejail.");
+	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /warn, /goto, /envoyera, /clearchat, /aduty, /ban, /aremovecall.");
 	    SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /masked, /amenerveh, /acceptname, /declinename, /a.");
-		SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /x /y /z /renvoyer, /caissedetat ,/stockdetat");
+		SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /x /y /z /renvoyer, /caissedetat, /stockdetat, /gotoactor.");
  	}
 	if (PlayerData[playerid][pAdmin] >= 2) {
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /unban, /blacklist, /vie, /armure.");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber.");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /addseat.");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber, /blacklist.");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /addseat, /unban.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 3) {
-        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /givewep, /sethelpeur, /baninfo, /setname, /asetfaction, /asetrank, /setitem.");
         SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /asellmaison, /asellbiz, /jetpack, /setweather, /setfuel, /setcarhp, /spawnitem.");
-        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /setquantity, /supitem, /setplayer, /asetleader, /setinventory, /arepair.");
+        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /setquantity, /supitem, /setplayer, /setinventory, /arepair, /givewep, /baninfo, /setitem.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 4) {
         SendClientMessage(playerid, COLOR_BLUE, "[LEVEL 4]:{FFFFFF} /dynamichelp, /restart, /mcreate");
-		SendClientMessage(playerid, COLOR_BLUE, "[LEVEL 4]:{FFFFFF} /salaireanpe, /mettreadmin, /supaccount, /supperso, /factionmod, /panel, /serveur.");
+		SendClientMessage(playerid, COLOR_BLUE, "[LEVEL 4]:{FFFFFF} /salaireanpe, /supaccount, /supperso, /panel, /serveur.");
 	}
 	return 1;
 }
@@ -487,32 +455,6 @@ CMD:vitre(playerid, params[])
 			}
 		}
 	}
-	return 1;
-}
-CMD:mettreadmin(playerid, params[])
-{
-	static userid,level;
-	if (PlayerData[playerid][pAdmin] < 4)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "ud", userid, level))
-		return SendSyntaxMessage(playerid, "/mettreadmin [playerid/name] [level]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (level < 0 || level > 6)
-	    return SendErrorMessage(playerid, "Invalide niveaux 0 a 6");
-	if (level > PlayerData[userid][pAdmin])
-	{
-	    SendAdminAction(playerid, "Vous avez mis %s admin de niveau (%d).", ReturnName(userid, 0), level);
-	    SendAdminAction(userid, "%s vous à mis admin de niveau (%d).", ReturnName(playerid, 0), level);
-	}
-	else
-	{
-	    SendAdminAction(playerid, "Vous avez mis %s admin de niveau (%d).", ReturnName(userid, 0), level);
-	    SendAdminAction(userid, "%s vous à mis admin de niveau (%d).", ReturnName(playerid, 0), level);
-	}
-	PlayerData[userid][pAdmin] = level;
- 	Log_Write("logs/admin_log.txt", "[%s] %s à mis admin %s au niveau %d.", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0), level);
-
 	return 1;
 }
 CMD:a(playerid, params[])
@@ -768,22 +710,6 @@ CMD:respawn(playerid, params[])
 	SendAdminAction(userid, "Vous avez été respawn par %s.", ReturnName(playerid, 0));
 	return 1;
 }
-
-CMD:refill(playerid, params[])
-{
-	static userid;
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/refill [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	PlayerData[userid][pHunger] = 100;
-	PlayerData[userid][pThirst] = 100;
-	SendAdminAction(playerid, "Vous avez restauré la faim et la soif de %s.", ReturnName(userid, 0));
-	SendAdminAction(userid, "Faim et soif restauré par %s.", ReturnName(playerid, 0));
-	return 1;
-}
 CMD:ban(playerid, params[])
 {
 	static userid,reason[128];
@@ -829,20 +755,6 @@ CMD:acc(playerid, params[])
 	format(string, sizeof(string), "Lunette: %s\nChapeau: %s\nBandana: %s", (PlayerData[playerid][pGlasses]) ? ("Oui") : ("Non"), (PlayerData[playerid][pHat]) ? ("Oui") : ("Non"), (PlayerData[playerid][pBandana]) ? ("Oui") : ("Non"));
 	Dialog_Show(playerid, Accessory, DIALOG_STYLE_LIST, "Accessoires", string, "Valider", "Annuler");
 	return 1;
-}
-CMD:shooter(playerid, params[])
-{
-	static userid;
-	if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/shooter [playerid/nom]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (PlayerData[userid][pLastShot] == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Ce joueur na pas été tirer dessus depuis sa connection au serveur.");
-    SendServerMessage(playerid, "%s a tirer sur %s (%s).", ReturnName(userid, 0), ReturnName(PlayerData[userid][pLastShot]), GetDuration(gettime() - PlayerData[userid][pShotTime]));
-    return 1;
 }
 CMD:goto(playerid, params[])
 {
@@ -1029,41 +941,9 @@ CMD:inventory(playerid, params[])
 	OpenInventory(playerid);
 	return 1;
 }
-CMD:setint(playerid, params[])
-{
-	static userid,interior;
-	if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "ud", userid, interior))
-		return SendSyntaxMessage(playerid, "/setint [playerid/name] [interior]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	SetPlayerInterior(userid, interior);
-	PlayerData[userid][pInterior] = interior;
-	SendServerMessage(playerid, "Vous avez mis %s dans l'intérieur (ID %d.)", ReturnName(userid, 0), interior);
-	return 1;
-}
-CMD:setvw(playerid, params[])
-{
-	static
-		userid,
-	    world;
-	if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "ud", userid, world))
-		return SendSyntaxMessage(playerid, "/setvw [playerid/name] [world]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	SetPlayerVirtualWorld(userid, world);
-	PlayerData[userid][pWorld] = world;
-	SendServerMessage(playerid, "Vous avez mis %s dans le virtual world (ID %d.)", ReturnName(userid, 0), world);
-	return 1;
-}
 CMD:atalk(playerid, params[])
 {
-	static
-	    userid,
-	    text[128];
+	static userid,text[128];
     if (PlayerData[playerid][pAdmin] < 1)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "us[128]", userid, text))
@@ -1078,9 +958,7 @@ CMD:atalk(playerid, params[])
 }
 CMD:envoyera(playerid, params[])
 {
-	static
-	    userid,
-	    targetid;
+	static userid,targetid;
     if (PlayerData[playerid][pAdmin] < 1)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "uu", userid, targetid))
@@ -1112,8 +990,7 @@ CMD:unban(playerid, params[])
 }
 CMD:blacklist(playerid, params[])
 {
-	static
-		type[24];
+	static type[24];
     if (PlayerData[playerid][pAdmin] < 2)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "s[24]s[128]", type, params))
@@ -1174,32 +1051,6 @@ CMD:togooc(playerid, params[])
 	    info_serveursettinginfo[serveursettinginfoid][settingoocactive] = 0;
 		serveursettinginfosave(serveursettinginfoid);
 	}
-	return 1;
-}
-CMD:vie(playerid, params[])
-{
-	static userid,Float:amount;
-	if (PlayerData[playerid][pAdmin] < 2)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "uf", userid, amount))
-		return SendSyntaxMessage(playerid, "/vie [playerid/name] [montant]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	SetPlayerHealth(userid, amount);
-	SendServerMessage(playerid, "Vous avez mis la vie de %s a %.2f.", ReturnName(userid, 0), amount);
-	return 1;
-}
-CMD:armure(playerid, params[])
-{
-	static userid,Float:amount;
-	if (PlayerData[playerid][pAdmin] < 2)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "uf", userid, amount))
-		return SendSyntaxMessage(playerid, "/armure [playerid/name] [montant]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-    SetPlayerArmour(userid, amount);
-	SendServerMessage(playerid, "Vous avez mis l'armure %s a %.2f.", ReturnName(userid, 0), amount);
 	return 1;
 }
 CMD:arepair(playerid, params[])
@@ -1390,7 +1241,7 @@ CMD:setplayer(playerid, params[])
 	{
 	    if (isnull(amount))
 	        return SendSyntaxMessage(playerid, "/setplayer [playerid/name] [job] [montant]");
-		if (strval(amount) < 0 || strval(amount) > 19)
+		if (strval(amount) < 0 || strval(amount) > 16)
 		    return SendErrorMessage(playerid, "Vous avez spécifier une invalide job ID.");
 		PlayerData[userid][pJob] = strval(amount);
 		SendServerMessage(playerid, "Vous avez mis a %s le job %s.", ReturnName(userid, 0), Job_GetName(PlayerData[userid][pJob]));
@@ -1443,77 +1294,6 @@ CMD:baninfo(playerid, params[])
 	    format(string, sizeof(string), "SELECT * FROM `blacklist` WHERE `Username` = '%s'", SQL_ReturnEscaped(params));
 	    mysql_tquery(g_iHandle, string, "OnBanLookup", "ds", playerid, params);
 	}
-	return 1;
-}
-CMD:sethelpeur(playerid, params[])
-{
-	static
-	    userid;
-    if (PlayerData[playerid][pAdmin] < 3)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/sethelpeur [playerid/nom]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (PlayerData[userid][pTester])
-	{
-	    PlayerData[userid][pTester] = false;
-	    SendAdminAction(playerid, "Vous avez enlever %s des helpeurs.", ReturnName(userid, 0));
-		SendAdminAction(userid, "%s vous à enlever des helpeurs.", ReturnName(playerid, 0));
-	}
-	else
-	{
-	    PlayerData[userid][pTester] = true;
-        SendAdminAction(playerid, "Vous avez invité %s dans les helpeurs.", ReturnName(userid, 0));
-		SendAdminAction(userid, "%s vous a invité dans les helpeurs.", ReturnName(playerid, 0));
-	}
-	return 1;
-}
-CMD:factionmod(playerid, params[])
-{
-	static userid;
-
-    if (PlayerData[playerid][pAdmin] < 4)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/factionmod [playerid/nom]");
-
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-
-	if (PlayerData[userid][pFactionMod])
-	{
-	    PlayerData[userid][pFactionMod] = false;
-	    SendAdminAction(playerid, "Vous avez été enlever %s de l'équipe de faction management.", ReturnName(userid, 0));
-		SendAdminAction(userid, "%s vous a kické de l'équipe de faction", ReturnName(playerid, 0));
-	}
-	else
-	{
-	    PlayerData[userid][pFactionMod] = true;
-        SendAdminAction(playerid, "Vous avez invité %s au faction management.", ReturnName(userid, 0));
-		SendAdminAction(userid, "%s vous a invité au faction management.", ReturnName(playerid, 0));
-	}
-	return 1;
-}
-CMD:setname(playerid, params[])
-{
-	static userid,newname[24],query[128];
-    if (PlayerData[playerid][pAdmin] < 3)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "us[24]", userid, newname))
-	    return SendSyntaxMessage(playerid, "/setname [playerid/name] [new name]");
-	if (userid == INVALID_PLAYER_ID)
-		return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (!PlayerData[userid][pLogged] && !PlayerData[userid][pCharacter])
-	    return SendErrorMessage(playerid, "Ce joueur n'a pas de personnage");
-	if (!IsValidPlayerName(newname))
-	    return SendErrorMessage(playerid, "Vous avez spécifier un nom de format invalide.");
-	foreach (new i : Player) if (!strcmp(ReturnName(i), newname)) {
-	    return SendErrorMessage(playerid, "Nom déja utilisé");
-	}
-	format(query, sizeof(query), "SELECT `ID` FROM `characters` WHERE `Character` = '%s'", SQL_ReturnEscaped(newname));
-	mysql_tquery(g_iHandle, query, "OnNameChange", "dds", playerid, userid, newname);
 	return 1;
 }
 CMD:clearchat(playerid, params[])
@@ -3233,23 +3013,32 @@ CMD:chargeur(playerid, params[])
 {
     if (PlayerData[playerid][pHospital] != -1 || PlayerData[playerid][pCuffed] || PlayerData[playerid][pInjured] || !IsPlayerSpawned(playerid))
 	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
-	if (!Inventory_HasItem(playerid, "Munition"))
-	    return SendErrorMessage(playerid, "Tu n'a pas de chargeur sur toi.");
 	new weaponid = 0;
-	switch ((weaponid = GetWeapon(playerid)))
+	if (Inventory_HasItem(playerid, "Munition"))
 	{
-		case 22, 23: GiveWeaponToPlayer(playerid, weaponid, 68);
-		case 24, 27: GiveWeaponToPlayer(playerid, weaponid, 35);
-	    case 25, 26: GiveWeaponToPlayer(playerid, weaponid, 20);
-	    case 28, 31, 32: GiveWeaponToPlayer(playerid, weaponid, 200);
-	    case 29, 30: GiveWeaponToPlayer(playerid, weaponid, 120);
-	    case 33, 34: GiveWeaponToPlayer(playerid, weaponid, 20);
-	    case 35..37: GiveWeaponToPlayer(playerid, weaponid, 4);
-	    case 38: GiveWeaponToPlayer(playerid, weaponid, 500);
-		default: return SendErrorMessage(playerid, "Tu ne peut utiliser de chargeur.");
+		switch ((weaponid = GetWeapon(playerid)))
+		{
+			case 22, 23, 24: GiveWeaponToPlayer(playerid, weaponid, 68);
+			case 25, 26, 27: GiveWeaponToPlayer(playerid, weaponid, 20);
+			case 28, 31, 32: GiveWeaponToPlayer(playerid, weaponid, 200);
+			case 29, 30: GiveWeaponToPlayer(playerid, weaponid, 120);
+			case 33, 34: GiveWeaponToPlayer(playerid, weaponid, 20);
+			case 35..37: GiveWeaponToPlayer(playerid, weaponid, 4);
+			case 38: GiveWeaponToPlayer(playerid, weaponid, 500);
+			default: return SendErrorMessage(playerid, "Tu ne peut utiliser de chargeur.");
+		}
+		Inventory_Remove(playerid, "Munition");
+	}
+	if (Inventory_HasItem(playerid, "douille de shotgun"))
+	{
+		switch ((weaponid = GetWeapon(playerid)))
+		{
+			case 25, 26, 27: GiveWeaponToPlayer(playerid, weaponid, 20);
+			default: return SendErrorMessage(playerid, "Tu ne peut utiliser de douille de shotgun.");
+		}
+		Inventory_Remove(playerid, "douille de shotgun");
 	}
 	PlayReloadAnimation(playerid, weaponid);
-	Inventory_Remove(playerid, "Munition");
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort un chargeur pour son %s.", ReturnName(playerid, 0), ReturnWeaponName(weaponid));
 	return 1;
 }
@@ -4210,7 +3999,7 @@ CMD:creercrate(playerid, params[])
 	if (sscanf(params, "d", type))
 	{
 	    SendSyntaxMessage(playerid, "/creercrate [type]");
-	    SendServerMessage(playerid, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece de sideskirt1 | 15: Piece de sideskirt2 | 16: Piece de wheel | 17: Piece d'hydraulics | 18: Piece de roue | 19: Piece de carrosserie");
+	    SendServerMessage(playerid, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece de sideskirt | 15: Piece d'hydraulics | 16: Piece de roue | 17: Piece de carrosserie");
 		return 1;
 	}
 	if (type < 1 || type > 20)
@@ -4773,77 +4562,6 @@ CMD:fequipement(playerid, params[])
 		Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Se mettre en service\nVêtements\nArmes\nRegarder CV", "Valider", "Annuler");
 	else Dialog_Show(playerid, Locker, DIALOG_STYLE_LIST, "Equipement", "Vêtements\nArmes\nRegarder CV\nCoffre", "Valider", "Annuler");
 	return 1;
-}
-CMD:asetleader(playerid, params[])
-{
-	static userid,id;
-    if (PlayerData[playerid][pAdmin] < 3)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "ud", userid, id))
-	    return SendSyntaxMessage(playerid, "/asetleader [playerid/name] [faction id] (Use -1 a unset)");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-    if ((id < -1 || id >= MAX_FACTIONS) || (id != -1 && !FactionData[id][factionExists]))
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide faction ID.");
-	if (id == -1)
-	{
-	    ResetFaction(userid);
-	    SendServerMessage(playerid, "Vous avez enlever a %s le leadership.", ReturnName(userid, 0));
-    	SendServerMessage(userid, "%s vous a enlever le leadership d'une faction.", ReturnName(playerid, 0));
-	}
-	else
-	{
-		SetFaction(userid, id);
-		PlayerData[userid][pFactionRank] = FactionData[id][factionRanks];
-		SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(userid, 0), FactionData[id][factionName]);
-    	SendServerMessage(userid, "%s ta mis leader de \"%s\".", ReturnName(playerid, 0), FactionData[id][factionName]);
-	}
-    return 1;
-}
-CMD:asetfaction(playerid, params[])
-{
-	static userid,id;
-    if (PlayerData[playerid][pAdmin] < 3)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "ud", userid, id))
-	    return SendSyntaxMessage(playerid, "/asetfaction [playerid/name] [faction id] (Use -1 a unset)");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-    if ((id < -1 || id >= MAX_FACTIONS) || (id != -1 && !FactionData[id][factionExists]))
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide faction ID.");
-	if (id == -1)
-	{
-	    ResetFaction(userid);
-	    SendServerMessage(playerid, "Vous avez enlever %s de sa faction.", ReturnName(userid, 0));
-    	SendServerMessage(userid, "%s ta enlever de ta faction.", ReturnName(playerid, 0));
-	}
-	else
-	{
-		SetFaction(userid, id);
-		if (!PlayerData[userid][pFactionRank])
-	    	PlayerData[userid][pFactionRank] = 1;
-		SendServerMessage(playerid, "Vous avez mis %s faction \"%s\".", ReturnName(userid, 0), FactionData[id][factionName]);
-    	SendServerMessage(userid, "%s vous a mis dans la faction \"%s\".", ReturnName(playerid, 0), FactionData[id][factionName]);
-	}
-    return 1;
-}
-CMD:asetrank(playerid, params[])
-{
-	static userid,rank,factionid;
-    if (PlayerData[playerid][pAdmin] < 3)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "ud", userid, rank))
-	    return SendSyntaxMessage(playerid, "/asetrank [playerid/name] [rank id]");
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if ((factionid = PlayerData[userid][pFaction]) == -1)
-	    return SendErrorMessage(playerid, "Ce joueur n'est pas membres d'une faction.");
-    if (rank < 1 || rank > FactionData[factionid][factionRanks])
-        return SendErrorMessage(playerid, "Invalide rang. Rang de 1 a %d.", FactionData[factionid][factionRanks]);
-	PlayerData[userid][pFactionRank] = rank;
-	SendServerMessage(playerid, "Vous avez mis %s le rang a %d.", ReturnName(userid, 0), rank);
-    SendServerMessage(userid, "%s vous a mis le rang a %d.", ReturnName(playerid, 0), rank);
-    return 1;
 }
 CMD:membres(playerid, params[])
 {
@@ -8283,131 +8001,131 @@ CMD:usemag(playerid, params[])
 	new weaponid = PlayerData[playerid][pHoldWeapon];
 	if (!weaponid)
 	    return SendErrorMessage(playerid, "Tu na pas d'arme vide sur toi.");
-	if (!Inventory_HasItem(playerid, "Chargeur"))
-	    return SendErrorMessage(playerid, "Vous n'avez pas de weapon magazines.");
 	if (PlayerData[playerid][pUsedMagazine])
 	    return SendErrorMessage(playerid, "Vous avez déja utiliser un chargeur pour votre arme.");
-	switch (weaponid)
+	if (Inventory_HasItem(playerid, "Chargeur"))
 	{
-	    case 22:
-	    {
-		    PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+		switch (weaponid)
+		{
+			case 22:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 24:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 28:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 29:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 32:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 30:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 31:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}		
+			case 33:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 34:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "Chargeur");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			default:
+				return SendErrorMessage(playerid, "Tu ne peut chargé cette arme.");
 		}
-		case 24:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+	}
+	if (Inventory_HasItem(playerid, "douille de shotgun"))
+	{
+		switch (weaponid)
+		{
+			case 25:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "douille de shotgun");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s mets quelque cartouche.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 26:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "douille de shotgun");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s mets quelque cartouche.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			case 27:
+			{
+				PlayerPlaySoundEx(playerid, 1131);
+				PlayerData[playerid][pUsedMagazine] = 1;
+				Inventory_Remove(playerid, "douille de shotgun");
+				PlayReloadAnimation(playerid, 24);
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s mets quelque cartouche.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			default:
+				return SendErrorMessage(playerid, "Tu ne peut chargé cette arme.");
 		}
-		case 25:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s mets quelque cartouche.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 26:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s mets quelque cartouche.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 27:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s mets quelque cartouche.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 28:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 29:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 32:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 30:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 31:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}		
-		case 311:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		case 33:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-        case 34:
-	    {
-	        PlayerPlaySoundEx(playerid, 1131);
-			PlayerData[playerid][pUsedMagazine] = 1;
-	        Inventory_Remove(playerid, "Chargeur");
-   			PlayReloadAnimation(playerid, 24);
-			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
-			ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
-		}
-		default:
-		    return SendErrorMessage(playerid, "Tu ne peut chargé cette arme.");
 	}
 	return 1;
 }
@@ -8434,45 +8152,6 @@ CMD:warnings(playerid, params[])
     if (PlayerData[playerid][pWarnings] >= 2 && strlen(PlayerData[playerid][pWarn2]))
         SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[playerid][pWarn2]);
     SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-	return 1;
-}
-CMD:warn(playerid, params[])
-{
-	static
-	    userid,
-		reason[32];
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "us[32]", userid, reason))
-	    return SendSyntaxMessage(playerid, "/warn [playerid/nom] [raison]");
-    if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "Vous avez mis un [id/nom] invalide.");
-	if (PlayerData[userid][pAdmin] > PlayerData[playerid][pAdmin])
-	    return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
-	switch (++ PlayerData[userid][pWarnings])
-	{
-	    case 1:
-	    {
-	        format(PlayerData[userid][pWarn1], 32, reason);
-	        SendAdminAction(userid, "%s vous a mis un warn pour \"%s\" (warn 1/3).", ReturnName(playerid, 0), reason);
-	        SendAdminAction(playerid, "Vous avez mis un warn a %s pour \"%s\" (warn 1/3).", ReturnName(userid, 0), reason);
-		}
-		case 2:
-	    {
-	        format(PlayerData[userid][pWarn2], 32, reason);
-	        SendAdminAction(userid, "%s vous a mis un warn pour \"%s\" (warn 2/3).", ReturnName(playerid, 0), reason);
-	        SendAdminAction(playerid, "Vous avez mis un warn %s pour \"%s\" (warn 2/3).", ReturnName(userid, 0), reason);
-		}
-		default:
-	    {
-	        ResetWarnings(userid);
-	        SendAdminAction(userid, "Tu as été banni pour avoir eu trop de warning (\"%s\").", reason);
-	        SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a été banni pour 3 warning par %s, raison: %s", ReturnName(userid, 0), ReturnName(playerid, 0), reason);
-			Blacklist_Add(PlayerData[userid][pIP], PlayerData[userid][pUsername], PlayerData[playerid][pUsername], reason);
-			KickEx(userid);
-		}
-	}
-	Log_Write("logs/warn_log.txt", "[%s] %s a warned %s pour %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0), reason);
 	return 1;
 }
 CMD:trier(playerid, params[])
@@ -10448,198 +10127,6 @@ CMD:tune(playerid, params[])
 		return 1;
 	}
 	else {SendClientMessage(playerid, COLOR_RED, "[ERROR] You cannot modify/tune a car unless you are the driver.");}
-	return 1;
-}
-//tuning
-CMD:tuning(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	{
-		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SendClientMessage(playerid, COLOR_GREY, "Vous n'êtes pas dans un véhicule.");
-		Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-		return 1;
-	}
-	else {SendClientMessage(playerid,COLOR_LIGHTGREEN,"[Mécanicien]: Vous ne pouver utiliser cette commande.");}
-	return 1;
-}
-CMD:etuning(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	{
-		if(sscanf(params, "s[16]", params))
-		{
-			SendClientMessage(playerid, COLOR_WHITE, "[Usage]: /etuning [option]");
-			SendClientMessage(playerid, COLOR_WHITE, "OPTIONS: x | y | z | done");
-		}
-		else if(!strcmp(params, "x", true)){Tuning[playerid][EditStatus] = 1;}
-		else if(!strcmp(params, "y", true)){Tuning[playerid][EditStatus] = 2;}
-		else if(!strcmp(params, "z", true)){Tuning[playerid][EditStatus] = 3;}
-		else if(!strcmp(params, "rx", true)){Tuning[playerid][EditStatus] = 4;}
-		else if(!strcmp(params, "ry", true)){Tuning[playerid][EditStatus] = 5;}
-		else if(!strcmp(params, "rz", true)){Tuning[playerid][EditStatus] = 6;}
-		else if(!strcmp(params, "done", true))
-		{
-			Tuning[playerid][EditStatus] = 0;
-			KillTimer(Tuning[playerid][EditingTimer]);
-			tuningsave(playerid);
-			Tuning[playerid][FrontBumper] = 0;
-			Tuning[playerid][FrontBumperID] = 0;
-			Tuning[playerid][FrontBumperX] = 0.0;
-			Tuning[playerid][FrontBumperY] = 0.0;
-			Tuning[playerid][FrontBumperZ] = 0.0;
-			Tuning[playerid][FrontBumperRX] = 0.0;
-			Tuning[playerid][FrontBumperRY] = 0.0;
-			Tuning[playerid][FrontBumperRZ] = 0.0;
-			Tuning[playerid][RearBumper] = 0;
-			Tuning[playerid][RearBumperID] = 0;
-			Tuning[playerid][RearBumperX] = 0.0;
-			Tuning[playerid][RearBumperY] = 0.0;
-			Tuning[playerid][RearBumperZ] = 0.0;
-			Tuning[playerid][RearBumperRX] = 0.0;
-			Tuning[playerid][RearBumperRY] = 0.0;
-			Tuning[playerid][RearBumperRZ] = 0.0;
-			Tuning[playerid][Roof] = 0;
-			Tuning[playerid][RoofID] = 0;
-			Tuning[playerid][RoofX] = 0.0;
-			Tuning[playerid][RoofY] = 0.0;
-			Tuning[playerid][RoofZ] = 0.0;
-			Tuning[playerid][RoofRX] = 0.0;
-			Tuning[playerid][RoofRY] = 0.0;
-			Tuning[playerid][RoofRZ] = 0.0;
-			Tuning[playerid][Hood] = 0;
-			Tuning[playerid][HoodID] = 0;
-			Tuning[playerid][HoodX] = 0.0;
-			Tuning[playerid][HoodY] = 0.0;
-			Tuning[playerid][HoodZ] = 0.0;
-			Tuning[playerid][HoodRX] = 0.0;
-			Tuning[playerid][HoodRY] = 0.0;
-			Tuning[playerid][HoodRZ] = 0.0;
-			Tuning[playerid][Spoiler] = 0;
-			Tuning[playerid][SpoilerID] = 0;
-			Tuning[playerid][SpoilerX] = 0.0;
-			Tuning[playerid][SpoilerY] = 0.0;
-			Tuning[playerid][SpoilerZ] = 0.0;
-			Tuning[playerid][SpoilerRX] = 0.0;
-			Tuning[playerid][SpoilerRY] = 0.0;
-			Tuning[playerid][SpoilerRZ] = 0.0;
-			Tuning[playerid][SideSkirt1] = 0;
-			Tuning[playerid][SideSkirt1ID] = 0;
-			Tuning[playerid][SideSkirt1X] = 0.0;
-			Tuning[playerid][SideSkirt1Y] = 0.0;
-			Tuning[playerid][SideSkirt1Z] = 0.0;
-			Tuning[playerid][SideSkirt1RX] = 0.0;
-			Tuning[playerid][SideSkirt1RY] = 0.0;
-			Tuning[playerid][SideSkirt1RZ] = 0.0;
-			Tuning[playerid][SideSkirt2] = 0;
-			Tuning[playerid][SideSkirt2ID] = 0;
-			Tuning[playerid][SideSkirt2X] = 0.0;
-			Tuning[playerid][SideSkirt2Y] = 0.0;
-			Tuning[playerid][SideSkirt2Z] = 0.0;
-			Tuning[playerid][SideSkirt2RX] = 0.0;
-			Tuning[playerid][SideSkirt2RY] = 0.0;
-			Tuning[playerid][SideSkirt2RZ] = 0.0;
-			Tuning[playerid][Wheel] = 0;
-			Tuning[playerid][WheelID] = 0;
-			Tuning[playerid][WheelX] = 0.0;
-			Tuning[playerid][WheelY] = 0.0;
-			Tuning[playerid][WheelZ] = 0.0;
-			Tuning[playerid][WheelRX] = 0.0;
-			Tuning[playerid][WheelRY] = 0.0;
-			Tuning[playerid][WheelRZ] = 0.0;
-			return 1;
-		}
-	}
-	else {SendClientMessage(playerid,COLOR_LIGHTGREEN,"[Mécanicien]: Vous ne pouver utiliser cette commande.");}
-	return 1;
-}
-CMD:rtuning(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	{
-		Tuning[playerid][FrontBumper] = 0;
-		Tuning[playerid][FrontBumperID] = 0;
-		Tuning[playerid][FrontBumperX] = 0.0;
-		Tuning[playerid][FrontBumperY] = 0.0;
-		Tuning[playerid][FrontBumperZ] = 0.0;
-		Tuning[playerid][FrontBumperRX] = 0.0;
-		Tuning[playerid][FrontBumperRY] = 0.0;
-		Tuning[playerid][FrontBumperRZ] = 0.0;
-		Tuning[playerid][RearBumper] = 0;
-		Tuning[playerid][RearBumperID] = 0;
-		Tuning[playerid][RearBumperX] = 0.0;
-		Tuning[playerid][RearBumperY] = 0.0;
-		Tuning[playerid][RearBumperZ] = 0.0;
-		Tuning[playerid][RearBumperRX] = 0.0;
-		Tuning[playerid][RearBumperRY] = 0.0;
-		Tuning[playerid][RearBumperRZ] = 0.0;
-		Tuning[playerid][Roof] = 0;
-		Tuning[playerid][RoofID] = 0;
-		Tuning[playerid][RoofX] = 0.0;
-		Tuning[playerid][RoofY] = 0.0;
-		Tuning[playerid][RoofZ] = 0.0;
-		Tuning[playerid][RoofRX] = 0.0;
-		Tuning[playerid][RoofRY] = 0.0;
-		Tuning[playerid][RoofRZ] = 0.0;
-		Tuning[playerid][Hood] = 0;
-		Tuning[playerid][HoodID] = 0;
-		Tuning[playerid][HoodX] = 0.0;
-		Tuning[playerid][HoodY] = 0.0;
-		Tuning[playerid][HoodZ] = 0.0;
-		Tuning[playerid][HoodRX] = 0.0;
-		Tuning[playerid][HoodRY] = 0.0;
-		Tuning[playerid][HoodRZ] = 0.0;
-		Tuning[playerid][Spoiler] = 0;
-		Tuning[playerid][SpoilerID] = 0;
-		Tuning[playerid][SpoilerX] = 0.0;
-		Tuning[playerid][SpoilerY] = 0.0;
-		Tuning[playerid][SpoilerZ] = 0.0;
-		Tuning[playerid][SpoilerRX] = 0.0;
-		Tuning[playerid][SpoilerRY] = 0.0;
-		Tuning[playerid][SpoilerRZ] = 0.0;
-		Tuning[playerid][SideSkirt1] = 0;
-		Tuning[playerid][SideSkirt1ID] = 0;
-		Tuning[playerid][SideSkirt1X] = 0.0;
-		Tuning[playerid][SideSkirt1Y] = 0.0;
-		Tuning[playerid][SideSkirt1Z] = 0.0;
-		Tuning[playerid][SideSkirt1RX] = 0.0;
-		Tuning[playerid][SideSkirt1RY] = 0.0;
-		Tuning[playerid][SideSkirt1RZ] = 0.0;
-		Tuning[playerid][SideSkirt2] = 0;
-		Tuning[playerid][SideSkirt2ID] = 0;
-		Tuning[playerid][SideSkirt2X] = 0.0;
-		Tuning[playerid][SideSkirt2Y] = 0.0;
-		Tuning[playerid][SideSkirt2Z] = 0.0;
-		Tuning[playerid][SideSkirt2RX] = 0.0;
-		Tuning[playerid][SideSkirt2RY] = 0.0;
-		Tuning[playerid][SideSkirt2RZ] = 0.0;
-		Tuning[playerid][Wheel] = 0;
-		Tuning[playerid][WheelID] = 0;
-		Tuning[playerid][WheelX] = 0.0;
-		Tuning[playerid][WheelY] = 0.0;
-		Tuning[playerid][WheelZ] = 0.0;
-		Tuning[playerid][WheelRX] = 0.0;
-		Tuning[playerid][WheelRY] = 0.0;
-		Tuning[playerid][WheelRZ] = 0.0;
-		Tuning[playerid][EditingPart] = 0;
-		Tuning[playerid][PlayerVehicle] = 0;
-		Tuning[playerid][AddSpeed] = 0.005;
-		DestroyDynamicObject(Tuning[playerid][Wheel]);
-		DestroyDynamicObject(Tuning[playerid][SideSkirt1]);
-		DestroyDynamicObject(Tuning[playerid][SideSkirt2]);
-		DestroyDynamicObject(Tuning[playerid][Spoiler]);
-		DestroyDynamicObject(Tuning[playerid][Hood]);
-		DestroyDynamicObject(Tuning[playerid][Roof]);
-		DestroyDynamicObject(Tuning[playerid][RearBumper]);
-		DestroyDynamicObject(Tuning[playerid][FrontBumper]);
-		new query[600];
-		mysql_format(g_iHandle, query, sizeof(query), "DELETE FROM `tuning` where `vehicule` = '%d'", GetPlayerVehicleID(playerid));
-		mysql_query(g_iHandle, query, false);
-		return 1;
-	}
-	else {SendClientMessage(playerid,COLOR_LIGHTGREEN,"[Mécanicien]: Vous ne pouver utiliser cette commande.");}
 	return 1;
 }
 //dynamite

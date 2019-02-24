@@ -24,7 +24,7 @@
 #include <zcmd>
 #include <Encrypt> //truc a la con de marco
 #include <fcnpc>
-#include <colandreas>
+#include <ColAndreas>
 #include <texasv1/discord-connector>
 native IsValidVehicle(vehicleid);
 //Include texas
@@ -1277,7 +1277,7 @@ script CraftParts(playerid, crateid)
 	    case 14:
 	    {
 	        new stockjobinfoid;
-			info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] += 5;
+			info_stockjobinfo[stockjobinfoid][stocktunningsideskirt] += 5;
 			stockjobinfosave(stockjobinfoid);
 			Crate_Delete(crateid);
 			SendServerMessage(playerid, "Vous avez mis 5 piece de sideskirt1 dans la réserve.");
@@ -1285,28 +1285,12 @@ script CraftParts(playerid, crateid)
 	    case 15:
 	    {
 	        new stockjobinfoid;
-			info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] += 5;
-			stockjobinfosave(stockjobinfoid);
-			Crate_Delete(crateid);
-			SendServerMessage(playerid, "Vous avez mis 5 piece de sideskirt2 dans la réserve.");
-		}
-	    case 16:
-	    {
-	        new stockjobinfoid;
-			info_stockjobinfo[stockjobinfoid][stocktunningwheel] += 5;
-			stockjobinfosave(stockjobinfoid);
-			Crate_Delete(crateid);
-			SendServerMessage(playerid, "Vous avez mis 5 piece de wheel dans la réserve.");
-		}
-	    case 17:
-	    {
-	        new stockjobinfoid;
 			info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] += 5;
 			stockjobinfosave(stockjobinfoid);
 			Crate_Delete(crateid);
 			SendServerMessage(playerid, "Vous avez mis 5 piece d'hydraulic dans la réserve.");
 		}
-	    case 18:
+	    case 16:
 	    {
 	        new stockjobinfoid;
 			info_stockjobinfo[stockjobinfoid][stocktunningroue] += 5;
@@ -1314,7 +1298,7 @@ script CraftParts(playerid, crateid)
 			Crate_Delete(crateid);
 			SendServerMessage(playerid, "Vous avez mis 5 piece de roue dans la réserve.");
 		}
-	    case 19:
+	    case 17:
 	    {
 	        new stockjobinfoid;
 			info_stockjobinfo[stockjobinfoid][stocktunningcaro] += 5;
@@ -3550,22 +3534,6 @@ public OnVehicleSpawn(vehicleid)
 	}
 	if (IsValidObject(CoreVehicles[vehicleid][vehCrate]) && GetVehicleModel(vehicleid) == 530)
 	    DestroyObject(CoreVehicles[vehicleid][vehCrate]);
-    if (IsValidDynamicObject(Tuning[vehicleid][FrontBumperID]))
-	DestroyDynamicObject(Tuning[vehicleid][FrontBumperID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][RearBumperID]))
-	DestroyDynamicObject(Tuning[vehicleid][RearBumperID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][RoofID]))
-	DestroyDynamicObject(Tuning[vehicleid][RoofID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][HoodID]))
-	DestroyDynamicObject(Tuning[vehicleid][HoodID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][SpoilerID]))
-	DestroyDynamicObject(Tuning[vehicleid][SpoilerID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][SideSkirt1ID]))
-	DestroyDynamicObject(Tuning[vehicleid][SideSkirt1ID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][SideSkirt2ID]))
-	DestroyDynamicObject(Tuning[vehicleid][SideSkirt2ID]);
-	if (IsValidDynamicObject(Tuning[vehicleid][WheelID]))
-	DestroyDynamicObject(Tuning[vehicleid][WheelID]);
 	ResetVehicle(vehicleid);
 	return 1;
 }
@@ -7139,8 +7107,6 @@ script OnPlayerConnect(playerid)
 	SetPVarInt(playerid,"Trabajando",0);
 	SetPVarInt(playerid,"TomoCarpintero",0);
 	SetPVarInt(playerid,"MueblesCreados",0);
-	//aidemenu
-	Showing[playerid] = 0;
 	//lowrider
 	InContest[playerid] = false;
 	CurrentNote[playerid] = -1;
@@ -7254,12 +7220,14 @@ script OnPlayerDisconnect(playerid, reason)
 }
 script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	if(PlayerData[playerid][pAdmin] >= 1 || PlayerData[playerid][pTester] > 0)
+	if(PlayerData[playerid][pAdmin] > 0 || PlayerData[playerid][pTester] > 0)
 	{
-		SendServerMessage(playerid,"Vous avez clicker sur %s",ReturnName(clickedplayerid));
+		SendServerMessage(playerid,"Vous avez clicker sur %s",ReturnName(clickedplayerid,0));
 		AdminTarget[playerid] = clickedplayerid;
 		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\
-		\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire sainger se joueur ou pas\nModifier les stats de se joueur","Valider","Annuler");
+		\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\
+		\nSlap se joueur\nFaire saigner ou pas se joueur\
+		\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
 	}
 	else return SendErrorMessage(playerid, "Vous n'êtes pas autorisé.");
 	return 1;
@@ -7737,116 +7705,6 @@ script OnGameModeInit()
 	salairepoliceload();
 	salaireswatload();
 	salaireurgentisteload();
-	//aide menu
-	AideMenu0 = TextDrawCreate(310.000000, 141.000000, "_");
-	TextDrawAlignment(AideMenu0, 2);
-	TextDrawBackgroundColor(AideMenu0, 16777215);
-	TextDrawFont(AideMenu0, 1);
-	TextDrawLetterSize(AideMenu0, 2.099999, 13.000000);
-	TextDrawColor(AideMenu0, -1);
-	TextDrawSetOutline(AideMenu0, 0);
-	TextDrawSetProportional(AideMenu0, 0);
-	TextDrawSetShadow(AideMenu0, 1);
-	TextDrawUseBox(AideMenu0, 1);
-	TextDrawBoxColor(AideMenu0, 255);
-	TextDrawTextSize(AideMenu0, 0.000000, -152.000000);
-
-	AideMenu1= TextDrawCreate(310.000000, 123.000000, "Menu d'aide");
-	TextDrawAlignment(AideMenu1, 2);
-	TextDrawBackgroundColor(AideMenu1, 255);
-	TextDrawFont(AideMenu1, 1);
-	TextDrawLetterSize(AideMenu1, 0.500000, 1.000000);
-	TextDrawColor(AideMenu1, -1);
-	TextDrawSetOutline(AideMenu1, 0);
-	TextDrawSetProportional(AideMenu1, 1);
-	TextDrawSetShadow(AideMenu1, 1);
-	TextDrawUseBox(AideMenu1, 1);
-	TextDrawBoxColor(AideMenu1, 255);
-	TextDrawTextSize(AideMenu1, 30.000000, 121.000000);
-
-	AideMenu2 = TextDrawCreate(260.000000, 150.000000, "Aide Chat");
-	TextDrawBackgroundColor(AideMenu2, 255);
-	TextDrawFont(AideMenu2, 1);
-	TextDrawLetterSize(AideMenu2, 0.500000, 1.000000);
-	TextDrawColor(AideMenu2, -1);
-	TextDrawSetOutline(AideMenu2, 0);
-	TextDrawSetProportional(AideMenu2, 1);
-	TextDrawSetShadow(AideMenu2, 1);
-    TextDrawSetSelectable(AideMenu2, 1);
-
-	AideMenu3 = TextDrawCreate(260.000000, 165.000000, "Aide Maison");
-	TextDrawBackgroundColor(AideMenu3, 255);
-	TextDrawFont(AideMenu3, 1);
-	TextDrawLetterSize(AideMenu3, 0.500000, 1.000000);
-	TextDrawColor(AideMenu3, -1);
-	TextDrawSetOutline(AideMenu3, 0);
-	TextDrawSetProportional(AideMenu3, 1);
-	TextDrawSetShadow(AideMenu3, 1);
-    TextDrawSetSelectable(AideMenu3, 1);
-
-	AideMenu4 = TextDrawCreate(260.000000, 180.000000, "Aide Magasin");
-	TextDrawBackgroundColor(AideMenu4, 255);
-	TextDrawFont(AideMenu4, 1);
-	TextDrawLetterSize(AideMenu4, 0.500000, 1.000000);
-	TextDrawColor(AideMenu4, -1);
-	TextDrawSetOutline(AideMenu4, 0);
-	TextDrawSetProportional(AideMenu4, 1);
-	TextDrawSetShadow(AideMenu4, 1);
-    TextDrawSetSelectable(AideMenu4, 1);
-
-	AideMenu5 = TextDrawCreate(260.000000, 195.000000, "Aide Vehicule");
-	TextDrawBackgroundColor(AideMenu5, 255);
-	TextDrawFont(AideMenu5, 1);
-	TextDrawLetterSize(AideMenu5, 0.500000, 1.000000);
-	TextDrawColor(AideMenu5, -1);
-	TextDrawSetOutline(AideMenu5, 0);
-	TextDrawSetProportional(AideMenu5, 1);
-	TextDrawSetShadow(AideMenu5, 1);
-    TextDrawSetSelectable(AideMenu5, 1);
-
-	AideMenu6 = TextDrawCreate(260.000000, 210.000000, "Aide Faction");
-	TextDrawBackgroundColor(AideMenu6, 255);
-	TextDrawFont(AideMenu6, 1);
-	TextDrawLetterSize(AideMenu6, 0.500000, 1.000000);
-	TextDrawColor(AideMenu6, -1);
-	TextDrawSetOutline(AideMenu6, 0);
-	TextDrawSetProportional(AideMenu6, 1);
-	TextDrawSetShadow(AideMenu6, 1);
-	TextDrawSetSelectable(AideMenu6, 1);
-
-	AideMenu7 = TextDrawCreate(260.000000, 225.000000, "Aide Divers");
-	TextDrawBackgroundColor(AideMenu7, 255);
-	TextDrawFont(AideMenu7, 1);
-	TextDrawLetterSize(AideMenu7, 0.500000, 1.000000);
-	TextDrawColor(AideMenu7, -1);
-	TextDrawSetOutline(AideMenu7, 0);
-	TextDrawSetProportional(AideMenu7, 1);
-	TextDrawSetShadow(AideMenu7, 1);
-    TextDrawSetSelectable(AideMenu7, 1);
-
-	AideMenu8 = TextDrawCreate(260.000000, 240.000000, "Aide General");
-	TextDrawBackgroundColor(AideMenu8, 255);
-	TextDrawFont(AideMenu8, 1);
-	TextDrawLetterSize(AideMenu8, 0.500000, 1.000000);
-	TextDrawColor(AideMenu8, -1);
-	TextDrawSetOutline(AideMenu8, 0);
-	TextDrawSetProportional(AideMenu8, 1);
-	TextDrawSetShadow(AideMenu8, 1);
-    TextDrawSetSelectable(AideMenu8, 1);
-
-	AideMenu9 = TextDrawCreate(310.000000, 265.000000, "Quitter");
-	TextDrawAlignment(AideMenu9, 2);
-	TextDrawBackgroundColor(AideMenu9, 255);
-	TextDrawFont(AideMenu9, 1);
-	TextDrawLetterSize(AideMenu9, 0.500000, 1.000000);
-	TextDrawColor(AideMenu9, -1);
-	TextDrawSetOutline(AideMenu9, 0);
-	TextDrawSetProportional(AideMenu9, 1);
-	TextDrawSetShadow(AideMenu9, 1);
-	TextDrawUseBox(AideMenu9, 1);
-	TextDrawBoxColor(AideMenu9, 255);
-	TextDrawTextSize(AideMenu9, 30.000000, 121.000000);
-    TextDrawSetSelectable(AideMenu9, 1);
 	//casino fonctionne pas encore
 	CreateCasinoMachine(CASINO_MACHINE_POKER,-243.57640,-19.74020,1003.98541,0.00000,0.00000,180.00000);
 	CreateCasinoMachine(CASINO_MACHINE_POKER,-239.31641,-19.74020,1003.98541,0.00000,0.00000,180.00000);
@@ -9286,212 +9144,6 @@ script OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 	    AddComponent(vehicleid, modelid);
 	    SendVehiculeMessage(playerid, "Vous avez changer les roues du véhicule. Marque des roues \"%s\".", GetWheelName(modelid));
 	}
-	//tuning
-	/*if ((response) && (extraid == FrontBumpers))*/
-	if ((response) && (extraid == MODEL_SELECTION_FRONTBUMPERS))
-    {
-    	if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper] = 0;}
-			stockjobinfosave(stockjobinfoid);
-            Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][FrontBumper] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][FrontBumperID] = modelid;
-	  	  	Tuning[playerid][FrontBumperX] = 0.0;
-	  	  	Tuning[playerid][FrontBumperY] = 0.0;
-	  	  	Tuning[playerid][FrontBumperZ] = 1.0;
-	  	  	Tuning[playerid][FrontBumperRX] = 0.0;
-	  	  	Tuning[playerid][FrontBumperRY] = 0.0;
-	  	  	Tuning[playerid][FrontBumperRZ] = 0.0;
-			Tuning[playerid][EditingPart] = 1;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-	if ((response) && (extraid == MODEL_SELECTION_REARBUMPERS))
-    {
-    	if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningrearbumper] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningrearbumper] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningrearbumper] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningrearbumper] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningrearbumper] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][RearBumper] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][RearBumperID] = modelid;
-	  	  	Tuning[playerid][RearBumperX] = 0.0;
-	  	  	Tuning[playerid][RearBumperY] = 0.0;
-	  	  	Tuning[playerid][RearBumperZ] = 1.0;
-	  	  	Tuning[playerid][RearBumperRX] = 0.0;
-	  	  	Tuning[playerid][RearBumperRY] = 0.0;
-	  	  	Tuning[playerid][RearBumperRZ] = 0.0;
-			Tuning[playerid][EditingPart] = 2;
-			ResetEditing(playerid);
-			EditDynamicObject(playerid,modelid);
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-   	if ((response) && (extraid == MODEL_SELECTION_ROOFS))
-    {
-    	if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningroof] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningroof] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningroof] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningroof] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningroof] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][Roof] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][RoofID] = modelid;
-	  	  	Tuning[playerid][RoofX] = 0.0;
-	  	  	Tuning[playerid][RoofY] = 0.0;
-	  	  	Tuning[playerid][RoofZ] = 1.0;
-	  	  	Tuning[playerid][RoofRX] = 0.0;
-	  	  	Tuning[playerid][RoofRY] = 0.0;
-	  	  	Tuning[playerid][RoofRZ] = 0.0;
-			Tuning[playerid][EditingPart] = 3;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-    if ((response) && (extraid == MODEL_SELECTION_HOODS))
-    {
-        if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunninghood] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunninghood] > 0) {info_stockjobinfo[stockjobinfoid][stocktunninghood] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunninghood] < 0) {info_stockjobinfo[stockjobinfoid][stocktunninghood] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][Hood] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][HoodID] = modelid;
-	  	  	Tuning[playerid][HoodX] = 0.0;
-	  	  	Tuning[playerid][HoodY] = 0.0;
-	  	  	Tuning[playerid][HoodZ] = 1.0;
-	  	  	Tuning[playerid][HoodRX] = 0.0;
-	  	  	Tuning[playerid][HoodRY] = 0.0;
-	  	  	Tuning[playerid][HoodRZ] = 0.0;
-			Tuning[playerid][EditingPart] = 4;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-   	if ((response) && (extraid == MODEL_SELECTION_SPOILERS))
-    {
-        if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningspoiler] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningspoiler] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningspoiler] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningspoiler] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningspoiler] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][Spoiler] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][SpoilerID] = modelid;
-	  	  	Tuning[playerid][SpoilerX] = 0.0;
-	  	  	Tuning[playerid][SpoilerY] = 0.0;
-	  	  	Tuning[playerid][SpoilerZ] = 1.0;
-	  	  	Tuning[playerid][SpoilerRX] = 0.0;
-	  	  	Tuning[playerid][SpoilerRY] = 0.0;
-	  	  	Tuning[playerid][SpoilerRZ] = 0.0;
-			Tuning[playerid][EditingPart] = 5;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-	if ((response) && (extraid == MODEL_SELECTION_SIDESKIRTS1))
-    {
-    	if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-		  	Tuning[playerid][SideSkirt1] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-		  	Tuning[playerid][SideSkirt1ID] = modelid;
-		  	Tuning[playerid][SideSkirt1X] = 0.0;
-		  	Tuning[playerid][SideSkirt1Y] = 0.0;
-		  	Tuning[playerid][SideSkirt1Z] = 1.0;
-		  	Tuning[playerid][SideSkirt1RX] = 0.0;
-		  	Tuning[playerid][SideSkirt1RY] = 0.0;
-		  	Tuning[playerid][SideSkirt1RZ] = 0.0;
-			Tuning[playerid][EditingPart] = 6;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-    if ((response) && (extraid == MODEL_SELECTION_SIDESKIRTS2))
-    {
-    	if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][SideSkirt2] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][SideSkirt2ID] = modelid;
-	  	  	Tuning[playerid][SideSkirt2X] = 0.0;
-	  	  	Tuning[playerid][SideSkirt2Y] = 0.0;
-	  	  	Tuning[playerid][SideSkirt2Z] = 1.0;
-	  	  	Tuning[playerid][SideSkirt2RX] = 0.0;
-	  	  	Tuning[playerid][SideSkirt2RY] = 0.0;
-	  	  	Tuning[playerid][SideSkirt2RZ] = 0.0;
-			Tuning[playerid][EditingPart] = 7;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-        }
-        else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-        return 1;
-    }
-    if ((response) && (extraid == MODEL_SELECTION_ROUE))
-    {
-    	if(response)
-        {
-            new stockjobinfoid;
-			if(info_stockjobinfo[stockjobinfoid][stocktunningwheel] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-			if( info_stockjobinfo[stockjobinfoid][stocktunningwheel] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningwheel] -= 1;}
-			if( info_stockjobinfo[stockjobinfoid][stocktunningwheel] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningwheel] = 0;}
-			stockjobinfosave(stockjobinfoid);
-			Tuning[playerid][PlayerVehicle] = GetPlayerVehicleID(playerid);
-	  	 	Tuning[playerid][Wheel] = CreateObject(modelid, 0.0, 0.0, -14.0, 0.0, 0.0, 0.0);
-	  	  	Tuning[playerid][WheelID] = modelid;
-	  	  	Tuning[playerid][WheelX] = 0.0;
-	  	  	Tuning[playerid][WheelY] = 0.0;
-	  	  	Tuning[playerid][WheelZ] = 1.0;
-	  	  	Tuning[playerid][WheelRX] = 0.0;
-	  	  	Tuning[playerid][WheelRY] = 0.0;
-	  	  	Tuning[playerid][WheelRZ] = 0.0;
-			Tuning[playerid][EditingPart] = 8;
-			Tuning[playerid][EditingTimer] = SetTimerEx("GetKeys", 30, true, "i", playerid);
-		}
-		else Dialog_Show(playerid, DIALOG_TUNING, DIALOG_STYLE_LIST, "Que voudriez-vous tuner ?", "Pare-choc avant\nPare-chocs arrière\nToit\nCapot\nSpoiler\nJupes latérales 1\nJupes latérales 2\nRoue", "Valider", "Quitter");
-		return 1;
-    }
-    /*
-    if ((response) && (extraid == Vehiclest))
-	{
-	    if(response)
-	    {
-	    	new Float:pos[3]; GetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-	    	CreateVehicle(modelid, pos[0] + 2.5, pos[1], pos[2] + 2.5, 0.0, random(128), random(128), -1);
-	    }
-    	return 1;
-	}*/
 	return 1;
 }
 
@@ -9510,203 +9162,6 @@ script ResprayCar(playerid, vehicleid, color)
 
 script OnPlayerClickTextDraw(playerid, Text:clickedid)
 {
-	if(clickedid == AideMenu2)
-	{
-	    jagawaa(playerid);
-	    Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour le chat","- /me Sert à effectuer une action,\
-		\n- /do Sert pour confirmer ou décrire une action,\n- /(c)rier Sert à crier\n- /(o)oc Sert à parlez en Out of Character,\
-		\n- /decrocher Sert à décrocher son téléphone\n- /racrocher Sert à racrocher son téléphone\n- /dc pour le chat discord\n- /discordchat pour activé le chat","Quitter","");
-	}
-	if(clickedid == AideMenu3)
-	{
-	    jagawaa(playerid);
-	    Dialog_Show(playerid,aidemaison,DIALOG_STYLE_MSGBOX,"Aide pour la maison","- /vendre pour vendre une maison,\
-		\n- /abandonner Pour abandonner votre maison sans gagner d'argent dessus\n- /porte Pour fermer la porte de la maison,\
-		\n- /mcoffre Pour voir le coffre de la maison\n- /fourniture Pour pouvoir bouger vos meubles\
-		\n- /acheteretagere Pour acheter une étagére\n- /armeetagere Pour poser une arme sur une étagére\
-		\n- /supetagere Pour supprimer une étagére\n- /sonner Pour sonner à la porte d'une maison\
-		\n- /lumiere Pour allumer la lumiére dans la maison\n- /cuisiner pour cuisiner un repas congelé\
-		\n- /locamax pour définir le max de locataire\n- /locaprix pour définir le prix de la locations\
-		\n- /(de)louermaison pour louer une maison ou délouer celle-ci","Quitter","");
-	}
-	if(clickedid == AideMenu4)
-	{
-	    jagawaa(playerid);
-	    Dialog_Show(playerid,aidebiz,DIALOG_STYLE_MSGBOX,"Aide pour le magasin","- /vendre pour vendre un magasin,\n- \
-		/abandonner Pour abandonner votre magasin sans gagner d'argent dessus\n- /porte Pour fermer la porte du magasin,\
-		\n- /bcoffre Pour voir le coffre du magasin\n- /produits Pour changer les prix des marchandises\
-		\n- /binfo Pour voir l'information du magasin\n- /bnom Pour changer le nom du magasin\
-		\n- /bmessage Pour changer le message du magasin\n- /accepterlivraison Faire une livraison de votre biz\
-		\n- /bheures définir les heures d'ouverture de votre magasin","Quitter","");
-	}
-	if(clickedid == AideMenu5)
-	{
-	    jagawaa(playerid);
-		Dialog_Show(playerid,aidevehicule,DIALOG_STYLE_MSGBOX,"Aide pour le véhicule","- /porte Pour fermer les portes du véhicule \
-		\n- /vendre pour vendre un véhicule,\n- /abandonner Pour abandonner votre véhicule sans gagner d'argent dessus\n- /remplir Pour faire le plein de votre véhicule\n\
-		- /jerrican Pour vous servir du jerrican\n- /enlevertunning Pour enlever le tuning du véhicule\
-		\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour démarrer le moteur du véhicule\
-		\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n\
-		- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenêtre du véhicule\
-		\n- /ceinture pour attacher votre ceinture\n- /setradio pour écouter la radio dans le véhicule,\
-		\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un vehicule,\
-		\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela,\
-		\n - /vpreter voir le vehicule qu'on vous a prêter,\n - /vdouble Pour prêter les clés de votre véhicule,\
-		\n - /vjeter pour jetter le double des clés prêter,\n - /payersabot pour payer le sabot du vehicule","Quitter","");
-	}
-	if(clickedid == AideMenu6)
-	{// a mettre -/mettrelefeu pour mettre le feu (en mission)
-	    jagawaa(playerid);
-	    //police
-	    new facass = PlayerData[playerid][pFaction];
-		if (PlayerData[playerid][pFaction] != -1)
-		{
-
-			if (FactionData[facass][factionacces][1] == 1){
-
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				 - /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				 - /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				 - /tazer pour sortir un pistolet Tazer (pistolet silencieux),\n- /menotter menotte une personne,\n- /demenotter demenotte une personne,\n\
-				 - /trainer trainer une personne,\n- /forcer pour la forcer dans un vehicule,\n- /mdc ouvrir le portable du vehicule,\n- /arrest pour arreté une personne,\n\
-				 - /radio pour parlé en IC radio,\n- /dept  pour parlé avec le gouvernement,\n- /seizeplant savoir a quel point le plan est gros\n \
-				 - /amende pour poser une amande,\n- /herse pour poser une herse,\n - /bbalise pour activer la balise,\n\
-				 - /analyser pour analyser un objet au sol,\n- /enleverlicense pour enlever la lisence d'arme,\n- /donnerlicense pour donner la lisence d'arme.\n \
-				 - /confisquer pour confisquer tout le sac,\n- /gyrophare pour mettre le giro,\n- /annonce pour mettre une annonce,\n- /camheli Être en vue de caméra sur l'hélicoptère,\n\
-				 - /flashball pour sortir un shotgun en caoutchouc,\n- /plaque pour afficher une plaque perso,\n- /blocaliser pour localiser un bracelet electronic,\n\
-				 - /bracelet pour mettre un bracelet electronic,\n- /ebracelet pour enlever un bracelet electronic,\n - /sabot pour mettre un sabot sur un vehicule,\n - /rsabot pour enlever un sabot d'un vehicule\n\
-				 - /barriere pour placer un type de barrage,\n- /destroybarriere pour détruire les barrages placé avec le /barriere,\n- /bizon réautorisé un biz a avoir des clients.\
-				 ","Quitter","");
-
-			}
-			if (FactionData[facass][factionacces][3] == 1) {//fbi
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				 - /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				 - /fexclure exclure une personne,\n - /bbalise pour activer la balise,\n- /frang mettre un rang,\n\
-				 - /menotte menotte une personne,\n- /demenotte menotte une personne,\n\
-				 - /radio pour parlé en IC radio,\n- /dept  pour parlé avec le gouvernement,\n\
-				 - /defoncerporte pour défoncé une porte,\n- /micro pour poser un micro sur quelqu'un,\n\
-				 ","Quitter","");
-			}
-			if (FactionData[facass][factionacces][4] == 1) {//swat
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				 - /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				 - /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				 - /menotte menotte une personne,\n- /demenotte menotte une personne,\n\
-				 - /radio pour parlé en IC radio,\n - /bbalise pour activer la balise,\n- /dept pour parlé avec le gouvernement,\n\
-				 ","Quitter","");
-			}
-			//hosto
-			if (FactionData[facass][factionacces][5] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				- /radio pour parlé en IC radio,\n - /bbalise pour activer la balise,\n- /dept  pour parlé avec le gouvernement,\
-				- /bandage pour faire un bandage a un patient,\n /chargermalade pour le mettre dans l'ambulance,\n /dechargermalade pour l'amener a l'hopital,\
-				","Quitter","");
-			}
-			//camionneur
-			if (FactionData[facass][factionacces][6] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				- /chargermarchandise pour charger les marchandise,\n- /stopchargement pour stoppé le chargement en cours,\n- /rem pour enlever la remorque,\n\
-				- /livrermarchandise pour livrée,\n- /fairelivraison pour commencer une livraison,\n- /quitterlivraison pour quitter une livraison,\n- /salairefaction pour gérer le salaire, \
-				- /appeler 1001 pour commencer une livraison dans votre vehicule,\n- /infob info sur les produits du biz\n \n- Vous aller recevoir des appelles pour des livraisons \
-				 ","Quitter","");
-			}
-			//gouvernement
-	        if (FactionData[facass][factionacces][7] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n - /bbalise pour activer la balise,\n- /frang mettre un rang,\n\
-				- /radio pour parlé en IC radio,\n- /dept  pour parlé avec le gouvernement,\n- /taxe pour ouvrir le menu gouvernemental,\n- /gouvretirer pour retirer du gouvernement\n- /gouvdeposer pour déposé au gouvernement\n \
-				- /trouverpoubelle pour trouver des poubelles,\n- /viderpoubelle pour vider les poubelles\n- /prendrepoubelle pour prendre une poubelle\n \
-				-\n- /salairegouv pour gérer le salaire gouvernement,\n- /salairepolice pour gérer le salaire police,\n- /salaireswat pour gérer le salaire swat,\n- /salairefbi pour gérer le salaire fbi,\n- /salaireurgentiste pour gérer le salaire urgentiste, \
-				","Quitter","");
-			}
-			//gang
-			if (FactionData[facass][factionacces][8] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				- /mettrelefeu pour mettre le feu (mission),\n- /ouvrircargaison pour ouvrir une boite de drogue,\n- /fspray pour faire un tag\
-				 ","Quitter","");
-			}
-			//mecano
-			if (FactionData[facass][factionacces][9] == 1) {
-			Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-			"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-			- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-			- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-			- /reparermoteur pour la réparation de moteur,\n- /reparercaro pour la réparation de la carosserie,\n- /nitros pour installé de la nitro,\n- /appeler 1002 pour commander des pieces,\n\
-			- /remorquer pour remorquer un vehicule,\n- /untow pour enlever le vehicule remorquer,\n- /fourriere pour mettre en fourriere un vehicule,\n- /colorcar pour mettre une nouvelle couleur au vehicule,\n\
-			- /paintjob pour faire un paintjob,\n- /tunning pour faire un tunning,\n- /peindre pour peindre le vehicule,\n- /poserboite pour poser une boite de l'entrepot a du garage,\n- /salairefaction pour modifier le salaire des rangs, \
-			 ","Quitter","");
-			}
-			//san news
-			if (FactionData[facass][factionacces][10] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n- /salairefaction pour modifier le salaire des rangs\
-				- /radio pour parlé en radio IC,\n- /diffuser pour diffuser un show,\n- /bc pour parlé dans le show,\n- /inviterpersonne inviter une personne dans le show,\n- /enleverpersonne enlever une personne du show. \
-				 ","Quitter","");
-			}
-			//vendeur de rue
-			if (FactionData[facass][factionacces][11] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est enligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n- /vendrefood vendre de la nourriture / boisson,\n\
-				- /salairefaction pour gérer le salaire\
-				 ","Quitter","");
-			}
-			//mafia caison
-			if (FactionData[facass][factionacces][12] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n- /salairefaction pour modifier le salaire des rangs\
-				 ","Quitter","");
-			}
-			//mafia taxi
-		    if (FactionData[facass][factionacces][13] == 1) {
-				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
-				"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
-				- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
-				- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-				- /taxi pour vous mettre en taxi,\n- /acceptertaxi accepté un appelle de taxi,\n- /salairefaction pour modifier le salaire des rangs\
-				 ","Quitter","");
-			}
-		}
-	}
-	if(clickedid == AideMenu7)
-	{
-		Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide divers", \
-		"-/proprieter pour voir se que vous êtes le propriétaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernierefois Pour connaître la dernière connection d'un joueur, ,\n- /acc pour enlever ou mettre vos accessoire,\n\
-		- /rapport pour rapporté un méfait,\n- /bjstart pour commencer le blackjack,\n-/bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /factionliste savoir la liste des factions,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n\
-		- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /id savoir l'id d'un joueur,\n- /resetvw Remet à 0 votre virtualWorld,\n - /distancec pour voir la distance du commissariat,\n - /bowlingstats pour avoir votre résultat du bowling\
-		","Quitter","");
-		jagawaa(playerid);
-	}
-	if(clickedid == AideMenu8)
-	{
-		Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide Général", \
-		"- /banque pour ouvrir le menu de la banque,\n- /payer pour payer un joueur,\n- /donnerarme pour donner une arme a un joueur,\n- /serrermain pour demander un serrage de main,\n- /volerbanque pour voler la banque,\n- /voleritem voler un item dans un magasin,\n\
-		- /ouvrircargaison pour ouvrir une boite,\n- /boombox pour mettre une musique,\n- /montrerpermis Pour montrer vos permis a un joueur,\n- /boite savoir le nombre de cargaisons dans un vehicule,\n- /planter pour pouvoir planter de la drogue,\n- /recolter Pour récolter une plante de drogue poussée\n\
-		- /trousse pour utiliser un kit de premier soin,\n- /crocheterporte pour forcer une porte d'un vehicule,\n- /fouiller pour fouiller dans l'inventaire d'un joueur,\n- /channel pour choisir le channel de votre talkie-walkie,\n\
-		- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n- /credits pour voir les credits\n\
-		","Quitter","");
-		jagawaa(playerid);
-	}
 	if (clickedid == Text:INVALID_TEXT_DRAW)
 	{
 		if (!Dialog_Opened(playerid) && PlayerData[playerid][pDisplayStats] > 0)
@@ -11609,39 +11064,6 @@ script salaireurgentisteload()
 	}
 	cache_delete(result);
 }
-script jagawaa(playerid)
-{
-	if(Showing[playerid] == 1)
-	{
-		Showing[playerid] = 0;
-		TextDrawHideForPlayer(playerid, AideMenu0);
-		TextDrawHideForPlayer(playerid, AideMenu1);
-		TextDrawHideForPlayer(playerid, AideMenu2);
-		TextDrawHideForPlayer(playerid, AideMenu3);
-		TextDrawHideForPlayer(playerid, AideMenu4);
-		TextDrawHideForPlayer(playerid, AideMenu5);
-		TextDrawHideForPlayer(playerid, AideMenu6);
-		TextDrawHideForPlayer(playerid, AideMenu7);
-		TextDrawHideForPlayer(playerid, AideMenu8);
-		TextDrawHideForPlayer(playerid, AideMenu9);
-		CancelSelectTextDraw(playerid);
-	}
-	else
-	{
-		Showing[playerid] = 1;
-		TextDrawShowForPlayer(playerid, AideMenu0);
-		TextDrawShowForPlayer(playerid, AideMenu1);
-		TextDrawShowForPlayer(playerid, AideMenu2);
-		TextDrawShowForPlayer(playerid, AideMenu3);
-		TextDrawShowForPlayer(playerid, AideMenu4);
-		TextDrawShowForPlayer(playerid, AideMenu5);
-		TextDrawShowForPlayer(playerid, AideMenu6);
-		TextDrawShowForPlayer(playerid, AideMenu7);
-		TextDrawShowForPlayer(playerid, AideMenu8);
-		TextDrawShowForPlayer(playerid, AideMenu9);
-		SelectTextDraw(playerid, 0xFF4040AA);
-	}
-}
 //vehicule doamge
 script OnPlayerShootVehiclePart(playerid, weaponid, vehicleid,hittype)
 {
@@ -12350,9 +11772,7 @@ script stockjobinfoload()
 		info_stockjobinfo[stockjobinfoid][stocktunningroof] = cache_get_field_content_int(stockjobinfoid,"roof");
 		info_stockjobinfo[stockjobinfoid][stocktunninghood] = cache_get_field_content_int(stockjobinfoid,"hood");
 		info_stockjobinfo[stockjobinfoid][stocktunningspoiler] = cache_get_field_content_int(stockjobinfoid,"spoiler");
-		info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1] = cache_get_field_content_int(stockjobinfoid,"sideskirt1");
-	    info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2] = cache_get_field_content_int(stockjobinfoid,"sideskirt2");
-		info_stockjobinfo[stockjobinfoid][stocktunningwheel] = cache_get_field_content_int(stockjobinfoid,"wheel");
+		info_stockjobinfo[stockjobinfoid][stocktunningsideskirt] = cache_get_field_content_int(stockjobinfoid,"sideskirt");
 		info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] = cache_get_field_content_int(stockjobinfoid,"hydrolic");
 		info_stockjobinfo[stockjobinfoid][stocktunningroue] = cache_get_field_content_int(stockjobinfoid,"roue");
 		info_stockjobinfo[stockjobinfoid][stocktunningcaro] = cache_get_field_content_int(stockjobinfoid,"caro");
@@ -12362,7 +11782,7 @@ script stockjobinfoload()
 script stockjobinfosave(stockjobinfoid)
 {
 	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE `factorystock` SET `bois`='%d', `viande`='%d', `meuble`='%d', `central1`='%d', `central2`='%d', `central3`='%d', `central4`='%d', `central5`='%d', `electronic`='%d', `petrol`='%d', `essencegenerator`=%d, `boismeuble`=%d, `magasinstock`=%d, `dockstock`=%d, `manutentionnairestock`=%d, `caristestock`=%d, `minerstock`=%d, `armesstock`=%d,`frontbumper`=%d, rearbumper=%d, roof=%d, hood=%d, spoiler=%d, sideskirt1=%d, sideskirt2=%d, wheel=%d, hydrolic=%d, roue=%d, caro=%d WHERE id='1'",
+    mysql_format(g_iHandle, query, sizeof(query),"UPDATE `factorystock` SET `bois`='%d', `viande`='%d', `meuble`='%d', `central1`='%d', `central2`='%d', `central3`='%d', `central4`='%d', `central5`='%d', `electronic`='%d', `petrol`='%d', `essencegenerator`=%d, `boismeuble`=%d, `magasinstock`=%d, `dockstock`=%d, `manutentionnairestock`=%d, `caristestock`=%d, `minerstock`=%d, `armesstock`=%d,`frontbumper`=%d, rearbumper=%d, roof=%d, hood=%d, spoiler=%d, sideskirt=%d, hydrolic=%d, roue=%d, caro=%d WHERE id='1'",
 	info_stockjobinfo[stockjobinfoid][stockjobinfobois],
 	info_stockjobinfo[stockjobinfoid][stockjobinfoviande],
 	info_stockjobinfo[stockjobinfoid][stockjobinfomeuble],
@@ -12386,9 +11806,7 @@ script stockjobinfosave(stockjobinfoid)
 	info_stockjobinfo[stockjobinfoid][stocktunningroof],
 	info_stockjobinfo[stockjobinfoid][stocktunninghood],
 	info_stockjobinfo[stockjobinfoid][stocktunningspoiler],
-	info_stockjobinfo[stockjobinfoid][stocktunningsideskirt1],
-	info_stockjobinfo[stockjobinfoid][stocktunningsideskirt2],
-	info_stockjobinfo[stockjobinfoid][stocktunningwheel],
+	info_stockjobinfo[stockjobinfoid][stocktunningsideskirt],
 	info_stockjobinfo[stockjobinfoid][stocktunninghydrolic],
 	info_stockjobinfo[stockjobinfoid][stocktunningroue],
 	info_stockjobinfo[stockjobinfoid][stocktunningcaro]);
@@ -12586,325 +12004,6 @@ script salairejobinfosave(salairejobinfoid)
 	info_salairejobinfo[salairejobinfoid][salairejobinfopetrolier],
 	info_salairejobinfo[salairejobinfoid][salairejobinfoboucher]);
     mysql_tquery(g_iHandle, query);
-}
-
-script tuningload()
-{
-    new query[750],VEH;
-    foreach(Player, i){VEH = Car_GetRealID(i);}
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM tuning");
-    new Cache:result = mysql_query(g_iHandle,query);
-    //new cartuning;
-	for(new cartuning = 0; cartuning < cache_get_row_count(); cartuning++)
-	{
-	    Tuning[cartuning][tuningidid] = cache_get_field_content_int(cartuning,"id");
-	    Tuning[cartuning][PlayerVehicle] = cache_get_field_content_int(cartuning,"vehicule");
-		Tuning[cartuning][FrontBumperID] = cache_get_field_content_int(cartuning,"FrontBumperID");
-		Tuning[cartuning][FrontBumperX] = cache_get_field_content_float(cartuning,"FrontBumperX");
-		Tuning[cartuning][FrontBumperY] = cache_get_field_content_float(cartuning,"FrontBumperY");
-		Tuning[cartuning][FrontBumperZ] = cache_get_field_content_float(cartuning,"FrontBumperZ");
-		Tuning[cartuning][FrontBumperRX] = cache_get_field_content_float(cartuning,"FrontBumperRX");
-	    Tuning[cartuning][FrontBumperRY] = cache_get_field_content_float(cartuning,"FrontBumperRY");
-		Tuning[cartuning][FrontBumperRZ] = cache_get_field_content_float(cartuning,"FrontBumperRZ");
-		Tuning[cartuning][RearBumperID] = cache_get_field_content_int(cartuning,"RearBumperID");
-		Tuning[cartuning][RearBumperX] = cache_get_field_content_float(cartuning,"RearBumperX");
-		Tuning[cartuning][RearBumperY] = cache_get_field_content_float(cartuning,"RearBumperY");
-		Tuning[cartuning][RearBumperZ] = cache_get_field_content_float(cartuning,"RearBumperZ");
-		Tuning[cartuning][RearBumperRX] = cache_get_field_content_float(cartuning,"RearBumperRX");
-	    Tuning[cartuning][RearBumperRY] = cache_get_field_content_float(cartuning,"RearBumperRY");
-		Tuning[cartuning][RearBumperRZ] = cache_get_field_content_float(cartuning,"RearBumperRZ");
-		Tuning[cartuning][RoofID] = cache_get_field_content_int(cartuning,"RoofID");
-		Tuning[cartuning][RoofX] = cache_get_field_content_float(cartuning,"RoofX");
-		Tuning[cartuning][RoofY] = cache_get_field_content_float(cartuning,"RoofY");
-		Tuning[cartuning][RoofZ] = cache_get_field_content_float(cartuning,"RoofZ");
-		Tuning[cartuning][RoofRX] = cache_get_field_content_float(cartuning,"RoofRX");
-	    Tuning[cartuning][RoofRY] = cache_get_field_content_float(cartuning,"RoofRY");
-		Tuning[cartuning][RoofRZ] = cache_get_field_content_float(cartuning,"RoofRZ");
-		Tuning[cartuning][HoodID] = cache_get_field_content_int(cartuning,"HoodID");
-		Tuning[cartuning][HoodX] = cache_get_field_content_float(cartuning,"HoodX");
-		Tuning[cartuning][HoodY] = cache_get_field_content_float(cartuning,"HoodY");
-		Tuning[cartuning][HoodZ] = cache_get_field_content_float(cartuning,"HoodZ");
-		Tuning[cartuning][HoodRX] = cache_get_field_content_float(cartuning,"HoodRX");
-	    Tuning[cartuning][HoodRY] = cache_get_field_content_float(cartuning,"HoodRY");
-		Tuning[cartuning][HoodRZ] = cache_get_field_content_float(cartuning,"HoodRZ");
-		Tuning[cartuning][SpoilerID] = cache_get_field_content_int(cartuning,"SpoilerID");
-		Tuning[cartuning][SpoilerX] = cache_get_field_content_float(cartuning,"SpoilerX");
-		Tuning[cartuning][SpoilerY] = cache_get_field_content_float(cartuning,"SpoilerY");
-		Tuning[cartuning][SpoilerZ] = cache_get_field_content_float(cartuning,"SpoilerZ");
-		Tuning[cartuning][SpoilerRX] = cache_get_field_content_float(cartuning,"SpoilerRX");
-	    Tuning[cartuning][SpoilerRY] = cache_get_field_content_float(cartuning,"SpoilerRY");
-		Tuning[cartuning][SpoilerRZ] = cache_get_field_content_float(cartuning,"SpoilerRZ");
-		Tuning[cartuning][WheelID] = cache_get_field_content_int(cartuning,"WheelID");
-		Tuning[cartuning][WheelX] = cache_get_field_content_float(cartuning,"WheelX");
-		Tuning[cartuning][WheelY] = cache_get_field_content_float(cartuning,"WheelY");
-		Tuning[cartuning][WheelZ] = cache_get_field_content_float(cartuning,"WheelZ");
-		Tuning[cartuning][WheelRX] = cache_get_field_content_float(cartuning,"WheelRX");
-	    Tuning[cartuning][WheelRY] = cache_get_field_content_float(cartuning,"WheelRY");
-		Tuning[cartuning][WheelRZ] = cache_get_field_content_float(cartuning,"WheelRZ");
-		Tuning[cartuning][SideSkirt1ID] = cache_get_field_content_int(cartuning,"SideSkirt1ID");
-		Tuning[cartuning][SideSkirt1X] = cache_get_field_content_float(cartuning,"SideSkirt1X");
-		Tuning[cartuning][SideSkirt1Y] = cache_get_field_content_float(cartuning,"SideSkirt1Y");
-		Tuning[cartuning][SideSkirt1Z] = cache_get_field_content_float(cartuning,"SideSkirt1Z");
-		Tuning[cartuning][SideSkirt1RX] = cache_get_field_content_float(cartuning,"SideSkirt1RX");
-	    Tuning[cartuning][SideSkirt1RY] = cache_get_field_content_float(cartuning,"SideSkirt1RY");
-		Tuning[cartuning][SideSkirt1RZ] = cache_get_field_content_float(cartuning,"SideSkirt1RZ");
-		Tuning[cartuning][SideSkirt2ID] = cache_get_field_content_int(cartuning,"SideSkirt2ID");
-		Tuning[cartuning][SideSkirt2X] = cache_get_field_content_float(cartuning,"SideSkirt2X");
-		Tuning[cartuning][SideSkirt2Y] = cache_get_field_content_float(cartuning,"SideSkirt2Y");
-		Tuning[cartuning][SideSkirt2Z] = cache_get_field_content_float(cartuning,"SideSkirt2Z");
-		Tuning[cartuning][SideSkirt2RX] = cache_get_field_content_float(cartuning,"SideSkirt2RX");
-	    Tuning[cartuning][SideSkirt2RY] = cache_get_field_content_float(cartuning,"SideSkirt2RY");
-		Tuning[cartuning][SideSkirt2RZ] = cache_get_field_content_float(cartuning,"SideSkirt2RZ");
-		Tuning[cartuning][EditingPart] = cache_get_field_content_int(cartuning,"EditingPart");
-		FrontBumperID1[VEH] = CreateDynamicObject(Tuning[cartuning][FrontBumperID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(FrontBumperID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][FrontBumperX], Tuning[cartuning][FrontBumperY], Tuning[cartuning][FrontBumperZ], Tuning[cartuning][FrontBumperRX], Tuning[cartuning][FrontBumperRY], Tuning[cartuning][FrontBumperRZ]);
-		RearBumperID1[VEH] = CreateDynamicObject(Tuning[cartuning][RearBumperID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(RearBumperID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][RearBumperX], Tuning[cartuning][RearBumperY], Tuning[cartuning][RearBumperZ], Tuning[cartuning][RearBumperRX], Tuning[cartuning][RearBumperRY], Tuning[cartuning][RearBumperRZ]);
- 		RoofID1[VEH] = CreateDynamicObject(Tuning[cartuning][RoofID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(RoofID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][RoofX], Tuning[cartuning][RoofY], Tuning[cartuning][RoofZ], Tuning[cartuning][RoofRX], Tuning[cartuning][RoofRY], Tuning[cartuning][RoofRZ]);
-		HoodID1[VEH] = CreateDynamicObject(Tuning[cartuning][HoodID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(HoodID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][HoodX], Tuning[cartuning][HoodY], Tuning[cartuning][HoodZ], Tuning[cartuning][HoodRX], Tuning[cartuning][HoodRY], Tuning[cartuning][HoodRZ]);
-		SpoilerID1[VEH] = CreateDynamicObject(Tuning[cartuning][SpoilerID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(SpoilerID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][SpoilerX], Tuning[cartuning][SpoilerY], Tuning[cartuning][SpoilerZ], Tuning[cartuning][SpoilerRX], Tuning[cartuning][SpoilerRY], Tuning[cartuning][SpoilerRZ]);
-		WheelID1[VEH] = CreateDynamicObject(Tuning[cartuning][WheelID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(WheelID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][WheelX], Tuning[cartuning][WheelY], Tuning[cartuning][WheelZ], Tuning[cartuning][WheelRX], Tuning[cartuning][WheelRY], Tuning[cartuning][WheelRZ]);
-		SideSkirt1ID1[VEH] = CreateDynamicObject(Tuning[cartuning][SideSkirt1ID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(SideSkirt1ID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][SideSkirt1X], Tuning[cartuning][SideSkirt1Y], Tuning[cartuning][SideSkirt1Z], Tuning[cartuning][SideSkirt1RX], Tuning[cartuning][SideSkirt1RY], Tuning[cartuning][SideSkirt1RZ]);
- 		SideSkirt2ID1[VEH] = CreateDynamicObject(Tuning[cartuning][SideSkirt2ID],0,0,0,0,0,0);
-		AttachDynamicObjectToVehicle(SideSkirt2ID1[VEH], Tuning[cartuning][PlayerVehicle], Tuning[cartuning][SideSkirt2X], Tuning[cartuning][SideSkirt2Y], Tuning[cartuning][SideSkirt2Z], Tuning[cartuning][SideSkirt2RX], Tuning[cartuning][SideSkirt2RY], Tuning[cartuning][SideSkirt2RZ]);
-	}
-	cache_delete(result);
-	print("Chargement Tuning");
-}
-script tuningsave(tuningid)
-{
-    new query[1500];
-    mysql_format(g_iHandle, query, sizeof(query),"INSERT INTO tuning SET vehicule=%d,FrontBumperID=%d\
-	,FrontBumperX=%f,FrontBumperY=%f,FrontBumperZ=%f,FrontBumperRX=%f,FrontBumperRY=%f,FrontBumperRZ=%f\
-	,RearBumperID=%d,RearBumperX=%f,RearBumperY=%f,RearBumperZ=%f,RearBumperRX=%f,RearBumperRY=%f,\
-	RearBumperRZ=%f,RoofID=%d,RoofX=%f,RoofY=%f,RoofZ=%f,RoofRX=%f,RoofRY=%f,RoofRZ=%f,HoodID=%d,HoodX=%f,\
-	HoodY=%f,HoodZ=%f,HoodRX=%f,HoodRY=%f,HoodRZ=%f,SpoilerID=%d,SpoilerX=%f,SpoilerY=%f,SpoilerZ=%f,SpoilerRX=%f,\
-	SpoilerRY=%f,SpoilerRZ=%f,WheelID=%d,WheelX=%f,WheelY=%f,WheelZ=%f,WheelRX=%f,WheelRY=%f,WheelRZ=%f,SideSkirt1ID=%d,\
-	SideSkirt1X=%f,SideSkirt1Y=%f,SideSkirt1Z=%f,SideSkirt1RX=%f,SideSkirt1RY=%f,SideSkirt1RZ=%f,SideSkirt2ID=%d,\
-	SideSkirt2X=%f,SideSkirt2Y=%f,SideSkirt2Z=%f,SideSkirt2RX=%f,SideSkirt2RY=%f,SideSkirt2RZ=%f, EditingPart=%d",
-	Tuning[tuningid][PlayerVehicle],
-    Tuning[tuningid][FrontBumperID],
-    Tuning[tuningid][FrontBumperX],
-    Tuning[tuningid][FrontBumperY],
-    Tuning[tuningid][FrontBumperZ],
-    Tuning[tuningid][FrontBumperRX],
-    Tuning[tuningid][FrontBumperRY],
-    Tuning[tuningid][FrontBumperRZ],
-    Tuning[tuningid][RearBumperID],
-    Tuning[tuningid][RearBumperX],
-    Tuning[tuningid][RearBumperY],
-    Tuning[tuningid][RearBumperZ],
-    Tuning[tuningid][RearBumperRX],
-    Tuning[tuningid][RearBumperRY],
-    Tuning[tuningid][RearBumperRZ],
-    Tuning[tuningid][RoofID],
-    Tuning[tuningid][RoofX],
-    Tuning[tuningid][RoofY],
-    Tuning[tuningid][RoofZ],
-    Tuning[tuningid][RoofRX],
-    Tuning[tuningid][RoofRY],
-    Tuning[tuningid][RoofRZ],
-    Tuning[tuningid][HoodID],
-    Tuning[tuningid][HoodX],
-    Tuning[tuningid][HoodY],
-    Tuning[tuningid][HoodZ],
-    Tuning[tuningid][HoodRX],
-    Tuning[tuningid][HoodRY],
-    Tuning[tuningid][HoodRZ],
-    Tuning[tuningid][SpoilerID],
-    Tuning[tuningid][SpoilerX],
-    Tuning[tuningid][SpoilerY],
-    Tuning[tuningid][SpoilerZ],
-    Tuning[tuningid][SpoilerRX],
-    Tuning[tuningid][SpoilerRY],
-    Tuning[tuningid][SpoilerRZ],
-    Tuning[tuningid][WheelID],
-    Tuning[tuningid][WheelX],
-    Tuning[tuningid][WheelY],
-    Tuning[tuningid][WheelZ],
-    Tuning[tuningid][WheelRX],
-    Tuning[tuningid][WheelRY],
-    Tuning[tuningid][WheelRZ],
-    Tuning[tuningid][SideSkirt1ID],
-    Tuning[tuningid][SideSkirt1X],
-    Tuning[tuningid][SideSkirt1Y],
-    Tuning[tuningid][SideSkirt1Z],
-    Tuning[tuningid][SideSkirt1RX],
-    Tuning[tuningid][SideSkirt1RY],
-    Tuning[tuningid][SideSkirt1RZ],
-    Tuning[tuningid][SideSkirt2ID],
-    Tuning[tuningid][SideSkirt2X],
-    Tuning[tuningid][SideSkirt2Y],
-    Tuning[tuningid][SideSkirt2Z],
-    Tuning[tuningid][SideSkirt2RX],
-    Tuning[tuningid][SideSkirt2RY],
-    Tuning[tuningid][SideSkirt2RZ],
-	Tuning[tuningid][EditingPart]);
-    mysql_tquery(g_iHandle, query);
-}
-script GetKeys(playerid)
-{
-	new Keys, ud;
-	Tuning[playerid][AddSpeed] = 0.005;
-    GetPlayerKeys(playerid,Keys,ud,Tuning[playerid][LeftRight]);
-    if(Tuning[playerid][LeftRight] == 128)
-    {
-        switch(Tuning[playerid][EditStatus])
-        {
-            case 1:
-            {
-				if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperX] = floatadd(Tuning[playerid][FrontBumperX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperX] = floatadd(Tuning[playerid][RearBumperX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofX] = floatadd(Tuning[playerid][RoofX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodX] = floatadd(Tuning[playerid][HoodX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerX] = floatadd(Tuning[playerid][SpoilerX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1X] = floatadd(Tuning[playerid][SideSkirt1X], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2X] = floatadd(Tuning[playerid][SideSkirt2X], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelX] = floatadd(Tuning[playerid][WheelX], Tuning[playerid][AddSpeed]);}
-            }
-            case 2:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperY] = floatadd(Tuning[playerid][FrontBumperY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperY] = floatadd(Tuning[playerid][RearBumperY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofY] = floatadd(Tuning[playerid][RoofY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodY] = floatadd(Tuning[playerid][HoodY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerY] = floatadd(Tuning[playerid][SpoilerY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1Y] = floatadd(Tuning[playerid][SideSkirt1Y], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2Y] = floatadd(Tuning[playerid][SideSkirt2Y], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelY] = floatadd(Tuning[playerid][WheelY], Tuning[playerid][AddSpeed]);}
-            }
-            case 3:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperZ] = floatadd(Tuning[playerid][FrontBumperZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperZ] = floatadd(Tuning[playerid][RearBumperZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofZ] = floatadd(Tuning[playerid][RoofZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodZ] = floatadd(Tuning[playerid][HoodZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerZ] = floatadd(Tuning[playerid][SpoilerZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1Z] = floatadd(Tuning[playerid][SideSkirt1Z], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2Z] = floatadd(Tuning[playerid][SideSkirt2Z], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelZ] = floatadd(Tuning[playerid][WheelZ], Tuning[playerid][AddSpeed]);}
-            }
-            case 4:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperRX] = floatadd(Tuning[playerid][FrontBumperRX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperRX] = floatadd(Tuning[playerid][RearBumperRX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofRX] = floatadd(Tuning[playerid][RoofRX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodRX] = floatadd(Tuning[playerid][HoodRX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerRX] = floatadd(Tuning[playerid][SpoilerRX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1RX] = floatadd(Tuning[playerid][SideSkirt1RX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2RX] = floatadd(Tuning[playerid][SideSkirt2RX], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelRX] = floatadd(Tuning[playerid][WheelRX], Tuning[playerid][AddSpeed]+1);}
-            }
-            case 5:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperRY] = floatadd(Tuning[playerid][FrontBumperRY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperRY] = floatadd(Tuning[playerid][RearBumperRY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofRY] = floatadd(Tuning[playerid][RoofRY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodRY] = floatadd(Tuning[playerid][HoodRY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerRY] = floatadd(Tuning[playerid][SpoilerRY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1RY] = floatadd(Tuning[playerid][SideSkirt1RY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2RY] = floatadd(Tuning[playerid][SideSkirt2RY], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelRY] = floatadd(Tuning[playerid][WheelRY], Tuning[playerid][AddSpeed]+1);}
-            }
-            case 6:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperRZ] = floatadd(Tuning[playerid][FrontBumperRZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperRZ] = floatadd(Tuning[playerid][RearBumperRZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofRZ] = floatadd(Tuning[playerid][RoofRZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodRZ] = floatadd(Tuning[playerid][HoodRZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerRZ] = floatadd(Tuning[playerid][SpoilerRZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1RZ] = floatadd(Tuning[playerid][SideSkirt1RZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2RZ] = floatadd(Tuning[playerid][SideSkirt2RZ], Tuning[playerid][AddSpeed]+1);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelRZ] = floatadd(Tuning[playerid][WheelRZ], Tuning[playerid][AddSpeed]+1);}
-            }
-		}
-	}
-	else if(Tuning[playerid][LeftRight] == -128)
-	{
-		switch(Tuning[playerid][EditStatus])
-        {
-            case 1:
-            {
-				if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperX] = floatsub(Tuning[playerid][FrontBumperX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperX] = floatsub(Tuning[playerid][RearBumperX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofX] = floatsub(Tuning[playerid][RoofX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodX] = floatsub(Tuning[playerid][HoodX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerX] = floatsub(Tuning[playerid][SpoilerX], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1X] = floatsub(Tuning[playerid][SideSkirt1X], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2X] = floatsub(Tuning[playerid][SideSkirt2X], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelX] = floatsub(Tuning[playerid][WheelX], Tuning[playerid][AddSpeed]);}
-            }
-            case 2:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperY] = floatsub(Tuning[playerid][FrontBumperY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperY] = floatsub(Tuning[playerid][RearBumperY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofY] = floatsub(Tuning[playerid][RoofY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodY] = floatsub(Tuning[playerid][HoodY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerY] = floatsub(Tuning[playerid][SpoilerY], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1Y] = floatsub(Tuning[playerid][SideSkirt1Y], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2Y] = floatsub(Tuning[playerid][SideSkirt2Y], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelY] = floatsub(Tuning[playerid][WheelY], Tuning[playerid][AddSpeed]);}
-            }
-            case 3:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperZ] = floatsub(Tuning[playerid][FrontBumperZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperZ] = floatsub(Tuning[playerid][RearBumperZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofZ] = floatsub(Tuning[playerid][RoofZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodZ] = floatsub(Tuning[playerid][HoodZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerZ] = floatsub(Tuning[playerid][SpoilerZ], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1Z] = floatsub(Tuning[playerid][SideSkirt1Z], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2Z] = floatsub(Tuning[playerid][SideSkirt2Z], Tuning[playerid][AddSpeed]);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelZ] = floatsub(Tuning[playerid][WheelZ], Tuning[playerid][AddSpeed]);}
-            }
-            case 4:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperRX] = floatsub(Tuning[playerid][FrontBumperRX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperRX] = floatsub(Tuning[playerid][RearBumperRX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofRX] = floatsub(Tuning[playerid][RoofRX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodRX] = floatsub(Tuning[playerid][HoodRX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerRX] = floatsub(Tuning[playerid][SpoilerRX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1RX] = floatsub(Tuning[playerid][SideSkirt1RX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2RX] = floatsub(Tuning[playerid][SideSkirt2RX], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelRX] = floatsub(Tuning[playerid][WheelRX], Tuning[playerid][AddSpeed]+1+1);}
-            }
-            case 5:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperRY] = floatsub(Tuning[playerid][FrontBumperRY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperRY] = floatsub(Tuning[playerid][RearBumperRY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofRY] = floatsub(Tuning[playerid][RoofRY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodRY] = floatsub(Tuning[playerid][HoodRY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerRY] = floatsub(Tuning[playerid][SpoilerRY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1RY] = floatsub(Tuning[playerid][SideSkirt1RY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2RY] = floatsub(Tuning[playerid][SideSkirt2RY], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelRY] = floatsub(Tuning[playerid][WheelRY], Tuning[playerid][AddSpeed]+1+1);}
-            }
-            case 6:
-            {
-                if(Tuning[playerid][EditingPart] == 1){Tuning[playerid][FrontBumperRZ] = floatsub(Tuning[playerid][FrontBumperRZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 2){Tuning[playerid][RearBumperRZ] = floatsub(Tuning[playerid][RearBumperRZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 3){Tuning[playerid][RoofRZ] = floatsub(Tuning[playerid][RoofRZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 4){Tuning[playerid][HoodRZ] = floatsub(Tuning[playerid][HoodRZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 5){Tuning[playerid][SpoilerRZ] = floatsub(Tuning[playerid][SpoilerRZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 6){Tuning[playerid][SideSkirt1RZ] = floatsub(Tuning[playerid][SideSkirt1RZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 7){Tuning[playerid][SideSkirt2RZ] = floatsub(Tuning[playerid][SideSkirt2RZ], Tuning[playerid][AddSpeed]+1+1);}
-	    		else if(Tuning[playerid][EditingPart] == 8){Tuning[playerid][WheelRZ] = floatsub(Tuning[playerid][WheelRZ], Tuning[playerid][AddSpeed]+1+1);}
-            }
-		}
-	}
-	if(Tuning[playerid][EditingPart] == 1){AttachObjectToVehicle(Tuning[playerid][FrontBumper], Tuning[playerid][PlayerVehicle], Tuning[playerid][FrontBumperX], Tuning[playerid][FrontBumperY], Tuning[playerid][FrontBumperZ], Tuning[playerid][FrontBumperRX], Tuning[playerid][FrontBumperRY], Tuning[playerid][FrontBumperRZ]);}
-	else if(Tuning[playerid][EditingPart] == 2){AttachObjectToVehicle(Tuning[playerid][RearBumper], Tuning[playerid][PlayerVehicle], Tuning[playerid][RearBumperX], Tuning[playerid][RearBumperY], Tuning[playerid][RearBumperZ], Tuning[playerid][RearBumperRX], Tuning[playerid][RearBumperRY], Tuning[playerid][RearBumperRZ]);}
-	else if(Tuning[playerid][EditingPart] == 3){AttachObjectToVehicle(Tuning[playerid][Roof], Tuning[playerid][PlayerVehicle], Tuning[playerid][RoofX], Tuning[playerid][RoofY], Tuning[playerid][RoofZ], Tuning[playerid][RoofRX], Tuning[playerid][RoofRY], Tuning[playerid][RoofRZ]);}
-	else if(Tuning[playerid][EditingPart] == 4){AttachObjectToVehicle(Tuning[playerid][Hood], Tuning[playerid][PlayerVehicle], Tuning[playerid][HoodX], Tuning[playerid][HoodY], Tuning[playerid][HoodZ], Tuning[playerid][HoodRX], Tuning[playerid][HoodRY], Tuning[playerid][HoodRZ]);}
-	else if(Tuning[playerid][EditingPart] == 5) {AttachObjectToVehicle(Tuning[playerid][Spoiler], Tuning[playerid][PlayerVehicle], Tuning[playerid][SpoilerX], Tuning[playerid][SpoilerY], Tuning[playerid][SpoilerZ], Tuning[playerid][SpoilerRX], Tuning[playerid][SpoilerRY], Tuning[playerid][SpoilerRZ]);}
-	else if(Tuning[playerid][EditingPart] == 6){AttachObjectToVehicle(Tuning[playerid][SideSkirt1], Tuning[playerid][PlayerVehicle], Tuning[playerid][SideSkirt1X], Tuning[playerid][SideSkirt1Y], Tuning[playerid][SideSkirt1Z], Tuning[playerid][SideSkirt1RX], Tuning[playerid][SideSkirt1RY], Tuning[playerid][SideSkirt1RZ]);}
-	else if(Tuning[playerid][EditingPart] == 7){AttachObjectToVehicle(Tuning[playerid][SideSkirt2], Tuning[playerid][PlayerVehicle], Tuning[playerid][SideSkirt2X], Tuning[playerid][SideSkirt2Y], Tuning[playerid][SideSkirt2Z], Tuning[playerid][SideSkirt2RX], Tuning[playerid][SideSkirt2RY], Tuning[playerid][SideSkirt2RZ]);}
-	else if(Tuning[playerid][EditingPart] == 8){AttachObjectToVehicle(Tuning[playerid][Wheel], Tuning[playerid][PlayerVehicle], Tuning[playerid][WheelX], Tuning[playerid][WheelY], Tuning[playerid][WheelZ], Tuning[playerid][WheelRX], Tuning[playerid][WheelRY], Tuning[playerid][WheelRZ]);}
-    return 1;
 }
 //afk
 script AFK()
