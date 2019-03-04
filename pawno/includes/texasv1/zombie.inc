@@ -1,5 +1,5 @@
 //zombie include
-#define MAX_ZOMBIES 250 // change this to whatever number you want
+#define MAX_ZOMBIES 500 // change this to whatever number you want
 new SpawnedZombies=0, ZombiesTimer,ZombieIsAttack[MAX_PLAYERS];
 new z_zombieskin[] = {20012, 20013, 20014, 20015, 20016, 20017, 20018};
 script CreateZombies()
@@ -10,7 +10,7 @@ script CreateZombies()
 		new thenpc_;
 		format(str,sizeof(str),"Zombie[%d]",MAX_PLAYERS-(SpawnedZombies));
 		thenpc_ = FCNPC_Create(str);
-		FCNPC_Spawn(thenpc_,z_zombieskin[random(sizeof(z_zombieskin))],-2106.8979+random(500)-random(500),51.3692+random(1000)-random(1000),35.1641);
+		FCNPC_Spawn(thenpc_,z_zombieskin[random(sizeof(z_zombieskin))],1796.9733+random(1000)-random(1000),1452.6584+random(1000)-random(1000),13.9513);
 		//FCNPC_Spawn(thenpc_,index,2485.1643+random(5),-1668.8185+random(5),13.3438);//groove
 		FCNPC_SetWeapon(thenpc_, 0);
 		FCNPC_SetHealth(thenpc_, 100);
@@ -162,7 +162,7 @@ public FCNPC_OnRespawn(npcid)
 	FCNPC_Stop(npcid);
 	FCNPC_StopAttack(npcid);
 	FCNPC_SetMinHeightPosCall(npcid, 0.2);
-	FCNPC_SetPosition(npcid,-2106.8979+random(500)-random(500),51.3692+random(1000)-random(1000),35.1641+FCNPC_GetMinHeightPosCall(npcid));
+	FCNPC_SetPosition(npcid,1796.9733+random(1000)-random(1000),1452.6584+random(1000)-random(1000),13.9513+FCNPC_GetMinHeightPosCall(npcid));
 	//FCNPC_SetPosition(npcid,2485.1643+random(10),-1668.8185+random(10),13.3438);//groove
 	return 1;
 }
@@ -191,11 +191,10 @@ script UpdateRadiation()
    	    new Float:Vie;
 		if(IsPlayerConnected(i) && PlayerData[i][pAdminDuty] == 0 && PlayerData[i][pPrisoned] == 0)
 		{
-			if(PlayerToPoint(1090.0, i,1915,1790,10.5048))
+			if(PlayerToPoint(450.0, i,199,1919,17) && PlayerData[i][pMaskOn] != 2)
 			{
 				GetPlayerHealth(i,Vie);
 				SetPlayerHealth(i,Vie-2);
-		    	GameTextForPlayer(i,"~r~Zone de radiation",5000,3);
 		    	new rand2 = random(10);
 				PlayerData[i][pMalade] += rand2;
 			}

@@ -34,6 +34,7 @@ native IsValidVehicle(vehicleid);
 #include <texasv1/vars>
 #include <texasv1/stock>
 #include <texasv1/command>
+#include <texasv1/stamina>
 #include <texasv1/pop>
 #include <texasv1/callback>
 #include <texasv1/bowling>
@@ -763,6 +764,7 @@ script Faction_Load()
 	    FactionData[i][factionLockerInt] = cache_get_field_int(i, "factionLockerInt");
 	    FactionData[i][factionLockerWorld] = cache_get_field_int(i, "factionLockerWorld");
         FactionData[i][factioncoffre] = cache_get_field_int(i, "factioncoffre");
+        cache_get_field_content(i, "factiondiscord", FactionData[i][factiondiscord], g_iHandle, 20);
         
 	    for (new j = 0; j < 8; j ++) {
 	        format(str, sizeof(str), "factionSkin%d", j + 1);
@@ -922,7 +924,7 @@ script Dropped_Load()
 		} else {
 			DroppedItems[i][droppedObject] = CreateDynamicObject(DroppedItems[i][droppedModel], DroppedItems[i][droppedPos][0], DroppedItems[i][droppedPos][1], DroppedItems[i][droppedPos][2], 0.0, 0.0, 0.0, DroppedItems[i][droppedWorld], DroppedItems[i][droppedInt]);
 		}
-		DroppedItems[i][droppedText3D] = CreateDynamic3DTextLabel(DroppedItems[i][droppedItem], COLOR_CYAN, DroppedItems[i][droppedPos][0], DroppedItems[i][droppedPos][1], DroppedItems[i][droppedPos][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, DroppedItems[i][droppedWorld], DroppedItems[i][droppedInt]);
+		DroppedItems[i][droppedText3D] = CreateDynamic3DTextLabel(DroppedItems[i][droppedItem], COLOR_CYAN, DroppedItems[i][droppedPos][0], DroppedItems[i][droppedPos][1], DroppedItems[i][droppedPos][2], 5.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, DroppedItems[i][droppedWorld], DroppedItems[i][droppedInt]);
 	}
 	return 1;
 }
@@ -3747,6 +3749,28 @@ script OnPlayerUseItem(playerid, itemid, name[])
     else if (!strcmp(name, "des", true)) {
         cmd_des(playerid, "");
     }
+    else if (!strcmp(name, "Masque a gaz", true))
+	{
+		if (!Inventory_HasItem(playerid, "Masque a gaz"))
+			return SendErrorMessage(playerid, "Vous n'avez pas de masque a gaz.");
+		switch (PlayerData[playerid][pMaskOn])
+		{
+			case 0:
+			{
+			    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son masque a gaz.", ReturnName(playerid, 0));
+			    PlayerData[playerid][pMaskOn] = 2;
+			    SetPlayerAttachedObject(playerid, 2,19472, 2, AccessoryData[playerid][2][0], AccessoryData[playerid][2][1], AccessoryData[playerid][2][2], AccessoryData[playerid][2][3], AccessoryData[playerid][2][4], AccessoryData[playerid][2][5], AccessoryData[playerid][2][6], AccessoryData[playerid][2][7], AccessoryData[playerid][2][8]);
+			    EditAttachedObject(playerid, 2);
+			}
+			case 1:
+			{
+			    PlayerData[playerid][pMaskOn] = 0;
+			    RemovePlayerAttachedObject(playerid, 2);
+			    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s enleve son masque a gaz.", ReturnName(playerid, 0));
+			}
+		}
+		return 1;
+	}
     else if (!strcmp(name, "Pizza cuite", true))
 	{
         if (PlayerData[playerid][pHunger] > 90)
@@ -4364,7 +4388,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	if (newkeys & KEY_NO && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 	{
 	    static string[320];
-		if (PlayerData[playerid][pTutorialStage] == 2 && (IsPlayerInRangeOfPoint(playerid, 1.5,-70.9738,-1574.2937,3.0855) || IsPlayerInRangeOfPoint(playerid, 1.5,2510.9900,-1728.5364,778.3384) || IsPlayerInRangeOfPoint(playerid, 3.0,1742.7317,-1948.1010,14.5589) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.8559) || IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) ||IsPlayerInRangeOfPoint(playerid, 1.5,-1967.6317,146.4278,28.2107) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.355) ||IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid, 1.5,529.4365,-1817.3754,15.3615)) && GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK)
+		if (PlayerData[playerid][pTutorialStage] == 2 && (IsPlayerInRangeOfPoint(playerid, 1.5,-70.9738,-1574.2937,3.0855) || IsPlayerInRangeOfPoint(playerid, 1.5,2510.9900,-1728.5364,778.3384) || IsPlayerInRangeOfPoint(playerid, 3.0,1742.7317,-1948.1010,14.5589) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.8559) || IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) ||IsPlayerInRangeOfPoint(playerid, 1.5,-1967.6317,146.4278,28.2107) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.355) ||IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid, 1.5,529.4365,-1817.3754,15.3615)))
 		{
 		    Inventory_Add(playerid, "Demo Soda", 1543);
 		    DestroyPlayerObject(playerid, PlayerData[playerid][pTutorialObject]);
@@ -5244,7 +5268,7 @@ script OnPlayerEnterCheckpoint(playerid)
 			SetPlayerInterior(playerid, 0);
 			PlayerData[playerid][pFreeze] = 0;
 			TogglePlayerControllable(playerid, 1);
-			SendServerMessage(playerid, "Un cannal nouveau /n (5heures de jeux max) est disponible pour vos question.");
+			SendServerMessage(playerid, "Un canal nouveau /n (5heures de jeux max) est disponible pour vos question.");
 			if (IsPlayerInRangeOfPoint(playerid,5,2513.0457,-1729.3940, 778.4033) && info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
 			{
 				SetPlayerPosEx(playerid,2096.7385, -1687.4127, 13.4706);
@@ -6777,7 +6801,6 @@ script OnPlayerUpdate(playerid)
 		SendClientMessage(playerid, COLOR_LIGHTRED, "[Anti-Cheat] Vous avez était kick pour Fly Hack!!!");
 		KickEx(playerid);
 	}
-	
 	static str[64], id = -1, keys[3], vehicleid;
 	if (PlayerData[playerid][pKicked])
 		return 0;
@@ -6791,7 +6814,6 @@ script OnPlayerUpdate(playerid)
 	    vehicleid = INVALID_VEHICLE_ID;
 
 	GetPlayerKeys(playerid, keys[0], keys[1], keys[2]);
-
 	if (GetPlayerWeapon(playerid) != PlayerData[playerid][pWeapon])
 	{
 	    PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
@@ -7024,10 +7046,29 @@ script OnPlayerUpdate(playerid)
 	}
 	if (Inventory_HasItem(playerid,"object contaminer"))
 	{
-	    SendServerMessage(playerid,"Vous vous sentez faible quelque chose ne tourne pas rond.");
 	    SetPlayerDrunkLevel(playerid, 15000);
 	    return 1;
 	}
+    new Float:stamina;
+    if(!IsPlayerNPC(playerid))
+    {
+        if(sbtime[playerid] != gettime())
+        {
+			if(PlayerData[playerid][pparcouru] <= 5000 && PlayerData[playerid][pparcouru] >= 2001) {SetPlayerStaminaSubVal(playerid, 1.0);}
+			if(PlayerData[playerid][pparcouru] <= 2000 && PlayerData[playerid][pparcouru] >= 1001) {SetPlayerStaminaSubVal(playerid, 5.0);}
+			if(PlayerData[playerid][pparcouru] <= 1000 && PlayerData[playerid][pparcouru] >= 501) {SetPlayerStaminaSubVal(playerid, 10.0);}
+			if(PlayerData[playerid][pparcouru] <= 500 && PlayerData[playerid][pparcouru] >= -500) {SetPlayerStaminaSubVal(playerid, 15.0);}
+			if(PlayerData[playerid][pparcouru] <= 0 && PlayerData[playerid][pparcouru] >= -501) {SetPlayerStaminaSubVal(playerid, 25.0);}
+			if(PlayerData[playerid][pparcouru] <= -502 && PlayerData[playerid][pparcouru] >= -1500) {SetPlayerStaminaSubVal(playerid, 30.0);}
+			if(PlayerData[playerid][pparcouru] <= -1501 && PlayerData[playerid][pparcouru] >= -2000) {SetPlayerStaminaSubVal(playerid, 35.0);}
+			if(PlayerData[playerid][pparcouru] <= -2001 && PlayerData[playerid][pparcouru] >= -3000) {SetPlayerStaminaSubVal(playerid, 35.0);}
+			if(PlayerData[playerid][pparcouru] <= -3001 && PlayerData[playerid][pparcouru] >= -4000) {SetPlayerStaminaSubVal(playerid, 40.0);}
+			if(PlayerData[playerid][pparcouru] <= -4001 && PlayerData[playerid][pparcouru] >= -5000) {SetPlayerStaminaSubVal(playerid, 45.0);}
+            GetPlayerStamina(playerid, stamina);
+            SetPlayerProgressBarValue(playerid, StaminaBar[playerid], stamina);
+            sbtime[playerid] = gettime();
+        }
+    }
 	return 1;
 }
 script OnPlayerConnect(playerid)
@@ -7216,6 +7257,8 @@ script OnPlayerDisconnect(playerid, reason)
 	PointGagner[playerid] = 0;
 	JustJoined[playerid] = false;
 	organisateur[playerid] = 0;
+	//stamina
+	DestroyPlayerProgressBar(playerid, StaminaBar[playerid]);
     return 1;
 }
 script OnPlayerClickPlayer(playerid, clickedplayerid, source)
@@ -7224,7 +7267,7 @@ script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 	{
 		SendServerMessage(playerid,"Vous avez clicker sur %s",ReturnName(clickedplayerid,0));
 		AdminTarget[playerid] = clickedplayerid;
-		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\
+		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\
 		\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\
 		\nSlap se joueur\nFaire saigner ou pas se joueur\
 		\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
@@ -7817,19 +7860,6 @@ script LotteryUpdate()
 	argent_entreprise[moneyentrepriseid][argentmedecin] += info_gouvernementinfo[gouvernementinfoid][gouvernementsubventionmedecin];
 	argent_entreprise[moneyentrepriseid][argentbanque] += info_gouvernementinfo[gouvernementinfoid][gouvernementaidebanque];
 	moneyentreprisesave(moneyentrepriseid);
-	//generateur
-	/*new stockjobinfoid;
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] -= 5;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] -= 5;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] -= 5;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] -= 5;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] -= 5;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] = 0;}
-	stockjobinfosave(stockjobinfoid);*/
 	return 1;
 }
 
@@ -7939,6 +7969,10 @@ script OnPlayerSpawn(playerid)
 	PreloadAnimLib(playerid,"CARRY");
 	new serveursettinginfoid;
 	SendAnnonceMessage(playerid, "%s.", info_serveursettinginfo[serveursettinginfoid][settingmotd]);
+	//stamina
+	SetPlayerStamina(playerid, 100.0);
+	StaminaBar[playerid] = CreatePlayerProgressBar(playerid, 547.0, 38.5, 63.0, 5.0,-1429936641, 100.0);
+    ShowPlayerProgressBar(playerid, StaminaBar[playerid]);
 	return 1;
 }
 script OnPlayerCommandReceived(playerid, cmdtext[])
@@ -8935,7 +8969,7 @@ script OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 	if ((response) && (extraid == MODEL_SELECTION_SKIN))
 	{
 	    PlayerData[playerid][pSkin] = modelid;
-		SetSpawnInfo(playerid, 0, PlayerData[playerid][pSkin], 1684.4392, 1771.6658, 10.8203, 270.0000, 0, 0, 0, 0, 0, 0);
+		SetSpawnInfo(playerid, 0, PlayerData[playerid][pSkin], -2266.5588, 2818.8813, 175.6808, 270.0000, 0, 0, 0, 0, 0, 0);
 		SetPlayerCameraLookAt(playerid,1404.5933, -1594.4730, 95.4797);
 		SetPlayerCameraPos(playerid, 1403.7042, -1594.0187, 96.0647);
 		TogglePlayerSpectating(playerid, 0);
@@ -14448,6 +14482,12 @@ script OnPlayerStopBurn(playerid)
 {
     RemovePlayerAttachedObject(playerid, 9);
 	return 1;
+}
+//stamina
+script OnPlayerOutOfStamina(playerid)
+{
+    ApplyAnimation(playerid, "PED", "IDLE_tired", 4.1, 0, 1, 1, 0, STAMINA_UPDATE_TIME*5, 1);
+    return 1;
 }
 script SendAdminAlert(color, const str[], {Float,_}:...)
 {

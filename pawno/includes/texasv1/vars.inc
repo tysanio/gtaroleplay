@@ -543,7 +543,8 @@ enum factionData {
 	factionPickup,
 	factionacces[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
 	factioncoffre,
-	factionsalaire[16] // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
+	factionsalaire[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
+	factiondiscord[20]
 };
 enum arrestPoints {
 	arrestID,
@@ -816,13 +817,6 @@ enum e_InventoryItems {
 };
 
 new const g_aInventoryItems[][e_InventoryItems] = {
-	{"Marijuana", 1578},
-	{"Cocaine", 1575},
-	{"Heroin", 1577},
-	{"Steroids", 1241},
-	{"Graine marijuana", 1578},
-	{"Graine cocaine", 1575},
-	{"Graine Heroin Opium", 1577},
 	{"Golf Club", 333},
 	{"Couteau", 335},
 	{"Pelle", 337},
@@ -840,7 +834,16 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"Sawn Off",350},
 	{"Rifle", 357},
 	{"Sniper", 358},
-	{"Chargeur", 19995},
+	{"Dynamite",1654},
+	{"Decodeur",2886},
+	{"Masque a gaz",19472},
+	{"Marijuana", 1578},
+	{"Cocaine", 1575},
+	{"Heroin", 1577},
+	{"Steroids", 1241},
+	{"Graine marijuana", 1578},
+	{"Graine cocaine", 1575},
+	{"Graine Heroin Opium", 1577},
 	{"Boite de matos", 2040},
 	{"Burger cuit", 2703},
 	{"Pizza cuite", 2702},
@@ -866,8 +869,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"Boite de carton", 928},
 	{"Poulet", 2663},
 	{"Talkie-Walkie", 18868},
-	{"Dynamite",1654},
-	{"Decodeur",2886},
+	{"Chargeur", 19995},
 	{"Cocktail Molotov",344},
 	{"Chargeur telephone",19087},
 	{"alcool",1486},
@@ -910,7 +912,6 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"sandwich a la viande",2880},
 	{"sandwich au jambon",2880},
 	{"object contaminer",1576}
-	
 };
 /*new const Float:arrHospitalDeliver[2][3] = { //vc
     {1866.9421,-1930.9034,4.9235},
@@ -1076,7 +1077,7 @@ enum e_InteriorData {
 };
 
 new const g_arrInteriorData[][e_InteriorData] = {
-	{"24/7 1 +", 17,-25.7220, -187.8216, 1003.5469},
+	{"24/7 1", 17,-25.7220, -187.8216, 1003.5469},
     {"24/7 2", 4,-27.844, -26.6737, 1003.5573,},
     {"24/7 3", 6, -26.8339, -55.5846, 1003.5469 },
     {"Airport Ticket", 14, -1827.147338, 7.207417, 1061.143554},
@@ -2348,3 +2349,6 @@ new pvehicleid[MAX_PLAYERS]; // array containing players vehicle id (loaded when
 new pmodelid[MAX_PLAYERS]; // array containing players vehicle MODEL id (loaded when player enters as driver)
 //clickplayer
 new AdminTarget[MAX_PLAYERS];
+//stamina
+new sbtime[MAX_PLAYERS];
+new PlayerBar:StaminaBar[MAX_PLAYERS];

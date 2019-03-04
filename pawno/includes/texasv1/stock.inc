@@ -3284,7 +3284,7 @@ Rack_Refresh(rackid)
 		    DestroyDynamic3DTextLabel(RackData[rackid][rackText3D]);
 		}
 		format(str, sizeof(str), "[Etagère %d]\n{FFFFFF}/armeetagere pour utiliser l'étagère.", rackid);
-		RackData[rackid][rackText3D] = CreateDynamic3DTextLabel(str, COLOR_DARKBLUE, RackData[rackid][rackPos][0], RackData[rackid][rackPos][1], RackData[rackid][rackPos][2] + 1.2, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, RackData[rackid][rackWorld], RackData[rackid][rackInterior]);
+		RackData[rackid][rackText3D] = CreateDynamic3DTextLabel(str, COLOR_DARKBLUE, RackData[rackid][rackPos][0], RackData[rackid][rackPos][1], RackData[rackid][rackPos][2] + 1.2, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, RackData[rackid][rackWorld], RackData[rackid][rackInterior]);
 		Rack_RefreshGuns(rackid);
         RackData[rackid][rackObjects][4] = CreateDynamicObject(2475, RackData[rackid][rackPos][0], RackData[rackid][rackPos][1], RackData[rackid][rackPos][2], 0.0, 0.0, RackData[rackid][rackPos][3], RackData[rackid][rackWorld], RackData[rackid][rackInterior]);
 	}
@@ -3746,7 +3746,7 @@ Faction_Refresh(factionid)
 Faction_Save(factionid)
 {
 	static query[2048];
-	format(query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s',`factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d', `factioncoffre` = '%d'",
+	format(query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s',`factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d', `factioncoffre` = '%d', `factiondiscord` = '%s'",
 		SQL_ReturnEscaped(FactionData[factionid][factionName]),
 		FactionData[factionid][factionRanks],
 		FactionData[factionid][factionLockerPos][0],
@@ -3754,7 +3754,8 @@ Faction_Save(factionid)
 		FactionData[factionid][factionLockerPos][2],
 		FactionData[factionid][factionLockerInt],
 		FactionData[factionid][factionLockerWorld],
-		FactionData[factionid][factioncoffre]
+		FactionData[factionid][factioncoffre],
+		SQL_ReturnEscaped(FactionData[factionid][factiondiscord])
 	);
 	for (new i = 0; i < 10; i ++)
 	{
@@ -6449,7 +6450,6 @@ Dialog:EditBandana(playerid, response, listitem, inputtext[])
 			{
 			    PlayerData[playerid][pToggleBandana] = 0;
        			SetPlayerAttachedObject(playerid, 2,PlayerData[playerid][pBandana], 2, AccessoryData[playerid][2][0], AccessoryData[playerid][2][1], AccessoryData[playerid][2][2], AccessoryData[playerid][2][3], AccessoryData[playerid][2][4], AccessoryData[playerid][2][5], AccessoryData[playerid][2][6], AccessoryData[playerid][2][7], AccessoryData[playerid][2][8]);
-
 			    EditAttachedObject(playerid, 2);
 			    PlayerData[playerid][pEditType] = 3;
 			}
@@ -6659,7 +6659,6 @@ Dialog:Origin(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 	    new str[64];
-
 	    if (isnull(inputtext) || strlen(inputtext) > 32) {
 	        Dialog_Show(playerid, Origin, DIALOG_STYLE_INPUT, "Origine du personnage", "Entrée un pays de ou vous vener:", "Envoyer", "Annuler");
 		}
@@ -24695,27 +24694,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
     {
        	switch(listitem)
        	{
-       	    case 0:
-       	    {
-				TogglePlayerControllable(AdminTarget[playerid], 0);
-				SendAdminAction(playerid, "Vous venez de freeze %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
-			}
-			case 1:
-			{
-				TogglePlayerControllable(AdminTarget[playerid], 1);
-				SendAdminAction(playerid, "Vous venez d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
-			}
-			case 2:
-			{
-				if (PlayerData[AdminTarget[playerid]][pAdmin] > PlayerData[playerid][pAdmin])
-					return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
-				SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a kické %s via tabclick.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Log_Write("logs/kick_log.txt", "[%s] %s a kické %s via tabclick", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				KickEx(AdminTarget[playerid]);
-			}
-			case 3:
+			case 0:
 			{
 				if (!PlayerData[playerid][pAdmin])
 					return SendErrorMessage(playerid, "Tu n'as pas acces a cette commande.");
@@ -24732,6 +24711,26 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a été banni par %s via tabclick.", PlayerData[AdminTarget[playerid]][pUsername], ReturnName(playerid, 0));
 				Log_Write("logs/ban_log.txt", "[%s] %s a été banni par %s via tabclick.",ReturnDate(),PlayerData[AdminTarget[playerid]][pUsername],ReturnName(playerid, 0));
 				Blacklist_Add(PlayerData[AdminTarget[playerid]][pIP], PlayerData[AdminTarget[playerid]][pUsername], PlayerData[playerid][pUsername],"Via tabclic");
+				KickEx(AdminTarget[playerid]);
+			}
+       	    case 1:
+       	    {
+				TogglePlayerControllable(AdminTarget[playerid], 0);
+				SendAdminAction(playerid, "Vous venez de freeze %s", ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+			}
+			case 2:
+			{
+				TogglePlayerControllable(AdminTarget[playerid], 1);
+				SendAdminAction(playerid, "Vous venez d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+			}
+			case 3:
+			{
+				if (PlayerData[AdminTarget[playerid]][pAdmin] > PlayerData[playerid][pAdmin])
+					return SendErrorMessage(playerid, "L'admin est plus fort que toi.");
+				SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a kické %s via tabclick.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
+				Log_Write("logs/kick_log.txt", "[%s] %s a kické %s via tabclick", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
 				KickEx(AdminTarget[playerid]);
 			}
 			case 4:
@@ -24758,7 +24757,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				TextDrawHideForPlayer(AdminTarget[playerid], gServerTextdraws[2]);
 				SendAdminAction(playerid, "Vous avez 1up %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s vous a réanimé.", ReturnName(playerid, 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");			
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");			
 			}
 			case 7:
 			{
@@ -24778,7 +24777,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					SendAdminAction(AdminTarget[playerid], "Vous avez été démute par %s", ReturnName(playerid, 0));
 					SendAdminAction(playerid, "Vous avez démute %s.", ReturnName(AdminTarget[playerid], 0));	
 				} 
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");				
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");				
 			}
 			case 8:
 			{
@@ -24788,7 +24787,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				PlayerPlaySound(AdminTarget[playerid], 1130, 0.0, 0.0, 0.0);
 				SendServerMessage(AdminTarget[playerid],"Vous avez été slap par %s.",ReturnName(playerid,0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s à slappé %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");		
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");		
 			}
 			case 9:
 			{
@@ -24809,7 +24808,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 						SendServerMessage(playerid, "Vous avez enlever le saignement à %s.", ReturnName(AdminTarget[playerid], 0));
 					}
 				}
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
 			}
 			case 10:
 			{
@@ -24827,7 +24826,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					SendAdminAction(playerid, "Vous avez invité %s dans les helpeurs.", ReturnName(AdminTarget[playerid], 0));
 					SendAdminAction(AdminTarget[playerid], "%s vous a invité dans les helpeurs.", ReturnName(playerid, 0));
 				}
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
 			}
 			case 11:
 			{
@@ -24848,7 +24847,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 			}
 			case 12:
 			{
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 		}
 	}
@@ -24856,7 +24855,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 }
 Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Freeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire sainger se joueur ou pas\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
     if(response)
     {
        	switch(listitem)
@@ -24873,7 +24872,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SetPlayerVirtualWorld(AdminTarget[playerid],0);
 				SetPlayerInterior(AdminTarget[playerid],0);
 				SendServerMessage(playerid, "Vous avez mit l'interieur et le virtualworld a 0 pour le joueur %s.",ReturnName(AdminTarget[playerid],0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 			case 2:
 			{
@@ -24887,20 +24886,20 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 					SendClientMessageEx(playerid, COLOR_WHITE, "* %s (%d ammo)", ReturnWeaponName(weaponid), ammo);
 				}
 				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 			case 3:
 			{
 				ResetWeapons(AdminTarget[playerid]);
 				SendAdminAction(playerid, "Vous avez reset %s weapons.", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 			case 4:
 			{
 				if (PlayerData[playerid][pAdmin] < 2)
 					return SendErrorMessage(playerid, "Tu n'as pas acces a cette commande.");
 				SendServerMessage(playerid, "%s IP est %s.", ReturnName(AdminTarget[playerid], 0), PlayerData[AdminTarget[playerid]][pIP]);
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 			case 5:
 			{
@@ -24911,7 +24910,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				if (PlayerData[AdminTarget[playerid]][pWarnings] >= 2 && strlen(PlayerData[AdminTarget[playerid]][pWarn2]))
 					SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[AdminTarget[playerid]][pWarn2]);
 				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
 			}
 			case 6:
 			{
@@ -24921,7 +24920,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SendAdminAction(playerid, "Vous avez supprimer a %s ces warn(s).", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s a supprimer vos warning.", ReturnName(playerid, 0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer les warn de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
 			}
 			case 7:
 			{
@@ -24929,7 +24928,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SendAdminAction(playerid, "Vous avez supprimer a %s son inventaire.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s a supprimer tout votre inventaire.", ReturnName(playerid, 0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer l'invtaire de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 			case 8:
 			{
@@ -24937,13 +24936,13 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				PlayerData[AdminTarget[playerid]][pThirst] = 100;
 				SendAdminAction(playerid, "Vous avez restauré la faim et la soif de %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "Faim et soif restauré par %s.", ReturnName(playerid, 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");			
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");			
 			}
 			case 9:
 			{
 				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur na pas été tirer dessus depuis sa connection au serveur.");}
 				SendServerMessage(playerid, "%s a tirer sur %s (%s).", ReturnName(AdminTarget[playerid], 0), ReturnName(PlayerData[AdminTarget[playerid]][pLastShot]), GetDuration(gettime() - PlayerData[AdminTarget[playerid]][pShotTime]));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 			}
 			case 10:
 			{
@@ -24989,62 +24988,66 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			{
 				Dialog_Show(playerid,ModifierInformation10,DIALOG_STYLE_INPUT,"Modification","Modifcation du rang admin","Valider","Annuler");
 			}
+			case 20:
+			{
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+			}
 		}
 	}
 	return 1;
 }
 Dialog:ModifierInformation1(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
     if(response)
     {
 		SetPlayerHealth(AdminTarget[playerid],strval(inputtext));
 		SendServerMessage(playerid, "Vous avez mis la vie de %s a %d.", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation2(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
     if(response)
     {
 		SetPlayerArmour(AdminTarget[playerid],strval(inputtext));
 		SendServerMessage(playerid, "Vous avez mis l'armure de %s a %d.", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation3(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
     if(response)
     {
 		SetPlayerInterior(AdminTarget[playerid],strval(inputtext));
 		PlayerData[AdminTarget[playerid]][pInterior] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s dans l'intérieur (ID %d.)", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation4(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
     if(response)
     {
 		SetPlayerVirtualWorld(AdminTarget[playerid], strval(inputtext));
 		PlayerData[AdminTarget[playerid]][pWorld] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s dans le virtual world (ID %d.)", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation5(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 1)
@@ -25075,14 +25078,14 @@ Dialog:ModifierInformation5(playerid, response, listitem, inputtext[])
 			}
 		}
 		Log_Write("logs/warn_log.txt", "[%s] %s a warned %s pour %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0),inputtext);
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation6(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
     if(response)
     {
 		static query[128];
@@ -25099,14 +25102,14 @@ Dialog:ModifierInformation6(playerid, response, listitem, inputtext[])
 		}
 		format(query, sizeof(query), "SELECT `ID` FROM `characters` WHERE `Character` = '%s'", SQL_ReturnEscaped(inputtext));
 		mysql_tquery(g_iHandle, query, "OnNameChange", "dds", playerid, AdminTarget[playerid], inputtext);
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifierInformation7(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 3)
@@ -25127,14 +25130,14 @@ Dialog:ModifierInformation7(playerid, response, listitem, inputtext[])
 			SendServerMessage(playerid, "Vous avez mis %s faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
 			SendServerMessage(AdminTarget[playerid], "%s vous a mis dans la faction \"%s\".", ReturnName(playerid, 0), FactionData[strval(inputtext)][factionName]);
 		}
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");			
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");			
 	}
 	return 1;
 }
 Dialog:ModifierInformation8(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
     if(response)
     {
 		static factionid;
@@ -25147,14 +25150,14 @@ Dialog:ModifierInformation8(playerid, response, listitem, inputtext[])
 		PlayerData[AdminTarget[playerid]][pFactionRank] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s le rang a %d.", ReturnName(AdminTarget[playerid], 0), strval(inputtext));
 		SendServerMessage(AdminTarget[playerid], "%s vous a mis le rang a %d.", ReturnName(playerid, 0), strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");		
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 3)
@@ -25174,14 +25177,14 @@ Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 			SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
 			SendServerMessage(AdminTarget[playerid], "%s ta mis leader de \"%s\".", ReturnName(playerid, 0), FactionData[strval(inputtext)][factionName]);
 		}
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");		
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 4)
@@ -25200,13 +25203,207 @@ Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 		}
 		PlayerData[AdminTarget[playerid]][pAdmin] = strval(inputtext);
 		Log_Write("logs/admin_log.txt", "[%s] %s à mis admin %s au niveau %d.", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0), strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faciton\nModifier le niveau admin","Valider","Annuler");		
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");		
+	}
+	return 1;
+}
+Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (response)
+	{
+		switch (listitem)
+		{
+			case 0:
+			{
+				switch (PlayerData[AdminTarget[playerid]][pGender])
+				{
+					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
+					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
+				}
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+			}	
+			case 1:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus0,DIALOG_STYLE_INPUT,"Modification date d'anniversaire","Veuiller entrée un nombre pour la la date d'anniversaire","Valider","Retour");
+			}			
+			case 2:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée un nombre pour la faim","Valider","Retour");
+			}
+			case 3:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée un nombre pour la soif","Valider","Retour");
+			}
+			case 4:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus2,DIALOG_STYLE_INPUT,"Modification Bras","Veuiller entrée un nombre pour les bras","Valider","Retour");
+			}
+			case 5:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée un nombre pour les jambes","Valider","Retour");
+			}			
+			case 6:
+			{
+				PlayerData[AdminTarget[playerid]][pLocaID] = 0;
+				SendServerMessage(playerid, "Vous avez mis a 0 le louage de vehicule à %s", ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+			}
+			case 7:
+			{
+				PlayerData[AdminTarget[playerid]][pLocaMaisonID] = 0;
+				SendServerMessage(AdminTarget[playerid], "Vous avez mis a 0 le louage de maison à %s", ReturnName(AdminTarget[playerid], 0));
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+			}
+			case 8:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus8,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une Job","Valider","Retour");
+			}
+			case 9:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une heure de jeux","Valider","Retour");
+			}
+			case 10:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus7,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée des minutes de jeux","Valider","Retour");
+			}
+			case 11:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
+			}
+			case 12:
+			{
+				Dialog_Show(playerid,ModifcationInformationPlus9,DIALOG_STYLE_MSGBOX,"Modification du Sexe","Homme ou Femme?","Homme","Femme");
+			}
+		}
+	}
+	return 1;
+}
+Dialog:ModifierInformationPlus1(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || strlen(inputtext) > 32)
+		return Dialog_Show(playerid,ModifcationInformationPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
+	format(PlayerData[AdminTarget[playerid]][pOrigin], 32, inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s l'origine a \"%s\".", ReturnName(AdminTarget[playerid], 0), inputtext);
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus2(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 31300))
+		return Dialog_Show(playerid,ModifcationInformationPlus2,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle données pour les bras","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][prepetitions] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s son niveau de bras a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus3(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 5000))
+		return Dialog_Show(playerid,ModifcationInformationPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée une nouvelle donnée pur les jambes","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][pparcouru] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s son niveau de jambes a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus4(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
+		return Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée une donnée de Faim","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][pHunger] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s son niveau de faim a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus5(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
+		return Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée une donnée de Soif","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][pThirst] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s son niveau de soif a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus6(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
+		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Heure de jeux","Veuiller entrée une donnée d'heure de jeux","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][pPlayingHours] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s son niveau d'heure de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus7(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 60))
+		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une donnée de minutes de jeux","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][pMinutes] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s son niveau de minutes de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus8(playerid, response, listitem, inputtext[])
+{
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 16))
+		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une donnée job","Valider","Retour");
+	PlayerData[AdminTarget[playerid]][pJob] = strval(inputtext);
+	SendServerMessage(playerid, "Vous avez mis a %s le job %s.", ReturnName(AdminTarget[playerid], 0), inputtext);
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	return 1;
+}
+Dialog:ModifierInformationPlus9(playerid, response, listitem, inputtext[])
+{
+    if (!response)
+    {
+		PlayerData[AdminTarget[playerid]][pGender] = 2;
+		SendServerMessage(playerid, "Vous avez mis a %s le sexe féminin.", ReturnName(AdminTarget[playerid], 0));
+		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+    }	
+	if(response)
+	{
+		PlayerData[AdminTarget[playerid]][pGender] = 1;
+		SendServerMessage(playerid, "Vous avez mis a %s le sexe masculin.", ReturnName(AdminTarget[playerid], 0));
+		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	}
+	return 1;
+}
+Dialog:ModifierInformationPlus0(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    new iDay,iMonth,iYear;
+	    static const arrMonthDays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	    if (sscanf(inputtext, "p</>ddd", iDay, iMonth, iYear)) {
+	        Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		}
+		else if (iYear < 1945 || iYear > 2000) {
+		    Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		}
+		else if (iMonth < 1 || iMonth > 12) {
+		    Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		}
+		else if (iDay < 1 || iDay > arrMonthDays[iMonth - 1]) {
+		    Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		}
+		else {
+		    format(PlayerData[AdminTarget[playerid]][pBirthdate], 32, inputtext);
+			SendServerMessage(playerid, "Vous avez mis a %s la date %s", ReturnName(AdminTarget[playerid], 0),inputtext);
+		}
 	}
 	return 1;
 }
 //aide menu
 Dialog:aidemenu(playerid, response, listitem, inputtext[])
 {
+	if(!response) return Dialog_Show(playerid,aidemenu,DIALOG_STYLE_LIST,"Menu d'aide","Aide Chat\nAide Maison\nAide Magasin\nAide Vehicule\nAide Faction\nAide Divers\nAide General","Quitter","");
 	if (response)
 	{
 		switch (listitem)
@@ -25273,14 +25470,13 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 						- /barriere pour placer un type de barrage,\n- /destroybarriere pour détruire les barrages placé avec le /barriere,\n- /bizon réautorisé un biz a avoir des clients.\
 					","Quitter","");
 					}
-					if (FactionData[facass][factionacces][3] == 1) {//fbi
+					if (FactionData[facass][factionacces][3] == 1) {//militaire
 						Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide pour la faction", \
 						"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 						- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 						- /fexclure exclure une personne,\n - /bbalise pour activer la balise,\n- /frang mettre un rang,\n\
 						- /menotte menotte une personne,\n- /demenotte menotte une personne,\n\
-						- /radio pour parlé en IC radio,\n- /dept  pour parlé avec le gouvernement,\n\
-						- /defoncerporte pour défoncé une porte,\n- /micro pour poser un micro sur quelqu'un,\n\
+						- /radio pour parlé en IC radio,\n- /dept  pour parlé avec le gouvernement,\
 						","Quitter","");
 					}
 					if (FactionData[facass][factionacces][4] == 1) {//swat
@@ -25289,6 +25485,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 						- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 						- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
 						- /menotte menotte une personne,\n- /demenotte menotte une personne,\n\
+						- /defoncerporte pour défoncé une porte,\n- /micro pour poser un micro sur quelqu'un,\n\
 						- /radio pour parlé en IC radio,\n - /bbalise pour activer la balise,\n- /dept pour parlé avec le gouvernement,\n\
 						","Quitter","");
 					}
@@ -25298,7 +25495,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 						"- /membres Sert a savoir qui est en ligne,\n- /(f) pour parlé de facons OOC a la faction,\n\
 						- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 						- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
-						- /radio pour parlé en IC radio,\n - /bbalise pour activer la balise,\n- /dept  pour parlé avec le gouvernement,\
+						- /radio pour parlé en IC radio,\n - /bbalise pour activer la balise,\n- /dept  pour parlé avec le gouvernement,\n\
 						- /bandage pour faire un bandage a un patient,\n /chargermalade pour le mettre dans l'ambulance,\n /dechargermalade pour l'amener a l'hopital,\
 						","Quitter","");
 					}
@@ -25395,7 +25592,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				"- /banque pour ouvrir le menu de la banque,\n- /payer pour payer un joueur,\n- /donnerarme pour donner une arme a un joueur,\n- /serrermain pour demander un serrage de main,\n- /volerbanque pour voler la banque,\n- /voleritem voler un item dans un magasin,\n\
 				- /ouvrircargaison pour ouvrir une boite,\n- /boombox pour mettre une musique,\n- /montrerpermis Pour montrer vos permis a un joueur,\n- /boite savoir le nombre de cargaisons dans un vehicule,\n- /planter pour pouvoir planter de la drogue,\n- /recolter Pour récolter une plante de drogue poussée\n\
 				- /trousse pour utiliser un kit de premier soin,\n- /crocheterporte pour forcer une porte d'un vehicule,\n- /fouiller pour fouiller dans l'inventaire d'un joueur,\n- /channel pour choisir le channel de votre talkie-walkie,\n\
-				- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n- /credits pour voir les credits\n\
+				- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n-/bras et /jambes voir votre musculation niveau bras et ou jambes\n- /credits pour voir les credits\n\
 				","Quitter","");
 			}
 		}
