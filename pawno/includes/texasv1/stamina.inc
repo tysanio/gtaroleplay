@@ -17,7 +17,7 @@ native OnPlayerOutOfStamina(playerid);
 
 
 #if !defined STAMINA_UPDATE_TIME
-	#define STAMINA_UPDATE_TIME (1000)
+	#define STAMINA_UPDATE_TIME (2000)
 #endif
 
 static es_timer;

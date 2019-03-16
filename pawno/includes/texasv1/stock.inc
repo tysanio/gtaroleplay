@@ -150,7 +150,7 @@ SQL_SaveCharacter(playerid)
 		PlayerData[playerid][pNoob],
 		PlayerData[playerid][pZombieKill]
 	);
-	for (new i = 1; i < 10; i ++) {
+	for (new i = 0; i < 10; i ++) {
 		format(query, sizeof(query), "%s, `skill%d` = '%d'",query,i,PlayerData[playerid][pSkill][i],i);
 	}
 	format(query, sizeof(query), "%s, `Glasses` = '%d', `Hat` = '%d', `Bandana` = '%d', `GlassesPos` = '%.4f|%.4f|%.4f|%.4f|%.4f|%.4f|%.4f|%.4f|%.4f'",
@@ -198,7 +198,7 @@ SQL_SaveCharacter(playerid)
 }
 stock GetBillboardByID(sqlid)
 {
-	for (new i = 0; i != MAX_BILLBOARDS; i ++) if (BillBoardData[i][bbExists] && BillBoardData[i][bbID] == sqlid)
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (BillBoardData[i][bbExists] && BillBoardData[i][bbID] == sqlid)
 	    return i;
 	return -1;
 }
@@ -486,7 +486,7 @@ stock Speed_Save(speedid)
 }
 stock Speed_Nearest(playerid)
 {
-	for (new i = 0; i < MAX_SPEED_CAMERAS; i ++) if (SpeedData[i][speedExists] && IsPlayerInRangeOfPoint(playerid, SpeedData[i][speedRange], SpeedData[i][speedPos][0], SpeedData[i][speedPos][1], SpeedData[i][speedPos][2]))
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (SpeedData[i][speedExists] && IsPlayerInRangeOfPoint(playerid, SpeedData[i][speedRange], SpeedData[i][speedPos][0], SpeedData[i][speedPos][1], SpeedData[i][speedPos][2]))
 	    return i;
 	return -1;
 }
@@ -513,7 +513,7 @@ stock Speed_Create(playerid, Float:limit, Float:range)
 	new Float:x,Float:y,Float:z,Float:angle;
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, angle);
-	for (new i = 0; i < MAX_SPEED_CAMERAS; i ++) if (!SpeedData[i][speedExists])
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (!SpeedData[i][speedExists])
 	{
 	    SpeedData[i][speedExists] = true;
 	    SpeedData[i][speedRange] = range;
@@ -801,7 +801,7 @@ stock PreloadAnimations(playerid)
 }
 stock Vendor_Create(playerid, type)
 {
-	for (new i = 0; i != MAX_VENDORS; i ++) if (!VendorData[i][vendorExists])
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!VendorData[i][vendorExists])
 	{
 	    VendorData[i][vendorExists] = true;
 	    VendorData[i][vendorType] = type;
@@ -836,7 +836,7 @@ stock Vendor_Delete(vendorid)
 }
 Vendor_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_VENDORS; i ++) if (VendorData[i][vendorExists] && IsPlayerInRangeOfPoint(playerid, 2.0, VendorData[i][vendorPos][0], VendorData[i][vendorPos][1], VendorData[i][vendorPos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (VendorData[i][vendorExists] && IsPlayerInRangeOfPoint(playerid, 2.0, VendorData[i][vendorPos][0], VendorData[i][vendorPos][1], VendorData[i][vendorPos][2]))
 	{
 		if (GetPlayerInterior(playerid) == VendorData[i][vendorInterior] && GetPlayerVirtualWorld(playerid) == VendorData[i][vendorWorld])
 			return i;
@@ -878,7 +878,7 @@ stock Vendor_Save(vendorid)
 }
 stock Garbage_Create(playerid, type)
 {
-	for (new i = 0; i != MAX_GARBAGE_BINS; i ++) if (!GarbageData[i][garbageExists])
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!GarbageData[i][garbageExists])
 	{
 	    switch (type) {
 	        case 1: GarbageData[i][garbageModel] = 1236;
@@ -930,7 +930,7 @@ stock Garbage_Delete(garbageid)
 }
 Garbage_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_GARBAGE_BINS; i ++) if (GarbageData[i][garbageExists] && IsPlayerInRangeOfPoint(playerid, 3.0, GarbageData[i][garbagePos][0], GarbageData[i][garbagePos][1], GarbageData[i][garbagePos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (GarbageData[i][garbageExists] && IsPlayerInRangeOfPoint(playerid, 3.0, GarbageData[i][garbagePos][0], GarbageData[i][garbagePos][1], GarbageData[i][garbagePos][2]))
 	{
 		if (GetPlayerInterior(playerid) == GarbageData[i][garbageInterior] && GetPlayerVirtualWorld(playerid) == GarbageData[i][garbageWorld])
 			return i;
@@ -1035,7 +1035,7 @@ stock ATM_Delete(atmid)
 }
 ATM_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_ATM_MACHINES; i ++) if (ATMData[i][atmExists] && IsPlayerInRangeOfPoint(playerid, 1.5, ATMData[i][atmPos][0], ATMData[i][atmPos][1], ATMData[i][atmPos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (ATMData[i][atmExists] && IsPlayerInRangeOfPoint(playerid, 1.5, ATMData[i][atmPos][0], ATMData[i][atmPos][1], ATMData[i][atmPos][2]))
 	{
 		if (GetPlayerInterior(playerid) == ATMData[i][atmInterior] && GetPlayerVirtualWorld(playerid) == ATMData[i][atmWorld])
 			return i;
@@ -1047,7 +1047,7 @@ stock ATM_Create(playerid)
     new Float:x,Float:y,Float:z,Float:angle;
 	if (GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle))
 	{
-		for (new i = 0; i < MAX_ATM_MACHINES; i ++) if (!ATMData[i][atmExists])
+		for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (!ATMData[i][atmExists])
 		{
 		    ATMData[i][atmExists] = true;
 		    x += 1.0 * floatsin(-angle, degrees);
@@ -1125,21 +1125,21 @@ stock Impound_Delete(impoundid)
 }
 stock GetImpoundByID(sqlid)
 {
-	for (new i = 0; i < MAX_IMPOUND_LOTS; i ++) if (ImpoundData[i][impoundExists] && ImpoundData[i][impoundID] == sqlid) {
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (ImpoundData[i][impoundExists] && ImpoundData[i][impoundID] == sqlid) {
 	    return i;
 	}
 	return -1;
 }
 stock Impound_Nearest(playerid)
 {
-	for (new i = 0; i < MAX_IMPOUND_LOTS; i ++) if (ImpoundData[i][impoundExists] && IsPlayerInRangeOfPoint(playerid, 20.0, ImpoundData[i][impoundLot][0], ImpoundData[i][impoundLot][1], ImpoundData[i][impoundLot][2])) {
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (ImpoundData[i][impoundExists] && IsPlayerInRangeOfPoint(playerid, 20.0, ImpoundData[i][impoundLot][0], ImpoundData[i][impoundLot][1], ImpoundData[i][impoundLot][2])) {
 	    return i;
 	}
 	return -1;
 }
 stock Impound_Create(Float:x, Float:y, Float:z)
 {
-	for (new i = 0; i != MAX_IMPOUND_LOTS; i ++) if (!ImpoundData[i][impoundExists])
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!ImpoundData[i][impoundExists])
 	{
 	    ImpoundData[i][impoundExists] = true;
 	    ImpoundData[i][impoundLot][0] = x;
@@ -1191,7 +1191,7 @@ stock Backpack_Items(playerid, id)
  	    new
 	        string[MAX_BACKPACK_CAPACITY * 32],
 			count = 0;
-	    for (new i = 0; i < MAX_BACKPACK_ITEMS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id)
+	    for (new i = 0; i < MAX_BACKPACKS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id)
 	    {
 	        if (BackpackItems[i][bItemQuantity] == 1)
 	            format(string, sizeof(string), "%s%s\n", string, BackpackItems[i][bItemName]);
@@ -1213,7 +1213,7 @@ stock Backpack_Open(playerid)
 	        string[MAX_BACKPACK_CAPACITY * 32],
 			count = 0;
 		string = "Add Item\n";
-	    for (new i = 0; i < MAX_BACKPACK_ITEMS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id)
+	    for (new i = 0; i < MAX_BACKPACKS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id)
 	    {
 	        if (BackpackItems[i][bItemQuantity] == 1)
 	            format(string, sizeof(string), "%s%s\n", string, BackpackItems[i][bItemName]);
@@ -1227,7 +1227,7 @@ stock Backpack_Open(playerid)
 stock Backpack_GetItems(id)
 {
 	new count;
-	for (new i = 0; i != MAX_BACKPACK_ITEMS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id) {
+	for (new i = 0; i != MAX_BACKPACKS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id) {
 	    count++;
 	}
 	return count;
@@ -1256,14 +1256,14 @@ stock Backpack_Refresh(id)
 }
 stock Backpack_GetItemID(id, name[])
 {
-	for (new i = 0; i != MAX_BACKPACK_ITEMS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id && !strcmp(BackpackItems[i][bItemName], name, true)) {
+	for (new i = 0; i != MAX_BACKPACKS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id && !strcmp(BackpackItems[i][bItemName], name, true)) {
 	    return i;
 	}
 	return -1;
 }
 stock Backpack_GetFreeItem()
 {
-	for (new i = 0; i != MAX_BACKPACK_ITEMS; i ++) if (!BackpackItems[i][bItemExists]) {
+	for (new i = 0; i != MAX_BACKPACKS; i ++) if (!BackpackItems[i][bItemExists]) {
 	    return i;
 	}
 	return -1;
@@ -1545,7 +1545,7 @@ stock Gate_Create(playerid)
 	new Float:x,Float:y,Float:z,Float:angle;
 	if (GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle))
 	{
-		for (new i = 0; i < MAX_GATES; i ++) if (!GateData[i][gateExists])
+		for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (!GateData[i][gateExists])
 		{
 		    GateData[i][gateExists] = true;
 			GateData[i][gateModel] = 980;
@@ -1586,7 +1586,7 @@ stock Gate_Delete(gateid)
 		mysql_tquery(g_iHandle, query);
 		if (IsValidDynamicObject(GateData[gateid][gateObject]))
 		    DestroyDynamicObject(GateData[gateid][gateObject]);
-		for (new i = 0; i != MAX_GATES; i ++) if (GateData[i][gateExists] && GateData[i][gateLinkID] == GateData[gateid][gateID]) {
+		for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (GateData[i][gateExists] && GateData[i][gateLinkID] == GateData[gateid][gateID]) {
 		    GateData[i][gateLinkID] = -1;
 		    Gate_Save(i);
 		}
@@ -2818,7 +2818,7 @@ ShowCharacterMenu(playerid)
 GetClosestGarbage(playerid)
 {
 	new Float:fDistance[2] = {99999.0, 0.0},iIndex = -1;
-	for (new i = 0; i < MAX_GARBAGE_BINS; i ++) if (GarbageData[i][garbageExists] && GarbageData[i][garbageCapacity] > 0 && GetPlayerInterior(playerid) == GarbageData[i][garbageInterior] && GetPlayerVirtualWorld(playerid) == GarbageData[i][garbageWorld])
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (GarbageData[i][garbageExists] && GarbageData[i][garbageCapacity] > 0 && GetPlayerInterior(playerid) == GarbageData[i][garbageInterior] && GetPlayerVirtualWorld(playerid) == GarbageData[i][garbageWorld])
 	{
 		fDistance[1] = GetPlayerDistanceFromPoint(playerid, GarbageData[i][garbagePos][0], GarbageData[i][garbagePos][1], GarbageData[i][garbagePos][2]);
 		if (fDistance[1] < fDistance[0])
@@ -2850,7 +2850,7 @@ GetClosestEntrance(playerid, type)
 	new
 	    Float:fDistance[2] = {9999.0, 0.0},
 	    iIndex = -1;
-	for (new i = 0; i < MAX_ENTRANCES; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceType] == type && GetPlayerInterior(playerid) == EntranceData[i][entranceExterior] && GetPlayerVirtualWorld(playerid) == EntranceData[i][entranceExteriorVW])
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceType] == type && GetPlayerInterior(playerid) == EntranceData[i][entranceExterior] && GetPlayerVirtualWorld(playerid) == EntranceData[i][entranceExteriorVW])
 	{
 		fDistance[1] = GetPlayerDistanceFromPoint(playerid, EntranceData[i][entrancePos][0], EntranceData[i][entrancePos][1], EntranceData[i][entrancePos][2]);
 		if (fDistance[1] < fDistance[0])
@@ -3532,7 +3532,7 @@ House_Save(houseid)
 }*/
 Gate_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_GATES; i ++) if (GateData[i][gateExists] && IsPlayerInRangeOfPoint(playerid, GateData[i][gateRadius], GateData[i][gatePos][0], GateData[i][gatePos][1], GateData[i][gatePos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (GateData[i][gateExists] && IsPlayerInRangeOfPoint(playerid, GateData[i][gateRadius], GateData[i][gatePos][0], GateData[i][gatePos][1], GateData[i][gatePos][2]))
 	{
 		if (GetPlayerInterior(playerid) == GateData[i][gateInterior] && GetPlayerVirtualWorld(playerid) == GateData[i][gateWorld])
 			return i;
@@ -3559,7 +3559,7 @@ Arrest_Nearest(playerid)
 }
 Pump_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_GAS_PUMPS; i ++) if (PumpData[i][pumpExists] && IsPlayerInRangeOfPoint(playerid, 4.0, PumpData[i][pumpPos][0], PumpData[i][pumpPos][1], PumpData[i][pumpPos][2]) && PumpData[i][pumpExists]) {
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (PumpData[i][pumpExists] && IsPlayerInRangeOfPoint(playerid, 4.0, PumpData[i][pumpPos][0], PumpData[i][pumpPos][1], PumpData[i][pumpPos][2]) && PumpData[i][pumpExists]) {
 	    return i;
 	}
 	return -1;
@@ -3576,7 +3576,7 @@ Plant_Nearest(playerid)
 Crate_Highest(crateid)
 {
 	new Float:height = -1.0,id = -1;
-    for (new i = 0; i != MAX_CRATES; i ++) if (i != id && CrateData[i][crateExists] && CrateData[i][crateVehicle] == INVALID_VEHICLE_ID && CrateData[i][cratePos][0] == CrateData[crateid][cratePos][0] && CrateData[i][cratePos][1] == CrateData[crateid][cratePos][1] && CrateData[i][cratePos][2] > CrateData[crateid][cratePos][2] && !IsCrateInUse(crateid))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (i != id && CrateData[i][crateExists] && CrateData[i][crateVehicle] == INVALID_VEHICLE_ID && CrateData[i][cratePos][0] == CrateData[crateid][cratePos][0] && CrateData[i][cratePos][1] == CrateData[crateid][cratePos][1] && CrateData[i][cratePos][2] > CrateData[crateid][cratePos][2] && !IsCrateInUse(crateid))
 	{
 	    if (CrateData[i][cratePos][2] > height)
 	    {
@@ -3590,7 +3590,7 @@ Crate_Nearest(playerid, Float:radius = 2.5)
 {
 	if (PlayerData[playerid][pCarryCrate] != -1 && CrateData[PlayerData[playerid][pCarryCrate]][crateExists])
 	    return PlayerData[playerid][pCarryCrate];
-    for (new i = 0; i != MAX_CRATES; i ++) if (CrateData[i][crateExists] && IsPlayerInRangeOfPoint(playerid, radius, CrateData[i][cratePos][0], CrateData[i][cratePos][1], CrateData[i][cratePos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (CrateData[i][crateExists] && IsPlayerInRangeOfPoint(playerid, radius, CrateData[i][cratePos][0], CrateData[i][cratePos][1], CrateData[i][cratePos][2]))
 	{
 		if (GetPlayerInterior(playerid) == CrateData[i][crateInterior] && GetPlayerVirtualWorld(playerid) == CrateData[i][crateWorld])
 			return i;
@@ -4090,7 +4090,7 @@ Crate_Create(playerid, type)
 	static Float:x,Float:y,Float:z,Float:angle;
 	if (GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle))
 	{
-	    for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
+	    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
 	    {
          	if (Crate_Nearest(playerid, 2.5) != -1) {
 			 	z = floatsub(z, 0.1);
@@ -4172,7 +4172,7 @@ Billboard_Create(playerid, price)
 	static Float:x,Float:y,Float:z;
 	if (GetPlayerPos(playerid, x, y, z))
 	{
-		for (new i = 0; i != MAX_BILLBOARDS; i ++)
+		for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++)
 		{
 	    	if (!BillBoardData[i][bbExists])
 		    {
@@ -4550,7 +4550,7 @@ Entrance_Inside(playerid)
 {
 	if (PlayerData[playerid][pEntrance] != -1)
 	{
-	    for (new i = 0; i != MAX_ENTRANCES; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceID] == PlayerData[playerid][pEntrance] && GetPlayerInterior(playerid) == EntranceData[i][entranceInterior] && GetPlayerVirtualWorld(playerid) == EntranceData[i][entranceWorld])
+	    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceID] == PlayerData[playerid][pEntrance] && GetPlayerInterior(playerid) == EntranceData[i][entranceInterior] && GetPlayerVirtualWorld(playerid) == EntranceData[i][entranceWorld])
 	        return i;
 	}
 	return -1;
@@ -4559,14 +4559,14 @@ Entrance_GetLink(playerid)
 {
 	if (GetPlayerVirtualWorld(playerid) > 0)
 	{
-	    for (new i = 0; i != MAX_ENTRANCES; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceID] == GetPlayerVirtualWorld(playerid) - 7000)
+	    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceID] == GetPlayerVirtualWorld(playerid) - 7000)
 			return EntranceData[i][entranceID];
 	}
 	return -1;
 }
 Entrance_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_ENTRANCES; i ++) if (EntranceData[i][entranceExists] && IsPlayerInRangeOfPoint(playerid, 1.5, EntranceData[i][entrancePos][0], EntranceData[i][entrancePos][1], EntranceData[i][entrancePos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (EntranceData[i][entranceExists] && IsPlayerInRangeOfPoint(playerid, 1.5, EntranceData[i][entrancePos][0], EntranceData[i][entrancePos][1], EntranceData[i][entrancePos][2]))
 	{
 		if (GetPlayerInterior(playerid) == EntranceData[i][entranceExterior] && GetPlayerVirtualWorld(playerid) == EntranceData[i][entranceExteriorVW])
 			return i;
@@ -9049,7 +9049,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						{
 							mysql_tquery(g_iHandle, "SELECT * FROM `cvfbi`", "cvidlalaload", "");
 							format(szString, sizeof(szString), "{FFFFFF}Nom Pénom - {FF8000}%s{FFFFFF}\n{FFFFFF}Téléphone - {FF8000}%d{FFFFFF}\n{FFFFFF}Date de naissance - {FF8000}%s{FFFFFF}\n{FFFFFF}Sexe - {FF8000}%s{FFFFFF}\n{FFFFFF}Origine - {FF8000}%s{FFFFFF}",info_fbicv[cvidlala][pseudo],info_fbicv[cvidlala][telephone],info_fbicv[cvidlala][naissance],(info_fbicv[cvidlala][sexe] == 2) ? ("Femme") : ("Homme"),info_fbicv[cvidlala][origine] );
-							Dialog_Show(playerid, fbicv1, DIALOG_STYLE_MSGBOX, "C.V - F.B.I", szString, "Ok", "Supprimer");
+							Dialog_Show(playerid, fbicv1, DIALOG_STYLE_MSGBOX, "C.V - Militaire", szString, "Ok", "Supprimer");
 						}		
 					}
 					else if (FactionData[factionid][factionacces][4] == 1)
@@ -9811,22 +9811,6 @@ Dialog:MyPhone(playerid, response, listitem, inputtext[])
 		switch (listitem)
 		{
 		    case 0:
-		    {
-		        if (PlayerData[playerid][pPhoneOff])
-		            return SendErrorMessage(playerid, "Ton téléphone doit être allumé.");
-    			if(PlayerData[playerid][pAcom] == 0) return SendErrorMessage(playerid,"{FF0000}Votre batterie est déchargée!");
-
-				Dialog_Show(playerid, DialNumber, DIALOG_STYLE_INPUT, "Composé un numéro", "Entrée le numéro que vous voulez composé:", "Appeler", " <-- ");
-			}
-			case 1:
-			{
-			    if (PlayerData[playerid][pPhoneOff])
-		            return SendErrorMessage(playerid, "Ton téléphone doit être allumé.");
-    			if(PlayerData[playerid][pAcom] == 0) return SendErrorMessage(playerid,"{FF0000}Votre batterie est déchargée!");
-
-			    ShowContacts(playerid);
-			}
-			case 2:
 			{
 			    if (!PlayerData[playerid][pPhoneOff])
 			    {
@@ -9843,11 +9827,81 @@ Dialog:MyPhone(playerid, response, listitem, inputtext[])
 			        SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s à allumé son téléphone cellulaire.", ReturnName(playerid, 0));
 				}
 			}
+			case 1:
+		    {
+		        if (PlayerData[playerid][pPhoneOff])
+		            return SendErrorMessage(playerid, "Ton téléphone doit être allumé.");
+    			if(PlayerData[playerid][pAcom] == 0) return SendErrorMessage(playerid,"{FF0000}Votre batterie est déchargée!");
+
+				Dialog_Show(playerid, DialNumber, DIALOG_STYLE_INPUT, "Composé un numéro", "Entrée le numéro que vous voulez composé:", "Appeler", " <-- ");
+			}
+			case 2:
+		    {
+		        if (PlayerData[playerid][pPhoneOff])
+		            return SendErrorMessage(playerid, "Ton téléphone doit être allumé.");
+    			if(PlayerData[playerid][pAcom] == 0) return SendErrorMessage(playerid,"{FF0000}Votre batterie est déchargée!");
+
+		        Dialog_Show(playerid, SendText, DIALOG_STYLE_INPUT, "Envoie de SMS", "Entrée le numéro a envoyer un message:", "Envoyer", " <-- ");
+			}
+			case 3:
+			{
+			    if (PlayerData[playerid][pPhoneOff])
+		            return SendErrorMessage(playerid, "Ton téléphone doit être allumé.");
+    			if(PlayerData[playerid][pAcom] == 0) return SendErrorMessage(playerid,"{FF0000}Votre batterie est déchargée!");
+
+			    ShowContacts(playerid);
+			}
 		}
 	}
 	return 1;
 }
+Dialog:SendText(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    new number = strval(inputtext);
 
+	    if (isnull(inputtext) || !IsNumeric(inputtext))
+	        return Dialog_Show(playerid, SendText, DIALOG_STYLE_INPUT, "SMS", "Erreur vide: Entrée un numéro pour envoyer un message:", "Valider", "Quitter");
+
+        if (GetNumberOwner(number) == INVALID_PLAYER_ID)
+            return Dialog_Show(playerid, SendText, DIALOG_STYLE_INPUT, "SMS", "Erreur: Le numéro composé est hors service.\n\nEntrée un numéro pour envoyer un message:", "Composer", "Quitter");
+
+		PlayerData[playerid][pContact] = GetNumberOwner(number);
+		Dialog_Show(playerid, TextMessage, DIALOG_STYLE_INPUT, "Message Texte", "Entrée un message.\n\nPour envoyer a %s:", "Envoyer", "Quitter", ReturnName(PlayerData[playerid][pContact], 0));
+	}
+	else {
+		cmd_tel(playerid, "\1");
+	}
+	return 1;
+}
+
+Dialog:TextMessage(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+		if (isnull(inputtext))
+			return Dialog_Show(playerid, TextMessage, DIALOG_STYLE_INPUT, "Message Texte", "Erreur: Entrée un message.\n\nPour envoyer a %s:", "Send", " <-- ", ReturnName(PlayerData[playerid][pContact], 0));
+
+		new targetid = PlayerData[playerid][pContact];
+
+		if (!IsPlayerConnected(targetid) || !PlayerData[targetid][pPhone])
+		    return SendErrorMessage(playerid, "Le numéro composé est hors service.");
+
+		GiveMoney(playerid, -1);
+		ShowPlayerFooter(playerid, "Vous payez ~r~1$~w~ pour le sms.");
+
+		SendClientMessageEx(targetid, COLOR_YELLOW, "[SMS]: %s - %s (%d)", inputtext, ReturnName(playerid, 0),PlayerData[playerid][pPhone]);
+		SendClientMessageEx(playerid, COLOR_YELLOW, "[SMS]: %s - %s (%d)", inputtext, ReturnName(playerid, 0),PlayerData[playerid][pPhone]);
+
+        PlayerPlaySoundEx(targetid, 21001);
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend son téléphone et envoie un sms.", ReturnName(playerid, 0));
+	}
+	else {
+        Dialog_Show(playerid, SendText, DIALOG_STYLE_INPUT, "SMS", "Entrée le numéro a envoyer un message:", "Envoyer", "Quitter");
+	}
+	return 1;
+}
 Dialog:ListedFurniture(playerid, response, listitem, inputtext[])
 {
 	if (response)
@@ -9975,8 +10029,8 @@ Dialog:ConfirmCarBuy(playerid, response, listitem, inputtext[])
 			if (GetMoney(playerid) < price)
 			    return SendErrorMessage(playerid, "Vous n'avez pas assez.");
 
-			if (Car_GetCount(playerid) >= MAX_OWNABLE_CARS)
-			    return SendErrorMessage(playerid, "Vous avez déjà %d vehicules (server limit).", MAX_OWNABLE_CARS);
+			if (Car_GetCount(playerid) >= MAX_OWNABLE_SOMETHING)
+			    return SendErrorMessage(playerid, "Vous avez déjà %d vehicules (server limit).", MAX_OWNABLE_SOMETHING);
 
 			new id = Car_Create(PlayerData[playerid][pID], DealershipCars[bizid][carid][vehModel], BusinessData[bizid][bizSpawn][0], BusinessData[bizid][bizSpawn][1], BusinessData[bizid][bizSpawn][2], BusinessData[bizid][bizSpawn][3], 1, 1,-1,-1);
 
@@ -10070,7 +10124,7 @@ Dialog:CarOptions(playerid, response, listitem, inputtext[])
 
 Pump_GetFreeID()
 {
-	for (new i = 0; i < MAX_GAS_PUMPS; i ++) if (!PumpData[i][pumpExists]) {
+	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (!PumpData[i][pumpExists]) {
 	    return i;
 	}
 	return -1;
@@ -10913,7 +10967,7 @@ stock Business_RemovePumps(bizid)
 	    {
 	        StopRefilling(i);
 	    }
-		for (new i = 0; i != MAX_GAS_PUMPS; i ++) if (PumpData[i][pumpExists] && PumpData[i][pumpBusiness] == bizid)
+		for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (PumpData[i][pumpExists] && PumpData[i][pumpBusiness] == bizid)
 		{
   			DestroyDynamicObject(PumpData[i][pumpObject]);
 			DestroyDynamic3DTextLabel(PumpData[i][pumpText3D]);
@@ -14511,7 +14565,7 @@ stock GetVehicleCrates(vehicleid)
 	if (!IsValidVehicle(vehicleid) || !IsLoadableVehicle(vehicleid))
 		return 0;
 	new crates;
-	for (new i = 0; i != MAX_CRATES; i ++) if (CrateData[i][crateExists] && CrateData[i][crateVehicle] == vehicleid) {
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (CrateData[i][crateExists] && CrateData[i][crateVehicle] == vehicleid) {
 	    crates++;
 	}
  	return crates;
@@ -14603,7 +14657,7 @@ stock Float:GetPlayerSpeed(playerid)
 }
 stock GetGateByID(sqlid)
 {
-	for (new i = 0; i != MAX_GATES; i ++) if (GateData[i][gateExists] && GateData[i][gateID] == sqlid)
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (GateData[i][gateExists] && GateData[i][gateID] == sqlid)
 	    return i;
 	return -1;
 }
@@ -14627,7 +14681,7 @@ stock GetBusinessByID(sqlid)
 }
 stock GetEntranceByID(sqlid)
 {
-	for (new i = 0; i != MAX_ENTRANCES; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceID] == sqlid)
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (EntranceData[i][entranceExists] && EntranceData[i][entranceID] == sqlid)
 	    return i;
 
 	return -1;
@@ -15611,8 +15665,8 @@ Dialog:FBIRank1(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi1] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15629,8 +15683,8 @@ Dialog:FBIRank2(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi2] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank2, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank1, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank2, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15647,8 +15701,8 @@ Dialog:FBIRank3(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi3] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank3, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank3, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank3, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank3, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15665,8 +15719,8 @@ Dialog:FBIRank4(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi4] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank4, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank4, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank4, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank4, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15683,8 +15737,8 @@ Dialog:FBIRank5(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi5] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank5, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank5, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank5, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank5, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15701,8 +15755,8 @@ Dialog:FBIRank6(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi6] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank6, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank6, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank6, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank6, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15719,8 +15773,8 @@ Dialog:FBIRank7(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi7] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank7, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank7, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank7, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank7, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15737,8 +15791,8 @@ Dialog:FBIRank8(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi8] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank8, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank8, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank8, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank8, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15755,8 +15809,8 @@ Dialog:FBIRank9(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi9] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank9, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank9, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank9, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank9, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15773,8 +15827,8 @@ Dialog:FBIRank10(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi10] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank10, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank10, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank10, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank10, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15791,8 +15845,8 @@ Dialog:FBIRank11(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi11] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank11, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank11, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank11, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank11, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15809,8 +15863,8 @@ Dialog:FBIRank12(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi12] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank12, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank12, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank12, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank12, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15827,8 +15881,8 @@ Dialog:FBIRank13(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi13] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank13, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank13, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank13, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank13, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15845,8 +15899,8 @@ Dialog:FBIRank14(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi14] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank14, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank14, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank14, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank14, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -15863,8 +15917,8 @@ Dialog:FBIRank15(playerid, response, listitem, inputtext[])
 	    static rank;
 		info_salairefbi[rank][salairefbi15] = taxe;
 		if (taxe < 1 || taxe > 2500)
-			return Dialog_Show(playerid, FBIRank15, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
-		Dialog_Show(playerid, FBIRank15, DIALOG_STYLE_INPUT, "F.B.I Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
+			return Dialog_Show(playerid, FBIRank15, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, FBIRank15, DIALOG_STYLE_INPUT, "Militaire Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
 		salairefbi(rank);
 	}
 	else {}
@@ -16793,7 +16847,7 @@ Dialog:fbicv1(playerid, response, listitem, inputtext[])
         new string[700], cvfbiid;
         format(string, sizeof(string), "DELETE FROM `cvfbi` WHERE `id` = '%d'", info_fbicv[cvfbiid][cvid]);
         mysql_tquery(g_iHandle, string);
-        Dialog_Show(playerid, fbicv2, DIALOG_STYLE_MSGBOX, "C.V - F.B.I", "C.V Supprimer!", "Ok", "");
+        Dialog_Show(playerid, fbicv2, DIALOG_STYLE_MSGBOX, "C.V - Militaire", "C.V Supprimer!", "Ok", "");
     }
 }
 //journaliste
@@ -17334,7 +17388,7 @@ Dialog:Mission(playerid, response, listitem, inputtext[])
 	{
 		//if(mission[playerid] != 1)
 		//{
-			for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
+			for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
 			{
 				if (Crate_Nearest(playerid, 2.5) != -1) {
 					z = floatsub(z, 0.1);
@@ -18242,6 +18296,16 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 				Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
 				return 1;
 			}
+			case 9:
+			{
+				Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire ","Valider","Fermer");
+				return 1;
+			}
+			case 10:
+			{
+				Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer");
+				return 1;
+			}
 		}
 	}
 	return 1;
@@ -18257,11 +18321,11 @@ Dialog:serveur1(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive]);
 		info_serveursettinginfo[serveursettinginfoid][settingoocactive] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18276,11 +18340,11 @@ Dialog:serveur2(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpmactive]);
 		info_serveursettinginfo[serveursettinginfoid][settingpmactive] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18295,11 +18359,11 @@ Dialog:serveur3(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive]);
 		info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18314,11 +18378,11 @@ Dialog:serveur4(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive]);
 		info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18333,11 +18397,11 @@ Dialog:serveur5(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafkactive]);
 		info_serveursettinginfo[serveursettinginfoid][settingafkactive] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18352,7 +18416,7 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 inférieur a 20","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafktime]);
 		info_serveursettinginfo[serveursettinginfoid][settingafktime] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 		KillTimer(AFKTimer);
 		AFKActiver = info_serveursettinginfo[serveursettinginfoid][settingafkactive];
 		if(AFKActiver == 0)
@@ -18362,7 +18426,7 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18379,11 +18443,11 @@ Dialog:serveur7(playerid, response, listitem, inputtext[])
 		new query[900];
 		format(query, sizeof(query), "UPDATE `serveursetting` SET `motd`='%s' WHERE `id`='1'", SQL_ReturnEscaped(info_serveursettinginfo[serveursettinginfoid][settingmotd]));
         mysql_tquery(g_iHandle, query);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18399,42 +18463,42 @@ Dialog:serveur8(playerid,response,listitem,inputtext[])
 				new serveursettinginfoid,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='1' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 			}
 			case 1:
 			{
 				new serveursettinginfoid,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='2' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 			}
 			case 2:
 			{
 				new serveursettinginfoid,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='3' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 			}
 			case 3:
 			{
 				new serveursettinginfoid,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='4' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 			}
 			case 4:
 			{
 				new serveursettinginfoid,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='5' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 			}
 		}
 	}
 	else
 	{
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18449,11 +18513,49 @@ Dialog:serveur9(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
 		info_serveursettinginfo[serveursettinginfoid][settingnouveau] = amount;
 		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	else {
 	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting","OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	}
+	return 1;
+}
+Dialog:serveur10(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    new amount = strval(inputtext),serveursettinginfoid;
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpolice]);
+		if (amount < 0 || amount > 10)
+			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire entre 0 et 10 ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpolice]);
+		info_serveursettinginfo[serveursettinginfoid][settingpolice] = amount;
+		serveursettinginfosave(serveursettinginfoid);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	}
+	else {
+	    new serveursettinginfoid;
+		Dialog_Show(playerid,serveur10,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	}
+	return 1;
+}
+Dialog:serveur11(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    new amount = strval(inputtext),serveursettinginfoid;
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingswat]);
+		if (amount < 0 || amount > 10)
+			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire entre 0 et 10 ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingswat]);
+		info_serveursettinginfo[serveursettinginfoid][settingswat] = amount;
+		serveursettinginfosave(serveursettinginfoid);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	}
+	else {
+	    new serveursettinginfoid;
+		Dialog_Show(playerid,serveur11,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
 	}
 	return 1;
 }
@@ -18752,7 +18854,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 	new rand = random(3),facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count;
 	if (response)
 	{
-		for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
+		for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
 		{
 			if (Crate_Nearest(playerid, 2.5) != -1) {
 				z = floatsub(z, 0.1);
@@ -18987,7 +19089,7 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 	new rand = random(3),facass = PlayerData[playerid][pFaction],count;
 	if (response)
 	{
-		for (new i = 0; i != MAX_CRATES; i ++) if (!CrateData[i][crateExists])
+		for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
 		{
 			if (Crate_Nearest(playerid, 2.5) != -1) {
 				z = floatsub(z, 0.1);
@@ -24717,13 +24819,13 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
        	    {
 				TogglePlayerControllable(AdminTarget[playerid], 0);
 				SendAdminAction(playerid, "Vous venez de freeze %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
 			}
 			case 2:
 			{
 				TogglePlayerControllable(AdminTarget[playerid], 1);
 				SendAdminAction(playerid, "Vous venez d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
 			}
 			case 3:
 			{
@@ -24757,7 +24859,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				TextDrawHideForPlayer(AdminTarget[playerid], gServerTextdraws[2]);
 				SendAdminAction(playerid, "Vous avez 1up %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s vous a réanimé.", ReturnName(playerid, 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");			
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");			
 			}
 			case 7:
 			{
@@ -24777,7 +24879,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					SendAdminAction(AdminTarget[playerid], "Vous avez été démute par %s", ReturnName(playerid, 0));
 					SendAdminAction(playerid, "Vous avez démute %s.", ReturnName(AdminTarget[playerid], 0));	
 				} 
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");				
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");				
 			}
 			case 8:
 			{
@@ -24787,7 +24889,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				PlayerPlaySound(AdminTarget[playerid], 1130, 0.0, 0.0, 0.0);
 				SendServerMessage(AdminTarget[playerid],"Vous avez été slap par %s.",ReturnName(playerid,0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s à slappé %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");		
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");		
 			}
 			case 9:
 			{
@@ -24808,7 +24910,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 						SendServerMessage(playerid, "Vous avez enlever le saignement à %s.", ReturnName(AdminTarget[playerid], 0));
 					}
 				}
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
 			}
 			case 10:
 			{
@@ -24826,7 +24928,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					SendAdminAction(playerid, "Vous avez invité %s dans les helpeurs.", ReturnName(AdminTarget[playerid], 0));
 					SendAdminAction(AdminTarget[playerid], "%s vous a invité dans les helpeurs.", ReturnName(playerid, 0));
 				}
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
 			}
 			case 11:
 			{
@@ -24847,7 +24949,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 			}
 			case 12:
 			{
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 		}
 	}
@@ -24855,7 +24957,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 }
 Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
     if(response)
     {
        	switch(listitem)
@@ -24872,7 +24974,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SetPlayerVirtualWorld(AdminTarget[playerid],0);
 				SetPlayerInterior(AdminTarget[playerid],0);
 				SendServerMessage(playerid, "Vous avez mit l'interieur et le virtualworld a 0 pour le joueur %s.",ReturnName(AdminTarget[playerid],0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 			case 2:
 			{
@@ -24886,20 +24988,20 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 					SendClientMessageEx(playerid, COLOR_WHITE, "* %s (%d ammo)", ReturnWeaponName(weaponid), ammo);
 				}
 				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 			case 3:
 			{
 				ResetWeapons(AdminTarget[playerid]);
 				SendAdminAction(playerid, "Vous avez reset %s weapons.", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 			case 4:
 			{
 				if (PlayerData[playerid][pAdmin] < 2)
 					return SendErrorMessage(playerid, "Tu n'as pas acces a cette commande.");
 				SendServerMessage(playerid, "%s IP est %s.", ReturnName(AdminTarget[playerid], 0), PlayerData[AdminTarget[playerid]][pIP]);
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 			case 5:
 			{
@@ -24910,7 +25012,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				if (PlayerData[AdminTarget[playerid]][pWarnings] >= 2 && strlen(PlayerData[AdminTarget[playerid]][pWarn2]))
 					SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[AdminTarget[playerid]][pWarn2]);
 				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
 			}
 			case 6:
 			{
@@ -24920,7 +25022,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SendAdminAction(playerid, "Vous avez supprimer a %s ces warn(s).", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s a supprimer vos warning.", ReturnName(playerid, 0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer les warn de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
 			}
 			case 7:
 			{
@@ -24928,7 +25030,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SendAdminAction(playerid, "Vous avez supprimer a %s son inventaire.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s a supprimer tout votre inventaire.", ReturnName(playerid, 0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer l'invtaire de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 			case 8:
 			{
@@ -24936,13 +25038,13 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				PlayerData[AdminTarget[playerid]][pThirst] = 100;
 				SendAdminAction(playerid, "Vous avez restauré la faim et la soif de %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "Faim et soif restauré par %s.", ReturnName(playerid, 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");			
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");			
 			}
 			case 9:
 			{
 				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur na pas été tirer dessus depuis sa connection au serveur.");}
 				SendServerMessage(playerid, "%s a tirer sur %s (%s).", ReturnName(AdminTarget[playerid], 0), ReturnName(PlayerData[AdminTarget[playerid]][pLastShot]), GetDuration(gettime() - PlayerData[AdminTarget[playerid]][pShotTime]));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 			}
 			case 10:
 			{
@@ -24974,14 +25076,23 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			}
 			case 16:
 			{
+				for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists]) {
+					SendClientMessageEx(playerid, COLOR_WHITE, "[ID: %d] %s", i, FactionData[i][factionName]);
+				}
 				Dialog_Show(playerid,ModifierInformation7,DIALOG_STYLE_INPUT,"Modification","Modifcation de la faction","Valider","Annuler");
 			}
 			case 17:
 			{
+				for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists]) {
+					SendClientMessageEx(playerid, COLOR_WHITE, "[ID: %d] %s", i, FactionData[i][factionName]);
+				}
 				Dialog_Show(playerid,ModifierInformation8,DIALOG_STYLE_INPUT,"Modification","Modifcation du rang de la faction","Valider","Annuler");
 			}
 			case 18:
 			{
+				for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists]) {
+					SendClientMessageEx(playerid, COLOR_WHITE, "[ID: %d] %s", i, FactionData[i][factionName]);
+				}
 				Dialog_Show(playerid,ModifierInformation9,DIALOG_STYLE_INPUT,"Modification","Modifcation du leader faction","Valider","Annuler");
 			}
 			case 19:
@@ -24990,7 +25101,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			}
 			case 20:
 			{
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}
 		}
 	}
@@ -24998,56 +25109,56 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 }
 Dialog:ModifierInformation1(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
     if(response)
     {
 		SetPlayerHealth(AdminTarget[playerid],strval(inputtext));
 		SendServerMessage(playerid, "Vous avez mis la vie de %s a %d.", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation2(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
     if(response)
     {
 		SetPlayerArmour(AdminTarget[playerid],strval(inputtext));
 		SendServerMessage(playerid, "Vous avez mis l'armure de %s a %d.", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation3(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
     if(response)
     {
 		SetPlayerInterior(AdminTarget[playerid],strval(inputtext));
 		PlayerData[AdminTarget[playerid]][pInterior] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s dans l'intérieur (ID %d.)", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation4(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
     if(response)
     {
 		SetPlayerVirtualWorld(AdminTarget[playerid], strval(inputtext));
 		PlayerData[AdminTarget[playerid]][pWorld] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s dans le virtual world (ID %d.)", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation5(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 1)
@@ -25078,14 +25189,14 @@ Dialog:ModifierInformation5(playerid, response, listitem, inputtext[])
 			}
 		}
 		Log_Write("logs/warn_log.txt", "[%s] %s a warned %s pour %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0),inputtext);
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation6(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
     if(response)
     {
 		static query[128];
@@ -25102,14 +25213,14 @@ Dialog:ModifierInformation6(playerid, response, listitem, inputtext[])
 		}
 		format(query, sizeof(query), "SELECT `ID` FROM `characters` WHERE `Character` = '%s'", SQL_ReturnEscaped(inputtext));
 		mysql_tquery(g_iHandle, query, "OnNameChange", "dds", playerid, AdminTarget[playerid], inputtext);
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifierInformation7(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 3)
@@ -25130,14 +25241,14 @@ Dialog:ModifierInformation7(playerid, response, listitem, inputtext[])
 			SendServerMessage(playerid, "Vous avez mis %s faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
 			SendServerMessage(AdminTarget[playerid], "%s vous a mis dans la faction \"%s\".", ReturnName(playerid, 0), FactionData[strval(inputtext)][factionName]);
 		}
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");			
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");			
 	}
 	return 1;
 }
 Dialog:ModifierInformation8(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
     if(response)
     {
 		static factionid;
@@ -25150,14 +25261,14 @@ Dialog:ModifierInformation8(playerid, response, listitem, inputtext[])
 		PlayerData[AdminTarget[playerid]][pFactionRank] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s le rang a %d.", ReturnName(AdminTarget[playerid], 0), strval(inputtext));
 		SendServerMessage(AdminTarget[playerid], "%s vous a mis le rang a %d.", ReturnName(playerid, 0), strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");		
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 3)
@@ -25177,14 +25288,14 @@ Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 			SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
 			SendServerMessage(AdminTarget[playerid], "%s ta mis leader de \"%s\".", ReturnName(playerid, 0), FactionData[strval(inputtext)][factionName]);
 		}
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");		
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 4)
@@ -25203,13 +25314,13 @@ Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 		}
 		PlayerData[AdminTarget[playerid]][pAdmin] = strval(inputtext);
 		Log_Write("logs/admin_log.txt", "[%s] %s à mis admin %s au niveau %d.", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0), strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats","Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification","Valider","Annuler");		
+		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
 	if (response)
 	{
 		switch (listitem)
@@ -25221,7 +25332,7 @@ Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
 					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
 					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
 				}
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}	
 			case 1:
 			{
@@ -25247,13 +25358,13 @@ Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
 			{
 				PlayerData[AdminTarget[playerid]][pLocaID] = 0;
 				SendServerMessage(playerid, "Vous avez mis a 0 le louage de vehicule à %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}
 			case 7:
 			{
 				PlayerData[AdminTarget[playerid]][pLocaMaisonID] = 0;
 				SendServerMessage(AdminTarget[playerid], "Vous avez mis a 0 le louage de maison à %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}
 			case 8:
 			{
@@ -25281,82 +25392,82 @@ Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
 }
 Dialog:ModifierInformationPlus1(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || strlen(inputtext) > 32)
 		return Dialog_Show(playerid,ModifcationInformationPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
 	format(PlayerData[AdminTarget[playerid]][pOrigin], 32, inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s l'origine a \"%s\".", ReturnName(AdminTarget[playerid], 0), inputtext);
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus2(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 31300))
 		return Dialog_Show(playerid,ModifcationInformationPlus2,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle données pour les bras","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][prepetitions] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s son niveau de bras a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus3(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 5000))
 		return Dialog_Show(playerid,ModifcationInformationPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée une nouvelle donnée pur les jambes","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][pparcouru] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s son niveau de jambes a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus4(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
 		return Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée une donnée de Faim","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][pHunger] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s son niveau de faim a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus5(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
 		return Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée une donnée de Soif","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][pThirst] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s son niveau de soif a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus6(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
 		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Heure de jeux","Veuiller entrée une donnée d'heure de jeux","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][pPlayingHours] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s son niveau d'heure de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus7(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 60))
 		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une donnée de minutes de jeux","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][pMinutes] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s son niveau de minutes de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus8(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 16))
 		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une donnée job","Valider","Retour");
 	PlayerData[AdminTarget[playerid]][pJob] = strval(inputtext);
 	SendServerMessage(playerid, "Vous avez mis a %s le job %s.", ReturnName(AdminTarget[playerid], 0), inputtext);
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	return 1;
 }
 Dialog:ModifierInformationPlus9(playerid, response, listitem, inputtext[])
@@ -25365,13 +25476,13 @@ Dialog:ModifierInformationPlus9(playerid, response, listitem, inputtext[])
     {
 		PlayerData[AdminTarget[playerid]][pGender] = 2;
 		SendServerMessage(playerid, "Vous avez mis a %s le sexe féminin.", ReturnName(AdminTarget[playerid], 0));
-		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
     }	
 	if(response)
 	{
 		PlayerData[AdminTarget[playerid]][pGender] = 1;
 		SendServerMessage(playerid, "Vous avez mis a %s le sexe masculin.", ReturnName(AdminTarget[playerid], 0));
-		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus","Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur","Valider","Annuler");
+		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	}
 	return 1;
 }
@@ -25403,7 +25514,6 @@ Dialog:ModifierInformationPlus0(playerid, response, listitem, inputtext[])
 //aide menu
 Dialog:aidemenu(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,aidemenu,DIALOG_STYLE_LIST,"Menu d'aide","Aide Chat\nAide Maison\nAide Magasin\nAide Vehicule\nAide Faction\nAide Divers\nAide General","Quitter","");
 	if (response)
 	{
 		switch (listitem)
@@ -25592,8 +25702,59 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				"- /banque pour ouvrir le menu de la banque,\n- /payer pour payer un joueur,\n- /donnerarme pour donner une arme a un joueur,\n- /serrermain pour demander un serrage de main,\n- /volerbanque pour voler la banque,\n- /voleritem voler un item dans un magasin,\n\
 				- /ouvrircargaison pour ouvrir une boite,\n- /boombox pour mettre une musique,\n- /montrerpermis Pour montrer vos permis a un joueur,\n- /boite savoir le nombre de cargaisons dans un vehicule,\n- /planter pour pouvoir planter de la drogue,\n- /recolter Pour récolter une plante de drogue poussée\n\
 				- /trousse pour utiliser un kit de premier soin,\n- /crocheterporte pour forcer une porte d'un vehicule,\n- /fouiller pour fouiller dans l'inventaire d'un joueur,\n- /channel pour choisir le channel de votre talkie-walkie,\n\
-				- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n-/bras et /jambes voir votre musculation niveau bras et ou jambes\n- /credits pour voir les credits\n\
+				- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n-/bras et /jambes voir votre musculation niveau bras et ou jambes\n-/zkill pour les skills de vos armes et le nombre de zombie tuée\n- /credits pour voir les credits\n\
 				","Quitter","");
+			}
+		}
+	}
+	return 1;
+}
+//gold bars
+Dialog:echanger(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+		switch (listitem)
+		{	
+			case 0:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 1)
+					return SendErrorMessage(playerid, "Tu a besoin de 1 gold bar pour l'échanger");
+			}
+			case 1:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 2)
+					return SendErrorMessage(playerid, "Tu a besoin de 2 gold bars pour l'échanger");
+			}
+			case 2:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 3)
+					return SendErrorMessage(playerid, "Tu a besoin de 3 gold bars pour l'échanger");
+			}
+			case 3:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 4)
+					return SendErrorMessage(playerid, "Tu a besoin de 4 gold bars pour l'échanger");
+			}
+			case 4:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 5)
+					return SendErrorMessage(playerid, "Tu a besoin de 5 golds bar pour l'échanger");
+			}
+			case 5:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 1)
+					return SendErrorMessage(playerid, "Tu a besoin de 1 gold bar pour l'échanger");
+			}
+			case 6:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 5)
+					return SendErrorMessage(playerid, "Tu a besoin de 5 gold bars pour l'échanger");
+			}
+			case 7:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 10)
+					return SendErrorMessage(playerid, "Tu a besoin de 10 gold bars pour l'échanger");
 			}
 		}
 	}

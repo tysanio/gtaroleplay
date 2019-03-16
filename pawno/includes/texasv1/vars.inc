@@ -318,7 +318,7 @@ enum billboardData {
 	Float:bbPos[4],
 	Text3D:bbText3D
 };
-new BillBoardData[MAX_BILLBOARDS][billboardData];
+new BillBoardData[MAX_DYNAMIC_OBJ][billboardData];
 new BillboardCheckout[MAX_PLAYERS];
 enum inventoryData {
 	invExists,
@@ -716,25 +716,25 @@ new GraffitiData[MAX_GRAFFITI_POINTS][graffitiData];
 new MetalDetectors[MAX_METAL_DETECTORS][detectorData];
 new BarricadeData[MAX_BARRICADES][barricadeData];
 
-new VendorData[MAX_VENDORS][vendorData];
-new SpeedData[MAX_SPEED_CAMERAS][speedData];
+new VendorData[MAX_DYNAMIC_OBJ][vendorData];
+new SpeedData[MAX_DYNAMIC_OBJ][speedData];
 
 new BoomboxData[MAX_PLAYERS][boomboxData];
 new RackData[MAX_WEAPON_RACKS][rackData];
 
-new ATMData[MAX_ATM_MACHINES][atmData];
-new GarbageData[MAX_GARBAGE_BINS][garbageData];
+new ATMData[MAX_DYNAMIC_OBJ][atmData];
+new GarbageData[MAX_DYNAMIC_OBJ][garbageData];
 
 new BackpackData[MAX_BACKPACKS][backpackData];
-new BackpackItems[MAX_BACKPACK_ITEMS][backpackItems];
+new BackpackItems[MAX_BACKPACKS][backpackItems];
 
 new BackpackListed[MAX_PLAYERS][MAX_BACKPACK_CAPACITY];
-new ImpoundData[MAX_IMPOUND_LOTS][impoundData];
+new ImpoundData[MAX_DYNAMIC_OBJ][impoundData];
 
 new PlayerData[MAX_PLAYERS][playerData];
 new Float:AccessoryData[MAX_PLAYERS][3][9];
 new TicketData[MAX_PLAYERS][MAX_PLAYER_TICKETS][ticketData];
-new ListedVehicles[MAX_PLAYERS][MAX_OWNABLE_CARS];
+new ListedVehicles[MAX_PLAYERS][MAX_OWNABLE_SOMETHING];
 
 new InventoryData[MAX_PLAYERS][MAX_INVENTORY][inventoryData];
 new ContactData[MAX_PLAYERS][MAX_CONTACTS][contactData];
@@ -748,11 +748,11 @@ new ReportData[MAX_REPORTS][reportData];
 new ArrestData[MAX_ARREST_POINTS][arrestPoints];
 
 new BusinessData[MAX_BUSINESSES][businessData];
-new PumpData[MAX_GAS_PUMPS][pumpData];
+new PumpData[MAX_DYNAMIC_OBJ][pumpData];
 new DealershipCars[MAX_BUSINESSES][MAX_DEALERSHIP_CARS][dealershipCars];
 
 new DroppedItems[MAX_DROPPED_ITEMS][droppedItems];
-new EntranceData[MAX_ENTRANCES][entranceData];
+new EntranceData[MAX_DYNAMIC_OBJ][entranceData];
 
 new CarData[MAX_DYNAMIC_CARS][carData];
 new CarStorage[MAX_DYNAMIC_CARS][MAX_CAR_STORAGE][carStorage];
@@ -762,12 +762,12 @@ new HouseStorage[MAX_HOUSES][MAX_HOUSE_STORAGE][houseStorage];
 new FurnitureData[MAX_FURNITURE][furnitureData];
 
 new JobData[MAX_DYNAMIC_JOBS][jobData];
-new CrateData[MAX_CRATES][crateData];
+new CrateData[MAX_DYNAMIC_OBJ][crateData];
 new PlantData[MAX_DRUG_PLANTS][plantData];
 
 new FactionData[MAX_FACTIONS][factionData];
 new FactionRanks[MAX_FACTIONS][15][32];
-new GateData[MAX_GATES][gateData];
+new GateData[MAX_DYNAMIC_OBJ][gateData];
 new PrisonData[prisonData];
 new Float:PrisonCells[24][3];
 new batiementData[MAX_batiementS][BatiementData];
@@ -1988,7 +1988,7 @@ enum ainfo
     actorvw,
 	actorsetting
 }
-new ActorInfo[MAXACTORS][ainfo];
+new ActorInfo[MAX_DYNAMIC_OBJ][ainfo];
 //ceinture
 new SeatbeltStatus[MAX_PLAYERS]; // Variable qui est va tenir le statut de la ceinture de sécurité.
 new Float:CarHealth[MAX_PLAYERS];
@@ -2352,3 +2352,15 @@ new AdminTarget[MAX_PLAYERS];
 //stamina
 new sbtime[MAX_PLAYERS];
 new PlayerBar:StaminaBar[MAX_PLAYERS];
+//phonebook
+enum phonebook
+{
+	phoneid,
+	phonenumber,
+	phoneobject,
+	phoneexists,
+	Float:phonepos[4],
+	phoneinterior,
+	phonevirtual
+}
+new phoneinfo[MAX_PHONE][phonebook];

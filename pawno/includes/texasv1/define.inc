@@ -10,9 +10,9 @@
 //#define SQL_PASSWORD															""
 
 //Information serveur
-#define SERVER_NAME 	 														"[0.3.dl] Experience RolePlay [RP]" //pour le nom du serveur
+#define SERVER_NAME 	 														"[0.3.dl] Expérience RolePlay [RP]" //pour le nom du serveur
 #define SERVER_URL 		 														"Tout sur discord"
-#define SERVER_REVISION  														"Los Santos"
+#define SERVER_REVISION  														"Build 75.5"
 #define LANGUAGE																"Français"
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
@@ -95,53 +95,42 @@
 #define JOB_USINE                                                               (14)
 #define JOB_GARBAGE																(15)
 
-//Maximum par joueur
-#define MAX_BILLBOARDS 															(50)
+//Maximum par joueur/serveur
 #define MAX_REPORTS 															(20)
 #define MAX_INVENTORY 															(24)
 #define MAX_HOUSES 																(750)
 #define MAX_HOUSE_STORAGE 														(10)
 #define MAX_BUSINESSES 															(150)
 #define MAX_DROPPED_ITEMS 														(3500)
-#define MAX_ENTRANCES 															(75)
 #define MAX_DEALERSHIP_CARS 													(40)
 #define MAX_DYNAMIC_CARS 														(1500)
-#define MAX_GAS_PUMPS 															(20)
 #define MAX_FURNITURE 															(7500)
 #define MAX_HOUSE_FURNITURE 													(100)
 #define MAX_DYNAMIC_JOBS 														(20)
 #define MAX_CONTACTS 															(20)
 #define MAX_GPS_LOCATIONS 														(20)
 #define MAX_CAR_STORAGE 														(10)
-#define MAX_CRATES 																(100)
 #define MAX_DRUG_PLANTS 														(100)
 #define MAX_FACTIONS 															(20)
 #define MAX_ARREST_POINTS 														(5)
 #define MAX_PLAYER_TICKETS 														(10)
-#define MAX_BARRICADES 															(25)
+#define MAX_BARRICADES 															(15)
 #define MAX_BOOTHS 																(8)
-#define MAX_GATES 																(200)
 #define MAX_batiementS															(250)
-#define MAX_IMPOUND_LOTS 														(100)
-#define MAX_ATM_MACHINES 														(75)
-#define MAX_GARBAGE_BINS 														(150)
-#define MAX_VENDORS 															(75)
 #define MAX_WEAPON_RACKS 														(500)
-#define MAX_SPEED_CAMERAS 														(75)
 #define MAX_LISTED_ITEMS 														(10)
 #define MAX_GRAFFITI_POINTS 													(20)
 #define MAX_METAL_DETECTORS 													(20)
-#define MAX_OWNABLE_CARS 														(5)
-#define MAX_OWNABLE_HOUSES 														(3)
-#define MAX_OWNABLE_BUSINESSES 													(3)
 #define MAX_BACKPACKS 															(2000)
-#define MAX_BACKPACK_ITEMS 														(4000)
 #define MAX_BACKPACK_CAPACITY 													(5)
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 															(551)
-#define MAXACTORS               												(50) //Max bots
 #define MAX_MACHINES 															(10)
 #define MAX_caisseS 															(250)
+#define MAX_PHONE																(100)
+
+#define MAX_OWNABLE_SOMETHING													(4)
+#define MAX_DYNAMIC_OBJ															(125)
 //Prison
 #define PRISON_WORLD 															(10000)
 //Diver
@@ -181,9 +170,6 @@
 //slot machine
 #define MONEY_COST 																10
 #define MONEY_WIN 																10*MONEY_COST
-//braquage
-#define COP_MIN_COPS_BRAQUAGE 													-1     // Minimum de flics pour un braquage DE biz
-#define SWAT_MIN_COPS_BRAQUAGE 													6     // Minimum de flics pour un braquage DE BANQUE
 //nouveau mesage box
 #define TSM 																	TD_SendMessage
 //roulette
@@ -218,6 +204,11 @@
 //define forward fuck you
 #define script%0(%1) forward%0(%1); public%0(%1)
 //discord chat
-//#define CHANNEL_ID "545331377139351563" // Change this to your channel id
-#define CHANNEL_ID "545679302587318304" // Change this to your channel id
-#define CHANNEL_IDSTAFF "534114477738557441"
+#define channelstaff "534114477738557441"
+#define channelaide "556155321622462525"
+#define channelnormal "545679302587318304"
+//phrase long test
+#define menuclick1 "Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur"
+#define menuclick2 "Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification"
+#define menuclick3 "Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nBannir se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur"
+#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d"

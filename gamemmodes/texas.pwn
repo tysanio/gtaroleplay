@@ -80,7 +80,7 @@ script Billboard_Load()
 {
     new rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_BILLBOARDS)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    BillBoardData[i][bbExists] = true;
 	   	BillBoardData[i][bbID] = cache_get_field_int(i, "bbID");
@@ -529,7 +529,7 @@ script Speed_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_SPEED_CAMERAS)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    SpeedData[i][speedExists] = true;
 	    SpeedData[i][speedID] = cache_get_field_int(i, "speedID");
@@ -572,7 +572,7 @@ script Vendor_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_VENDORS)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    VendorData[i][vendorExists] = true;
 	    VendorData[i][vendorID] = cache_get_field_int(i, "vendorID");
@@ -591,7 +591,7 @@ script Garbage_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_GARBAGE_BINS)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    GarbageData[i][garbageExists] = true;
 	    GarbageData[i][garbageID] = cache_get_field_int(i, "garbageID");
@@ -611,7 +611,7 @@ script ATM_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_ATM_MACHINES)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    ATMData[i][atmExists] = true;
 	    ATMData[i][atmID] = cache_get_field_int(i, "atmID");
@@ -630,7 +630,7 @@ script Impound_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_IMPOUND_LOTS)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    ImpoundData[i][impoundExists] = true;
 	    ImpoundData[i][impoundID] = cache_get_field_int(i, "impoundID");
@@ -677,7 +677,7 @@ script Gate_Load()
 {
     static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_GATES)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    GateData[i][gateExists] = true;
 	    GateData[i][gateOpened] = false;
@@ -816,7 +816,7 @@ script Crate_Load()
 {
 	static rows,fields;
 	cache_get_data(rows, fields, g_iHandle);
-	for (new i = 0; i < rows; i ++) if (i < MAX_CRATES)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    CrateData[i][crateExists] = true;
 	    CrateData[i][crateID] = cache_get_field_int(i, "crateID");
@@ -864,7 +864,7 @@ script Entrance_Load()
     static rows,fields;
     cache_get_data(rows, fields, g_iHandle);
 
-	for (new i = 0; i < rows; i ++) if (i < MAX_ENTRANCES)
+	for (new i = 0; i < rows; i ++) if (i < MAX_DYNAMIC_OBJ)
 	{
 	    EntranceData[i][entranceExists] = true;
     	EntranceData[i][entranceID] = cache_get_field_int(i, "entranceID");
@@ -1087,6 +1087,25 @@ script Car_Load()
 	for (new i = 0; i < MAX_DYNAMIC_CARS; i ++) if (CarData[i][carExists]) {
 		format(str, sizeof(str), "SELECT * FROM `carstorage` WHERE `ID` = '%d'", CarData[i][carID]);
 		mysql_tquery(g_iHandle, str, "OnLoadCarStorage", "d", i);
+	}
+	return 1;
+}
+script phonebook_Load()
+{
+	static rows,fields;
+	cache_get_data(rows, fields, g_iHandle);
+	for (new i = 0; i < rows; i ++) if (i < MAX_PHONE)
+	{
+	    phoneinfo[i][phoneexists] = true;
+	    phoneinfo[i][phoneid] = cache_get_field_int(i, "phonebookID");
+	    phoneinfo[i][phoneobject] = cache_get_field_int(i, "phoneobject");
+	    phoneinfo[i][phonepos][0] = cache_get_field_float(i, "phoneposX");
+	    phoneinfo[i][phonepos][1] = cache_get_field_float(i, "phoneposY");
+	    phoneinfo[i][phonepos][2] = cache_get_field_float(i, "phoneposZ");
+	    phoneinfo[i][phonepos][3] = cache_get_field_float(i, "phoneposA");
+	    phoneinfo[i][phoneinterior] = cache_get_field_int(i, "phoneposInterior");
+	    phoneinfo[i][phonevirtual] = cache_get_field_int(i, "phoneposWorld");
+		//phonebook_refresh(i);
 	}
 	return 1;
 }
@@ -1706,7 +1725,7 @@ script OnQueryFinished(extraid, threadid)
 			            format(query, sizeof(query), "Ammo%d", i + 1);
 			            PlayerData[extraid][pAmmo][i] = cache_get_field_int(0, query);
 			        }
-			        for (new j = 1; j < 10; j ++) {
+			        for (new j = 0; j < 10; j ++) {
 					    format(query, sizeof(query), "skill%d", j);
 					    PlayerData[extraid][pSkill][j] = cache_get_field_int(0, query);
 					}
@@ -3495,7 +3514,7 @@ script OnVehicleDeath(vehicleid)
 	    CoreVehicles[vehicleid][vehTemporary] = false;
 	    DestroyVehicle(vehicleid);
 	}
-	for (new i = 0; i != MAX_CRATES; i ++) if (CrateData[i][crateExists] && CrateData[i][crateVehicle] == vehicleid) {
+	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (CrateData[i][crateExists] && CrateData[i][crateVehicle] == vehicleid) {
 	    Crate_Delete(i);
 	}
 	//clignotant
@@ -3531,7 +3550,7 @@ public OnVehicleSpawn(vehicleid)
 	    CoreVehicles[vehicleid][vehTemporary] = false;
 	    DestroyVehicle(vehicleid);
 	}
-    for (new i = 0; i != MAX_CRATES; i ++) if (CrateData[i][crateExists] && CrateData[i][crateVehicle] == vehicleid) {
+    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (CrateData[i][crateExists] && CrateData[i][crateVehicle] == vehicleid) {
 	    Crate_Delete(i);
 	}
 	if (IsValidObject(CoreVehicles[vehicleid][vehCrate]) && GetVehicleModel(vehicleid) == 530)
@@ -4537,7 +4556,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		{
 			new bizid = Business_Inside(playerid),moneyganho,serveursettinginfoid,facass = PlayerData[playerid][pFaction];
 			if(info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive] == 1) {ShowPlayerFooter(playerid, "Les braquages sont desactiver");return 1;}
-			if(cop_nbrCops < COP_MIN_COPS_BRAQUAGE) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
+			if(cop_nbrCops < info_serveursettinginfo[serveursettinginfoid][settingpolice]) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
 			foreach (new y : Player)
 			{
 				if (FactionData[facass][factionacces][1] == 1) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
@@ -4551,7 +4570,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				moneyganho = BusinessData[bizid][bizVault];
 				new rnMsg[35];
         		BusinessData[bizid][bizVault] -= moneyganho;
-        		GiveMoney(playerid, moneyganho);
+        		Inventory_Add(playerid, "argent sale", 1212,moneyganho);
         		Business_Save(bizid);
 				format(rnMsg, sizeof(rnMsg), "~g~Vous aver voler~n~$%i", moneyganho);
 				GameTextForPlayer(playerid, rnMsg, 2000, 0);
@@ -5435,7 +5454,7 @@ script OnPlayerEnterCheckpoint(playerid)
 					}
 					if (CoreVehicles[PlayerData[playerid][pUnloadVehicle]][vehLoadType] == 5)
 					{
-						for (new i = 0; i < MAX_GAS_PUMPS; i ++) if (PumpData[i][pumpExists] && PumpData[i][pumpBusiness] == PlayerData[playerid][pUnloading]) {
+						for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (PumpData[i][pumpExists] && PumpData[i][pumpBusiness] == PlayerData[playerid][pUnloading]) {
 						    PumpData[i][pumpFuel] += 100;
 
 			                format(string, sizeof(string), "[Pompe: %d]\n{FFFFFF}Restant: %d litres", i, PumpData[i][pumpFuel]);
@@ -7054,7 +7073,7 @@ script OnPlayerUpdate(playerid)
     {
         if(sbtime[playerid] != gettime())
         {
-			if(PlayerData[playerid][pparcouru] <= 5000 && PlayerData[playerid][pparcouru] >= 2001) {SetPlayerStaminaSubVal(playerid, 1.0);}
+			if(PlayerData[playerid][pparcouru] <= 5000 && PlayerData[playerid][pparcouru] >= 2001) {SetPlayerStaminaSubVal(playerid, 2.0);}
 			if(PlayerData[playerid][pparcouru] <= 2000 && PlayerData[playerid][pparcouru] >= 1001) {SetPlayerStaminaSubVal(playerid, 5.0);}
 			if(PlayerData[playerid][pparcouru] <= 1000 && PlayerData[playerid][pparcouru] >= 501) {SetPlayerStaminaSubVal(playerid, 10.0);}
 			if(PlayerData[playerid][pparcouru] <= 500 && PlayerData[playerid][pparcouru] >= -500) {SetPlayerStaminaSubVal(playerid, 15.0);}
@@ -7327,8 +7346,8 @@ script OnGameModeInit()
     mysql_tquery(g_iHandle, "SELECT * FROM `graffiti`", "Graffiti_Load", "");
     mysql_tquery(g_iHandle, "SELECT * FROM `detectors`", "Detector_Load", "");
     mysql_tquery(g_iHandle, "SELECT * FROM `caisses`", "caisse_Load", "");
-    //bots
     mysql_tquery(g_iHandle, "SELECT * FROM `actors`", "LoadActors", "");
+    mysql_tquery(g_iHandle, "SELECT * FROM `phonebook`", "phonebook_Load", "");
     SetModelPreviewRotation(18875, 90.0, 180.0, 0.0);
     SetModelPreviewRotation(2703, -105.0, 0.0, -15.0);
     SetModelPreviewRotation(2702, 90.0, 90.0, 0.0);
@@ -7969,6 +7988,7 @@ script OnPlayerSpawn(playerid)
 	PreloadAnimLib(playerid,"CARRY");
 	new serveursettinginfoid;
 	SendAnnonceMessage(playerid, "%s.", info_serveursettinginfo[serveursettinginfoid][settingmotd]);
+	SendServerMessage(playerid,"Pour communiquer avec le discord pour tout demande d'aide ou de chat nouveau /discordchat");
 	//stamina
 	SetPlayerStamina(playerid, 100.0);
 	StaminaBar[playerid] = CreatePlayerProgressBar(playerid, 547.0, 38.5, 63.0, 5.0,-1429936641, 100.0);
@@ -8014,7 +8034,7 @@ script OnPlayerCommandTextEx(playerid, cmdtext[])
         new serveursettinginfoid;
         if(info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive] == 1) return SendErrorMessage(playerid,"Les braquages sont désactivé pour les admins");
         if(portevol == 1) return SendErrorMessage(playerid,"Cela fait moins de une heure que la banque a été voler");
-        if(SWAT_MIN_COPS_BRAQUAGE < swat_nbrCops) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~swat~w~ en ville"); return 1;}
+        if(info_serveursettinginfo[serveursettinginfoid][settingswat] < swat_nbrCops) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~swat~w~ en ville"); return 1;}
         if(IsACop(playerid)) return SendErrorMessage(playerid,"Vous êtes du gouvernement mon dieu!");
         if(start1[playerid] != 1) return SendErrorMessage(playerid,"Vous n'avez pas commencer de braquage!");
         if (!IsPlayerInRangeOfPoint(playerid,10,1435.7437, -971.5178, 983.1413)) return SendErrorMessage(playerid,"Vous n'êtes pas dans le coffre!");
@@ -12255,7 +12275,7 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 		}
     }
     //All biz
-    for (new i = 0; i < MAXACTORS; i ++)
+    for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++)
     {
 		if(newtarget == ActorInfo[i][aID])
     	{cmd_acheter(playerid, "");}
@@ -13378,7 +13398,7 @@ script OnPlayerShootDynamicObject(playerid, weaponid, objectid, Float:x, Float:y
  	if((0 <= weaponid <= 9) && Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_MODEL_ID) == 2942)
 	{
 		new id = -1;
-		for(new i; i < MAX_ATM_MACHINES; i++)
+		for(new i; i < MAX_DYNAMIC_OBJ; i++)
 		{
 		    if(!ATMData[i][atmExists]) continue;
 			if (objectid == ATMData[i][atmObject])

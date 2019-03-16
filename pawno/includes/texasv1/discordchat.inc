@@ -24,13 +24,13 @@ script DCC_OnChannelMessage(DCC_Channel:channel, DCC_User:author, const message[
 	Log_Write("logs/discordchat.txt", "[%s] %s", ReturnDate(),str);
     return 1;
 }
-CMD:dchat(playerid, params[])
+CMD:dc(playerid, params[])
 {
 	new tmp[512], name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-	if (PlayerData[playerid][pDiscordChat] == 0) return SendErrorMessage(playerid,"Le chat discord n'est pas allumer /dchaton.");
-	if (sscanf(params, "s[512]", tmp)) return SendSyntaxMessage(playerid, "Usage: /dchat [message]");
-	SendDC(CHANNEL_ID, "%s: %s", name, tmp);
+	if (PlayerData[playerid][pDiscordChat] == 0) return SendErrorMessage(playerid,"Le chat discord n'est pas allumer /discordchat.");
+	if (sscanf(params, "s[512]", tmp)) return SendSyntaxMessage(playerid, "Usage: /dc [message]");
+	SendDC(channelnormal, "%s: %s", name, tmp);
 	return 1;
 }
 CMD:discordchat(playerid, params[])
@@ -40,7 +40,9 @@ CMD:discordchat(playerid, params[])
 	if (PlayerData[playerid][pDiscordChat] == 0)
 	{
 		PlayerData[playerid][pDiscordChat] = 1;
-		SendServerMessage(playerid,"Chat discord mis à on /dchat pour écrire!");
+		SendServerMessage(playerid,"Chat discord mis à on /dc pour écrire!");
+		SendServerMessage(playerid,"Attention /dc [texte] pour voir les messages ooc seulement!");
+		SendServerMessage(playerid,"Attention le /fac [texte] fera en sorte que vous voyez les messages de votre faction seulement!");
 		return 1;
 	}
 	else
