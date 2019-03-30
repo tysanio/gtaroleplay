@@ -1121,6 +1121,8 @@ CMD:givewep(playerid, params[])
 	    return SendErrorMessage(playerid, "Tu ne peut donner au joueur déconnecté.");
 	if (!IsPlayerSpawned(userid))
 	    return SendErrorMessage(playerid, "Tu ne peut donner au joueur non chargé.");
+	if(PlayerData[userid][pPlayingHours] < 5)
+		return SendErrorMessage(playerid, "Joueur n'a pas assez d'heure de jeux (5).");
 	if (weaponid <= 0 || weaponid > 46 || (weaponid >= 19 && weaponid <= 21))
 		return SendErrorMessage(playerid, "Vous avez spécifier une invalide weapon.");
 	GiveWeaponToPlayer(userid, weaponid, ammo);
@@ -2542,9 +2544,9 @@ CMD:passerpermis4321(playerid, params[])
 	GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
  	GetPlayerFacingAngle(playerid, PlayerData[playerid][pPos][3]);
 	if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
-	{ PlayerData[playerid][pTestCar] = CreateVehicle(410, -2047.1056, -87.7183, 34.8219, 0.1447, 1, 1, -1); }
+	{ PlayerData[playerid][pTestCar] = CreateVehicle(410, -2047.1056, -87.7183, 34.8219, 0.1447, -1, -1, -1); }
 	if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 5)
-	{ PlayerData[playerid][pTestCar] = CreateVehicle(410,859.2825,-1857.2244,8.9857,89.7378, 1, 1, -1);}
+	{ PlayerData[playerid][pTestCar] = CreateVehicle(410,859.2825,-1857.2244,8.9857,89.7378, -1, -1, -1);}
     PlayerData[playerid][pTestWarns] = 0;
 	if (PlayerData[playerid][pTestCar] != INVALID_VEHICLE_ID)
 	{
@@ -2562,6 +2564,10 @@ CMD:passerpermis4321(playerid, params[])
 		SetPlayerInterior(playerid, 0);
 		new voicar = GetPlayerVehicleID(playerid);
 		SetEngineStatus(voicar, true);
+		ResetVehicle(PlayerData[playerid][pTestCar]);
+	    SetPlayerVirtualWorld(playerid, (2000 + playerid));
+	    SetVehicleVirtualWorld(PlayerData[playerid][pTestCar], (2000 + playerid));
+		PutPlayerInVehicle(playerid, PlayerData[playerid][pTestCar], 0);
 		GiveMoney(playerid, -500);
 		new moneyentrepriseid;
 		argent_entreprise[moneyentrepriseid][argentmairie] += 500;
@@ -2711,7 +2717,7 @@ CMD:editentrer(playerid, params[])
 	    if (sscanf(string, "d", typeint))
 	    {
 	        SendSyntaxMessage(playerid, "/editentrer [id] [type] [entrance type]");
-			SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 0: None | 1: DMV | 2: Bank | 3: Warehouse | 4: City Hall | 5: Shooting Range | 6: Casino | 7: PMU | 8: Comico | 9: Bowling | 10: Anpe");
+			SendServerMessage(playerid,"[TYPES]:{FFFFFF} 0: None | 1: DMV | 2: Bank | 3: Warehouse | 4: City Hall | 5: Shooting Range | 6: Casino | 7: PMU | 8: Comico | 9: Bowling | 10: Anpe");
 			return 1;
 		}
 		if (typeint < 0 || typeint > 10)
@@ -2861,7 +2867,6 @@ CMD:atm(playerid, params[])
 	new stockjobinfoid;
 	if (ATM_Nearest(playerid) == -1)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas proche d'un atm.");
-		
     if(info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] == 0) return SendErrorMessage(playerid,"Il n'y a plus d'électricité dans le pays central générateur hors service");
 	/*Dialog_Show(playerid, Bank, DIALOG_STYLE_LIST, "Guichet automatique", "Compte en banque: %s$\nCompte épargne: %s$", "Valider", "Quitter", FormatNumber(PlayerData[playerid][pBankMoney]), FormatNumber(PlayerData[playerid][pSavings]));*/
 	SelectTextDraw(playerid, 0xA3B4C5FF);
@@ -3347,6 +3352,9 @@ CMD:prendrejob(playerid, params[])
 	    if (PlayerData[playerid][pJob] == JobData[id][jobType])
 	        return SendErrorMessage(playerid, "Vous avez déja ce job.");
 	    PlayerData[playerid][pJob] = JobData[id][jobType];
+		SendJOBMessage(playerid,"Attention certain job ne fonctionne pas avec certain joueur merci de ne pas le rapporté.");
+		SendJOBMessage(playerid,"Le développeur est déjà au courant de tout il essai de faire fonctionner pour tous.");
+		SendJOBMessage(playerid,"Merci de ne pas rapporté qu'un job ne fonctionne pas avec vous.");
 	    return SendServerMessage(playerid, "Vous êtes maintenant un(e) %s - Tapez \"/jobcmds\" pour avoir les commandes.", Job_GetName(JobData[id][jobType]));
 	}
     SendErrorMessage(playerid, "Vous n'êtes proche de rien.");
@@ -4139,7 +4147,7 @@ CMD:open(playerid, params[])
 	stockjobinfosave(stockjobinfoid);
 	return 1;
 }
-CMD:jetter(playerid, params[])
+CMD:jeter(playerid, params[])
 {
 	new weaponid = 0;
     if (IsPlayerInAnyVehicle(playerid) || !IsPlayerSpawned(playerid))
@@ -4211,7 +4219,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces1 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][2] = acces;
+	    FactionData[id][factionacces][1] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 1 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4222,7 +4230,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces2 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][3] = acces;
+	    FactionData[id][factionacces][2] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 2 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4233,7 +4241,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces3 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][4] = acces;
+	    FactionData[id][factionacces][3] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 3 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4244,7 +4252,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces4 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][5] = acces;
+	    FactionData[id][factionacces][4] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 4 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4255,7 +4263,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces5 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][6] = acces;
+	    FactionData[id][factionacces][5] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 5 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4266,7 +4274,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces6 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][7] = acces;
+	    FactionData[id][factionacces][6] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 6 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4277,7 +4285,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces7 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][8] = acces;
+	    FactionData[id][factionacces][7] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 7 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4288,7 +4296,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces8 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][9] = acces;
+	    FactionData[id][factionacces][8] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 8 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4299,7 +4307,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces9 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][10] = acces;
+	    FactionData[id][factionacces][9] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 9 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4310,7 +4318,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces10 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][11] = acces;
+	    FactionData[id][factionacces][10] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 10 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4321,7 +4329,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces11 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][12] = acces;
+	    FactionData[id][factionacces][11] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 11 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4332,7 +4340,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces12 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][13] = acces;
+	    FactionData[id][factionacces][12] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 12 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4343,7 +4351,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces13 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][14] = acces;
+	    FactionData[id][factionacces][13] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 13 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4354,7 +4362,7 @@ CMD:editfaction(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces14 [o/n]");
 		if (acces < 0 || acces > 1)
 		    return SendErrorMessage(playerid," 0 = non, 1 = oui.");
-	    FactionData[id][factionacces][15] = acces;
+	    FactionData[id][factionacces][14] = acces;
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté l'acces faction 14 de la faction ID: %d a %d.", ReturnName(playerid, 0), id, acces);
 	}
@@ -4678,11 +4686,7 @@ CMD:forcer(playerid, params[])
 }
 CMD:creerarrest(playerid, params[])
 {
-	static
-	    id = -1,
-		Float:x,
-		Float:y,
-		Float:z;
+	static id = -1,Float:x,Float:y,Float:z;
 	GetPlayerPos(playerid, x, y, z);
     if (PlayerData[playerid][pAdmin] < 4)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
@@ -4968,8 +4972,8 @@ CMD:payer(playerid, params[])
 		return SendErrorMessage(playerid, "Vous ne pouvez vous donnez de l'argent a toi-même.");
 	if (amount < 1)
 	    return SendErrorMessage(playerid, "Minimun 1 dollar.");
-	if (amount > 100 && PlayerData[playerid][pPlayingHours] < 2)
-	    return SendErrorMessage(playerid, "Vous ne pouvez donnée plus de 100$ en moins de 2 heures de jeu.");
+	if (amount > 100 && PlayerData[playerid][pPlayingHours] < 5)
+	    return SendErrorMessage(playerid, "Vous ne pouvez donnée plus de 100$ en moins de 5 heures de jeu.");
 	if (amount > GetMoney(playerid))
 	    return SendErrorMessage(playerid, "Vous n'avez pas assez sur vous..");
 	static string[72];
@@ -5083,7 +5087,7 @@ CMD:tog(playerid, params[])
 	if (isnull(params))
 	{
 	    SendSyntaxMessage(playerid, "/tog [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} ooc, pm, faction, Helpeur, broadcast, speedo");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} ooc, pm, faction, Helpeur, broadcast, hud");
 	    return 1;
 	}
 	//new vehicleid = GetPlayerVehicleID(playerid);
@@ -5157,6 +5161,19 @@ CMD:tog(playerid, params[])
      		SendServerMessage(playerid, "Vous avez activé les séances de diffusion.");
 		}
 	}	
+	else if (!strcmp(params, "hud",true))
+	{
+		if(PlayerData[playerid][pHUD] == 1)
+		{
+			ShowHungerTextdraw(playerid, 0);
+			PlayerData[playerid][pHUD] = 0;
+		}
+		else 
+		{
+			PlayerData[playerid][pHUD] = 1;
+			ShowHungerTextdraw(playerid, 1);
+		}
+	}
 	return 1;
 }
 CMD:123(playerid, params[])
@@ -5547,7 +5564,7 @@ CMD:editgate(playerid, params[])
 CMD:creerbatiement(playerid, params[])
 {
 	static id = -1;
-	if (PlayerData[playerid][pAdmin] < 4 || !PlayerData[playerid][pFactionMod])
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = batiement_Create(playerid);
 	if (id == -1)
@@ -5561,7 +5578,7 @@ CMD:creerbatiement(playerid, params[])
 CMD:supbatiement(playerid, params[])
 {
 	static id = 0;
-	if (PlayerData[playerid][pAdmin] < 4 || !PlayerData[playerid][pFactionMod])
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suppbatiement [batiement id]");
@@ -5574,7 +5591,7 @@ CMD:supbatiement(playerid, params[])
 CMD:editbatiement(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4 || !PlayerData[playerid][pFactionMod])
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -5654,11 +5671,14 @@ CMD:udrogue(playerid, params[])
 	{
 	    if (Inventory_Count(playerid, "Marijuana") < 2)
 	        return SendErrorMessage(playerid, "Tu a besoin de 2 grams of marijuana.");
+		if (!Inventory_HasItem(playerid, "briquet"))
+		return SendErrorMessage(playerid, "Vous n'avez pas de briquet.");
         PlayerData[playerid][pDrugTime] = 20;
 		PlayerData[playerid][pDrugUsed] = 1;
 		Inventory_Remove(playerid, "Marijuana", 2);
 		ApplyAnimation(playerid, "SMOKING", "M_smk_in", 4.1, 0, 0, 0, 0, 0, 1);
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_SMOKE_CIGGY);
+		Inventory_Remove(playerid, "briquet",1);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort un briquet de sa poche, se roule un joint et l'allume.", ReturnName(playerid, 0));
 	}
 	else if (!strcmp(params, "cocaine", true))
@@ -5768,7 +5788,7 @@ CMD:setfuel(playerid, params[])
 }
 CMD:supcar(playerid, params[])
 {
-	static id = 0,query[750];
+	static id = 0;
     if (PlayerData[playerid][pAdmin] < 4)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
     /*if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
@@ -5783,8 +5803,6 @@ CMD:supcar(playerid, params[])
 	    return SendErrorMessage(playerid, "ID de vehicule invalide.");
     RemovePlayerFromVehicle(playerid);
 	RemovePlayerAttachedObject(playerid, 6);
-	mysql_format(g_iHandle, query, sizeof(query), "DELETE FROM `tuning` where `vehicule` = '%d'",id);
-	mysql_tquery(g_iHandle, query);
 	Car_Delete(Car_GetID(id));
 	SendVehiculeMessage(playerid, "Vous avez supprimé avec succes vehicle (ID: %d.)", id);
 	Log_Write("logs/vehicule.txt", "[%s] %s a supprimer le vehicule a %d.", ReturnDate(), ReturnName(playerid),CarData[id][carVehicle]);
@@ -10081,7 +10099,7 @@ CMD:ebracelet(playerid, params[])
 	PlayerData[userid][pBraceletProx] = 0;
 	//SQL_SaveCharacter(userid);
 	SendServerMessage(playerid, "Vous avez dettaché un bracelet éléctronique à %s ", ReturnName(userid));
-	SendServerMessage(userid, "L'agent %s vous a  dettaché un bracelet éléctronique ", ReturnName(playerid));
+	SendServerMessage(userid, "L'agent %s vous a dettaché un bracelet éléctronique.", ReturnName(playerid));
 	return 1;
 }
 //louer veh
@@ -10873,16 +10891,16 @@ CMD:rejoindrelowrider(playerid, params[])
 //musculation
 CMD:bras(playerid,params[])
 {
-	if(PlayerData[playerid][prepetitions] <= 31400 && PlayerData[playerid][prepetitions] >= 20001) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Monsieur/Madame univers au niveau du haut du corps.",ReturnName(playerid,0));
-	if(PlayerData[playerid][prepetitions] <= 20000 && PlayerData[playerid][prepetitions] >= 10001) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Bien musclé au niveau du haut du corps.",ReturnName(playerid,0));
-	if(PlayerData[playerid][prepetitions] <= 10000 && PlayerData[playerid][prepetitions] >= 1) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Musclé au niveau du haut du corps.",ReturnName(playerid,0));
-	if(PlayerData[playerid][prepetitions] <= 0 && PlayerData[playerid][prepetitions] >= -500) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Maigrement musclé au niveau du haut du corps.",ReturnName(playerid,0));
+	if(PlayerData[playerid][prepetitions] <= 5000 && PlayerData[playerid][prepetitions] >= 2001) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Monsieur/Madame univers au niveau du haut du corps.",ReturnName(playerid,0));
+	if(PlayerData[playerid][prepetitions] <= 2000 && PlayerData[playerid][prepetitions] >= 1001) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Bien musclé au niveau du haut du corps.",ReturnName(playerid,0));
+	if(PlayerData[playerid][prepetitions] <= 1000 && PlayerData[playerid][prepetitions] >= 501) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Musclé au niveau du haut du corps.",ReturnName(playerid,0));
+	if(PlayerData[playerid][prepetitions] <= 500 && PlayerData[playerid][prepetitions] >= 1) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Maigrement musclé au niveau du haut du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][prepetitions] <= 0 && PlayerData[playerid][prepetitions] >= -501) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Maigre au niveau du haut du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][prepetitions] <= -502 && PlayerData[playerid][prepetitions] >= -1500) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Quelque bourlets au niveau du haut du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][prepetitions] <= -1501 && PlayerData[playerid][prepetitions] >= -2000) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Surplus de poids au niveau du haut du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][prepetitions] <= -2001 && PlayerData[playerid][prepetitions] >= -3000) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Gros/Grosse au niveau du haut du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][prepetitions] <= -3001 && PlayerData[playerid][prepetitions] >= -4000) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Obèse au niveau du haut du corps.",ReturnName(playerid,0));
-	if(PlayerData[playerid][prepetitions] <= -4001 && PlayerData[playerid][prepetitions] >= -5250) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Obèse morbide au niveau du haut du corps.",ReturnName(playerid,0));
+	if(PlayerData[playerid][prepetitions] <= -4001 && PlayerData[playerid][prepetitions] >= -5000) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Obèse morbide au niveau du haut du corps.",ReturnName(playerid,0));
 	else
 	{
 		SendServerMessage(playerid,"Votre musclation des bras est à %d",PlayerData[playerid][prepetitions]);
@@ -10894,7 +10912,7 @@ CMD:jambes(playerid,params[])
 	if(PlayerData[playerid][pparcouru] <= 5000 && PlayerData[playerid][pparcouru] >= 2001) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Monsieur/Madame univers au niveau du bas du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][pparcouru] <= 2000 && PlayerData[playerid][pparcouru] >= 1001) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Bien musclé au niveau du bas du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][pparcouru] <= 1000 && PlayerData[playerid][pparcouru] >= 501) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Musclé au niveau du bas du corps.",ReturnName(playerid,0));
-	if(PlayerData[playerid][pparcouru] <= 500 && PlayerData[playerid][pparcouru] >= -500) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Maigrement musclé au niveau du bas du corps.",ReturnName(playerid,0));
+	if(PlayerData[playerid][pparcouru] <= 500 && PlayerData[playerid][pparcouru] >= 1) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Maigrement musclé au niveau du bas du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][pparcouru] <= 0 && PlayerData[playerid][pparcouru] >= -501) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Maigre au niveau du bas du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][pparcouru] <= -502 && PlayerData[playerid][pparcouru] >= -1500) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Quelque bourlets au niveau du bas du corps.",ReturnName(playerid,0));
 	if(PlayerData[playerid][pparcouru] <= -1501 && PlayerData[playerid][pparcouru] >= -2000) return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "%s est considérer comme une personne : Surplus de poids au niveau du bas du corps.",ReturnName(playerid,0));
@@ -11304,7 +11322,7 @@ CMD:skinstest(playerid,params[])
 	static id,idd;
 	if(PlayerData[playerid][pAdmin] == 4)
 	{
-		if(sscanf(params, "dd",id,idd)) return SendClientMessage(playerid, -1, "Utilisation: /skins id idskin");
+		if(sscanf(params, "dd",id,idd)) return SendServerMessage(playerid,"Utilisation: /skins id idskin");
 		SetPlayerSkin(id,idd);
 		PlayerData[id][pSkin] = idd;
 	}

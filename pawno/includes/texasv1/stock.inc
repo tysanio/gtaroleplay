@@ -366,8 +366,7 @@ stock CreateBlood(playerid)
 }
 stock PlayerText:ShowPlayerBox(playerid, color)
 {
-	new
-	    PlayerText:textid;
+	new PlayerText:textid;
     textid = CreatePlayerTextDraw(playerid, 0.000000, 0.000000, "_");
 	PlayerTextDrawFont(playerid, textid, 1);
 	PlayerTextDrawLetterSize(playerid, textid, 0.500000, 50.000000);
@@ -1845,8 +1844,8 @@ stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z, time = 1500)
 }
 stock EquipWeapon(playerid, weapon[])
 {
-	if (PlayerData[playerid][pPlayingHours] < 2)
-	    return SendErrorMessage(playerid, "Vous devez jouer 2 heure avant.");
+	if (PlayerData[playerid][pPlayingHours] < 5)
+	    return SendErrorMessage(playerid, "Vous devez jouer 5 heures avant.");
 	if (IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous devez être sortie du vehicule.");
 	if (!strcmp(weapon, "Colt 45", true))
@@ -2714,12 +2713,28 @@ ShowHungerTextdraw(playerid, enable)
 		PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][66]);
 		PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][63]);
 		PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][64]);
+		PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][60]);
+		PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][61]);
+		HidePlayerProgressBar(playerid, PlayerData[playerid][FaimBar]);
+		HidePlayerProgressBar(playerid, PlayerData[playerid][SoifBar]);
+		HidePlayerProgressBar(playerid, PlayerData[playerid][BrasBar]);
+		HidePlayerProgressBar(playerid, PlayerData[playerid][JambesBar]);
 	}
 	else if (PlayerData[playerid][pHUD] && PlayerData[playerid][pJailTime] < 1) {
 	    PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][65]);
 		PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][66]);
 		PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][63]);
 		PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][64]);
+		PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][60]);
+		PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][61]);
+		SetPlayerProgressBarValue(playerid,PlayerData[playerid][FaimBar],PlayerData[playerid][pHunger]);
+		ShowPlayerProgressBar(playerid, PlayerData[playerid][FaimBar]);
+		SetPlayerProgressBarValue(playerid,PlayerData[playerid][SoifBar],PlayerData[playerid][pThirst]);
+		ShowPlayerProgressBar(playerid, PlayerData[playerid][SoifBar]);
+		SetPlayerProgressBarValue(playerid,PlayerData[playerid][BrasBar],PlayerData[playerid][prepetitions]);
+		ShowPlayerProgressBar(playerid, PlayerData[playerid][BrasBar]);
+		SetPlayerProgressBarValue(playerid,PlayerData[playerid][JambesBar],PlayerData[playerid][pparcouru]);
+		ShowPlayerProgressBar(playerid, PlayerData[playerid][JambesBar]);
 	}
 	return 1;
 }
@@ -9291,7 +9306,6 @@ Dialog:LockerMoneyRetirer(playerid,response,listitem,inputtext[])
 		return 0;
 	if (response)
 	{
-		if (amount > GetMoney(playerid)) return SendErrorMessage(playerid, "Vous n'avez pas assez sur vous..");
 		if (amount < 1 || amount > FactionData[factionid][factioncoffre]) {SendErrorMessage(playerid,"Vous n'avez pas asser d'argent dans le coffre vous avez %d",FactionData[factionid][factioncoffre]);}
 		SendServerMessage(playerid,"Vous avez retirer %d du coffre faction.",amount);
 		FactionData[factionid][factioncoffre] -= amount;
@@ -9309,6 +9323,7 @@ Dialog:LockerMoneyAjouter(playerid,response,listitem,inputtext[])
 		return 0;
 	if (response)
 	{
+		if (amount > GetMoney(playerid)) return SendErrorMessage(playerid, "Vous n'avez pas assez sur vous..");
 		SendServerMessage(playerid,"Vous avez mis %d du coffre faction.",amount);
 		FactionData[factionid][factioncoffre] += amount;
 		GiveMoney(playerid, -amount);
@@ -12613,27 +12628,8 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][59], 420.000000, 0.000000);
 	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][59], 0);
 
-	PlayerData[playerid][pTextdraws][60] = CreatePlayerTextDraw(playerid, 208.000000, 164.000000, "Vous aller spawn apres le tutorial.");
-	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][60], 255);
-	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][60], 1);
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][60], 0.270000, 1.000000);
-	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][60], -1);
-	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][60], 0);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][60], 1);
-	PlayerTextDrawSetShadow(playerid,PlayerData[playerid][pTextdraws][60], 1);
-	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][60], 0);
 
-	PlayerData[playerid][pTextdraws][61] = CreatePlayerTextDraw(playerid, 208.000000, 197.000000, "Pour avoir de l aide, ecriver ~g~~h~/seekhelp~w~.~n~Un helpeur va regarder votre demande~n~ou tout personne en service.");
-	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][61], 255);
-	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][61], 1);
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][61], 0.270000, 1.000000);
-	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][61], -1);
-	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][61], 0);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][61], 1);
-	PlayerTextDrawSetShadow(playerid,PlayerData[playerid][pTextdraws][61], 1);
-	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][61], 0);
-
-	PlayerData[playerid][pTextdraws][62] = CreatePlayerTextDraw(playerid, 644.000000, 1.000000, "_");
+	PlayerData[playerid][pTextdraws][62] = CreatePlayerTextDraw(playerid, 644.000000, 1.000000, "_");//light house
 	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][62], 255);
 	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][62], 1);
 	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][62], 0.530000, 51.000000);
@@ -12646,49 +12642,67 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][62], -6.000000, 30.000000);
 	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][62], 0);
 
-	PlayerData[playerid][pTextdraws][63] = CreatePlayerTextDraw(playerid, 579.000000, 122.000000, "100%");
-	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][63], 255);
-	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][63], 1);
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][63], 0.290000, 0.899999);
-	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][63], -1);
-	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][63], 1);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][63], 1);
-	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][63], 0);
+	PlayerData[playerid][pTextdraws][60] = CreatePlayerTextDraw(playerid, 140.399917, 299.668731, "usebox");
+	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][60], 0.000000, 8.449753);
+	PlayerTextDrawTextSize(playerid, PlayerData[playerid][pTextdraws][60], 19.599992, 0.000000);
+	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][60], 1);
+	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][60], 0);
+	PlayerTextDrawUseBox(playerid, PlayerData[playerid][pTextdraws][60], true);
+	PlayerTextDrawBoxColor(playerid, PlayerData[playerid][pTextdraws][60], 102);
+	PlayerTextDrawSetShadow(playerid, PlayerData[playerid][pTextdraws][60], 0);
+	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][60], 0);
+	PlayerTextDrawBackgroundColor(playerid, PlayerData[playerid][pTextdraws][60], 255);
+	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][60], 0);
 
-	PlayerData[playerid][pTextdraws][64] = CreatePlayerTextDraw(playerid, 519.000000, 122.000000, "100%");
-	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][64], 255);
-	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][64], 1);
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][64], 0.290000, 0.899999);
-	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][64], -1);
-	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][64], 1);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][64], 1);
-	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][64], 0);
+	PlayerData[playerid][pTextdraws][61] = CreatePlayerTextDraw(playerid, 22.399997, 308.124389, "Faim");
+	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][61], 0.449999, 1.600000);
+	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][61], 1);	
+	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][61], -1);
+	PlayerTextDrawSetShadow(playerid, PlayerData[playerid][pTextdraws][61], 0);
+	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][61], 1);
+	PlayerTextDrawBackgroundColor(playerid, PlayerData[playerid][pTextdraws][61], 51);
+	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][61], 1);
+	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][61], 1);	
+	
+	PlayerData[playerid][pTextdraws][63] = CreatePlayerTextDraw(playerid, 23.600002, 321.564422, "Soif");
+	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][63], 0.449999, 1.600000);
+	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][63], 1);
+	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][63], -1);
+	PlayerTextDrawSetShadow(playerid, PlayerData[playerid][pTextdraws][63], 0);
+	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][63], 1);
+	PlayerTextDrawBackgroundColor(playerid, PlayerData[playerid][pTextdraws][63], 51);
+	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][63], 1);
+	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][63], 1);
 
-	PlayerData[playerid][pTextdraws][65] = CreatePlayerTextDraw(playerid, 536.000000, 108.000000, "hunger");
-	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][65], 0);
-	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][65], 5);
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][65], 0.539999, 1.400000);
-	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][65], -1);
-	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][65], 1);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][65], 1);
-	PlayerTextDrawUseBox(playerid,PlayerData[playerid][pTextdraws][65], 1);
-	PlayerTextDrawBoxColor(playerid,PlayerData[playerid][pTextdraws][65], 0);
-	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][65], 51.000000, 37.000000);
-	PlayerTextDrawSetPreviewModel(playerid,PlayerData[playerid][pTextdraws][65], 2702);
-	PlayerTextDrawSetPreviewRot(playerid,PlayerData[playerid][pTextdraws][65], 0.0000, 90.0000, 90.0000);
+	PlayerData[playerid][pTextdraws][64] = CreatePlayerTextDraw(playerid, 23.599990, 335.502197, "Bras");
+	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][64], 0.449999, 1.600000);
+	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][64], 1);
+	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][64], -1);
+	PlayerTextDrawSetShadow(playerid, PlayerData[playerid][pTextdraws][64], 0);
+	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][64], 1);
+	PlayerTextDrawBackgroundColor(playerid, PlayerData[playerid][pTextdraws][64], 51);
+	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][64], 1);
+	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][64], 1);
 
-	PlayerData[playerid][pTextdraws][66] = CreatePlayerTextDraw(playerid, 476.000000, 108.000000, "thirst");
-	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][66], 0);
-	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][66], 5);
-	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][66], 0.539999, 1.400000);
-	PlayerTextDrawColor(playerid,PlayerData[playerid][pTextdraws][66], -1);
-	PlayerTextDrawSetOutline(playerid,PlayerData[playerid][pTextdraws][66], 1);
-	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][66], 1);
-	PlayerTextDrawUseBox(playerid,PlayerData[playerid][pTextdraws][66], 1);
-	PlayerTextDrawBoxColor(playerid,PlayerData[playerid][pTextdraws][66], 0);
-	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][66], 51.000000, 37.000000);
-	PlayerTextDrawSetPreviewModel(playerid,PlayerData[playerid][pTextdraws][66], 1543);
-	PlayerTextDrawSetPreviewRot(playerid,PlayerData[playerid][pTextdraws][66], 0.0000, 0.0000, 0.0000);
+	PlayerData[playerid][pTextdraws][65] = CreatePlayerTextDraw(playerid, 22.000013, 349.440032, "Jambes");
+	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][65], 0.449999, 1.600000);
+	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][65], 1);
+	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][65], -1);
+	PlayerTextDrawSetShadow(playerid, PlayerData[playerid][pTextdraws][65], 0);
+	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][65], 1);
+	PlayerTextDrawBackgroundColor(playerid, PlayerData[playerid][pTextdraws][65], 51);
+	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][65], 1);
+	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][65], 1);
+
+	PlayerData[playerid][pTextdraws][66] = CreatePlayerTextDraw(playerid, 22.800003, 284.728912, "Stats");
+	PlayerTextDrawLetterSize(playerid, PlayerData[playerid][pTextdraws][66], 0.603199, 2.222222);
+	PlayerTextDrawAlignment(playerid, PlayerData[playerid][pTextdraws][66], 1);
+	PlayerTextDrawColor(playerid, PlayerData[playerid][pTextdraws][66], -1);
+	PlayerTextDrawSetShadow(playerid, PlayerData[playerid][pTextdraws][66], 0);
+	PlayerTextDrawSetOutline(playerid, PlayerData[playerid][pTextdraws][66], 1);
+	PlayerTextDrawBackgroundColor(playerid, PlayerData[playerid][pTextdraws][66], 51);
+	PlayerTextDrawFont(playerid, PlayerData[playerid][pTextdraws][66], 0);
+	PlayerTextDrawSetProportional(playerid, PlayerData[playerid][pTextdraws][66], 1);
 
     PlayerData[playerid][pTextdraws][67] = CreatePlayerTextDraw(playerid, 535.000000, 172.000000, "armor");
 	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][67], 0);
@@ -12860,7 +12874,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][82], 0);
 	
 	//compteur tysanio
-	PlayerData[playerid][pTextdraws][84]= CreatePlayerTextDraw(playerid,634.800354, 357.908843, "usebox");
+	PlayerData[playerid][pTextdraws][84] = CreatePlayerTextDraw(playerid,634.800354, 357.908843, "usebox");
 	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][84], 0.000000, 8.865058);
 	PlayerTextDrawTextSize(playerid,PlayerData[playerid][pTextdraws][84], 488.799865, 0.000000);
 	PlayerTextDrawAlignment(playerid,PlayerData[playerid][pTextdraws][84], 1);
@@ -14309,6 +14323,10 @@ ResetStatistics(playerid)
     PlayerData[playerid][pNameTag] = Text3D:INVALID_3DTEXT_ID;
 	PlayerData[playerid][prepetitions] = 0;
 	PlayerData[playerid][pparcouru] = 0;
+	PlayerData[playerid][FaimBar] = INVALID_PLAYER_BAR_ID;
+	PlayerData[playerid][BrasBar] = INVALID_PLAYER_BAR_ID;
+	PlayerData[playerid][SoifBar] = INVALID_PLAYER_BAR_ID;
+	PlayerData[playerid][JambesBar] = INVALID_PLAYER_BAR_ID;
 	//DernieVehLoc[playerid] = -1;
 	//DernieVehLocID[playerid] = -1;
     ResetWarnings(playerid);
@@ -20773,7 +20791,7 @@ Dialog:TutorialConfirm(playerid, response, listitem, inputtext[])
   		PlayerData[playerid][pTutorial] = 0;
 		PlayerData[playerid][pTutorialTime] = 0;
 		SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");//\nImmigrant
-		Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Voyage d'affaires\nRésident ailleur\nClochard", "Accepter", "");
+		Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
 	}
 	else
 	{
@@ -20788,7 +20806,7 @@ Dialog:TutorialConfirm(playerid, response, listitem, inputtext[])
 Dialog:Spawntype(playerid, response, listitem, inputtext[])
 {
 	if(!response) //\nImmigrant
-	{Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Voyage d'affaires\nRésident ailleur\nClochard", "Accepter", "");}
+	{Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");}
 	new serveursettinginfoid;
 	if (response)
 	{
@@ -20880,162 +20898,6 @@ Dialog:Spawntype(playerid, response, listitem, inputtext[])
 				}
 			}
 	        case 1:
-	        {
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,1734.3215,-1949.3239,14.1172);
-					SetPlayerFacingAngle(playerid,28.1491);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous arrivez du train de bonne humeur, a fin de commencer une nouvelle vie.");
-					SendServerMessage(playerid,"Aller chercher votre soda sur le muret.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,1742.5693,-1948.0618,13.1172, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,1742.5693,-1948.0618,13.1172,1.0);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 2)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,-1965.2988,144.8813,27.6875);
-					SetPlayerFacingAngle(playerid,28.1491);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous arrivez du train de bonne humeur, a fin de commencer une nouvelle vie.");
-					SendServerMessage(playerid,"Aller chercher votre soda sur le banc.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,-1967.6317,146.4278,28.2107, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,-1967.6317,146.4278,28.2107, 0.5);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 3)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,954.8917,1738.0048,8.6484);
-					SetPlayerFacingAngle(playerid,221.1544);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					SetPlayerVirtualWorld(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid, "Tapez /etape pour voir votre liste de truc a faire.");
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 5)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,517.6495,-1832.8634,15.3549);
-					SetPlayerFacingAngle(playerid,268.4155);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					SetPlayerVirtualWorld(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,529.8129,-1817.5156,15.3615, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,529.8129,-1817.5156,15.3615, 0.5);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid, "Tapez /etape pour voir votre liste de truc a faire.");
-					SQL_SaveCharacter(playerid);
-				}
-			}
-	        case 2:
-	        {
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,-45.5593,-1562.9238,2.6027);
-					SetPlayerFacingAngle(playerid,127.8249);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous vous réveillez, vous ne vous rappelez de rien.");
-					SendServerMessage(playerid,"Vous sentez mauvais, cela vient sûrement de votre temps passé à chercher dans les ordures.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid, 1543,-70.9738,-1574.2937,2.0855, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid, -70.9738,-1574.2937,0.0855, 0.5);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 3)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,2849.9639,1291.1910,11.3906);
-					SetPlayerFacingAngle(playerid,92.2366);
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous vous réveillez, vous ne vous rappelez de rien.");
-					SendServerMessage(playerid,"Vous sentez mauvais, cela vient sûrement de votre temps passé à chercher dans les ordures.");
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 5)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,2512.2488,-1721.1636,778.6384);
-					SetPlayerFacingAngle(playerid,127.8249);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous vous réveillez, vous ne vous rappelez de rien.");
-					SendServerMessage(playerid,"Vous sentez mauvais, cela vient sûrement de votre temps passé à chercher dans les ordures.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,2510.9900,-1728.5364,777.7184, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,2510.9900,-1728.5364,778.3384, 1);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-			}
-	        case 3:
 	        {
 				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
 				{
@@ -25101,7 +24963,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			}
 			case 20:
 			{
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}
 		}
 	}
@@ -25283,6 +25145,8 @@ Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 		}
 		else
 		{
+			if (PlayerData[AdminTarget[playerid]][pPlayingHours] < 5)
+				return SendErrorMessage(playerid, "Il doit avoir au moins 5 heures de jeux.");
 			SetFaction(AdminTarget[playerid], strval(inputtext));
 			PlayerData[AdminTarget[playerid]][pFactionRank] = FactionData[strval(inputtext)][factionRanks];
 			SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
@@ -25318,7 +25182,7 @@ Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 	}
 	return 1;
 }
-Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus(playerid, response, listitem, inputtext[])
 {
 	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
 	if (response)
@@ -25332,177 +25196,202 @@ Dialog:ModifierInformationPlus(playerid, response, listitem, inputtext[])
 					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
 					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
 				}
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}	
 			case 1:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus0,DIALOG_STYLE_INPUT,"Modification date d'anniversaire","Veuiller entrée un nombre pour la la date d'anniversaire","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus0,DIALOG_STYLE_INPUT,"Modification date d'anniversaire","Veuiller entrée un nombre pour la la date d'anniversaire","Valider","Retour");
 			}			
 			case 2:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée un nombre pour la faim","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée un nombre pour la faim","Valider","Retour");
 			}
 			case 3:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée un nombre pour la soif","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée un nombre pour la soif","Valider","Retour");
 			}
 			case 4:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus2,DIALOG_STYLE_INPUT,"Modification Bras","Veuiller entrée un nombre pour les bras","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus2,DIALOG_STYLE_INPUT,"Modification Bras","Veuiller entrée un nombre pour les bras","Valider","Retour");
 			}
 			case 5:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée un nombre pour les jambes","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée un nombre pour les jambes","Valider","Retour");
 			}			
 			case 6:
 			{
 				PlayerData[AdminTarget[playerid]][pLocaID] = 0;
 				SendServerMessage(playerid, "Vous avez mis a 0 le louage de vehicule à %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}
 			case 7:
 			{
 				PlayerData[AdminTarget[playerid]][pLocaMaisonID] = 0;
 				SendServerMessage(AdminTarget[playerid], "Vous avez mis a 0 le louage de maison à %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 			}
 			case 8:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus8,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une Job","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus8,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une Job","Valider","Retour");
 			}
 			case 9:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une heure de jeux","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une heure de jeux","Valider","Retour");
 			}
 			case 10:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus7,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée des minutes de jeux","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus7,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée des minutes de jeux","Valider","Retour");
 			}
 			case 11:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
+				Dialog_Show(playerid,ModifcationInfoPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
 			}
 			case 12:
 			{
-				Dialog_Show(playerid,ModifcationInformationPlus9,DIALOG_STYLE_MSGBOX,"Modification du Sexe","Homme ou Femme?","Homme","Femme");
+				Dialog_Show(playerid,ModifcationInfoPlus9,DIALOG_STYLE_MSGBOX,"Modification du Sexe","Homme ou Femme?","Homme","Femme");
 			}
 		}
 	}
 	return 1;
 }
-Dialog:ModifierInformationPlus1(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus1(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || strlen(inputtext) > 32)
-		return Dialog_Show(playerid,ModifcationInformationPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
-	format(PlayerData[AdminTarget[playerid]][pOrigin], 32, inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s l'origine a \"%s\".", ReturnName(AdminTarget[playerid], 0), inputtext);
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || strlen(inputtext) > 32)
+			return Dialog_Show(playerid,ModifcationInfoPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
+		format(PlayerData[AdminTarget[playerid]][pOrigin], 32, inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s l'origine a \"%s\".", ReturnName(AdminTarget[playerid], 0), inputtext);
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus2(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus2(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 31300))
-		return Dialog_Show(playerid,ModifcationInformationPlus2,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle données pour les bras","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][prepetitions] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s son niveau de bras a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 31300))
+			return Dialog_Show(playerid,ModifcationInfoPlus2,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle données pour les bras","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][prepetitions] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son niveau de bras a %s.", ReturnName(AdminTarget[playerid], 0),FormatNumber(strval(inputtext), ""));
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus3(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus3(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 5000))
-		return Dialog_Show(playerid,ModifcationInformationPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée une nouvelle donnée pur les jambes","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][pparcouru] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s son niveau de jambes a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 5000))
+			return Dialog_Show(playerid,ModifcationInfoPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée une nouvelle donnée pur les jambes","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pparcouru] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son niveau de jambes a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus4(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus4(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
-		return Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée une donnée de Faim","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][pHunger] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s son niveau de faim a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
+			return Dialog_Show(playerid,ModifcationInfoPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée une donnée de Faim","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pHunger] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son niveau de faim a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus5(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus5(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
-		return Dialog_Show(playerid,ModifcationInformationPlus4,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée une donnée de Soif","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][pThirst] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s son niveau de soif a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
+			return Dialog_Show(playerid,ModifcationInfoPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée une donnée de Soif","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pThirst] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son niveau de soif a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus6(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus6(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
-		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Heure de jeux","Veuiller entrée une donnée d'heure de jeux","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][pPlayingHours] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s son niveau d'heure de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
+			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Heure de jeux","Veuiller entrée une donnée d'heure de jeux","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pPlayingHours] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son niveau d'heure de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus7(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus7(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 60))
-		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une donnée de minutes de jeux","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][pMinutes] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s son niveau de minutes de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 60))
+			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une donnée de minutes de jeux","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pMinutes] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son niveau de minutes de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus8(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus8(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
-	if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 16))
-		return Dialog_Show(playerid,ModifcationInformationPlus6,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une donnée job","Valider","Retour");
-	PlayerData[AdminTarget[playerid]][pJob] = strval(inputtext);
-	SendServerMessage(playerid, "Vous avez mis a %s le job %s.", ReturnName(AdminTarget[playerid], 0), inputtext);
-	Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 16))
+			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une donnée job","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pJob] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s le job %s.", ReturnName(AdminTarget[playerid], 0), inputtext);
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	}
 	return 1;
 }
-Dialog:ModifierInformationPlus9(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus9(playerid, response, listitem, inputtext[])
 {
     if (!response)
     {
 		PlayerData[AdminTarget[playerid]][pGender] = 2;
 		SendServerMessage(playerid, "Vous avez mis a %s le sexe féminin.", ReturnName(AdminTarget[playerid], 0));
-		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
     }	
 	if(response)
 	{
 		PlayerData[AdminTarget[playerid]][pGender] = 1;
 		SendServerMessage(playerid, "Vous avez mis a %s le sexe masculin.", ReturnName(AdminTarget[playerid], 0));
-		Dialog_Show(playerid,ModifierInformationPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	}
 	return 1;
 }
-Dialog:ModifierInformationPlus0(playerid, response, listitem, inputtext[])
+Dialog:ModifcationInfoPlus0(playerid, response, listitem, inputtext[])
 {
+	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
 	if (response)
 	{
 	    new iDay,iMonth,iYear;
 	    static const arrMonthDays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	    if (sscanf(inputtext, "p</>ddd", iDay, iMonth, iYear)) {
-	        Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+	        Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iYear < 1945 || iYear > 2000) {
-		    Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		    Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iMonth < 1 || iMonth > 12) {
-		    Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		    Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iDay < 1 || iDay > arrMonthDays[iMonth - 1]) {
-		    Dialog_Show(playerid, ModifierInformationPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		    Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else {
 		    format(PlayerData[AdminTarget[playerid]][pBirthdate], 32, inputtext);
@@ -25693,7 +25582,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide divers", \
 				"-/proprieter pour voir se que vous êtes le propriétaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot	de passe\n- /dernierefois Pour connaître la dernière connection d'un joueur, ,\n- /acc pour enlever ou mettre vos accessoire,\n\
 				- /rapport pour rapporté un méfait,\n- /bjstart pour commencer le blackjack,\n-/bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /factionliste savoir la liste des factions,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n\
-				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /id savoir l'id d'un joueur,\n- /resetvw Remet à 0 votre virtualWorld,\n - /distancec pour voir la distance du commissariat,\n - /bowlingstats pour avoir votre résultat du bowling\
+				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /id savoir l'id d'un joueur,\n- /resetvw Remet à 0 votre virtualWorld,\n - /distancec pour voir la distance du commissariat,\n - /bowlingstats pour avoir votre résultat du bowling,\n - /jeter pour jeter une arme\
 				","Quitter","");
 			}
 			case 6:

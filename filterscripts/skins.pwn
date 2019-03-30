@@ -1,5 +1,5 @@
 #include <a_samp>
-new SERVER_DOWNLOAD[] = "http://51.38.230.12/download/";
+new SERVER_DOWNLOAD[] = "http://51.38.230.12/download1";
 public OnPlayerRequestDownload(playerid, type, crc)
 {
     new filename[128], filefound, final_url[256];
@@ -12,6 +12,7 @@ public OnPlayerRequestDownload(playerid, type, crc)
     if(filefound)
     {
 		format(final_url, sizeof(final_url), "%s/%s", SERVER_DOWNLOAD, filename);
+		printf("%s/%s", SERVER_DOWNLOAD, filename); //détecteur de fichier
 		RedirectDownload(playerid, final_url);
 	}
 	return 1;
@@ -19,18 +20,11 @@ public OnPlayerRequestDownload(playerid, type, crc)
 public OnFilterScriptInit()
 {
 AntiDeAMX();
-//model du personnage
-AddCharModel(192, 20001, "skins/clara.dff", "skins/clara.txd");
-/*AddCharModel(233, 20002, "skins/Mai_Shr.dff", "skins/Mai_Shr.txd");
-AddCharModel(131, 20003, "skins/Tinaxs.dff", "skins/Tinaxs.txd");
-AddCharModel(280, 20004, "skins/police1.dff", "skins/police1.txd");
-AddCharModel(281, 20005, "skins/police2.dff", "skins/police2.txd");
-AddCharModel(282, 20006, "skins/police3.dff", "skins/police3.txd");
-AddCharModel(283, 20007, "skins/police4.dff", "skins/police4.txd");
-AddCharModel(284, 20008, "skins/police5.dff", "skins/police5.txd");
-AddCharModel(191, 20009, "skins/police6.dff", "skins/police6.txd");*/
-AddCharModel(191, 20010, "skins/militiaf.dff", "skins/militiaf.txd");
-AddCharModel(191, 20011, "skins/soldierf.dff", "skins/soldierf.txd");
+//model du personnage privé
+AddCharModel(0, 20001, "skins/soldierf.dff", "skins/soldierf.txd");
+AddCharModel(195, 20002, "skins/Vagos.dff", "skins/Vagos.txd");
+AddCharModel(91, 20003, "skins/persn2.dff", "skins/persn2.txd");
+//model du personnage public
 //zombie skin
 AddCharModel(31, 20012, "skins/zombie31.dff", "skins/zombie31.txd");
 AddCharModel(31, 20013, "skins/zombie33.dff", "skins/zombie33.txd");

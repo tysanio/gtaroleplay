@@ -7,6 +7,7 @@ enum playerData {
 	pLogged,
 	pIP[16],
 	pLoginDate[36],
+	pDoublePerso,
 	PlayerText:pTextdraws[97],
 	pUsername[MAX_PLAYER_NAME + 1],
 	pLoginAttempts,
@@ -293,7 +294,12 @@ enum playerData {
 	pMalade,
 	pRadiation,
 	pZombieKill,
-	pDiscordChat
+	pDiscordChat,
+	//bar faimt soif
+	PlayerBar:FaimBar,
+	PlayerBar:SoifBar,
+	PlayerBar:BrasBar,
+	PlayerBar:JambesBar
 };
 enum prisonData {
 	prisonDoors[3],
@@ -630,7 +636,7 @@ enum atmData {
 	atmInterior,
 	atmWorld,
 	atmObject,
-	Text3D:atmText3D
+	Text3D:atmText3D,
 };
 enum garbageData {
 	garbageID,
@@ -2166,9 +2172,7 @@ new Float:AFKPos[MAX_PLAYERS][3];
 new AFKMaxMin; //Nombre de minutes avant le kick pour AFK (valeur par defaut mais peux être modifier IG par un admin via la commande /afkmaxmin)
 new AFKActiver; //1 = Anti AFK activé 0 = afk desactivé (valeur par defaut mais peux être modifier IG par un admin via la commande /afksystem)
 //dynamite boom
-new dynamite_Timer;
-new dynamiteobject;
-new Float:dx, Float:dy, Float:dz;
+new dynamite_Timer,dynamiteobject,Float:dx, Float:dy, Float:dz;
 //braquage
 new cop_nbrCops=0;                              // Nombre de flics connectés.
 new swat_nbrCops=0; 								// swat co

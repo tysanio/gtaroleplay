@@ -4982,7 +4982,6 @@ stock CreateServerObjects()
 	SetDynamicObjectMaterialText(CreateDynamicObject(19327, -1836.59375, 44.09200, 1448.04565,   0.00000, 0.00000, 90.00000),0,"État civil",140,"Cambria",130, 1, -1, 0, 1);
 	SetDynamicObjectMaterialText(CreateDynamicObject(19327, -1823.67651, 40.18830, 1445.58899,   0.00000, 0.00000, 180.00000),0,"Accueil",140,"Cambria",130, 1, -1, 0, 1);
 	//bureau taxi
-	//mur et sol
 	SetDynamicObjectMaterial(CreateDynamicObject(19379,-1967.45850,-900.21478,756.81262,0.00000,90.00000,0.00000),0,16150,"ufo_bar","dinerfloor01_128",0xFFFFFFFF);
 	SetDynamicObjectMaterial(CreateDynamicObject(19379,-1967.45337,-909.83173,756.81262,0.00000,90.00000,0.00000),0,16150,"ufo_bar","dinerfloor01_128",0xFFFFFFFF);
 	SetDynamicObjectMaterial(CreateDynamicObject(19465,-1969.73096,-903.67310,759.39258,0.00000,0.00000,90.00000),0,12925,"sw_sheds","sw_shedwall03",0xFFFFFFFF);

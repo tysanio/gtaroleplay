@@ -413,31 +413,31 @@ script UpdateBooth(playerid, id)
 	        case 0:
 	        {
 	            ResetPlayerWeapons(playerid);
-				GivePlayerWeapon(playerid, 25, 15000);
+				GiveWeaponToPlayer(playerid, 25, 15000);
 	            SendServerMessage(playerid, "Vous avancez au prochain niveau (1/5).");
 	        }
 	        case 1:
 	        {
 	            ResetPlayerWeapons(playerid);
-				GivePlayerWeapon(playerid, 28, 15000);
+				GiveWeaponToPlayer(playerid, 28, 15000);
 	            SendServerMessage(playerid, "Vous avancez au prochain niveau (2/5).");
 	        }
 	        case 2:
 	        {
 	            ResetPlayerWeapons(playerid);
-				GivePlayerWeapon(playerid, 29, 15000);
+				GiveWeaponToPlayer(playerid, 29, 15000);
 	            SendServerMessage(playerid, "Vous avancez au prochain niveau (3/5).");
 	        }
 	        case 3:
 	        {
 	            ResetPlayerWeapons(playerid);
-				GivePlayerWeapon(playerid, 30, 15000);
+				GiveWeaponToPlayer(playerid, 30, 15000);
 	            SendServerMessage(playerid, "Vous avancez au prochain niveau (4/5).");
 	        }
 	        case 4:
 	        {
 	            ResetPlayerWeapons(playerid);
-				GivePlayerWeapon(playerid, 27, 15000);
+				GiveWeaponToPlayer(playerid, 27, 15000);
 	            SendServerMessage(playerid, "Vous avancez au prochain niveau (5/5).");
 	        }
 	        case 5:
@@ -780,10 +780,10 @@ script Faction_Load()
 		    format(str, sizeof(str), "factionRank%d", j + 1);
 		    cache_get_field_content(i, str, FactionRanks[i][j], g_iHandle, 32);
 		}
-		for (new j = 1; j < 15; j ++) {
-		    format(str, sizeof(str), "factionacces%d", j);
+		for (new j = 0; j < 15; j ++) {
+		    format(str, sizeof(str), "factionacces%d", j + 1);
 		    FactionData[i][factionacces][j] = cache_get_field_int(i, str);
-		    format(str, sizeof(str), "SalaireRank%d", j);
+		    format(str, sizeof(str), "SalaireRank%d", j + 1);
 		    FactionData[i][factionsalaire][j] = cache_get_field_int(i, str);
 		}
 		Faction_Refresh(i);
@@ -2440,7 +2440,7 @@ script MinuteCheck()
        	    PlayerData[i][prepetitions] -= random(100);
 			PlayerData[i][pparcouru] -= random(100);
             PlayerData[i][pparcouru] = clamp(PlayerData[i][pparcouru], -5000, 5000);
-            PlayerData[i][prepetitions] = clamp(PlayerData[i][prepetitions], -5000, 31300);
+            PlayerData[i][prepetitions] = clamp(PlayerData[i][prepetitions], -5000, 5000);
             PlayerData[i][pHideTags] -= 1;
             PlayerData[i][pMinutes] = 0;
 			PlayerData[i][pPlayingHours]++;
@@ -3373,7 +3373,6 @@ script PlayerCheck()
         		else if (PlayerData[i][pHunger] <= 0)
 				{
     	        	SetPlayerHealth(i, health - 10);
-        	    	FlashTextDraw(i, PlayerData[i][pTextdraws][65]);
         		}
         		PlayerData[i][pHungerTime] = 0;
         	}
@@ -3416,11 +3415,6 @@ script PlayerCheck()
 		{
 			Booth_Leave(i);
 		}
-		format(str, sizeof(str), "%d%c", PlayerData[i][pHunger], '%');
-		PlayerTextDrawSetString(i, PlayerData[i][pTextdraws][63], str);
-
-		format(str, sizeof(str), "%d%c", PlayerData[i][pThirst], '%');
-		PlayerTextDrawSetString(i, PlayerData[i][pTextdraws][64], str);
 	}
 	return 1;
 }
@@ -3624,6 +3618,9 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	else if (!strcmp(name, "Chargeur", true)) {
 	    cmd_usemag(playerid, "\1");
 	}
+	else if (!strcmp(name, "tournevis", true)) {
+	    cmd_crocheterporte(playerid, "\1");
+	}
 	else if (!strcmp(name, "Munition", true)) {
 	    cmd_chargeur(playerid, "\1");
 	}
@@ -3760,13 +3757,13 @@ script OnPlayerUseItem(playerid, itemid, name[])
         cmd_planter(playerid, "Heroin");
     }
     else if (!strcmp(name, "Dynamite", true)) {
-        cmd_dynamite(playerid, "");
+        cmd_dynamite(playerid, "\1");
     }
     else if (!strcmp(name, "Decodeur", true)) {
-        cmd_decodeur(playerid, "");
+        cmd_decodeur(playerid, "\1");
     }
     else if (!strcmp(name, "des", true)) {
-        cmd_des(playerid, "");
+        cmd_des(playerid, "\1");
     }
     else if (!strcmp(name, "Masque a gaz", true))
 	{
@@ -3969,7 +3966,7 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 	return 1;
 }
 
-script OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid)
+script OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
 	if (PlayerData[playerid][pFirstAid])
 	{
@@ -3985,6 +3982,21 @@ script OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid)
 	GetPlayerHealth(playerid, HP);
 	if(weaponid == 25 && PlayerData[playerid][pflashball]) SetPlayerHealth(playerid, HP-10);//Shotgun en flashball
     if(weaponid == 23 && PlayerData[playerid][pTazer]) SetPlayerHealth(playerid, HP-10);//silencieux en tazer
+    if(issuerid != INVALID_PLAYER_ID) // If not self-inflicted
+    {
+        if(bodypart == 5) //left arm
+        {//jeter arme lourde
+            if(weaponid == 25 || weaponid == 27 || weaponid == 29 || weaponid == 30 || weaponid == 31 || weaponid == 33 || weaponid == 34){cmd_jeter(playerid, "\1");}
+        }
+        if(bodypart == 6) //right arm
+        {//jeter arme legere
+            if(weaponid == 16 || weaponid == 17 || weaponid == 18 || weaponid == 22 || weaponid == 23 || weaponid ==24 || weaponid == 26 || weaponid ==28 || weaponid == 32 || weaponid == 41){cmd_jeter(playerid, "\1");}
+        }
+        if(bodypart == 8 || bodypart == 7)
+        {
+            ApplyAnimation(playerid, "PED", "BIKE_fall_off", 4.1, 0, 1, 1, 1, 0, 1);
+        }
+    }
 	return 1;
 }
 
@@ -4183,7 +4195,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED && newkeys & KEY_JUMP && !(oldkeys & KEY_JUMP))
 		ApplyAnimation(playerid, "GYMNASIUM", "gym_jog_falloff", 4.0, 0, 1, 1, 0, 0, 1);
 	if (newkeys & KEY_CROUCH && IsPlayerInAnyVehicle(playerid)) {cmd_open(playerid, "\1");}
-	if (newkeys & KEY_CROUCH && (IsPlayerInRangeOfPoint(playerid, 1.5, -70.9738,-1574.2937,3.0855)||IsPlayerInRangeOfPoint(playerid,1.5,2510.9900,-1728.5364,778.3384) || IsPlayerInRangeOfPoint(playerid,3.0,1742.5693,-1948.0618,13.1172) || IsPlayerInRangeOfPoint(playerid,1.5,1646.6123,-2299.5503,-0.8559) ||  IsPlayerInRangeOfPoint(playerid,1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid,1.5,-1967.6317,146.4278,28.2107) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.355) || IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid,1.5,529.4365,-1817.3754,15.3615) && PlayerData[playerid][pTutorialStage] == 1))
+	if (newkeys & KEY_CROUCH && (IsPlayerInRangeOfPoint(playerid, 1.5, -70.9738,-1574.2937,3.0855)||IsPlayerInRangeOfPoint(playerid,1.5,2510.9900,-1728.5364,778.3384) || IsPlayerInRangeOfPoint(playerid,1.5,1742.5693,-1948.0618,13.1172) || IsPlayerInRangeOfPoint(playerid,1.5,1646.6123,-2299.5503,-0.8559) ||  IsPlayerInRangeOfPoint(playerid,1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid,1.5,-1967.6317,146.4278,28.2107) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.355) || IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid,1.5,529.4365,-1817.3754,15.3615) && PlayerData[playerid][pTutorialStage] == 1))
 	{
 	    DisablePlayerCheckpoint(playerid);
 		PlayerData[playerid][pTutorialStage] = 2;
@@ -4673,7 +4685,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    PlayerData[playerid][pRangeBooth] = i;
 		    UpdateWeapons(playerid);
 		    ResetPlayerWeapons(playerid);
-		    GivePlayerWeapon(playerid, 24, 15000);
+		    GiveWeaponToPlayer(playerid, 24, 15000);
 			Booth_Refresh(playerid);
 			PlayerTextDrawSetString(playerid, PlayerData[playerid][pTextdraws][81], "~b~Cible:~w~ 0/10");
 			PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][81]);
@@ -5078,7 +5090,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				if(BENCH_IN_USE[g]==false && PLAYER_INBENCH[playerid]==false)
 				{
-				    if(PlayerData[playerid][prepetitions] >= 31000) return SendErrorMessage(playerid, "Vous êtes au max de vos capacité revenez plutard.");
+				    if(PlayerData[playerid][prepetitions] >= 5000) return SendErrorMessage(playerid, "Vous êtes au max de vos capacité revenez plutard.");
 					BENCH_IN_USE[g]=true;
 					PLAYER_INBENCH[playerid]=true;
 					PLAYER_CURRECT_BENCH[playerid]=g;
@@ -5100,7 +5112,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				if(DUMB_IN_USE[d]==false && PLAYER_INDUMB[playerid]==false)
 				{
-				    if(PlayerData[playerid][prepetitions] >= 31000) return SendErrorMessage(playerid, "Vous êtes au max de vos capacité revenez plutard.");
+				    if(PlayerData[playerid][prepetitions] >= 5000) return SendErrorMessage(playerid, "Vous êtes au max de vos capacité revenez plutard.");
 					DUMB_IN_USE[d]=true;
 					PLAYER_INDUMB[playerid]=true;
 					PLAYER_CURRECT_DUMB[playerid]=d;
@@ -5195,6 +5207,14 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	 	}
 	 	return 1;
 	}
+	if (PRESSED123(KEY_ACTION))
+	{
+		ShowHungerTextdraw(playerid, 1);
+	}
+	else if (RELEASED123(KEY_ACTION))
+	{
+		ShowHungerTextdraw(playerid, 0);
+	}
 	return 1;
 }
 script PutInsideVehicle(playerid, vehicleid)
@@ -5272,8 +5292,8 @@ script OnPlayerEnterCheckpoint(playerid)
 		        SendClientMessage(playerid, -1, "");
 			}
 			new serveursettinginfoid,money = random(5000) + 5000;
-			PlayerData[playerid][prepetitions] = random(2500);
-			PlayerData[playerid][pparcouru] = random(2500);
+			PlayerData[playerid][prepetitions] = random(500);
+			PlayerData[playerid][pparcouru] = random(500);
 			PlayerData[playerid][pBankMoney] = money;
 			SendServerMessage(playerid,"Vous avez reçu %s$ pour vous etes connecté sur le serveur en finissant l'inscription.",FormatNumber(money));
 			SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: Un nouveau %s est arrivé sur le serveur, origine : %s.",ReturnName(playerid),PlayerData[playerid][pOrigin]);
@@ -5499,9 +5519,7 @@ script OnPlayerEnterCheckpoint(playerid)
 		else if (PlayerData[playerid][pJob] == JOB_MINER && PlayerData[playerid][pMinedRock] && GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CARRY)
 		{
 		    //new money = random(20) + 5;
-		    new salairejobinfoid;
-		    new money = info_salairejobinfo[salairejobinfoid][salairejobinfominer];
-			new stockjobinfoid;
+		    new salairejobinfoid,money = info_salairejobinfo[salairejobinfoid][salairejobinfominer],stockjobinfoid;
 			SendJOBMessage(playerid, "Vous avez gagné %d$ sur cette roche.", money);
 			GiveMoney(playerid, money);
 			info_stockjobinfo[stockjobinfoid][stockjobinfostockminer] += 1;
@@ -5538,10 +5556,8 @@ script OnPlayerEnterCheckpoint(playerid)
 	    else if (PlayerData[playerid][pJob] == JOB_UNLOADER && IsPlayerInWarehouse(playerid) && GetVehicleModel(vehicleid) == 530 && CoreVehicles[vehicleid][vehLoadType] == 7)
 	    {
 	        GetVehicleHealth(vehicleid, health);
-
 	        CoreVehicles[vehicleid][vehLoadType] = 0;
 	        DestroyObject(CoreVehicles[vehicleid][vehCrate]);
-
 			CoreVehicles[vehicleid][vehCrate] = INVALID_OBJECT_ID;
 			DisablePlayerCheckpoint(playerid);
 
@@ -6495,6 +6511,18 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	    	PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 	    	GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 	    	GetPlayerFacingAngle(playerid, PlayerData[playerid][pPos][3]);
+			foreach (new i : Player)
+			{
+				new factionid = PlayerData[i][pFaction],Float:x, Float:y, Float:z;
+				GetPlayerPos(playerid,x,y,z);
+				if(FactionData[factionid][factionacces][1] == 1 ||FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][7] == 1 || FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionacces][4] == 1)
+				{
+				    SetFactionMarker(playerid, factionid, 0x00ffc5FF);
+				    PlayAudioStreamForPlayer(i,"http://hubroleplay.net/assets/bipbip.mp3");
+					SendFactionMessage(facass,COLOR_RED,"[CENTRAL] L'agent de police %s est à terre, une balise automatique a été activée.",ReturnName(playerid,0));
+					break;
+				}
+			}
 			if (0 <= reason <= 8 || 10 <= reason <= 15)
 				SetTimerEx("TimerNotDeadYet",120000, false, "d", playerid);
 		}
@@ -6519,9 +6547,18 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	    for (new i = 84; i < 97; i ++)
 			PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][i]);
 		PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][82]);
+		RemovePlayerAttachedObject(playerid, 6);
 	}
 	else if (newstate == PLAYER_STATE_DRIVER)
 	{
+		if (IsSpeedoVehicle(vehicleid)){
+			TextDrawHideForPlayer(playerid,poker_background[0]);
+			TextDrawHideForPlayer(playerid,poker_background[1]);
+ 	    	for (new i = 84; i < 92; i ++){
+				PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][i]);
+				PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][96]);
+			}
+		}
 		if (FactionData[facass][factionacces][7] == 1 && GetVehicleModel(vehicleid) == 408 && CoreVehicles[vehicleid][vehTrash] > 0)
 		{
 		    new pointid = -1;
@@ -6579,15 +6616,6 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
    				SendClientMessage(playerid, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} vous conduisez sans permis.");
 			}
 		}
-	    if (IsSpeedoVehicle(vehicleid)){
-		    TextDrawHideForPlayer(playerid,poker_background[0]);
-			TextDrawHideForPlayer(playerid,poker_background[1]);
- 	    	for (new i = 84; i < 90; i ++)
-				PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][i]);
-			PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][91]);
-			PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][92]);
-			PlayerTextDrawShow(playerid, PlayerData[playerid][pTextdraws][96]);
-		}
 		SetPlayerArmedWeapon(playerid, 0);
 	}
 	if ((oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER) && PlayerData[playerid][pPlayRadio])
@@ -6637,6 +6665,7 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	    foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) {
      		PlayerSpectatePlayer(i, playerid);
 		}
+		RemovePlayerAttachedObject(playerid, 6);
 	}
 	if (newstate == PLAYER_STATE_PASSENGER && IsPlayerInsideTaxi(playerid))
 	{
@@ -7278,6 +7307,10 @@ script OnPlayerDisconnect(playerid, reason)
 	organisateur[playerid] = 0;
 	//stamina
 	DestroyPlayerProgressBar(playerid, StaminaBar[playerid]);
+	DestroyPlayerProgressBar(playerid, PlayerData[playerid][FaimBar]);
+	DestroyPlayerProgressBar(playerid, PlayerData[playerid][SoifBar]);
+	DestroyPlayerProgressBar(playerid, PlayerData[playerid][BrasBar]);
+	DestroyPlayerProgressBar(playerid, PlayerData[playerid][JambesBar]);
     return 1;
 }
 script OnPlayerClickPlayer(playerid, clickedplayerid, source)
@@ -7286,10 +7319,7 @@ script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 	{
 		SendServerMessage(playerid,"Vous avez clicker sur %s",ReturnName(clickedplayerid,0));
 		AdminTarget[playerid] = clickedplayerid;
-		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur","Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\
-		\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\
-		\nSlap se joueur\nFaire saigner ou pas se joueur\
-		\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur","Valider","Annuler");
+		Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
 	}
 	else return SendErrorMessage(playerid, "Vous n'êtes pas autorisé.");
 	return 1;
@@ -7297,6 +7327,8 @@ script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 script OnGameModeInit()
 {
 	//partie fs oubliger
+	/*SendRconCommand("unloadfs skins");
+	SendRconCommand("loadfs skins");*/
 	SendRconCommand("unloadfs pool");
     SendRconCommand("loadfs pool");
     SendRconCommand("unloadfs soccer");
@@ -7940,7 +7972,7 @@ script OnPlayerSpawn(playerid)
 	}
 	else if (!PlayerData[playerid][pCreated])
 	{
-	    Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Voyage d'affaires\nRésident ailleur\nClochard\nImmigrant", "Accepter", "");
+	    Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
         SetPlayerCameraLookAt(playerid,1404.5933, -1594.4730, 95.4797);
 		SetPlayerCameraPos(playerid, 1403.7042, -1594.0187, 96.0647);
 	}
@@ -7973,7 +8005,7 @@ script OnPlayerSpawn(playerid)
 		else
 		{
 			SetWeapons(playerid);
-			ShowHungerTextdraw(playerid, 1);
+			//ShowHungerTextdraw(playerid, 1);
 
 			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
 			SetPlayerArmour(playerid, PlayerData[playerid][pArmorStatus]);
@@ -7993,6 +8025,11 @@ script OnPlayerSpawn(playerid)
 	SetPlayerStamina(playerid, 100.0);
 	StaminaBar[playerid] = CreatePlayerProgressBar(playerid, 547.0, 38.5, 63.0, 5.0,-1429936641, 100.0);
     ShowPlayerProgressBar(playerid, StaminaBar[playerid]);
+    //prgress bar faim soif jambes et lautre
+    PlayerData[playerid][FaimBar] = CreatePlayerProgressBar(playerid, 82.000000, 317.000000, 55.500000, 3.200000, -1429936641, 100.0000, 0);
+    PlayerData[playerid][SoifBar] = CreatePlayerProgressBar(playerid, 82.000000, 330.000000, 55.500000, 3.200000, -1429936641, 100.0000, 0);
+    PlayerData[playerid][BrasBar] = CreatePlayerProgressBar(playerid, 82.000000, 343.000000, 55.500000, 3.200000, -1429936641, 5000.0000, 0);
+    PlayerData[playerid][JambesBar] = CreatePlayerProgressBar(playerid, 82.000000, 357.000000, 55.500000, 3.200000, -1429936641, 5000.0000, 0);
 	return 1;
 }
 script OnPlayerCommandReceived(playerid, cmdtext[])
@@ -9314,7 +9351,7 @@ script OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				}
 			    CancelSelectTextDraw(playerid);
 			    TogglePlayerControllable(playerid, 1);
-			    Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Voyage d'affaires\nRésident ailleur\nClochard\nImmigrant", "Accepter", "");
+			    Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
 			}
 			else if (playertextid == PlayerData[playerid][pTextdraws][47])
 			{
@@ -12886,7 +12923,7 @@ DUMB_CHECK(playerid)
 		PLAYER_DUMB_COUNT[playerid]++;
 		format(LocalLabel,sizeof(LocalLabel),"%d",PLAYER_DUMB_COUNT[playerid]);
 		TextDrawSetString(gym_deslabel[playerid],LocalLabel);
-		PlayerData[playerid][prepetitions] += PLAYER_DUMB_COUNT[playerid];
+		PlayerData[playerid][prepetitions] += PLAYER_DUMB_COUNT[playerid]/2;
 		SetAntoineBarValue(player_gym_progress[playerid],0);
 		SetTimerEx( "DUMB_SET_AIMSTOP",2000, false, "i", playerid);
 	}
@@ -12908,7 +12945,7 @@ BENCH_CHECK(playerid)
 		format(LocalLabel,sizeof(LocalLabel),"%d",PLAYER_BENCH_COUNT[playerid]);
 		TextDrawSetString(gym_deslabel[playerid],LocalLabel);
 		SetAntoineBarValue(player_gym_progress[playerid],0);
-		PlayerData[playerid][prepetitions] += PLAYER_BENCH_COUNT[playerid];
+		PlayerData[playerid][prepetitions] += PLAYER_BENCH_COUNT[playerid]/2;
 		SetTimerEx( "BENCH_SET_AIMSTOP",2000, false, "i", playerid);
 	}
 }
