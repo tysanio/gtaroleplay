@@ -5291,7 +5291,8 @@ script OnPlayerEnterCheckpoint(playerid)
 		    for (new i = 0; i < 5; i ++) {
 		        SendClientMessage(playerid, -1, "");
 			}
-			new serveursettinginfoid,money = random(5000) + 5000;
+			new serveursettinginfoid;
+			/*if (info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1) */new money = random(5000) + 5000;
 			PlayerData[playerid][prepetitions] = random(500);
 			PlayerData[playerid][pparcouru] = random(500);
 			PlayerData[playerid][pBankMoney] = money;

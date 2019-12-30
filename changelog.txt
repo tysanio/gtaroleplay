@@ -1,0 +1,25 @@
+-------------ajoute d'un systeme de CK apres mort
+chaque mort ajouter un score si tu dépasse un score X byebye plus de perso tu recommence a 0
+-------------ajoute d'un systeme de double perso 
+systeme de double perso payable avec des gold bars
+-------------ajoute de systeme de vetement
+le systeme de vetement te donne un item qui est un vetement avec un ID quand on lutilise on met le skin sur sois
+-------------ajoute du systeme de tunning v4
+piece de tuning optenable par les livreurs et ajoute la piece dans l'inventaire du joueur
+on clique sur la peice et lajoute sur le vehicule
+-------------ajoute d'un deuxieme billard
+mise a jour sur l'emplacement de location de la queue de billard
+-------------ajoute d'un script poker texas holdem
+pas encore fini mais jouable l'include poker3
+-------------ajoute du tableclic
+table click pour bcp de commande admin fait sur un joueur
+-------------ajoute de deux langues v1
+ajoute de la langue selecteur quand on se connect anglais francais a date sa l'influence sur le tabclick uniquement
+-------------ajoute de compte whiteliste
+on peut mettre le serveur en whiteliste par la commande /serveur et /creercompte
+-------------ajoute du systeme de stamina
+la stamina est représenté par la bar en haut a droite et peut etre modifier selons les jambes avec le gymnase
+-------------modificiation de job
+on change les job comment il sont fait pour avoir une uniformisation partout
+-------------modification des commande faction
+on peut maintenant déterminer lemplacement de group de commande avec 3 emplacement
