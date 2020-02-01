@@ -192,8 +192,8 @@ CMD:bas(playerid, params[])
 }
 CMD:o(playerid, params[])
 {
-	new serveursettinginfoid;
-	if(info_serveursettinginfo[serveursettinginfoid][settingoocactive] == 1) return SendErrorMessage(playerid,"Le OOC est désactivé");
+	new serveurinfo;
+	if(info_serveursetting[serveurinfo][settingoocactive] == 1) return SendErrorMessage(playerid,"Le OOC est désactivé");
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/o [global OOC]");
 	if (PlayerData[playerid][pDisableOOC])
@@ -481,8 +481,8 @@ CMD:a(playerid, params[])
 }
 CMD:n(playerid, params[])
 {
-	new serveursettinginfoid;
-	if(info_serveursettinginfo[serveursettinginfoid][settingnouveau] == 1) return SendErrorMessage(playerid,"Le chat nouveau est désactivé");
+	new serveurinfo;
+	if(info_serveursetting[serveurinfo][settingnouveau] == 1) return SendErrorMessage(playerid,"Le chat nouveau est désactivé");
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/n [nouveau] text]");
 	if (strlen(params) > 64) {
@@ -1038,18 +1038,18 @@ CMD:togooc(playerid, params[])
 {
     if (PlayerData[playerid][pAdmin] < 2)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	new serveursettinginfoid;
-	if(info_serveursettinginfo[serveursettinginfoid][settingoocactive] == 0)
+	new serveurinfo;
+	if(info_serveursetting[serveurinfo][settingoocactive] == 0)
 	{
 	    SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: OOC OFF.");
-	    info_serveursettinginfo[serveursettinginfoid][settingoocactive] = 1;
-		serveursettinginfosave(serveursettinginfoid);
+	    info_serveursetting[serveurinfo][settingoocactive] = 1;
+		serveursettinginfosave(serveurinfo);
 	}
 	else
 	{
 	    SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: OOC ON");
-	    info_serveursettinginfo[serveursettinginfoid][settingoocactive] = 0;
-		serveursettinginfosave(serveursettinginfoid);
+	    info_serveursetting[serveurinfo][settingoocactive] = 0;
+		serveursettinginfosave(serveurinfo);
 	}
 	return 1;
 }
@@ -1124,7 +1124,7 @@ CMD:givewep(playerid, params[])
 	if(PlayerData[userid][pPlayingHours] < 5)
 		return SendErrorMessage(playerid, "Joueur n'a pas assez d'heure de jeux (5).");
 	if (weaponid <= 0 || weaponid > 46 || (weaponid >= 19 && weaponid <= 21))
-		return SendErrorMessage(playerid, "Vous avez spécifier une invalide weapon.");
+		return SendErrorMessage(playerid, "Vous avez spécifier une arme invalide.");
 	GiveWeaponToPlayer(userid, weaponid, ammo);
 	SendServerMessage(playerid, "Vous avez donné a %s un(e) %s avec %d balle.", ReturnName(userid, 0), ReturnWeaponName(weaponid), ammo);
 	return 1;
@@ -1176,14 +1176,13 @@ CMD:creermaison(playerid, params[])
 }
 CMD:supmaison(playerid, params[])
 {
-	static
-	    id = 0;
+	static id = 0;
     if (PlayerData[playerid][pAdmin] < 4)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supmaison [id]");
 	if ((id < 0 || id >= MAX_HOUSES) || !HouseData[id][houseExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID invalide.");
 	House_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes la maison (ID: %d.)", id);
 	return 1;
@@ -1529,13 +1528,13 @@ CMD:vendre(playerid, params[])
 		}
 		else SendErrorMessage(playerid, "Vous devez être a l'intérieur de votre véhicule.");
 	}
-	else if (!strcmp(type, "servicemecano3", true))
+	else if (!strcmp(type, "servicemecano", true))
 	{
 		static price;
 		if (FactionData[facass][factionacces][9] == 0)
 			return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");		
 		if (sscanf(string, "d", price))
-			return SendSyntaxMessage(playerid, "/vendre [playerid/name] [servicemecano3] [prix]");
+			return SendSyntaxMessage(playerid, "/vendre [playerid/name] [servicemecano] [prix]");
 		if (price < 50)
 		    return SendErrorMessage(playerid, "Prix minimun de 50$.");
 		PlayerData[targetid][pMecanoSeller] = playerid;
@@ -1799,10 +1798,14 @@ CMD:accepter(playerid, params[])
 	    new targetid = PlayerData[playerid][pck],query[256];
 	    if (!IsPlayerNearPlayer(playerid, targetid, 3.0))
 		    return SendErrorMessage(playerid, "Vous n'êtes pas proche de ce joueur.");
-       	mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `inventory` WHERE `ID` = %d",PlayerData[playerid][pID]);
+		mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `inventory` WHERE `ID` = %d",PlayerData[playerid][pID]);
 		mysql_tquery(g_iHandle, query);
-	    mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `characters` WHERE `ID` = %d",PlayerData[playerid][pID]);
-  		mysql_tquery(g_iHandle, query);
+		mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `characters` WHERE `ID` = %d",PlayerData[playerid][pID]);
+		mysql_tquery(g_iHandle, query);
+		mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `contacts` WHERE `ID` = %d",PlayerData[playerid][pID]);
+		mysql_tquery(g_iHandle, query);
+		mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `tickets` WHERE `ID` = %d",PlayerData[playerid][pID]);
+		mysql_tquery(g_iHandle, query);
 		Dialog_Show(playerid, NULLED, DIALOG_STYLE_MSGBOX, "CK de votre personnage", "Votre personnage a été tué, et vous avez accepté sa mort.\nDonc il sera supprimé et vous aller devoir en créer un nouveau.\nVous allez être déconnecté pour faire cela", "Quitter", "");
 		KickEx(playerid);
 	}
@@ -1910,7 +1913,7 @@ CMD:editmaison(playerid, params[])
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_HOUSES) || !HouseData[id][houseExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide maison ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID de maison invalide.");
 	if (!strcmp(type, "location", true))
 	{
 		GetPlayerPos(playerid, HouseData[id][housePos][0], HouseData[id][housePos][1], HouseData[id][housePos][2]);
@@ -2029,6 +2032,8 @@ CMD:proche(playerid, params[])
  		SendServerMessage(playerid, "Vous êtes proche de la caisse (ID: %d.)", id);
     if ((id = Batiement_Nearest(playerid)) != -1)
 	    SendServerMessage(playerid, "Vous êtes proche du batiement (ID: %d.)", id);
+    /*if ((id = OpenWorldMaisonNearest(playerid)) != -1)
+	    SendServerMessage(playerid, "Vous êtes proche du open world (ID: %d.)", id);*/
 	return 1;
 }
 CMD:editbiz(playerid, params[])
@@ -2043,7 +2048,7 @@ CMD:editbiz(playerid, params[])
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_BUSINESSES) || !BusinessData[id][bizExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide biz ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID biz invalide.");
 	if (!strcmp(type, "location", true))
 	{
  		GetPlayerPos(playerid, BusinessData[id][bizPos][0], BusinessData[id][bizPos][1], BusinessData[id][bizPos][2]);
@@ -2184,7 +2189,7 @@ CMD:editbiz(playerid, params[])
       			BusinessData[id][bizInt][3] = 270.0000;
 				BusinessData[id][bizInterior] = 6;
 			}
-			case 8: {
+			case 8: { //non la sur VC
                	BusinessData[id][bizInt][0] = 501.98098;
                	BusinessData[id][bizInt][1] = -69.150199;
                	BusinessData[id][bizInt][2] = 998.757812;
@@ -2258,7 +2263,7 @@ CMD:creerbiz(playerid, params[])
 	if (sscanf(params, "dd", type, price))
  	{
 	 	SendSyntaxMessage(playerid, "/creerbiz [type] [price]");
-    	SendSyntaxMessage(playerid,"[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie");
+    	SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie");
     	return 1;
 	}
 	if (type < 1 || type > 10)
@@ -2302,7 +2307,7 @@ CMD:bizstate(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/bizstate [biz id]");
 	if ((id < 0 || id >= MAX_BUSINESSES) || !BusinessData[id][bizExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide magasin ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID biz invalide.");
 	BusinessData[id][bizOwner] = 99999999;
 	Business_Refresh(id);
 	Business_Save(id);
@@ -2317,7 +2322,7 @@ CMD:supbiz(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supbiz [biz id]");
 	if ((id < 0 || id >= MAX_BUSINESSES) || !BusinessData[id][bizExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide biz ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID biz invalide.");
 	Business_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes le magasin (ID: %d.)", id);
 	return 1;
@@ -2362,10 +2367,10 @@ CMD:boire(playerid, params[])
  		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
 	}
-	else if (!strcmp(params, "alcool", true))
+	else if (!strcmp(params, "aBTool", true))
 	{
-	    if (!Inventory_HasItem(playerid, "alcool"))
-	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'alcool sur vous.");
+	    if (!Inventory_HasItem(playerid, "aBTool"))
+	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'aBTool sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
         PlayerData[playerid][pDrinking] = 2;
@@ -2373,7 +2378,7 @@ CMD:boire(playerid, params[])
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
 		Inventory_Add(playerid, "Bouteille vide", 1484);
-		Inventory_Remove(playerid, "alcool");
+		Inventory_Remove(playerid, "aBTool");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_WINE);
  		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
@@ -2530,7 +2535,7 @@ CMD:bcoffre(playerid, params[])
 }
 CMD:passerpermis4321(playerid, params[])
 {
-	new serveursettinginfoid;
+	new serveurinfo;
 	if (PlayerData[playerid][pDrivingTest])
 	    return SendErrorMessage(playerid, "Vous avez déja commencer le test!");
 	if (!IsPlayerInRangeOfPoint(playerid, 3.0, -2035.0946,-117.3694,1035.1719))
@@ -2543,9 +2548,9 @@ CMD:passerpermis4321(playerid, params[])
    	PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 	GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
  	GetPlayerFacingAngle(playerid, PlayerData[playerid][pPos][3]);
-	if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
+	if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 	{ PlayerData[playerid][pTestCar] = CreateVehicle(410, -2047.1056, -87.7183, 34.8219, 0.1447, -1, -1, -1); }
-	if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 5)
+	if(info_serveursetting[serveurinfo][settingvilleactive] == 5)//ugmp
 	{ PlayerData[playerid][pTestCar] = CreateVehicle(410,859.2825,-1857.2244,8.9857,89.7378, -1, -1, -1);}
     PlayerData[playerid][pTestWarns] = 0;
 	if (PlayerData[playerid][pTestCar] != INVALID_VEHICLE_ID)
@@ -2789,7 +2794,7 @@ CMD:editentrer(playerid, params[])
 			case 9: {
 			    EntranceData[id][entranceInt][0] = -1992.6971;
            		EntranceData[id][entranceInt][1] = 407.8793;
-            	EntranceData[id][entranceInt][2] = 2.5010;
+            	EntranceData[id][entranceInt][2] = 802.5010;
             	EntranceData[id][entranceInt][3] = 268.7060;
 				EntranceData[id][entranceInterior] = 1;
 			}
@@ -2935,7 +2940,7 @@ CMD:creerpump(playerid, params[])
 	if (sscanf(params, "d", bizid))
 	    return SendSyntaxMessage(playerid, "/creerpump [biz id]");
 	if ((bizid < 0 || bizid >= MAX_BUSINESSES) || !BusinessData[bizid][bizExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide biz ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID biz invalide.");
 	if (BusinessData[bizid][bizType] != 6)
 	    return SendErrorMessage(playerid, "Ce biz n'est pas une station essence!");
     if (GetPlayerInterior(playerid) > 0 || GetPlayerVirtualWorld(playerid) > 0)
@@ -2956,7 +2961,7 @@ CMD:editpump(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/editpump [pump id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !PumpData[id][pumpExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide pump ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID pompe invalide.");
 	ResetEditing(playerid);
 	PlayerData[playerid][pEditPump] = id;
 	EditDynamicObject(playerid, PumpData[id][pumpObject]);
@@ -3194,8 +3199,8 @@ CMD:creerjob(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", type))
 	    return SendSyntaxMessage(playerid, "/creerjob [type]");
-	if (type < 1 || type > 20)
-	    return SendErrorMessage(playerid, "Type invalide. Essayer entre 1 et 20.");
+	if (type < 1 || type > 15)
+	    return SendErrorMessage(playerid, "Type invalide. Essayer entre 1 et 15.");
 	id = Job_Create(playerid, type);
 	if (id == -1)
 	    return SendErrorMessage(playerid, "MAX LIMITES");
@@ -3210,7 +3215,7 @@ CMD:supjob(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supjob [job id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_JOBS) || !JobData[id][jobExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide job ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID job invalide.");
 	Job_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes le job (ID: %d.)", id);
 	return 1;
@@ -3227,7 +3232,7 @@ CMD:editjob(playerid, params[])
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_JOBS) || !JobData[id][jobExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide job ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID job invalide.");
 	if (!strcmp(type, "location", true))
 	{
 	    static Float:x,Float:y,Float:z;
@@ -3299,6 +3304,14 @@ CMD:quitjob(playerid, params[])
 		{
 			PlayerData[playerid][pWoodCount] = 0;
 			PlayerData[playerid][pWoodRock] = 0;
+			DisablePlayerCheckpoint(playerid);
+			RemovePlayerAttachedObject(playerid, 4);
+			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+		}
+		if (PlayerData[playerid][pPetrolRock])
+		{
+	    	PlayerData[playerid][pPetrolRock] = 0;
+			PlayerData[playerid][pPetrolCount] = 0;
 			DisablePlayerCheckpoint(playerid);
 			RemovePlayerAttachedObject(playerid, 4);
 			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
@@ -3757,7 +3770,7 @@ CMD:bucheron(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous devez être proche du lieu de bucheron.");
 	new blabla;
 	stockjobinfosave(blabla);
-	Job_Refresh(12);
+	Job_Refresh(8);
 	if (PlayerData[playerid][pWoodcutting])
 	{
 	    PlayerData[playerid][pWoodcutting] = false;
@@ -3851,7 +3864,7 @@ CMD:creercrate(playerid, params[])
 	if (sscanf(params, "d", type))
 	{
 	    SendSyntaxMessage(playerid, "/creercrate [type]");
-	    SendServerMessage(playerid, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece de sideskirt | 15: Piece d'hydraulics | 16: Piece de roue | 17: Piece de carrosserie");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece d'extra | 15: Piece d'hydraulics | 16: Piece de roue | 17: Piece de carrosserie");
 		return 1;
 	}
 	if (type < 1 || type > 20)
@@ -3871,7 +3884,7 @@ CMD:supcrate(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supcrate [crate id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !CrateData[id][crateExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide crate ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID boite invalide.");
 
 	Crate_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes crate (ID: %d.)", id);
@@ -3896,16 +3909,15 @@ CMD:boite(playerid, params[])
 }
 CMD:creerarme(playerid, params[])
 {
-	new id = -1,facass = PlayerData[playerid][pFaction];
+	new facass = PlayerData[playerid][pFaction];
 	if (FactionData[facass][factionacces][13] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-    if ((id = Job_NearestPoint(playerid)) == -1 || JobData[id][jobType] != JOB_WEAPON_SMUGGLER)
-		return SendErrorMessage(playerid, "Vous n'êtes pas sur le point de création.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
 	if (PlayerData[playerid][pCarryCrate] == -1)
 	    return SendErrorMessage(playerid, "Tu n'as pas de boite dans les mains.");
 	if (PlayerData[playerid][pCrafting])
 	    return SendErrorMessage(playerid, "Tu à déja une boite.");
-	if (CrateData[PlayerData[playerid][pCarryCrate]][crateType] < 1 || CrateData[PlayerData[playerid][pCarryCrate]][crateType] > 5)
+	if (CrateData[PlayerData[playerid][pCarryCrate]][crateType] < 1 || CrateData[PlayerData[playerid][pCarryCrate]][crateType] > 8)
 	    return SendErrorMessage(playerid, "Il n'y a pas d'arme dans la boite.");
     PlayerData[playerid][pCrafting] = 1;
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s commence à construire des %s.", ReturnName(playerid, 0), Crate_GetType(CrateData[PlayerData[playerid][pCarryCrate]][crateType]));
@@ -4041,7 +4053,7 @@ CMD:supfaction(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supfaction [faction id]");
 	if ((id < 0 || id >= MAX_FACTIONS) || !FactionData[id][factionExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide faction ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID faction invalide.");
 	Faction_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes faction (ID: %d.)", id);
 	return 1;
@@ -4051,6 +4063,19 @@ CMD:open(playerid, params[])
 	new id = Gate_Nearest(playerid),stockjobinfoid,facass = PlayerData[playerid][pFaction];
 	if (id != -1)
 	{
+		if(info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] == 0 && info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] == 0) return SendErrorMessage(playerid,"Il n'y a plus d'électricité dans le pays central générateur hors service");
+		//generateur
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] -= 2;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] -= 2;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] -= 2;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] -= 2;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] -= 2;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] = 0;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] = 0;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] = 0;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] = 0;}
+		if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] = 0;}
+		stockjobinfosave(stockjobinfoid);
 		if (strlen(GateData[id][gatePass]))
 		{Dialog_Show(playerid, GatePass, DIALOG_STYLE_INPUT, "Mot de passe", "Veuiller entrée le mot de passe:", "Valider", "Annuler");}
 		else
@@ -4134,17 +4159,6 @@ CMD:open(playerid, params[])
 		}
 		break;
 	}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] -= 10;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] -= 10;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] -= 10;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] -= 10;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] > 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] -= 10;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral1] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral2] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral3] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral4] = 0;}
-	if( info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] < 0) {info_stockjobinfo[stockjobinfoid][stockjobinfocentral5] = 0;}
-	stockjobinfosave(stockjobinfoid);
 	return 1;
 }
 CMD:jeter(playerid, params[])
@@ -4178,11 +4192,11 @@ CMD:editfaction(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editfaction [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, models, locker, ranks, maxranks, acces[1 a 15]");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, models, locker, ranks, maxranks, acces[1 a 15], action[1 a 3]");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_FACTIONS) || !FactionData[id][factionExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide faction ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID faction invalide.");
     if (!strcmp(type, "name", true))
 	{
 	    new name[32];
@@ -4390,6 +4404,72 @@ CMD:editfaction(playerid, params[])
 	{
         PlayerData[playerid][pFactionEdit] = id;
 		Dialog_Show(playerid, FactionLocker, DIALOG_STYLE_LIST, "Faction Locker", "Set Location\nLocker Weapons", "Valider", "Annuler");
+	}
+	else if (!strcmp(type, "action1", true))
+	{
+		static Float:x,Float:y,Float:z;
+		GetPlayerPos(playerid,x,y,z);
+		FactionData[id][factionaction1Pos][0] = x;
+		FactionData[id][factionaction1Pos][1] = y;
+		FactionData[id][factionaction1Pos][2] = z;
+		Faction_Save(id);
+		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté la position action 1 de la faction ID: %d.", ReturnName(playerid, 0), id);
+	}
+	else if (!strcmp(type, "action2", true))
+	{
+		static Float:x,Float:y,Float:z;
+		GetPlayerPos(playerid,x,y,z);
+		FactionData[id][factionaction2Pos][0] = x;
+		FactionData[id][factionaction2Pos][1] = y;
+		FactionData[id][factionaction2Pos][2] = z;
+		Faction_Save(id);
+		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté la position action 2 de la faction ID: %d.", ReturnName(playerid, 0), id);
+	}
+	else if (!strcmp(type, "action3", true))
+	{
+		static Float:x,Float:y,Float:z;
+		GetPlayerPos(playerid,x,y,z);
+		FactionData[id][factionaction3Pos][0] = x;
+		FactionData[id][factionaction3Pos][1] = y;
+		FactionData[id][factionaction3Pos][2] = z;
+		Faction_Save(id);
+		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté la position action 3 de la faction ID: %d.", ReturnName(playerid, 0), id);
+	}
+	else if (!strcmp(type, "action1range", true))
+	{
+	    static Float:radius;
+		if (sscanf(string, "f", radius))
+		    return SendSyntaxMessage(playerid, "/editfaction [id] action1range [range]");
+		if (radius < 0.0 || radius > 20.0)
+		    return SendErrorMessage(playerid, "La portée doit être minimum 0 et max 20.");
+        FactionData[id][factionaction1Pos][3] = radius;
+		Faction_Save(id);
+		SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté la porté des commande d'action 1 de la faction ID: %d a %.4f.", ReturnName(playerid, 0), id, radius);
+		return 1;
+	}
+	else if (!strcmp(type, "action2range", true))
+	{
+	    static Float:radius;
+		if (sscanf(string, "f", radius))
+		    return SendSyntaxMessage(playerid, "/editfaction [id] action1range [range]");
+		if (radius < 0.0 || radius > 20.0)
+		    return SendErrorMessage(playerid, "La portée doit être minimum 0 et max 20.");
+        FactionData[id][factionaction2Pos][3] = radius;
+		Faction_Save(id);
+		SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté la porté des commande d'action 2 de la faction ID: %d a %.4f.", ReturnName(playerid, 0), id, radius);
+		return 1;
+	}
+	else if (!strcmp(type, "action3range", true))
+	{
+	    static Float:radius;
+		if (sscanf(string, "f", radius))
+		    return SendSyntaxMessage(playerid, "/editfaction [id] action1range [range]");
+		if (radius < 0.0 || radius > 20.0)
+		    return SendErrorMessage(playerid, "La portée doit être minimum 0 et max 20.");
+        FactionData[id][factionaction3Pos][3] = radius;
+		Faction_Save(id);
+		SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté la porté des commande d'action 3 de la faction ID: %d a %.4f.", ReturnName(playerid, 0), id, radius);
+		return 1;
 	}
 	return 1;
 }
@@ -4606,7 +4686,7 @@ CMD:demenotter(playerid, params[])
     if (!PlayerData[userid][pCuffed])
         return SendErrorMessage(playerid, "Ce joueur n'est pas menotté en se moment.");
 	if (Inventory_Items(playerid) >= MAX_INVENTORY - 1)
-	    return SendErrorMessage(playerid, "Vous ne pouvez pas démenotter cette personne et prendre les menottes. (pas de palce dans l'inventaire)");
+	    return SendErrorMessage(playerid, "Vous ne pouvez pas démenotter cette personne et prendre les menottes. (pas de paBTe dans l'inventaire)");
 	static string[64];
     PlayerData[userid][pCuffed] = 0;
     SetPlayerSpecialAction(userid, SPECIAL_ACTION_NONE);
@@ -4704,7 +4784,7 @@ CMD:suparrest(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suparrest [point id]");
 	if ((id < 0 || id >= MAX_ARREST_POINTS) || !ArrestData[id][arrestExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide arrest point ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID d'arrestation invalide.");
 	Arrest_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes arrest point (ID: %d.)", id);
 	return 1;
@@ -5063,8 +5143,8 @@ CMD:jerrican(playerid, params[])
 CMD:pm(playerid, params[])
 {
 	static userid, text[128];
-	new serveursettinginfoid;
-	if(info_serveursettinginfo[serveursettinginfoid][settingpmactive] == 1 && PlayerData[playerid][pAdmin] < 1 && PlayerData[playerid][pTester] < 1) return SendErrorMessage(playerid,"Les PM est désactivé");
+	new serveurinfo;
+	if(info_serveursetting[serveurinfo][settingpmactive] == 1 && PlayerData[playerid][pAdmin] < 1 && PlayerData[playerid][pTester] < 1) return SendErrorMessage(playerid,"Les PM est désactivé");
 	if (sscanf(params, "us[128]", userid, text))
 	    return SendSyntaxMessage(playerid, "/pm [playerid/name] [message]");
 	if (PlayerData[playerid][pDisablePM])
@@ -5538,7 +5618,7 @@ CMD:editgate(playerid, params[])
 		if (sscanf(string, "d", factionid))
 		    return SendSyntaxMessage(playerid, "/editgate [id] [faction] [gate faction] (-1 for none)");
         if ((factionid < -1 || factionid >= MAX_FACTIONS) || (factionid != -1 && !FactionData[factionid][factionExists]))
-	    	return SendErrorMessage(playerid, "Vous avez spécifier une invalide faction ID.");
+	    	return SendErrorMessage(playerid, "Vous avez spécifier un ID faction invalide.");
         GateData[id][gateFaction] = (factionid == -1) ? (-1) : (FactionData[factionid][factionID]);
 		Gate_Save(id);
 		if (factionid == -1)
@@ -5655,6 +5735,14 @@ CMD:giveplzz(playerid, params[])
 	GiveMoney(userid, amount);
 	SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a given %s a %s.", ReturnName(playerid, 0), FormatNumber(amount), ReturnName(userid, 0));
  	Log_Write("logs/admin_log.txt", "[%s] %s a given %s a %s.", ReturnDate(), ReturnName(playerid, 0), FormatNumber(amount), ReturnName(userid, 0));
+	return 1;
+}
+CMD:nuit(playerid,params[])
+{
+	if (PlayerData[playerid][pAdmin] < 4)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
+	SetPlayerTime(playerid,0,0);
+	SendServerMessage(playerid,"Spam: Attention ta 30 seconde de nuit avec cette commande!");
 	return 1;
 }
 CMD:udrogue(playerid, params[])
@@ -5870,7 +5958,7 @@ CMD:setitem(playerid, params[])
 }
 CMD:itemlist(playerid, params[])
 {
-	static string[1256];
+	static string[2000];
 	if (!strlen(string)) {
 		for (new i = 0; i < sizeof(g_aInventoryItems); i ++) {
 			format(string, sizeof(string), "%s%s\n", string, g_aInventoryItems[i][e_InventoryItem]);
@@ -5900,7 +5988,7 @@ CMD:supimpound(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supimpound [impound id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !ImpoundData[id][impoundExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide impound lot ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID fourrière invalide.");
 	Impound_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes impound lot (ID: %d.)", id);
 	return 1;
@@ -5917,7 +6005,7 @@ CMD:editimpound(playerid, params[])
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !ImpoundData[id][impoundExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide impound lot ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID fourrière invalide.");
 	if (!strcmp(type, "location", true))
 	{
 	    static Float:x,Float:y,Float:z;
@@ -6107,7 +6195,7 @@ CMD:supatm(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supatm [atm id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !ATMData[id][atmExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide ATM ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID ATM invalide.");
 	ATM_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes ATM (ID: %d.)", id);
 	return 1;
@@ -6129,6 +6217,13 @@ CMD:enlevercp(playerid, params[])
 	{
 	    PlayerData[playerid][pMinedRock] = 0;
 		PlayerData[playerid][pMineCount] = 0;
+		RemovePlayerAttachedObject(playerid, 4);
+		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+	}
+	if (PlayerData[playerid][pPetrolRock])
+	{
+	    PlayerData[playerid][pPetrolRock] = 0;
+		PlayerData[playerid][pPetrolCount] = 0;
 		RemovePlayerAttachedObject(playerid, 4);
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 	}
@@ -6214,7 +6309,7 @@ CMD:asellmaison(playerid, params[])
 	if (sscanf(params, "d", houseid))
 	    return SendSyntaxMessage(playerid, "/asellmaison [maison ID]");
 	if ((houseid < 0 || houseid >= MAX_HOUSES) || !HouseData[houseid][houseExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide maison ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID maison invalide.");
 	HouseData[houseid][houseOwner] = 0;
 	House_Refresh(houseid);
 	House_Save(houseid);
@@ -6229,7 +6324,7 @@ CMD:asellbiz(playerid, params[])
 	if (sscanf(params, "d", bizid))
 	    return SendSyntaxMessage(playerid, "/asellbiz [biz ID]");
 	if ((bizid < 0 || bizid >= MAX_HOUSES) || !BusinessData[bizid][bizExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide biz ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID biz invalide.");
 	BusinessData[bizid][bizOwner] = 0;
 	Business_Refresh(bizid);
 	Business_Save(bizid);
@@ -6467,8 +6562,8 @@ CMD:supgarbage(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supgarbage [garbage id]");
-	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !GarbageData[id][garbageExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide garbage ID.");
+	if ((id < 0 || id >= MAX_DYNAMIC_TRASH) || !GarbageData[id][garbageExists])
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID poubelle invalide.");
 	Garbage_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes garbage bin (ID: %d.)", id);
 	return 1;
@@ -6543,9 +6638,18 @@ CMD:supvendor(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supvendor [vendor id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !VendorData[id][vendorExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide vendor ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID vendeur invalide.");
 	Vendor_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes vendor (ID: %d.)", id);
+	return 1;
+}
+CMD:animcmds(playerid, params[])
+{
+	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
+	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
+	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
+	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
+	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /cry, /tired, /assis, /crossarms, /fucku, /walk, /piss, /lean, /stopanim.");
 	return 1;
 }
 CMD:dance(playerid, params[])
@@ -6578,15 +6682,6 @@ CMD:piss(playerid, params[])
     if (!AnimationCheck(playerid))
 	    return SendErrorMessage(playerid, "Tu ne peut faire cette animation en se moment.");
 	SetPlayerSpecialAction(playerid, 68);
-	return 1;
-}
-CMD:animcmds(playerid, params[])
-{
-	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
-	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
-	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
-	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
-	SendClientMessage(playerid, COLOR_CLIENT, "ANIMATION:{FFFFFF} /cry, /tired, /assis, /crossarms, /fucku, /walk, /piss, /lean, /stopanim.");
 	return 1;
 }
 CMD:bat(playerid, params[])
@@ -7616,7 +7711,7 @@ CMD:editrack(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/editrack [rack id]");
 	if ((id < 0 || id >= MAX_WEAPON_RACKS) || !RackData[id][rackExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide rack ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID rack invalide.");
 	ResetEditing(playerid);
 	PlayerData[playerid][pEditRack] = id;
 	EditDynamicObject(playerid, RackData[id][rackObjects][4]);
@@ -7631,7 +7726,7 @@ CMD:suprack(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suprack [rack id]");
 	if ((id < 0 || id >= MAX_WEAPON_RACKS) || !RackData[id][rackExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide rack ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID rack invalide.");
 	Rack_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes weapon rack (ID: %d.)", id);
 	return 1;
@@ -7644,7 +7739,7 @@ CMD:tracenumber(playerid, params[])
 	if (sscanf(params, "d", number))
 	    return SendSyntaxMessage(playerid, "/tracenumber [phone number]");
 	if (number == 0)
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide number.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un numéro invalide.");
 	if (GetNumberOwner(number) != INVALID_PLAYER_ID)
 	    return SendServerMessage(playerid, "Le numero de téléphone %d est a %s.", number, ReturnName(GetNumberOwner(number), 0));
 	SendErrorMessage(playerid, "Aucun joueur online avec ce numero.");
@@ -7696,7 +7791,7 @@ CMD:supspeed(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supspeed [speed id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !SpeedData[id][speedExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide speed camera ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID radar invalide.");
 	Speed_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes speed camera (ID: %d.)", id);
 	return 1;
@@ -8212,18 +8307,16 @@ CMD:gyrophare(playerid, params[])
 }
 CMD:setinventory(playerid, params[])
 {
-	static
-	    userid,
-		capacity;
+	static userid,capacity;
     if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ud", userid, capacity))
 	    return SendSyntaxMessage(playerid, "/setinventory [playerid/name] [montant]");
 	if (userid == INVALID_PLAYER_ID)
 	    return SendErrorMessage(playerid, "Le numéro du player est déconnecté.");
-	if (capacity < 1 || capacity > 24)
-	    return SendErrorMessage(playerid, "La capacité est max 24.");
-	PlayerData[userid][pCapacity] = 24;
+	if (capacity < 1 || capacity > 35)
+	    return SendErrorMessage(playerid, "La capacité est max 35.");
+	PlayerData[userid][pCapacity] = capacity;
 	SendServerMessage(playerid, "Vous avez set %s inventory capacity a %d items.", ReturnName(userid, 0), capacity);
 	SendServerMessage(userid, "%s a mis votre inventory capacity a %d items.", ReturnName(playerid, 0), capacity);
 	return 1;
@@ -8321,7 +8414,7 @@ CMD:supgraffiti(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supgraffiti [graffiti id]");
 	if ((id < 0 || id >= MAX_GRAFFITI_POINTS) || !GraffitiData[id][graffitiExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide graffiti ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID graffiti tage invalide.");
 	Graffiti_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes graffiti (ID: %d.)", id);
 	return 1;
@@ -8430,7 +8523,7 @@ CMD:supdetector(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supdetector [detector id]");
 	if ((id < 0 || id >= MAX_METAL_DETECTORS) || !MetalDetectors[id][detectorExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide detector ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID detecteur invalide.");
 	Detector_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes detector (ID: %d.)", id);
 	return 1;
@@ -8461,7 +8554,7 @@ CMD:supplant(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suppplant [plant id]");
 	if ((id < 0 || id >= MAX_DRUG_PLANTS) || !PlantData[id][plantExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide plant ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID plante invalide");
 	Plant_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes plant (ID: %d.)", id);
 	return 1;
@@ -8499,7 +8592,7 @@ CMD:editbillboard(playerid, params[])
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !BillBoardData[id][bbExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide biz ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID biz invalide.");
 	if (!strcmp(type, "location", true))
 	{
  		GetPlayerPos(playerid, BillBoardData[id][bbPos][0], BillBoardData[id][bbPos][1], BillBoardData[id][bbPos][2]);
@@ -8588,7 +8681,7 @@ CMD:supbillboard(playerid, params[])
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supbillboard [bb id]");
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !BillBoardData[id][bbExists])
-	    return SendErrorMessage(playerid, "Vous avez spécifier une invalide billboard ID.");
+	    return SendErrorMessage(playerid, "Vous avez spécifier un ID panneau d'affichage invalide.");
 	Billboard_Delete(id);
 	SendServerMessage(playerid, "Vous avez supprimé avec succes billboard (ID: %d.)", id);
 	return 1;
@@ -8703,7 +8796,7 @@ CMD:appeler(playerid, params[])
 			return SendTelephoneMessage(playerid, "Téléphone : Vous êtes qui vous?");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des pièces.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		Dialog_Show(playerid, commande, DIALOG_STYLE_LIST,"Vous-vouler commander quoi?","Commander pièce de tunning avant\nCommander pièce de tunning arrière\nCommander pièce de tunning toit\nCommander pièce de tunning capot\nCommander pièce de tunning aileron\nCommander pièce de tunning sideskirt1\nCommander pièce de tunning sideskirt2\nCommander pièce de tunning wheel\nCommander pièce de tunning hydraulics\nCommander pièce de tunning roue\nCommander pièce de tunning carrosserie\nCommander bombe de peinture\nCommander des boites a outils\nCommander des bonbonne de NOS\nSavoir le stock", "Fermer", "");
+		Dialog_Show(playerid, commande, DIALOG_STYLE_LIST,"Vous-vouler commander quoi?","Commander pièce de tunning avant\nCommander pièce de tunning arrière\nCommander pièce de tunning toit\nCommander pièce de tunning capot\nCommander pièce de tunning aileron\nCommander pièce de tunning d'extra\nCommander pièce de tunning sideskirt2\nCommander pièce de tunning wheel\nCommander pièce de tunning hydraulics\nCommander pièce de tunning roue\nCommander pièce de tunning carrosserie\nCommander bombe de peinture\nCommander des boites a outils\nCommander des bonbonne de NOS\nSavoir le stock", "Fermer", "");
 
 	}
 	else if ((targetid = GetNumberOwner(number)) != INVALID_PLAYER_ID)
@@ -8740,7 +8833,7 @@ CMD:appeler(playerid, params[])
 			new id = House_Nearest(playerid);
 			foreach (new idd : Player) if (House_Inside(idd) == id)
 			{
-				SendClientMessage(idd, COLOR_PURPLE, "** Vous entender téléphone sonner.");
+				SendClientMessage(idd, COLOR_PURPLE, "** Vous entendez le téléphone sonner.");
 				PlayerPlaySound(idd, 20801, 0, 0, 0);
 			}
 		}
@@ -9936,19 +10029,12 @@ CMD:mettrelefeu(playerid, params[])
 }
 CMD:salaireanpe(playerid, params[])
 {
-	new salairejobinfoid;
-	new cariste = info_salairejobinfo[salairejobinfoid][salairejobinfocariste];
-	new manutentionnaire = info_salairejobinfo[salairejobinfoid][salairejobinfomanutentionnaire];
-	new dock = info_salairejobinfo[salairejobinfoid][salairejobinfodock];
-	new miner = info_salairejobinfo[salairejobinfoid][salairejobinfominer];
-	new usineelectronic = info_salairejobinfo[salairejobinfoid][salairejobinfoelectronic];
-	new bucheron = info_salairejobinfo[salairejobinfoid][salairejobinfobucheron];
-	new menuisier = info_salairejobinfo[salairejobinfoid][salairejobinfomenuisier];
-	new generateur = info_salairejobinfo[salairejobinfoid][salairejobinfogenerateur];
-	new electricien = info_salairejobinfo[salairejobinfoid][salairejobinfoelectricien];
-	new arme = info_salairejobinfo[salairejobinfoid][salairejobinfoarme];
-	new petrol = info_salairejobinfo[salairejobinfoid][salairejobinfopetrolier];
-	new boucher = info_salairejobinfo[salairejobinfoid][salairejobinfoboucher];
+	new salairejobinfoid,cariste = info_salairejobinfo[salairejobinfoid][salairejobinfocariste],manutentionnaire = info_salairejobinfo[salairejobinfoid][salairejobinfomanutentionnaire];
+	new dock = info_salairejobinfo[salairejobinfoid][salairejobinfodock],miner = info_salairejobinfo[salairejobinfoid][salairejobinfominer];
+	new usineelectronic = info_salairejobinfo[salairejobinfoid][salairejobinfoelectronic],bucheron = info_salairejobinfo[salairejobinfoid][salairejobinfobucheron];
+	new menuisier = info_salairejobinfo[salairejobinfoid][salairejobinfomenuisier],generateur = info_salairejobinfo[salairejobinfoid][salairejobinfogenerateur];
+	new electricien = info_salairejobinfo[salairejobinfoid][salairejobinfoelectricien],arme = info_salairejobinfo[salairejobinfoid][salairejobinfoarme];
+	new petrol = info_salairejobinfo[salairejobinfoid][salairejobinfopetrolier],boucher = info_salairejobinfo[salairejobinfoid][salairejobinfoboucher];
 	if (PlayerData[playerid][pAdmin] < 4)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	Dialog_Show(playerid,SalaireAnpe,DIALOG_STYLE_TABLIST,"Liste des salaires de l'anpe","{ffffff}Cariste: \t{ff3300}%d${ffffff}\nManutentionnaire: \t{ff3300}%d${ffffff}\nDock port: \t{ff3300}%d${ffffff}{ffffff}\nMineur: \t{ff3300}%d${ffffff}\nUsine eletronic: \t{ff3300}%d${ffffff}\nBucheron: \t{ff3300}%d${ffffff}\nMenuisier: \t{ff3300}%d${ffffff}\nTechnicien generateur: \t{ff3300}%d${ffffff}\nElectricien: \t{ff3300}%d${ffffff}\nFabrication d'arme: \t{ff3300}%d${ffffff}\nPetrolier: \t{ff3300}%d${ffffff}\nBoucher: \t{ff3300}%d${ffffff}","Modifier","Retour",cariste,manutentionnaire,dock,miner,usineelectronic,bucheron,menuisier,generateur,electricien,arme,petrol,boucher);	
@@ -9972,19 +10058,7 @@ CMD:rem(playerid,params[])
 }
 CMD:credits(playerid,params[])
 {
-	Dialog_Show(playerid,CREDITS,DIALOG_STYLE_MSGBOX,"Crédits","Script South-Central 0.21 par Emmet\nModification Fait par Tysanio\nAnciennement cjeje84  & Thecycy2a , communauté russe et autre qui on aidé par le passé\nMerci a Lokii pour le systeme de Stamina\nMapping Gang ajouter fait par Kova","Fermer","");
-	return 1;
-}
-//tune
-CMD:tune(playerid, params[])
-{
-	new playerstate = GetPlayerState(playerid);
-	if(playerstate == PLAYER_STATE_DRIVER)
-	{
-		Dialog_Show(playerid,DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-		return 1;
-	}
-	else {SendClientMessage(playerid, COLOR_RED, "[ERROR] You cannot modify/tune a car unless you are the driver.");}
+	Dialog_Show(playerid,CREDITS,DIALOG_STYLE_MSGBOX,"Crédits","Script South-Central 0.21 par Emmet\nModification Fait par Tysanio\nAnciennement cjeje84  & Thecycy2a , communauté russe et autre qui on aidé par le passé\nMerci a Lokii pour le systeme de Stamina\nMapping Gang ajouter fait par Kova\nMerci pour l'équipe de UG pour se tout nouveau serveur sur Vice-City","Fermer","");
 	return 1;
 }
 //dynamite
@@ -10030,8 +10104,8 @@ CMD:serveur(playerid,params[])
 {
 	if (PlayerData[playerid][pAdmin] < 4)
     	return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	new serveursettinginfoid;
-	Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	new serveurinfo;
+	Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	return 1;
 }
 //bracelet electronic
@@ -10558,7 +10632,7 @@ CMD:poserboite(playerid, params[])
     PlayerData[playerid][pCrafting] = 1;
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s pose une boite et ouvre des %s.", ReturnName(playerid, 0), Crate_GetType(CrateData[PlayerData[playerid][pCarryCrate]][crateType]));
 	TogglePlayerControllable(playerid, 0);
-	SetTimerEx("CraftParts", 2000, false, "dd", playerid, PlayerData[playerid][pCarryCrate]);
+	SetTimerEx("CraftParts", 12000, false, "dd", playerid, PlayerData[playerid][pCarryCrate]);
 	return 1;
 }
 CMD:position(playerid, params[])
@@ -11001,7 +11075,7 @@ CMD:bbalise(playerid,params[])
 	{
 		new factionid = PlayerData[i][pFaction],Float:x, Float:y, Float:z;
 		GetPlayerPos(playerid,x,y,z);
-		SetFactionMarker(playerid, factionid, 0x00ffc5FF);
+		SetFactionMarker(playerid, 0x00ffc5FF);
 		if(FactionData[factionid][factionacces][1] == 1 ||FactionData[factionid][factionacces][2] == 1 || FactionData[factionid][factionacces][3] == 1 || FactionData[factionid][factionacces][7] == 1 || FactionData[factionid][factionacces][5] == 1 || FactionData[factionid][factionacces][4] == 1)
 		{
 			SendServerMessage(i,"{BABABA}%s demande du renfort. (Localisation: {FFFFFF}%s{BABABA})", ReturnName(playerid), GetLocation(x, y, z));
@@ -11078,14 +11152,14 @@ CMD:des(playerid,params[])
 //voler item
 CMD:voleritem(playerid,params[])
 {
-	static bizid = -1,serveursettinginfoid;
+	static bizid = -1,serveurinfo;
 	new facass = PlayerData[playerid][pFaction];
 	if ((bizid = Business_Inside(playerid)) != -1)
 	{
 		if (bizid == -1 || !BusinessData[bizid][bizExists])
 			return 0;
-		if(info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive] == 1) {ShowPlayerFooter(playerid, "Les braquages sont desactiver");return 1;}
-		if(cop_nbrCops < info_serveursettinginfo[serveursettinginfoid][settingpolice]) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
+		if(info_serveursetting[serveurinfo][settingbraquagenpcactive] == 1) {ShowPlayerFooter(playerid, "Les braquages sont desactiver");return 1;}
+		if(cop_nbrCops < info_serveursetting[serveurinfo][settingpolice]) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
 		switch (BusinessData[bizid][bizType])
 		{
 			case 1, 6:
@@ -11346,7 +11420,8 @@ CMD:louerbillard(playerid,params[])
 	    return SendErrorMessage(playerid, "Vous devez être proche du point de location.");
 	if(GetPlayerMoney(playerid) <= 10) return GameTextForPlayer(playerid, "~r~Vous n'avez pas assez d'argent", 2000, 3);
 	SendServerMessage(playerid,"Vous avez louer la queue de billard au cout de 10$.");
-	SendServerMessage(playerid,"Faites /pool pour commencer a jouer un ding! se fera attendre.");
+	SendServerMessage(playerid,"Faites /pool pour commencer a jouer sur la première table un ding! se fera attendre.");
+	SendServerMessage(playerid,"Faites /pool2 pour commencer a jouer sur la deuxième table un ding! se fera attendre.");
 	GiveMoney(playerid, -10);
 	GiveWeaponToPlayer(playerid, 7, 1);
 	return 1;
@@ -11504,6 +11579,1690 @@ CMD:sub(playerid, params[])
 CMD:echanger(playerid,params[])
 {
 	if(!Inventory_HasItem(playerid,"gold bar")) return SendErrorMessage(playerid,"Il vous faut une gold bar minimun pour accéder a ce menu.");
-	Dialog_Show(playerid,echanger,DIALOG_STYLE_TABLIST,"Menu d'échange","Argent 100$\t 1 Gold bar\nArgent 200$\t 2 Gold bars\nArgent 300$\t 3 Gold bars\nArgent 400$\t 4 Gold bars\nArgent 500$\t 5 Gold bars\nHeure de jeux 1\t 1 Gold bar\nHeure de jeux 5\t 5 Gold bars\nHeure de jeux 10\t 10 Gold bars","Valider","Quitter");
+	Dialog_Show(playerid,echanger,DIALOG_STYLE_TABLIST,"Menu d'échange","Argent 100$\t 1 Gold bar\nArgent 200$\t 2 Gold bars\nArgent 300$\t 3 Gold bars\nArgent 400$\t 4 Gold bars\nArgent 500$\t 5 Gold bars\nHeure de jeux 1\t 1 Gold bar\nHeure de jeux 5\t 5 Gold bars\nHeure de jeux 10\t 10 Gold bars\nDouble personnage autorisé\t 100 gold bars\nAjouter capacité d'inventaire (35 places)\t 25 gold bars","Valider","Quitter");
+	return 1;
+}
+//compte en wl
+CMD:creercompte(playerid,params[])
+{
+	if (PlayerData[playerid][pAdmin] < 4)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
+	static nomjoueur[24],password[60];
+	if (sscanf(params, "s[24]s[60]",nomjoueur,password))
+	{
+	    SendSyntaxMessage(playerid, "/creercompte [nom du compte] [mot de passe]");
+		return 1;
+	}
+	SQL_CreateAccountWL(nomjoueur,password);
+	return 1;
+}
+CMD:lang(playerid,params[])
+{
+	Dialog_Show(playerid,Language1,DIALOG_STYLE_LIST,"Choose Language","You understand? Click me!\nTu me comprend? Clic ici!","OK","");
+	return 1;
+}
+CMD:aie(playerid,params[])
+{
+	new Float:x,Float:y,Float:z;
+	GetPlayerPos(playerid,x,y,z);
+	if(z > 400) return SetPlayerPos(playerid,2096.7385,-1687.4127,13.4706);
+	return 1;
+}
+CMD:vetement(playerid,params[])
+{
+	if(Inventory_HasItem(playerid,"Vetement 0")) {Inventory_Remove(playerid,"Vetement 0"); SetPlayerSkin(playerid,0);}
+	if(Inventory_HasItem(playerid,"Vetement 1")) {Inventory_Remove(playerid,"Vetement 1"); SetPlayerSkin(playerid,1);}
+	if(Inventory_HasItem(playerid,"Vetement 2")) {Inventory_Remove(playerid,"Vetement 2"); SetPlayerSkin(playerid,2);}
+	if(Inventory_HasItem(playerid,"Vetement 3")) {Inventory_Remove(playerid,"Vetement 3"); SetPlayerSkin(playerid,3);}
+	if(Inventory_HasItem(playerid,"Vetement 4")) {Inventory_Remove(playerid,"Vetement 4"); SetPlayerSkin(playerid,4);}
+	if(Inventory_HasItem(playerid,"Vetement 5")) {Inventory_Remove(playerid,"Vetement 5"); SetPlayerSkin(playerid,5);}
+	if(Inventory_HasItem(playerid,"Vetement 6")) {Inventory_Remove(playerid,"Vetement 6"); SetPlayerSkin(playerid,6);}
+	if(Inventory_HasItem(playerid,"Vetement 7")) {Inventory_Remove(playerid,"Vetement 7"); SetPlayerSkin(playerid,7);}
+	if(Inventory_HasItem(playerid,"Vetement 8")) {Inventory_Remove(playerid,"Vetement 8"); SetPlayerSkin(playerid,8);}
+	if(Inventory_HasItem(playerid,"Vetement 9")) {Inventory_Remove(playerid,"Vetement 9"); SetPlayerSkin(playerid,9);}
+	if(Inventory_HasItem(playerid,"Vetement 10")) {Inventory_Remove(playerid,"Vetement 10"); SetPlayerSkin(playerid,10);}
+	if(Inventory_HasItem(playerid,"Vetement 11")) {Inventory_Remove(playerid,"Vetement 11"); SetPlayerSkin(playerid,11);}
+	if(Inventory_HasItem(playerid,"Vetement 12")) {Inventory_Remove(playerid,"Vetement 12"); SetPlayerSkin(playerid,12);}
+	if(Inventory_HasItem(playerid,"Vetement 13")) {Inventory_Remove(playerid,"Vetement 13"); SetPlayerSkin(playerid,13);}
+	if(Inventory_HasItem(playerid,"Vetement 14")) {Inventory_Remove(playerid,"Vetement 14"); SetPlayerSkin(playerid,14);}
+	if(Inventory_HasItem(playerid,"Vetement 15")) {Inventory_Remove(playerid,"Vetement 15"); SetPlayerSkin(playerid,15);}
+	if(Inventory_HasItem(playerid,"Vetement 16")) {Inventory_Remove(playerid,"Vetement 16"); SetPlayerSkin(playerid,16);}
+	if(Inventory_HasItem(playerid,"Vetement 17")) {Inventory_Remove(playerid,"Vetement 17"); SetPlayerSkin(playerid,17);}
+	if(Inventory_HasItem(playerid,"Vetement 18")) {Inventory_Remove(playerid,"Vetement 18"); SetPlayerSkin(playerid,18);}
+	if(Inventory_HasItem(playerid,"Vetement 19")) {Inventory_Remove(playerid,"Vetement 19"); SetPlayerSkin(playerid,19);}
+	if(Inventory_HasItem(playerid,"Vetement 20")) {Inventory_Remove(playerid,"Vetement 20"); SetPlayerSkin(playerid,20);}
+	if(Inventory_HasItem(playerid,"Vetement 21")) {Inventory_Remove(playerid,"Vetement 21"); SetPlayerSkin(playerid,21);}
+	if(Inventory_HasItem(playerid,"Vetement 22")) {Inventory_Remove(playerid,"Vetement 22"); SetPlayerSkin(playerid,22);}
+	if(Inventory_HasItem(playerid,"Vetement 23")) {Inventory_Remove(playerid,"Vetement 23"); SetPlayerSkin(playerid,23);}
+	if(Inventory_HasItem(playerid,"Vetement 24")) {Inventory_Remove(playerid,"Vetement 24"); SetPlayerSkin(playerid,24);}
+	if(Inventory_HasItem(playerid,"Vetement 25")) {Inventory_Remove(playerid,"Vetement 25"); SetPlayerSkin(playerid,25);}
+	if(Inventory_HasItem(playerid,"Vetement 26")) {Inventory_Remove(playerid,"Vetement 26"); SetPlayerSkin(playerid,26);}
+	if(Inventory_HasItem(playerid,"Vetement 27")) {Inventory_Remove(playerid,"Vetement 27"); SetPlayerSkin(playerid,27);}
+	if(Inventory_HasItem(playerid,"Vetement 28")) {Inventory_Remove(playerid,"Vetement 28"); SetPlayerSkin(playerid,28);}
+	if(Inventory_HasItem(playerid,"Vetement 29")) {Inventory_Remove(playerid,"Vetement 29"); SetPlayerSkin(playerid,29);}
+	if(Inventory_HasItem(playerid,"Vetement 30")) {Inventory_Remove(playerid,"Vetement 30"); SetPlayerSkin(playerid,30);}
+	if(Inventory_HasItem(playerid,"Vetement 31")) {Inventory_Remove(playerid,"Vetement 31"); SetPlayerSkin(playerid,31);}
+	if(Inventory_HasItem(playerid,"Vetement 32")) {Inventory_Remove(playerid,"Vetement 32"); SetPlayerSkin(playerid,32);}
+	if(Inventory_HasItem(playerid,"Vetement 33")) {Inventory_Remove(playerid,"Vetement 33"); SetPlayerSkin(playerid,33);}
+	if(Inventory_HasItem(playerid,"Vetement 34")) {Inventory_Remove(playerid,"Vetement 34"); SetPlayerSkin(playerid,34);}
+	if(Inventory_HasItem(playerid,"Vetement 35")) {Inventory_Remove(playerid,"Vetement 35"); SetPlayerSkin(playerid,35);}
+	if(Inventory_HasItem(playerid,"Vetement 36")) {Inventory_Remove(playerid,"Vetement 36"); SetPlayerSkin(playerid,36);}
+	if(Inventory_HasItem(playerid,"Vetement 37")) {Inventory_Remove(playerid,"Vetement 37"); SetPlayerSkin(playerid,37);}
+	if(Inventory_HasItem(playerid,"Vetement 38")) {Inventory_Remove(playerid,"Vetement 38"); SetPlayerSkin(playerid,38);}
+	if(Inventory_HasItem(playerid,"Vetement 39")) {Inventory_Remove(playerid,"Vetement 39"); SetPlayerSkin(playerid,39);}
+	if(Inventory_HasItem(playerid,"Vetement 40")) {Inventory_Remove(playerid,"Vetement 40"); SetPlayerSkin(playerid,40);}
+	if(Inventory_HasItem(playerid,"Vetement 41")) {Inventory_Remove(playerid,"Vetement 41"); SetPlayerSkin(playerid,41);}
+	if(Inventory_HasItem(playerid,"Vetement 42")) {Inventory_Remove(playerid,"Vetement 42"); SetPlayerSkin(playerid,42);}
+	if(Inventory_HasItem(playerid,"Vetement 43")) {Inventory_Remove(playerid,"Vetement 43"); SetPlayerSkin(playerid,43);}
+	if(Inventory_HasItem(playerid,"Vetement 44")) {Inventory_Remove(playerid,"Vetement 44"); SetPlayerSkin(playerid,44);}
+	if(Inventory_HasItem(playerid,"Vetement 45")) {Inventory_Remove(playerid,"Vetement 45"); SetPlayerSkin(playerid,45);}
+	if(Inventory_HasItem(playerid,"Vetement 46")) {Inventory_Remove(playerid,"Vetement 46"); SetPlayerSkin(playerid,46);}
+	if(Inventory_HasItem(playerid,"Vetement 47")) {Inventory_Remove(playerid,"Vetement 47"); SetPlayerSkin(playerid,47);}
+	if(Inventory_HasItem(playerid,"Vetement 48")) {Inventory_Remove(playerid,"Vetement 48"); SetPlayerSkin(playerid,48);}
+	if(Inventory_HasItem(playerid,"Vetement 49")) {Inventory_Remove(playerid,"Vetement 49"); SetPlayerSkin(playerid,49);}
+	if(Inventory_HasItem(playerid,"Vetement 50")) {Inventory_Remove(playerid,"Vetement 50"); SetPlayerSkin(playerid,50);}
+	if(Inventory_HasItem(playerid,"Vetement 51")) {Inventory_Remove(playerid,"Vetement 51"); SetPlayerSkin(playerid,51);}
+	if(Inventory_HasItem(playerid,"Vetement 52")) {Inventory_Remove(playerid,"Vetement 52"); SetPlayerSkin(playerid,52);}
+	if(Inventory_HasItem(playerid,"Vetement 53")) {Inventory_Remove(playerid,"Vetement 53"); SetPlayerSkin(playerid,53);}
+	if(Inventory_HasItem(playerid,"Vetement 54")) {Inventory_Remove(playerid,"Vetement 54"); SetPlayerSkin(playerid,54);}
+	if(Inventory_HasItem(playerid,"Vetement 55")) {Inventory_Remove(playerid,"Vetement 55"); SetPlayerSkin(playerid,55);}
+	if(Inventory_HasItem(playerid,"Vetement 56")) {Inventory_Remove(playerid,"Vetement 56"); SetPlayerSkin(playerid,56);}
+	if(Inventory_HasItem(playerid,"Vetement 57")) {Inventory_Remove(playerid,"Vetement 57"); SetPlayerSkin(playerid,57);}
+	if(Inventory_HasItem(playerid,"Vetement 58")) {Inventory_Remove(playerid,"Vetement 58"); SetPlayerSkin(playerid,58);}
+	if(Inventory_HasItem(playerid,"Vetement 59")) {Inventory_Remove(playerid,"Vetement 59"); SetPlayerSkin(playerid,59);}
+	if(Inventory_HasItem(playerid,"Vetement 60")) {Inventory_Remove(playerid,"Vetement 60"); SetPlayerSkin(playerid,60);}
+	if(Inventory_HasItem(playerid,"Vetement 61")) {Inventory_Remove(playerid,"Vetement 61"); SetPlayerSkin(playerid,61);}
+	if(Inventory_HasItem(playerid,"Vetement 62")) {Inventory_Remove(playerid,"Vetement 62"); SetPlayerSkin(playerid,62);}
+	if(Inventory_HasItem(playerid,"Vetement 60")) {Inventory_Remove(playerid,"Vetement 60"); SetPlayerSkin(playerid,60);}
+	if(Inventory_HasItem(playerid,"Vetement 61")) {Inventory_Remove(playerid,"Vetement 61"); SetPlayerSkin(playerid,61);}
+	if(Inventory_HasItem(playerid,"Vetement 62")) {Inventory_Remove(playerid,"Vetement 62"); SetPlayerSkin(playerid,62);}
+	if(Inventory_HasItem(playerid,"Vetement 63")) {Inventory_Remove(playerid,"Vetement 63"); SetPlayerSkin(playerid,63);}
+	if(Inventory_HasItem(playerid,"Vetement 64")) {Inventory_Remove(playerid,"Vetement 64"); SetPlayerSkin(playerid,64);}
+	if(Inventory_HasItem(playerid,"Vetement 65")) {Inventory_Remove(playerid,"Vetement 65"); SetPlayerSkin(playerid,65);}
+	if(Inventory_HasItem(playerid,"Vetement 66")) {Inventory_Remove(playerid,"Vetement 66"); SetPlayerSkin(playerid,66);}
+	if(Inventory_HasItem(playerid,"Vetement 67")) {Inventory_Remove(playerid,"Vetement 67"); SetPlayerSkin(playerid,67);}
+	if(Inventory_HasItem(playerid,"Vetement 68")) {Inventory_Remove(playerid,"Vetement 68"); SetPlayerSkin(playerid,68);}
+	if(Inventory_HasItem(playerid,"Vetement 69")) {Inventory_Remove(playerid,"Vetement 69"); SetPlayerSkin(playerid,69);}
+	if(Inventory_HasItem(playerid,"Vetement 70")) {Inventory_Remove(playerid,"Vetement 70"); SetPlayerSkin(playerid,70);}
+	if(Inventory_HasItem(playerid,"Vetement 71")) {Inventory_Remove(playerid,"Vetement 71"); SetPlayerSkin(playerid,71);}
+	if(Inventory_HasItem(playerid,"Vetement 72")) {Inventory_Remove(playerid,"Vetement 72"); SetPlayerSkin(playerid,72);}
+	if(Inventory_HasItem(playerid,"Vetement 73")) {Inventory_Remove(playerid,"Vetement 73"); SetPlayerSkin(playerid,73);}
+	if(Inventory_HasItem(playerid,"Vetement 74")) {Inventory_Remove(playerid,"Vetement 74"); SetPlayerSkin(playerid,74);}
+	if(Inventory_HasItem(playerid,"Vetement 75")) {Inventory_Remove(playerid,"Vetement 75"); SetPlayerSkin(playerid,75);}
+	if(Inventory_HasItem(playerid,"Vetement 76")) {Inventory_Remove(playerid,"Vetement 76"); SetPlayerSkin(playerid,76);}
+	if(Inventory_HasItem(playerid,"Vetement 77")) {Inventory_Remove(playerid,"Vetement 77"); SetPlayerSkin(playerid,77);}
+	if(Inventory_HasItem(playerid,"Vetement 78")) {Inventory_Remove(playerid,"Vetement 78"); SetPlayerSkin(playerid,78);}
+	if(Inventory_HasItem(playerid,"Vetement 79")) {Inventory_Remove(playerid,"Vetement 79"); SetPlayerSkin(playerid,79);}
+	if(Inventory_HasItem(playerid,"Vetement 80")) {Inventory_Remove(playerid,"Vetement 80"); SetPlayerSkin(playerid,80);}
+	if(Inventory_HasItem(playerid,"Vetement 81")) {Inventory_Remove(playerid,"Vetement 81"); SetPlayerSkin(playerid,81);}
+	if(Inventory_HasItem(playerid,"Vetement 82")) {Inventory_Remove(playerid,"Vetement 82"); SetPlayerSkin(playerid,82);}
+	if(Inventory_HasItem(playerid,"Vetement 83")) {Inventory_Remove(playerid,"Vetement 83"); SetPlayerSkin(playerid,83);}
+	if(Inventory_HasItem(playerid,"Vetement 84")) {Inventory_Remove(playerid,"Vetement 84"); SetPlayerSkin(playerid,84);}
+	if(Inventory_HasItem(playerid,"Vetement 85")) {Inventory_Remove(playerid,"Vetement 85"); SetPlayerSkin(playerid,85);}
+	if(Inventory_HasItem(playerid,"Vetement 86")) {Inventory_Remove(playerid,"Vetement 86"); SetPlayerSkin(playerid,86);}
+	if(Inventory_HasItem(playerid,"Vetement 87")) {Inventory_Remove(playerid,"Vetement 87"); SetPlayerSkin(playerid,87);}
+	if(Inventory_HasItem(playerid,"Vetement 88")) {Inventory_Remove(playerid,"Vetement 88"); SetPlayerSkin(playerid,88);}
+	if(Inventory_HasItem(playerid,"Vetement 89")) {Inventory_Remove(playerid,"Vetement 89"); SetPlayerSkin(playerid,89);}
+	if(Inventory_HasItem(playerid,"Vetement 90")) {Inventory_Remove(playerid,"Vetement 90"); SetPlayerSkin(playerid,90);}
+	if(Inventory_HasItem(playerid,"Vetement 91")) {Inventory_Remove(playerid,"Vetement 91"); SetPlayerSkin(playerid,91);}
+	if(Inventory_HasItem(playerid,"Vetement 92")) {Inventory_Remove(playerid,"Vetement 92"); SetPlayerSkin(playerid,92);}
+	if(Inventory_HasItem(playerid,"Vetement 93")) {Inventory_Remove(playerid,"Vetement 93"); SetPlayerSkin(playerid,93);}
+	if(Inventory_HasItem(playerid,"Vetement 94")) {Inventory_Remove(playerid,"Vetement 94"); SetPlayerSkin(playerid,94);}
+	if(Inventory_HasItem(playerid,"Vetement 95")) {Inventory_Remove(playerid,"Vetement 95"); SetPlayerSkin(playerid,95);}
+	if(Inventory_HasItem(playerid,"Vetement 96")) {Inventory_Remove(playerid,"Vetement 96"); SetPlayerSkin(playerid,96);}
+	if(Inventory_HasItem(playerid,"Vetement 97")) {Inventory_Remove(playerid,"Vetement 97"); SetPlayerSkin(playerid,97);}
+	if(Inventory_HasItem(playerid,"Vetement 98")) {Inventory_Remove(playerid,"Vetement 98"); SetPlayerSkin(playerid,98);}
+	if(Inventory_HasItem(playerid,"Vetement 99")) {Inventory_Remove(playerid,"Vetement 99"); SetPlayerSkin(playerid,99);}
+	if(Inventory_HasItem(playerid,"Vetement 100")) {Inventory_Remove(playerid,"Vetement 100"); SetPlayerSkin(playerid,100);}
+	if(Inventory_HasItem(playerid,"Vetement 101")) {Inventory_Remove(playerid,"Vetement 101"); SetPlayerSkin(playerid,101);}
+	if(Inventory_HasItem(playerid,"Vetement 102")) {Inventory_Remove(playerid,"Vetement 102"); SetPlayerSkin(playerid,102);}
+	if(Inventory_HasItem(playerid,"Vetement 103")) {Inventory_Remove(playerid,"Vetement 103"); SetPlayerSkin(playerid,103);}
+	if(Inventory_HasItem(playerid,"Vetement 104")) {Inventory_Remove(playerid,"Vetement 104"); SetPlayerSkin(playerid,104);}
+	if(Inventory_HasItem(playerid,"Vetement 105")) {Inventory_Remove(playerid,"Vetement 105"); SetPlayerSkin(playerid,105);}
+	if(Inventory_HasItem(playerid,"Vetement 106")) {Inventory_Remove(playerid,"Vetement 106"); SetPlayerSkin(playerid,106);}
+	if(Inventory_HasItem(playerid,"Vetement 107")) {Inventory_Remove(playerid,"Vetement 107"); SetPlayerSkin(playerid,107);}
+	if(Inventory_HasItem(playerid,"Vetement 108")) {Inventory_Remove(playerid,"Vetement 108"); SetPlayerSkin(playerid,108);}
+	if(Inventory_HasItem(playerid,"Vetement 109")) {Inventory_Remove(playerid,"Vetement 109"); SetPlayerSkin(playerid,109);}
+	if(Inventory_HasItem(playerid,"Vetement 110")) {Inventory_Remove(playerid,"Vetement 110"); SetPlayerSkin(playerid,110);}
+	if(Inventory_HasItem(playerid,"Vetement 111")) {Inventory_Remove(playerid,"Vetement 111"); SetPlayerSkin(playerid,111);}
+	if(Inventory_HasItem(playerid,"Vetement 112")) {Inventory_Remove(playerid,"Vetement 112"); SetPlayerSkin(playerid,112);}
+	if(Inventory_HasItem(playerid,"Vetement 113")) {Inventory_Remove(playerid,"Vetement 113"); SetPlayerSkin(playerid,113);}
+	if(Inventory_HasItem(playerid,"Vetement 114")) {Inventory_Remove(playerid,"Vetement 114"); SetPlayerSkin(playerid,114);}
+	if(Inventory_HasItem(playerid,"Vetement 115")) {Inventory_Remove(playerid,"Vetement 115"); SetPlayerSkin(playerid,115);}
+	if(Inventory_HasItem(playerid,"Vetement 116")) {Inventory_Remove(playerid,"Vetement 116"); SetPlayerSkin(playerid,116);}
+	if(Inventory_HasItem(playerid,"Vetement 117")) {Inventory_Remove(playerid,"Vetement 117"); SetPlayerSkin(playerid,117);}
+	if(Inventory_HasItem(playerid,"Vetement 118")) {Inventory_Remove(playerid,"Vetement 118"); SetPlayerSkin(playerid,118);}
+	if(Inventory_HasItem(playerid,"Vetement 119")) {Inventory_Remove(playerid,"Vetement 119"); SetPlayerSkin(playerid,119);}
+	if(Inventory_HasItem(playerid,"Vetement 120")) {Inventory_Remove(playerid,"Vetement 120"); SetPlayerSkin(playerid,120);}
+	if(Inventory_HasItem(playerid,"Vetement 121")) {Inventory_Remove(playerid,"Vetement 121"); SetPlayerSkin(playerid,121);}
+	if(Inventory_HasItem(playerid,"Vetement 122")) {Inventory_Remove(playerid,"Vetement 122"); SetPlayerSkin(playerid,122);}
+	if(Inventory_HasItem(playerid,"Vetement 123")) {Inventory_Remove(playerid,"Vetement 123"); SetPlayerSkin(playerid,123);}
+	if(Inventory_HasItem(playerid,"Vetement 124")) {Inventory_Remove(playerid,"Vetement 124"); SetPlayerSkin(playerid,124);}
+	if(Inventory_HasItem(playerid,"Vetement 125")) {Inventory_Remove(playerid,"Vetement 125"); SetPlayerSkin(playerid,125);}
+	if(Inventory_HasItem(playerid,"Vetement 126")) {Inventory_Remove(playerid,"Vetement 126"); SetPlayerSkin(playerid,126);}
+	if(Inventory_HasItem(playerid,"Vetement 127")) {Inventory_Remove(playerid,"Vetement 127"); SetPlayerSkin(playerid,127);}
+	if(Inventory_HasItem(playerid,"Vetement 128")) {Inventory_Remove(playerid,"Vetement 128"); SetPlayerSkin(playerid,128);}
+	if(Inventory_HasItem(playerid,"Vetement 129")) {Inventory_Remove(playerid,"Vetement 129"); SetPlayerSkin(playerid,129);}
+	if(Inventory_HasItem(playerid,"Vetement 130")) {Inventory_Remove(playerid,"Vetement 130"); SetPlayerSkin(playerid,130);}
+	if(Inventory_HasItem(playerid,"Vetement 131")) {Inventory_Remove(playerid,"Vetement 131"); SetPlayerSkin(playerid,131);}
+	if(Inventory_HasItem(playerid,"Vetement 132")) {Inventory_Remove(playerid,"Vetement 132"); SetPlayerSkin(playerid,132);}
+	if(Inventory_HasItem(playerid,"Vetement 133")) {Inventory_Remove(playerid,"Vetement 133"); SetPlayerSkin(playerid,133);}
+	if(Inventory_HasItem(playerid,"Vetement 134")) {Inventory_Remove(playerid,"Vetement 134"); SetPlayerSkin(playerid,134);}
+	if(Inventory_HasItem(playerid,"Vetement 135")) {Inventory_Remove(playerid,"Vetement 135"); SetPlayerSkin(playerid,135);}
+	if(Inventory_HasItem(playerid,"Vetement 136")) {Inventory_Remove(playerid,"Vetement 136"); SetPlayerSkin(playerid,136);}
+	if(Inventory_HasItem(playerid,"Vetement 137")) {Inventory_Remove(playerid,"Vetement 137"); SetPlayerSkin(playerid,137);}
+	if(Inventory_HasItem(playerid,"Vetement 138")) {Inventory_Remove(playerid,"Vetement 138"); SetPlayerSkin(playerid,138);}
+	if(Inventory_HasItem(playerid,"Vetement 139")) {Inventory_Remove(playerid,"Vetement 139"); SetPlayerSkin(playerid,139);}
+	if(Inventory_HasItem(playerid,"Vetement 140")) {Inventory_Remove(playerid,"Vetement 140"); SetPlayerSkin(playerid,140);}
+	if(Inventory_HasItem(playerid,"Vetement 141")) {Inventory_Remove(playerid,"Vetement 141"); SetPlayerSkin(playerid,141);}
+	if(Inventory_HasItem(playerid,"Vetement 142")) {Inventory_Remove(playerid,"Vetement 142"); SetPlayerSkin(playerid,142);}
+	if(Inventory_HasItem(playerid,"Vetement 143")) {Inventory_Remove(playerid,"Vetement 143"); SetPlayerSkin(playerid,143);}
+	if(Inventory_HasItem(playerid,"Vetement 144")) {Inventory_Remove(playerid,"Vetement 144"); SetPlayerSkin(playerid,144);}
+	if(Inventory_HasItem(playerid,"Vetement 145")) {Inventory_Remove(playerid,"Vetement 145"); SetPlayerSkin(playerid,145);}
+	if(Inventory_HasItem(playerid,"Vetement 146")) {Inventory_Remove(playerid,"Vetement 146"); SetPlayerSkin(playerid,146);}
+	if(Inventory_HasItem(playerid,"Vetement 147")) {Inventory_Remove(playerid,"Vetement 147"); SetPlayerSkin(playerid,147);}
+	if(Inventory_HasItem(playerid,"Vetement 148")) {Inventory_Remove(playerid,"Vetement 148"); SetPlayerSkin(playerid,148);}
+	if(Inventory_HasItem(playerid,"Vetement 149")) {Inventory_Remove(playerid,"Vetement 149"); SetPlayerSkin(playerid,149);}
+	if(Inventory_HasItem(playerid,"Vetement 150")) {Inventory_Remove(playerid,"Vetement 150"); SetPlayerSkin(playerid,150);}
+	if(Inventory_HasItem(playerid,"Vetement 151")) {Inventory_Remove(playerid,"Vetement 151"); SetPlayerSkin(playerid,151);}
+	if(Inventory_HasItem(playerid,"Vetement 152")) {Inventory_Remove(playerid,"Vetement 152"); SetPlayerSkin(playerid,152);}
+	if(Inventory_HasItem(playerid,"Vetement 153")) {Inventory_Remove(playerid,"Vetement 153"); SetPlayerSkin(playerid,153);}
+	if(Inventory_HasItem(playerid,"Vetement 154")) {Inventory_Remove(playerid,"Vetement 154"); SetPlayerSkin(playerid,154);}
+	if(Inventory_HasItem(playerid,"Vetement 155")) {Inventory_Remove(playerid,"Vetement 155"); SetPlayerSkin(playerid,155);}
+	if(Inventory_HasItem(playerid,"Vetement 156")) {Inventory_Remove(playerid,"Vetement 156"); SetPlayerSkin(playerid,156);}
+	if(Inventory_HasItem(playerid,"Vetement 157")) {Inventory_Remove(playerid,"Vetement 157"); SetPlayerSkin(playerid,157);}
+	if(Inventory_HasItem(playerid,"Vetement 158")) {Inventory_Remove(playerid,"Vetement 158"); SetPlayerSkin(playerid,158);}
+	if(Inventory_HasItem(playerid,"Vetement 159")) {Inventory_Remove(playerid,"Vetement 159"); SetPlayerSkin(playerid,159);}
+	if(Inventory_HasItem(playerid,"Vetement 160")) {Inventory_Remove(playerid,"Vetement 160"); SetPlayerSkin(playerid,160);}
+	if(Inventory_HasItem(playerid,"Vetement 161")) {Inventory_Remove(playerid,"Vetement 161"); SetPlayerSkin(playerid,161);}
+	if(Inventory_HasItem(playerid,"Vetement 162")) {Inventory_Remove(playerid,"Vetement 162"); SetPlayerSkin(playerid,162);}
+	if(Inventory_HasItem(playerid,"Vetement 160")) {Inventory_Remove(playerid,"Vetement 160"); SetPlayerSkin(playerid,160);}
+	if(Inventory_HasItem(playerid,"Vetement 161")) {Inventory_Remove(playerid,"Vetement 161"); SetPlayerSkin(playerid,161);}
+	if(Inventory_HasItem(playerid,"Vetement 162")) {Inventory_Remove(playerid,"Vetement 162"); SetPlayerSkin(playerid,162);}
+	if(Inventory_HasItem(playerid,"Vetement 163")) {Inventory_Remove(playerid,"Vetement 163"); SetPlayerSkin(playerid,163);}
+	if(Inventory_HasItem(playerid,"Vetement 164")) {Inventory_Remove(playerid,"Vetement 164"); SetPlayerSkin(playerid,164);}
+	if(Inventory_HasItem(playerid,"Vetement 165")) {Inventory_Remove(playerid,"Vetement 165"); SetPlayerSkin(playerid,165);}
+	if(Inventory_HasItem(playerid,"Vetement 166")) {Inventory_Remove(playerid,"Vetement 166"); SetPlayerSkin(playerid,166);}
+	if(Inventory_HasItem(playerid,"Vetement 167")) {Inventory_Remove(playerid,"Vetement 167"); SetPlayerSkin(playerid,167);}
+	if(Inventory_HasItem(playerid,"Vetement 168")) {Inventory_Remove(playerid,"Vetement 168"); SetPlayerSkin(playerid,168);}
+	if(Inventory_HasItem(playerid,"Vetement 169")) {Inventory_Remove(playerid,"Vetement 169"); SetPlayerSkin(playerid,169);}
+	if(Inventory_HasItem(playerid,"Vetement 170")) {Inventory_Remove(playerid,"Vetement 170"); SetPlayerSkin(playerid,170);}
+	if(Inventory_HasItem(playerid,"Vetement 171")) {Inventory_Remove(playerid,"Vetement 171"); SetPlayerSkin(playerid,171);}
+	if(Inventory_HasItem(playerid,"Vetement 172")) {Inventory_Remove(playerid,"Vetement 172"); SetPlayerSkin(playerid,172);}
+	if(Inventory_HasItem(playerid,"Vetement 173")) {Inventory_Remove(playerid,"Vetement 173"); SetPlayerSkin(playerid,173);}
+	if(Inventory_HasItem(playerid,"Vetement 174")) {Inventory_Remove(playerid,"Vetement 174"); SetPlayerSkin(playerid,174);}
+	if(Inventory_HasItem(playerid,"Vetement 175")) {Inventory_Remove(playerid,"Vetement 175"); SetPlayerSkin(playerid,175);}
+	if(Inventory_HasItem(playerid,"Vetement 176")) {Inventory_Remove(playerid,"Vetement 176"); SetPlayerSkin(playerid,176);}
+	if(Inventory_HasItem(playerid,"Vetement 177")) {Inventory_Remove(playerid,"Vetement 177"); SetPlayerSkin(playerid,177);}
+	if(Inventory_HasItem(playerid,"Vetement 178")) {Inventory_Remove(playerid,"Vetement 178"); SetPlayerSkin(playerid,178);}
+	if(Inventory_HasItem(playerid,"Vetement 179")) {Inventory_Remove(playerid,"Vetement 179"); SetPlayerSkin(playerid,179);}
+	if(Inventory_HasItem(playerid,"Vetement 180")) {Inventory_Remove(playerid,"Vetement 180"); SetPlayerSkin(playerid,180);}
+	if(Inventory_HasItem(playerid,"Vetement 181")) {Inventory_Remove(playerid,"Vetement 181"); SetPlayerSkin(playerid,181);}
+	if(Inventory_HasItem(playerid,"Vetement 182")) {Inventory_Remove(playerid,"Vetement 182"); SetPlayerSkin(playerid,182);}
+	if(Inventory_HasItem(playerid,"Vetement 183")) {Inventory_Remove(playerid,"Vetement 183"); SetPlayerSkin(playerid,183);}
+	if(Inventory_HasItem(playerid,"Vetement 184")) {Inventory_Remove(playerid,"Vetement 184"); SetPlayerSkin(playerid,184);}
+	if(Inventory_HasItem(playerid,"Vetement 185")) {Inventory_Remove(playerid,"Vetement 185"); SetPlayerSkin(playerid,185);}
+	if(Inventory_HasItem(playerid,"Vetement 186")) {Inventory_Remove(playerid,"Vetement 186"); SetPlayerSkin(playerid,186);}
+	if(Inventory_HasItem(playerid,"Vetement 187")) {Inventory_Remove(playerid,"Vetement 187"); SetPlayerSkin(playerid,187);}
+	if(Inventory_HasItem(playerid,"Vetement 188")) {Inventory_Remove(playerid,"Vetement 188"); SetPlayerSkin(playerid,188);}
+	if(Inventory_HasItem(playerid,"Vetement 189")) {Inventory_Remove(playerid,"Vetement 189"); SetPlayerSkin(playerid,189);}
+	if(Inventory_HasItem(playerid,"Vetement 190")) {Inventory_Remove(playerid,"Vetement 190"); SetPlayerSkin(playerid,190);}
+	if(Inventory_HasItem(playerid,"Vetement 191")) {Inventory_Remove(playerid,"Vetement 191"); SetPlayerSkin(playerid,191);}
+	if(Inventory_HasItem(playerid,"Vetement 192")) {Inventory_Remove(playerid,"Vetement 192"); SetPlayerSkin(playerid,192);}
+	if(Inventory_HasItem(playerid,"Vetement 193")) {Inventory_Remove(playerid,"Vetement 193"); SetPlayerSkin(playerid,193);}
+	if(Inventory_HasItem(playerid,"Vetement 194")) {Inventory_Remove(playerid,"Vetement 194"); SetPlayerSkin(playerid,194);}
+	if(Inventory_HasItem(playerid,"Vetement 195")) {Inventory_Remove(playerid,"Vetement 195"); SetPlayerSkin(playerid,195);}
+	if(Inventory_HasItem(playerid,"Vetement 196")) {Inventory_Remove(playerid,"Vetement 196"); SetPlayerSkin(playerid,196);}
+	if(Inventory_HasItem(playerid,"Vetement 197")) {Inventory_Remove(playerid,"Vetement 197"); SetPlayerSkin(playerid,197);}
+	if(Inventory_HasItem(playerid,"Vetement 198")) {Inventory_Remove(playerid,"Vetement 198"); SetPlayerSkin(playerid,198);}
+	if(Inventory_HasItem(playerid,"Vetement 199")) {Inventory_Remove(playerid,"Vetement 199"); SetPlayerSkin(playerid,199);}
+	if(Inventory_HasItem(playerid,"Vetement 200")) {Inventory_Remove(playerid,"Vetement 200"); SetPlayerSkin(playerid,200);}
+	if(Inventory_HasItem(playerid,"Vetement 201")) {Inventory_Remove(playerid,"Vetement 201"); SetPlayerSkin(playerid,201);}
+	if(Inventory_HasItem(playerid,"Vetement 202")) {Inventory_Remove(playerid,"Vetement 202"); SetPlayerSkin(playerid,202);}
+	if(Inventory_HasItem(playerid,"Vetement 203")) {Inventory_Remove(playerid,"Vetement 203"); SetPlayerSkin(playerid,203);}
+	if(Inventory_HasItem(playerid,"Vetement 204")) {Inventory_Remove(playerid,"Vetement 204"); SetPlayerSkin(playerid,204);}
+	if(Inventory_HasItem(playerid,"Vetement 205")) {Inventory_Remove(playerid,"Vetement 205"); SetPlayerSkin(playerid,205);}
+	if(Inventory_HasItem(playerid,"Vetement 206")) {Inventory_Remove(playerid,"Vetement 206"); SetPlayerSkin(playerid,206);}
+	if(Inventory_HasItem(playerid,"Vetement 207")) {Inventory_Remove(playerid,"Vetement 207"); SetPlayerSkin(playerid,207);}
+	if(Inventory_HasItem(playerid,"Vetement 208")) {Inventory_Remove(playerid,"Vetement 208"); SetPlayerSkin(playerid,208);}
+	if(Inventory_HasItem(playerid,"Vetement 209")) {Inventory_Remove(playerid,"Vetement 209"); SetPlayerSkin(playerid,209);}
+	if(Inventory_HasItem(playerid,"Vetement 210")) {Inventory_Remove(playerid,"Vetement 210"); SetPlayerSkin(playerid,210);}
+	if(Inventory_HasItem(playerid,"Vetement 211")) {Inventory_Remove(playerid,"Vetement 211"); SetPlayerSkin(playerid,211);}
+	if(Inventory_HasItem(playerid,"Vetement 212")) {Inventory_Remove(playerid,"Vetement 212"); SetPlayerSkin(playerid,212);}
+	if(Inventory_HasItem(playerid,"Vetement 213")) {Inventory_Remove(playerid,"Vetement 213"); SetPlayerSkin(playerid,213);}
+	if(Inventory_HasItem(playerid,"Vetement 214")) {Inventory_Remove(playerid,"Vetement 214"); SetPlayerSkin(playerid,214);}
+	if(Inventory_HasItem(playerid,"Vetement 215")) {Inventory_Remove(playerid,"Vetement 215"); SetPlayerSkin(playerid,215);}
+	if(Inventory_HasItem(playerid,"Vetement 216")) {Inventory_Remove(playerid,"Vetement 216"); SetPlayerSkin(playerid,216);}
+	if(Inventory_HasItem(playerid,"Vetement 217")) {Inventory_Remove(playerid,"Vetement 217"); SetPlayerSkin(playerid,217);}
+	if(Inventory_HasItem(playerid,"Vetement 218")) {Inventory_Remove(playerid,"Vetement 218"); SetPlayerSkin(playerid,218);}
+	if(Inventory_HasItem(playerid,"Vetement 219")) {Inventory_Remove(playerid,"Vetement 219"); SetPlayerSkin(playerid,219);}
+	if(Inventory_HasItem(playerid,"Vetement 220")) {Inventory_Remove(playerid,"Vetement 220"); SetPlayerSkin(playerid,220);}
+	if(Inventory_HasItem(playerid,"Vetement 221")) {Inventory_Remove(playerid,"Vetement 221"); SetPlayerSkin(playerid,221);}
+	if(Inventory_HasItem(playerid,"Vetement 222")) {Inventory_Remove(playerid,"Vetement 222"); SetPlayerSkin(playerid,222);}
+	if(Inventory_HasItem(playerid,"Vetement 223")) {Inventory_Remove(playerid,"Vetement 223"); SetPlayerSkin(playerid,223);}
+	if(Inventory_HasItem(playerid,"Vetement 224")) {Inventory_Remove(playerid,"Vetement 224"); SetPlayerSkin(playerid,224);}
+	if(Inventory_HasItem(playerid,"Vetement 225")) {Inventory_Remove(playerid,"Vetement 225"); SetPlayerSkin(playerid,225);}
+	if(Inventory_HasItem(playerid,"Vetement 226")) {Inventory_Remove(playerid,"Vetement 226"); SetPlayerSkin(playerid,226);}
+	if(Inventory_HasItem(playerid,"Vetement 227")) {Inventory_Remove(playerid,"Vetement 227"); SetPlayerSkin(playerid,227);}
+	if(Inventory_HasItem(playerid,"Vetement 228")) {Inventory_Remove(playerid,"Vetement 228"); SetPlayerSkin(playerid,228);}
+	if(Inventory_HasItem(playerid,"Vetement 229")) {Inventory_Remove(playerid,"Vetement 229"); SetPlayerSkin(playerid,229);}
+	if(Inventory_HasItem(playerid,"Vetement 230")) {Inventory_Remove(playerid,"Vetement 230"); SetPlayerSkin(playerid,230);}
+	if(Inventory_HasItem(playerid,"Vetement 231")) {Inventory_Remove(playerid,"Vetement 231"); SetPlayerSkin(playerid,231);}
+	if(Inventory_HasItem(playerid,"Vetement 232")) {Inventory_Remove(playerid,"Vetement 232"); SetPlayerSkin(playerid,232);}
+	if(Inventory_HasItem(playerid,"Vetement 233")) {Inventory_Remove(playerid,"Vetement 233"); SetPlayerSkin(playerid,233);}
+	if(Inventory_HasItem(playerid,"Vetement 234")) {Inventory_Remove(playerid,"Vetement 234"); SetPlayerSkin(playerid,234);}
+	if(Inventory_HasItem(playerid,"Vetement 235")) {Inventory_Remove(playerid,"Vetement 235"); SetPlayerSkin(playerid,235);}
+	if(Inventory_HasItem(playerid,"Vetement 236")) {Inventory_Remove(playerid,"Vetement 236"); SetPlayerSkin(playerid,236);}
+	if(Inventory_HasItem(playerid,"Vetement 237")) {Inventory_Remove(playerid,"Vetement 237"); SetPlayerSkin(playerid,237);}
+	if(Inventory_HasItem(playerid,"Vetement 238")) {Inventory_Remove(playerid,"Vetement 238"); SetPlayerSkin(playerid,238);}
+	if(Inventory_HasItem(playerid,"Vetement 239")) {Inventory_Remove(playerid,"Vetement 239"); SetPlayerSkin(playerid,239);}
+	if(Inventory_HasItem(playerid,"Vetement 240")) {Inventory_Remove(playerid,"Vetement 240"); SetPlayerSkin(playerid,240);}
+	if(Inventory_HasItem(playerid,"Vetement 241")) {Inventory_Remove(playerid,"Vetement 241"); SetPlayerSkin(playerid,241);}
+	if(Inventory_HasItem(playerid,"Vetement 242")) {Inventory_Remove(playerid,"Vetement 242"); SetPlayerSkin(playerid,242);}
+	if(Inventory_HasItem(playerid,"Vetement 243")) {Inventory_Remove(playerid,"Vetement 243"); SetPlayerSkin(playerid,243);}
+	if(Inventory_HasItem(playerid,"Vetement 244")) {Inventory_Remove(playerid,"Vetement 244"); SetPlayerSkin(playerid,244);}
+	if(Inventory_HasItem(playerid,"Vetement 245")) {Inventory_Remove(playerid,"Vetement 245"); SetPlayerSkin(playerid,245);}
+	if(Inventory_HasItem(playerid,"Vetement 246")) {Inventory_Remove(playerid,"Vetement 246"); SetPlayerSkin(playerid,246);}
+	if(Inventory_HasItem(playerid,"Vetement 247")) {Inventory_Remove(playerid,"Vetement 247"); SetPlayerSkin(playerid,247);}
+	if(Inventory_HasItem(playerid,"Vetement 248")) {Inventory_Remove(playerid,"Vetement 248"); SetPlayerSkin(playerid,248);}
+	if(Inventory_HasItem(playerid,"Vetement 249")) {Inventory_Remove(playerid,"Vetement 249"); SetPlayerSkin(playerid,249);}
+	if(Inventory_HasItem(playerid,"Vetement 250")) {Inventory_Remove(playerid,"Vetement 250"); SetPlayerSkin(playerid,250);}
+	if(Inventory_HasItem(playerid,"Vetement 251")) {Inventory_Remove(playerid,"Vetement 251"); SetPlayerSkin(playerid,251);}
+	if(Inventory_HasItem(playerid,"Vetement 252")) {Inventory_Remove(playerid,"Vetement 252"); SetPlayerSkin(playerid,252);}
+	if(Inventory_HasItem(playerid,"Vetement 253")) {Inventory_Remove(playerid,"Vetement 253"); SetPlayerSkin(playerid,253);}
+	if(Inventory_HasItem(playerid,"Vetement 254")) {Inventory_Remove(playerid,"Vetement 254"); SetPlayerSkin(playerid,254);}
+	if(Inventory_HasItem(playerid,"Vetement 255")) {Inventory_Remove(playerid,"Vetement 255"); SetPlayerSkin(playerid,255);}
+	if(Inventory_HasItem(playerid,"Vetement 256")) {Inventory_Remove(playerid,"Vetement 256"); SetPlayerSkin(playerid,256);}
+	if(Inventory_HasItem(playerid,"Vetement 257")) {Inventory_Remove(playerid,"Vetement 257"); SetPlayerSkin(playerid,257);}
+	if(Inventory_HasItem(playerid,"Vetement 258")) {Inventory_Remove(playerid,"Vetement 258"); SetPlayerSkin(playerid,258);}
+	if(Inventory_HasItem(playerid,"Vetement 259")) {Inventory_Remove(playerid,"Vetement 259"); SetPlayerSkin(playerid,259);}
+	if(Inventory_HasItem(playerid,"Vetement 260")) {Inventory_Remove(playerid,"Vetement 260"); SetPlayerSkin(playerid,260);}
+	if(Inventory_HasItem(playerid,"Vetement 261")) {Inventory_Remove(playerid,"Vetement 261"); SetPlayerSkin(playerid,261);}
+	if(Inventory_HasItem(playerid,"Vetement 262")) {Inventory_Remove(playerid,"Vetement 262"); SetPlayerSkin(playerid,262);}
+	if(Inventory_HasItem(playerid,"Vetement 260")) {Inventory_Remove(playerid,"Vetement 260"); SetPlayerSkin(playerid,260);}
+	if(Inventory_HasItem(playerid,"Vetement 261")) {Inventory_Remove(playerid,"Vetement 261"); SetPlayerSkin(playerid,261);}
+	if(Inventory_HasItem(playerid,"Vetement 262")) {Inventory_Remove(playerid,"Vetement 262"); SetPlayerSkin(playerid,262);}
+	if(Inventory_HasItem(playerid,"Vetement 263")) {Inventory_Remove(playerid,"Vetement 263"); SetPlayerSkin(playerid,263);}
+	if(Inventory_HasItem(playerid,"Vetement 264")) {Inventory_Remove(playerid,"Vetement 264"); SetPlayerSkin(playerid,264);}
+	if(Inventory_HasItem(playerid,"Vetement 265")) {Inventory_Remove(playerid,"Vetement 265"); SetPlayerSkin(playerid,265);}
+	if(Inventory_HasItem(playerid,"Vetement 266")) {Inventory_Remove(playerid,"Vetement 266"); SetPlayerSkin(playerid,266);}
+	if(Inventory_HasItem(playerid,"Vetement 267")) {Inventory_Remove(playerid,"Vetement 267"); SetPlayerSkin(playerid,267);}
+	if(Inventory_HasItem(playerid,"Vetement 268")) {Inventory_Remove(playerid,"Vetement 268"); SetPlayerSkin(playerid,268);}
+	if(Inventory_HasItem(playerid,"Vetement 269")) {Inventory_Remove(playerid,"Vetement 269"); SetPlayerSkin(playerid,269);}
+	if(Inventory_HasItem(playerid,"Vetement 270")) {Inventory_Remove(playerid,"Vetement 270"); SetPlayerSkin(playerid,270);}
+	if(Inventory_HasItem(playerid,"Vetement 271")) {Inventory_Remove(playerid,"Vetement 271"); SetPlayerSkin(playerid,271);}
+	if(Inventory_HasItem(playerid,"Vetement 272")) {Inventory_Remove(playerid,"Vetement 272"); SetPlayerSkin(playerid,272);}
+	if(Inventory_HasItem(playerid,"Vetement 273")) {Inventory_Remove(playerid,"Vetement 273"); SetPlayerSkin(playerid,273);}
+	if(Inventory_HasItem(playerid,"Vetement 274")) {Inventory_Remove(playerid,"Vetement 274"); SetPlayerSkin(playerid,274);}
+	if(Inventory_HasItem(playerid,"Vetement 275")) {Inventory_Remove(playerid,"Vetement 275"); SetPlayerSkin(playerid,275);}
+	if(Inventory_HasItem(playerid,"Vetement 276")) {Inventory_Remove(playerid,"Vetement 276"); SetPlayerSkin(playerid,276);}
+	if(Inventory_HasItem(playerid,"Vetement 277")) {Inventory_Remove(playerid,"Vetement 277"); SetPlayerSkin(playerid,277);}
+	if(Inventory_HasItem(playerid,"Vetement 278")) {Inventory_Remove(playerid,"Vetement 278"); SetPlayerSkin(playerid,278);}
+	if(Inventory_HasItem(playerid,"Vetement 279")) {Inventory_Remove(playerid,"Vetement 279"); SetPlayerSkin(playerid,279);}
+	if(Inventory_HasItem(playerid,"Vetement 280")) {Inventory_Remove(playerid,"Vetement 280"); SetPlayerSkin(playerid,280);}
+	if(Inventory_HasItem(playerid,"Vetement 281")) {Inventory_Remove(playerid,"Vetement 281"); SetPlayerSkin(playerid,281);}
+	if(Inventory_HasItem(playerid,"Vetement 282")) {Inventory_Remove(playerid,"Vetement 282"); SetPlayerSkin(playerid,282);}
+	if(Inventory_HasItem(playerid,"Vetement 283")) {Inventory_Remove(playerid,"Vetement 283"); SetPlayerSkin(playerid,283);}
+	if(Inventory_HasItem(playerid,"Vetement 284")) {Inventory_Remove(playerid,"Vetement 284"); SetPlayerSkin(playerid,284);}
+	if(Inventory_HasItem(playerid,"Vetement 285")) {Inventory_Remove(playerid,"Vetement 285"); SetPlayerSkin(playerid,285);}
+	if(Inventory_HasItem(playerid,"Vetement 286")) {Inventory_Remove(playerid,"Vetement 286"); SetPlayerSkin(playerid,286);}
+	if(Inventory_HasItem(playerid,"Vetement 287")) {Inventory_Remove(playerid,"Vetement 287"); SetPlayerSkin(playerid,287);}
+	if(Inventory_HasItem(playerid,"Vetement 288")) {Inventory_Remove(playerid,"Vetement 288"); SetPlayerSkin(playerid,288);}
+	if(Inventory_HasItem(playerid,"Vetement 289")) {Inventory_Remove(playerid,"Vetement 289"); SetPlayerSkin(playerid,289);}
+	if(Inventory_HasItem(playerid,"Vetement 290")) {Inventory_Remove(playerid,"Vetement 290"); SetPlayerSkin(playerid,290);}
+	if(Inventory_HasItem(playerid,"Vetement 291")) {Inventory_Remove(playerid,"Vetement 291"); SetPlayerSkin(playerid,291);}
+	if(Inventory_HasItem(playerid,"Vetement 292")) {Inventory_Remove(playerid,"Vetement 292"); SetPlayerSkin(playerid,292);}
+	if(Inventory_HasItem(playerid,"Vetement 293")) {Inventory_Remove(playerid,"Vetement 293"); SetPlayerSkin(playerid,293);}
+	if(Inventory_HasItem(playerid,"Vetement 294")) {Inventory_Remove(playerid,"Vetement 294"); SetPlayerSkin(playerid,294);}
+	if(Inventory_HasItem(playerid,"Vetement 295")) {Inventory_Remove(playerid,"Vetement 295"); SetPlayerSkin(playerid,295);}
+	if(Inventory_HasItem(playerid,"Vetement 296")) {Inventory_Remove(playerid,"Vetement 296"); SetPlayerSkin(playerid,296);}
+	if(Inventory_HasItem(playerid,"Vetement 297")) {Inventory_Remove(playerid,"Vetement 297"); SetPlayerSkin(playerid,297);}
+	if(Inventory_HasItem(playerid,"Vetement 298")) {Inventory_Remove(playerid,"Vetement 298"); SetPlayerSkin(playerid,298);}
+	if(Inventory_HasItem(playerid,"Vetement 299")) {Inventory_Remove(playerid,"Vetement 299"); SetPlayerSkin(playerid,299);}
+	if(Inventory_HasItem(playerid,"Vetement 300")) {Inventory_Remove(playerid,"Vetement 300"); SetPlayerSkin(playerid,300);}
+	if(Inventory_HasItem(playerid,"Vetement 301")) {Inventory_Remove(playerid,"Vetement 301"); SetPlayerSkin(playerid,301);}
+	if(Inventory_HasItem(playerid,"Vetement 302")) {Inventory_Remove(playerid,"Vetement 302"); SetPlayerSkin(playerid,302);}
+	if(Inventory_HasItem(playerid,"Vetement 303")) {Inventory_Remove(playerid,"Vetement 303"); SetPlayerSkin(playerid,303);}
+	if(Inventory_HasItem(playerid,"Vetement 304")) {Inventory_Remove(playerid,"Vetement 304"); SetPlayerSkin(playerid,304);}
+	if(Inventory_HasItem(playerid,"Vetement 305")) {Inventory_Remove(playerid,"Vetement 305"); SetPlayerSkin(playerid,305);}
+	if(Inventory_HasItem(playerid,"Vetement 306")) {Inventory_Remove(playerid,"Vetement 306"); SetPlayerSkin(playerid,306);}
+	if(Inventory_HasItem(playerid,"Vetement 307")) {Inventory_Remove(playerid,"Vetement 307"); SetPlayerSkin(playerid,307);}
+	if(Inventory_HasItem(playerid,"Vetement 308")) {Inventory_Remove(playerid,"Vetement 308"); SetPlayerSkin(playerid,308);}
+	if(Inventory_HasItem(playerid,"Vetement 309")) {Inventory_Remove(playerid,"Vetement 309"); SetPlayerSkin(playerid,309);}
+	if(Inventory_HasItem(playerid,"Vetement 310")) {Inventory_Remove(playerid,"Vetement 310"); SetPlayerSkin(playerid,310);}
+	if(Inventory_HasItem(playerid,"Vetement 311")) {Inventory_Remove(playerid,"Vetement 311"); SetPlayerSkin(playerid,311);}
+	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	return 1;
+}
+//job nouveau petrolier
+CMD:petrolier(playerid, params[])
+{
+    if (PlayerData[playerid][pJob] != JOB_PETROLIER)
+	    return SendErrorMessage(playerid, "Vous avez pas le job approprié.");
+	if (!IsPlayerNearPetrol(playerid))
+	    return SendErrorMessage(playerid, "Vous devez être proche du lieu de prendre le pétrol");
+	if (PlayerData[playerid][pPetrol])
+	{
+	    PlayerData[playerid][pPetrol] = false;
+	    PlayerData[playerid][pPetrolCount] = 0;
+		RemovePlayerAttachedObject(playerid, 4);
+	    SendServerMessage(playerid, "Vous avez fini votre job.");
+		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+	}
+	else
+	{
+	    PlayerData[playerid][pPetrol] = true;
+        PlayerData[playerid][pPetrolCount] = 0;
+	}
+	return 1;
+}
+CMD:tun(playerid,params[])
+{
+	new car = GetPlayerVehicleID(playerid);
+	if(Inventory_HasItem(playerid,"dual muffler"))
+	{
+		if(pmodelid[playerid] == 518||pmodelid[playerid] == 415||pmodelid[playerid] == 542||pmodelid[playerid] == 546||pmodelid[playerid] == 400||pmodelid[playerid] == 517||pmodelid[playerid] == 603||pmodelid[playerid] == 426||pmodelid[playerid] == 436||pmodelid[playerid] == 547||pmodelid[playerid] == 405||pmodelid[playerid] == 550||pmodelid[playerid] == 549 || pmodelid[playerid] == 477) // zr-350
+       	{
+            AddVehicleComponent(car,1019);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			Inventory_Remove(playerid, "dual muffler",1);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		}
+	}
+	if(Inventory_HasItem(playerid,"improved muffler"))
+	{
+	   	if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 527 || pmodelid[playerid] == 542 || pmodelid[playerid] == 589 || pmodelid[playerid] == 400 || pmodelid[playerid] == 603 || pmodelid[playerid] == 436 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477 || pmodelid[playerid] == 517) // majestic
+        {
+            AddVehicleComponent(car,1020);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+            SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "improved muffler",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"medium muffler"))
+	{
+       	if(pmodelid[playerid] == 527 || pmodelid[playerid] == 542 || pmodelid[playerid] == 400 || pmodelid[playerid] == 426 || pmodelid[playerid] == 436 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 477) // zr350
+        {
+            AddVehicleComponent(car,1021);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+            Inventory_Remove(playerid, "medium muffler",1);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		}
+	}
+	if(Inventory_HasItem(playerid,"small muffler"))
+	{
+	   	if(pmodelid[playerid] == 436) // previon
+	   	{
+			AddVehicleComponent(car,1022);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+            Inventory_Remove(playerid, "small muffler",1);
+            SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		}
+	}
+	if(Inventory_HasItem(playerid,"exhaust pipe"))
+	{
+       	if(pmodelid[playerid] == 415 || pmodelid[playerid] == 518 || pmodelid[playerid] == 527 || pmodelid[playerid] == 542 || pmodelid[playerid] == 589 || pmodelid[playerid] == 400 || pmodelid[playerid] == 603 || pmodelid[playerid] == 546 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477 || pmodelid[playerid] == 517) // majestic
+       	{
+			AddVehicleComponent(car,1018);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+            Inventory_Remove(playerid, "exhaust pipe",1);
+            SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		}
+	}
+	if(Inventory_HasItem(playerid,"double small pipe"))
+	{
+		if(pmodelid[playerid] == 562)
+		{
+		   	AddVehicleComponent(car,1034);
+		   	PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double small pipe",1);
+		}
+		if(pmodelid[playerid] == 565)
+		{
+			AddVehicleComponent(car,1046);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "double small pipe",1);
+		}
+		if(pmodelid[playerid] == 559)
+		{
+			AddVehicleComponent(car,1065);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "double small pipe",1);
+		}
+		if(pmodelid[playerid] == 561)
+		{
+			AddVehicleComponent(car,1064);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "double small pipe",1);
+		}
+		if(pmodelid[playerid] == 560)
+		{
+			AddVehicleComponent(car,1028);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "double small pipe",1);
+		}
+		if(pmodelid[playerid] == 558)
+		{
+			AddVehicleComponent(car,1089);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "double small pipe",1);
+	    }
+	}
+	if(Inventory_HasItem(playerid,"double large pipe"))
+	{
+		if(pmodelid[playerid] == 562)
+		{
+		    AddVehicleComponent(car,1037);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double large pipe",1);
+		}
+		if(pmodelid[playerid] == 565)
+		{
+		    AddVehicleComponent(car,1045);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double large pipe",1);
+		}
+		if(pmodelid[playerid] == 559)
+		{
+		    AddVehicleComponent(car,1066);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double large pipe",1);
+		}
+		if(pmodelid[playerid] == 561)
+		{
+		    AddVehicleComponent(car,1059);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double large pipe",1);
+		}
+		if(pmodelid[playerid] == 560)
+		{
+		    AddVehicleComponent(car,1029);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double large pipe",1);
+		}
+		if(pmodelid[playerid] == 558)
+		{
+		    AddVehicleComponent(car,1092);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double large pipe",1);
+		}
+	}//9008
+	if(Inventory_HasItem(playerid,"up pipe"))
+	{
+        if(pmodelid[playerid] == 575) // Brodway
+        {
+            AddVehicleComponent(car,1044);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+          	SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "up pipe",1);
+		}
+		else if(pmodelid[playerid] == 534)// Remington
+		{
+		    AddVehicleComponent(car,1126);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "up pipe",1);
+		}
+		else if(pmodelid[playerid] == 567)// Savanna
+		{
+		    AddVehicleComponent(car,1129);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+	        SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "up pipe",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+		    AddVehicleComponent(car,1104);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "up pipe",1);
+		}
+		else if(pmodelid[playerid] == 535) // Slamvan
+		{
+ 			AddVehicleComponent(car,1113);
+ 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "up pipe",1);
+		}
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+		    AddVehicleComponent(car,1136);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		   	SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "up pipe",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"double long pipe"))
+	{
+        if(pmodelid[playerid] == 575) // Brodway
+        {
+            AddVehicleComponent(car,1043);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "double long pipe",1);
+		}
+		else if(pmodelid[playerid] == 534)// Remington
+		{
+		    AddVehicleComponent(car,1127);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double long pipe",1);
+		}
+		else if(pmodelid[playerid] == 567)// Savanna
+		{
+		    AddVehicleComponent(car,1132);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double long pipe",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+		    AddVehicleComponent(car,1105);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double long pipe",1);
+		}
+
+		else if(pmodelid[playerid] == 535) // Slamvan
+		{
+		    AddVehicleComponent(car,1114);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double long pipe",1);
+		}
+
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+		    AddVehicleComponent(car,1135);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "double long pipe",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"round light"))
+	{
+		if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 ||pmodelid[playerid] == 589 || pmodelid[playerid] == 400 || pmodelid[playerid] == 436 || pmodelid[playerid] == 439) // stallion
+		{
+			AddVehicleComponent(car,1013);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "round light",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"square light"))
+	{
+       	if(pmodelid[playerid] == 589 || pmodelid[playerid] == 603 || pmodelid[playerid] == 400) // landstalker
+		{
+			AddVehicleComponent(car,1024);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "square light",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"oval vents"))
+	{
+		if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 546 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 547 || pmodelid[playerid] == 439 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549) //majestic primo sunrise tampa statlion phoniex intruder bucanner bravura
+		{
+			AddVehicleComponent(car,1142);
+			AddVehicleComponent(car,1143);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "oval vents",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"square vents"))
+	{
+		if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 589 || pmodelid[playerid] == 546 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 ||pmodelid[playerid] == 439 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549) //bravura buccaneer club intruder majestic phoenix stallion sunrise tampa
+		{
+			AddVehicleComponent(car,1144);
+			AddVehicleComponent(car,1145);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "square vents",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"stereo"))
+	{
+		AddVehicleComponent(car,1086);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		Inventory_Remove(playerid, "stereo",1);
+	}
+	if(Inventory_HasItem(playerid,"bar square"))
+	{
+		if(pmodelid[playerid] == 534) // Remington
+		{
+			AddVehicleComponent(car,1100);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "bar square",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"bar grill"))
+	{
+	    if(pmodelid[playerid] == 534) // Remington
+		{
+			AddVehicleComponent(car,1123);
+            SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "bar grill",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"bar lights"))
+	{
+		if(pmodelid[playerid] == 534) // Remington
+		{
+			AddVehicleComponent(car,1125);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "bar lights",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"bar solid"))
+	{
+		if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1117);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "bar solid",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"hood fury"))
+	{
+		if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 589 || pmodelid[playerid] == 492 || pmodelid[playerid] == 426 || pmodelid[playerid] == 550) //bravura buccaneer club greenwood premier sunrise
+		{
+			AddVehicleComponent(car,1005);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+           	Inventory_Remove(playerid, "hood fury",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"hood champ"))
+	{
+		if(pmodelid[playerid] == 401 || pmodelid[playerid] == 546 || pmodelid[playerid] == 492 || pmodelid[playerid] == 426 || pmodelid[playerid] == 550) //bravura intruder greenwood premier sunrise
+		{
+			AddVehicleComponent(car,1004);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "hood champ",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"hood race"))
+	{
+		if(pmodelid[playerid] == 549) // tampa
+		{
+			AddVehicleComponent(car,1011);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "hood race",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"hood race"))
+	{
+		if(pmodelid[playerid] == 549) // tampa
+		{
+			AddVehicleComponent(car,1012);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "hood worx",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler win"))
+	{
+		if(pmodelid[playerid] == 401||pmodelid[playerid] == 518||pmodelid[playerid] == 527||pmodelid[playerid] == 415||pmodelid[playerid] == 546||pmodelid[playerid] == 603||pmodelid[playerid] == 426||pmodelid[playerid] == 436||pmodelid[playerid] == 405||pmodelid[playerid] == 477||pmodelid[playerid] == 580||pmodelid[playerid] == 550||pmodelid[playerid] == 549) // tampa
+		{
+			AddVehicleComponent(car,1001);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "spoiler win",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler alpha"))
+	{
+		if(pmodelid[playerid] == 518||pmodelid[playerid] == 415||pmodelid[playerid] == 401||pmodelid[playerid] == 517||pmodelid[playerid] == 426||pmodelid[playerid] == 436||pmodelid[playerid] == 477||pmodelid[playerid] == 547||pmodelid[playerid] == 550||pmodelid[playerid] == 549) // tampa
+		{
+			AddVehicleComponent(car,1003);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "spoiler alpha",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler drag"))
+	{
+		if(pmodelid[playerid] == 546||pmodelid[playerid] == 517) // majestic
+		{
+			AddVehicleComponent(car,1002);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+           	Inventory_Remove(playerid, "spoiler drag",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler race"))
+	{
+		if(pmodelid[playerid] == 527||pmodelid[playerid] == 542 || pmodelid[playerid] == 405) // clover
+		{
+			AddVehicleComponent(car,1014);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler race",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler pro"))
+	{
+		if(pmodelid[playerid] == 518||pmodelid[playerid] == 492||pmodelid[playerid] == 547||pmodelid[playerid] == 405) // sentinel
+		{
+			AddVehicleComponent(car,1000);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler pro",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler alien"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1147);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler alien",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1049);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler alien",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jester
+		{
+			AddVehicleComponent(car,1162);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler alien",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1158);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler alien",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1138);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler alien",1);
+		}
+		else if(pmodelid[playerid] == 558) // Uranus
+		{
+			AddVehicleComponent(car,1164);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler alien",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"spoiler xflow"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1146);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler xflow",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1150);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler xflow",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jetser
+		{
+			AddVehicleComponent(car,1158);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler xflow",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1060);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler xflow",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1139);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "spoiler xflow",1);
+		}
+		else if(pmodelid[playerid] == 558)  // Uranus
+		{
+			AddVehicleComponent(car,1163);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added.");
+			Inventory_Remove(playerid, "spoiler xflow",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"roof scoop"))
+	{
+		if(pmodelid[playerid] == 401||pmodelid[playerid] == 518||pmodelid[playerid] == 589||pmodelid[playerid] == 492||pmodelid[playerid] == 546||pmodelid[playerid] == 603||pmodelid[playerid] == 426||pmodelid[playerid] == 436||pmodelid[playerid] == 580||pmodelid[playerid] == 550||pmodelid[playerid] == 477)
+		{
+			AddVehicleComponent(car,1006);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof scoop",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"roof soft"))
+	{
+		if(pmodelid[playerid] == 567) // Savanna
+		{
+			AddVehicleComponent(car,1131);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof soft",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+			AddVehicleComponent(car,1103);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof soft",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"roof hard"))
+	{
+        if(pmodelid[playerid] == 567) // Savanna
+        {
+            AddVehicleComponent(car,1130);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+            SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+            Inventory_Remove(playerid, "roof hard",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+		    AddVehicleComponent(car,1128);
+            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof hard",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"roof xflow"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+		    AddVehicleComponent(car,1035);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof xflow",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+		    AddVehicleComponent(car,1053);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof xflow",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jetser
+		{
+		    AddVehicleComponent(car,1068);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof xflow",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+		    AddVehicleComponent(car,1061);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof xflow",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+		    AddVehicleComponent(car,1033);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof xflow",1);
+		}
+		else if(pmodelid[playerid] == 558)  // Uranus
+		{
+		    AddVehicleComponent(car,1091);
+		    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		    SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "roof xflow",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"roof alien"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1038);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof alien",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1054);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof alien",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jester
+		{
+			AddVehicleComponent(car,1067);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof alien",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1055);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof alien",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1032);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof alien",1);
+		}
+		else if(pmodelid[playerid] == 558) // Uranus
+		{
+			AddVehicleComponent(car,1088);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "roof alien",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"front alien"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1171);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front alien",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1153);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front alien",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jester
+		{
+			AddVehicleComponent(car,1160);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front alien",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1155);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front alien",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1169);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front alien",1);
+		}
+		else if(pmodelid[playerid] == 558) // Uranus
+		{
+			AddVehicleComponent(car,1166);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front alien",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"front xflow"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1172);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front xflow",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1152);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front xflow",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jetser
+		{
+			AddVehicleComponent(car,1173);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front xflow",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1157);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front xflow",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1170);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front xflow",1);
+		}
+		else if(pmodelid[playerid] == 558)  // Uranus
+		{
+			AddVehicleComponent(car,1165);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front xflow",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"front chrome"))
+	{
+		if(pmodelid[playerid] == 575) // Brodway
+		{
+			AddVehicleComponent(car,1174);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front chrome",1);
+		}
+		else if(pmodelid[playerid] == 534)// Remington
+		{
+			AddVehicleComponent(car,1179);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front chrome",1);
+		}
+		else if(pmodelid[playerid] == 567)// Savanna
+		{
+			AddVehicleComponent(car,1189);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front chrome",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+			AddVehicleComponent(car,1182);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front chrome",1);
+		}
+		else if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1115);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front chrome",1);
+		}
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+			AddVehicleComponent(car,1191);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front chrome",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"front slamin"))
+	{
+		if(pmodelid[playerid] == 575) // Brodway
+		{
+			AddVehicleComponent(car,1175);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front slamin",1);
+		}
+		else if(pmodelid[playerid] == 534)// Remington
+		{
+			AddVehicleComponent(car,1185);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front slamin",1);
+		}
+		else if(pmodelid[playerid] == 567)// Savanna
+		{
+			AddVehicleComponent(car,1188);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front slamin",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+			AddVehicleComponent(car,1181);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front slamin",1);
+		}
+		else if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1116);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front slamin",1);
+		}
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+			AddVehicleComponent(car,1190);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "front slamin",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	{
+		if(pmodelid[playerid] == 534) // Remington
+		{
+			AddVehicleComponent(car,1122);
+			AddVehicleComponent(car,1101);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	{
+		if(pmodelid[playerid] == 534) // Remington
+		{
+			AddVehicleComponent(car,1106);
+			AddVehicleComponent(car,1124);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+    }
+	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	{
+		if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1118);
+			AddVehicleComponent(car,1120);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+    }
+	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	{
+
+		if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1119);
+			AddVehicleComponent(car,1121);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	{
+		if(pmodelid[playerid] == 401||pmodelid[playerid] == 518||pmodelid[playerid] == 527||pmodelid[playerid] == 415||pmodelid[playerid] == 589||pmodelid[playerid] == 546||pmodelid[playerid] == 517||pmodelid[playerid] == 603||pmodelid[playerid] == 436||pmodelid[playerid] == 439||pmodelid[playerid] == 580||pmodelid[playerid] == 549||pmodelid[playerid] == 477)
+		{
+			AddVehicleComponent(car,1007);
+			AddVehicleComponent(car,1017);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	{
+		if(pmodelid[playerid] == 575) // Brodway
+		{
+			AddVehicleComponent(car,1042);
+			AddVehicleComponent(car,1099);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+	   	else if(pmodelid[playerid] == 567) // Savanna
+		{
+			AddVehicleComponent(car,1102);
+			AddVehicleComponent(car,1133);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+	    	Inventory_Remove(playerid, "sidekirts transfender",1);
+		}
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+			AddVehicleComponent(car,1134);
+			AddVehicleComponent(car,1137);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts transfender",1);
+	    }
+	    else if(pmodelid[playerid] == 536) // Blade
+		{
+			AddVehicleComponent(car,1108);
+			AddVehicleComponent(car,1107);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+	        Inventory_Remove(playerid, "sidekirts transfender",1);
+
+		}
+	}
+	if(Inventory_HasItem(playerid,"sidekirts wheebtovers"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1039);
+			AddVehicleComponent(car,1041);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1048);
+			AddVehicleComponent(car,1052);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jetser
+		{
+			AddVehicleComponent(car,1070);
+			AddVehicleComponent(car,1072);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1057);
+			AddVehicleComponent(car,1063);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1031);
+			AddVehicleComponent(car,1030);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+		}
+		else if(pmodelid[playerid] == 558)  // Uranus
+		{
+			AddVehicleComponent(car,1093);
+			AddVehicleComponent(car,1095);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+		}
+    }
+	if(Inventory_HasItem(playerid,"sidekirts chrome"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1036);
+			AddVehicleComponent(car,1040);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts chrome",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1047);
+			AddVehicleComponent(car,1051);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts chrome",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jester
+		{
+			AddVehicleComponent(car,1069);
+			AddVehicleComponent(car,1071);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendClientMessage(playerid,COLOR_WHITE,"[INFO] YComponent successfully added.");
+			Inventory_Remove(playerid, "sidekirts chrome",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1056);
+			AddVehicleComponent(car,1062);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts chrome",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1026);
+			AddVehicleComponent(car,1027);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts chrome",1);
+		}
+		else if(pmodelid[playerid] == 558) // Uranus
+		{
+			AddVehicleComponent(car,1090);
+			AddVehicleComponent(car,1094);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "sidekirts chrome",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"rear slamin"))
+	{
+		if(pmodelid[playerid] == 575) // Brodway
+		{
+			AddVehicleComponent(car,1177);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear slamin",1);
+		}
+		else if(pmodelid[playerid] == 534)// Remington
+		{
+			AddVehicleComponent(car,1178);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear slamin",1);
+		}
+		else if(pmodelid[playerid] == 567)// Savanna
+		{
+			AddVehicleComponent(car,1186);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear slamin",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+			AddVehicleComponent(car,1183);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear slamin",1);
+		}
+		else if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1110);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear slamin",1);
+		}
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+			AddVehicleComponent(car,1193);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear slamin",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"rear chrome"))
+	{
+		if(pmodelid[playerid] == 575) // Brodway
+		{
+			AddVehicleComponent(car,1176);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear chrome",1);
+		}
+		else if(pmodelid[playerid] == 534)// Remington
+		{
+			AddVehicleComponent(car,1180);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear chrome",1);
+		}
+		else if(pmodelid[playerid] == 567)// Savanna
+		{
+			AddVehicleComponent(car,1187);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear chrome",1);
+		}
+		else if(pmodelid[playerid] == 536) // Blade
+		{
+			AddVehicleComponent(car,1184);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear chrome",1);
+		}
+		else if(pmodelid[playerid] == 535) // Slamvan
+		{
+			AddVehicleComponent(car,1109);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear chrome",1);
+		}
+		else if(pmodelid[playerid] == 576) // Tornado
+		{
+			AddVehicleComponent(car,1192);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear chrome",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"rear xflow"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+			AddVehicleComponent(car,1148);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendClientMessage(playerid,COLOR_WHITE,"[INFO] YComponent successfully added.");
+			Inventory_Remove(playerid, "rear xflow",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1151);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear xflow",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jetser
+		{
+			AddVehicleComponent(car,1161);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear xflow",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1156);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear xflow",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1140);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear xflow",1);
+		}
+		else if(pmodelid[playerid] == 558)  // Uranus
+		{
+			AddVehicleComponent(car,1167);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear xflow",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"rear alien"))
+	{
+		if(pmodelid[playerid] == 562) // Elegy
+		{
+		    AddVehicleComponent(car,1149);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+	        SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+		    Inventory_Remove(playerid, "rear alien",1);
+		}
+		else if(pmodelid[playerid] == 565) // Flash
+		{
+			AddVehicleComponent(car,1150);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear alien",1);
+		}
+		else if(pmodelid[playerid] == 559) // Jester
+		{
+			AddVehicleComponent(car,1159);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear alien",1);
+		}
+		else if(pmodelid[playerid] == 561) // Stratum
+		{
+			AddVehicleComponent(car,1154);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear alien",1);
+		}
+		else if(pmodelid[playerid] == 560) // Sultan
+		{
+			AddVehicleComponent(car,1141);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear alien",1);
+		}
+		else if(pmodelid[playerid] == 558) // Uranus
+		{
+			AddVehicleComponent(car,1168);
+			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
+			Inventory_Remove(playerid, "rear alien",1);
+		}
+	}
+	if(Inventory_HasItem(playerid,"roue offroad"))
+	{
+		AddVehicleComponent(car,1025);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue ",1);
+	}
+	if(Inventory_HasItem(playerid,"roue mega"))
+	{
+		AddVehicleComponent(car,1074);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue mega",1);
+	}
+	if(Inventory_HasItem(playerid,"roue wires"))
+	{
+		AddVehicleComponent(car,1076);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue wires",1);
+	}
+	if(Inventory_HasItem(playerid,"roue twist"))
+	{
+		AddVehicleComponent(car,1078);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue twist",1);
+	}
+	if(Inventory_HasItem(playerid,"roue grove"))
+	{
+		AddVehicleComponent(car,1081);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue grove",1);
+	}
+	if(Inventory_HasItem(playerid,"roue import"))
+	{
+		AddVehicleComponent(car,1082);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue import",1);
+	}
+	if(Inventory_HasItem(playerid,"roue atomic"))
+	{
+		AddVehicleComponent(car,1085);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue atomic",1);
+	}
+	if(Inventory_HasItem(playerid,"roue ahab"))
+	{
+		AddVehicleComponent(car,1096);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue ahab",1);
+	}
+	if(Inventory_HasItem(playerid,"roue virtual"))
+	{
+		AddVehicleComponent(car,1097);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue virtual",1);
+	}
+	if(Inventory_HasItem(playerid,"roue access"))
+	{
+		AddVehicleComponent(car,1098);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue access",1);
+	}
+	if(Inventory_HasItem(playerid,"roue trance"))
+	{
+		AddVehicleComponent(car,1084);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue trance",1);
+	}
+	if(Inventory_HasItem(playerid,"roue shadow"))
+	{
+		AddVehicleComponent(car,1073);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue shadow",1);
+	}
+	if(Inventory_HasItem(playerid,"roue rimshine"))
+	{
+		AddVehicleComponent(car,1075);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue rimshine",1);
+	}
+	if(Inventory_HasItem(playerid,"roue classic"))
+	{
+		AddVehicleComponent(car,1077);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue classic",1);
+	}
+	if(Inventory_HasItem(playerid,"roue cutter"))
+	{
+		AddVehicleComponent(car,1079);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue cutter",1);
+	}
+	if(Inventory_HasItem(playerid,"roue switch"))
+	{
+		AddVehicleComponent(car,1080);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue switch",1);
+	}
+	if(Inventory_HasItem(playerid,"roue dollar"))
+	{
+		AddVehicleComponent(car,1083);
+		PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
+		Inventory_Remove(playerid, "roue dollar",1);
+	}
 	return 1;
 }

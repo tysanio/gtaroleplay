@@ -1,78 +1,65 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.12deb2+deb8u5
--- http://www.phpmyadmin.net
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
 --
--- Client :  localhost
--- Généré le :  Sam 30 Mars 2019 à 22:40
--- Version du serveur :  5.5.62-0+deb8u1
--- Version de PHP :  5.6.40-0+deb8u1
+-- Host: 127.0.0.1
+-- Generation Time: Feb 01, 2020 at 07:38 AM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.3.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `samp2`
+-- Database: `vice`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `accounts`
+-- Table structure for table `accounts`
 --
 
-CREATE TABLE IF NOT EXISTS `accounts` (
-`ID` int(12) NOT NULL,
+CREATE TABLE `accounts` (
+  `ID` int(12) NOT NULL,
   `Username` varchar(24) DEFAULT NULL,
   `Password` varchar(129) DEFAULT NULL,
   `RegisterDate` varchar(36) DEFAULT NULL,
   `LoginDate` varchar(36) DEFAULT NULL,
-  `IP` varchar(16) DEFAULT 'n/a'
-) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=latin1;
+  `IP` varchar(16) DEFAULT 'n/a',
+  `WL` int(4) NOT NULL DEFAULT 0,
+  `Language` int(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `actors`
+-- Table structure for table `actors`
 --
 
-CREATE TABLE IF NOT EXISTS `actors` (
+CREATE TABLE `actors` (
   `ID` int(11) NOT NULL,
   `Skinid` int(3) NOT NULL,
   `Float` varchar(220) NOT NULL,
-  `actorint` int(4) NOT NULL DEFAULT '0',
-  `actorvw` int(4) NOT NULL DEFAULT '0',
-  `actorsetting` int(4) NOT NULL DEFAULT '0',
-  `Text` varchar(32) NOT NULL
+  `actorint` int(4) NOT NULL DEFAULT 0,
+  `actorvw` int(4) NOT NULL DEFAULT 0,
+  `actorsetting` int(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Contenu de la table `actors`
---
-
-INSERT INTO `actors` (`ID`, `Skinid`, `Float`, `actorint`, `actorvw`, `actorsetting`, `Text`) VALUES
-(0, 217, '1435.042114|-1326.188232|13.567937|268.409027', 0, 0, 0, ''),
-(0, 205, '1186.947998|-897.544738|43.258857|267.792694', 0, 0, 0, ''),
-(0, 205, '1186.709716|-895.870971|43.258880|281.435882', 0, 0, 0, ''),
-(0, 205, '1186.397705|-893.670593|43.258895|279.699493', 0, 0, 0, ''),
-(0, 217, '1318.148681|-885.529602|39.584129|188.243438', 0, 0, 0, ''),
-(0, 150, '1425.904418|-987.094543|996.105041|249.778152', 6, 0, 0, ''),
-(0, 20001, '1526.031738|-1670.564331|13.382812|345.226989', 0, 0, 0, ''),
-(0, 217, '1352.960205|-1760.869506|13.552237|173.157836', 0, 0, 0, ''),
-(0, 217, '-30.932931|-30.710462|1003.557250|358.658416', 4, 60031, 0, ''),
-(0, 217, '-24.235851|-57.280921|1003.546875|351.094696', 6, 0, 0, '');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `arrestpoints`
+-- Table structure for table `arrestpoints`
 --
 
-CREATE TABLE IF NOT EXISTS `arrestpoints` (
+CREATE TABLE `arrestpoints` (
   `arrestID` int(11) NOT NULL,
   `arrestX` float NOT NULL,
   `arrestY` float NOT NULL,
@@ -84,11 +71,11 @@ CREATE TABLE IF NOT EXISTS `arrestpoints` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `atm`
+-- Table structure for table `atm`
 --
 
-CREATE TABLE IF NOT EXISTS `atm` (
-`atmID` int(11) NOT NULL,
+CREATE TABLE `atm` (
+  `atmID` int(11) NOT NULL,
   `atmX` float NOT NULL,
   `atmY` float NOT NULL,
   `atmZ` float NOT NULL,
@@ -96,108 +83,49 @@ CREATE TABLE IF NOT EXISTS `atm` (
   `atmInterior` int(11) NOT NULL,
   `atmWorld` int(11) NOT NULL,
   `destroy` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=209 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `atm`
---
-
-INSERT INTO `atm` (`atmID`, `atmX`, `atmY`, `atmZ`, `atmA`, `atmInterior`, `atmWorld`, `destroy`) VALUES
-(21, 1553.82, -1679.62, 13.5499, 269.503, 0, 0, 0),
-(24, 2257.31, -1669.92, 15.4574, 181.251, 0, 0, 0),
-(26, 2394.89, -1899.09, 13.5468, 178.115, 0, 0, 0),
-(34, 2071.51, -1802.35, 13.5468, 40.4348, 0, 0, 0),
-(35, 1847.99, -1876.24, 13.5781, 268.928, 0, 0, 0),
-(40, 1363.7, -1744.25, 13.5468, 266.879, 0, 0, 0),
-(44, 1173.21, -1331.73, 13.9896, 91.0703, 0, 0, 0),
-(50, 1013.08, -928.916, 42.1796, 5.4447, 0, 0, 0),
-(52, 2134.09, -1206.68, 23.9309, 43.8864, 0, 0, 0),
-(61, 1446.05, -981.95, 996.105, 358.819, 6, 7010, 0),
-(64, 1448.72, -982.066, 996.105, 358.506, 6, 7010, 0),
-(65, 1451.23, -982.091, 996.105, 359.133, 6, 7010, 0),
-(74, 456.111, -1484.64, 31.0214, 289.816, 0, 0, 0),
-(77, 2423, -1752.47, 13.5468, 268.6, 0, 0, 0),
-(78, 843.904, -1627.57, 13.5468, 180.499, 0, 0, 0),
-(80, 937.976, -1740.18, 13.5468, 271.819, 0, 0, 0),
-(82, 2060.08, -1897.57, 13.5538, 358.91, 0, 0, 0),
-(84, 2041.63, -1431.3, 17.164, 182.87, 0, 0, 0),
-(86, 1304.61, -900.044, 39.5781, 92.2003, 0, 0, 0),
-(87, 343.703, -1600.24, 33.1974, 181.379, 0, 0, 0),
-(90, 1809.99, -1685.95, 13.537, 178.983, 0, 0, 0),
-(93, 2655.91, -1632.44, 10.8604, 354.484, 0, 0, 0),
-(95, 2842.69, -1546.6, 11.0937, 91.2097, 0, 0, 0),
-(99, 2154.06, -1018.03, 62.8118, 90.6899, 0, 0, 0),
-(102, 360.607, -1814.85, 4.3769, 268.816, 0, 0, 0),
-(106, 2411.35, -1511.65, 24, 358.316, 0, 0, 0),
-(112, 759.432, -1344.81, 13.7363, 85.6121, 0, 0, 0),
-(116, 1046.63, -1055.77, 31.6961, 179.263, 0, 0, 0),
-(117, 1018.75, -1310.69, 13.5468, 357.836, 0, 0, 0),
-(118, 611.756, -1486.85, 14.7377, 89.2579, 0, 0, 0),
-(120, 848.828, -1797.29, 13.8726, 177.151, 0, 0, 0),
-(127, 1213.09, -1813.38, 16.5937, 89.9745, 0, 0, 0),
-(137, 2233.01, -1350.59, 23.9857, 269.915, 0, 0, 0),
-(143, 1420.7, -1543.95, 13.546, 46.24, 0, 0, 0),
-(145, 1080.12, -1678.65, 13.5403, 359.217, 0, 0, 0),
-(147, 1440.71, -988.339, 996.11, 178.094, 6, 7032, 0),
-(152, 1440.76, -982.838, 996.105, 356.986, 6, 7032, 0),
-(160, 2749.86, -2384.31, 13.6561, 1.1989, 0, 0, 0),
-(161, -1972.15, -899.638, 757.898, 91.2116, 1, 7035, 0),
-(163, -248.491, -17.7868, 1004.15, 2.2893, 3, 7034, 0),
-(164, -250.535, -17.5819, 1004.15, 2.2893, 3, 7034, 0),
-(165, 2105.59, -1740.5, 13.5628, 256.957, 0, 0, 0),
-(166, 1928.58, -1783.55, 13.5468, 94.143, 0, 0, 0),
-(171, 1445.35, -1338.36, 13.5375, 91.1277, 0, 0, 0),
-(179, 1285.68, -1662.69, 13.5468, 3.3401, 0, 0, 0),
-(180, 2704.82, -1947.58, 13.5468, 90.1887, 0, 0, 0),
-(187, 2153.58, -2298.46, 13.4345, 135.723, 0, 0, 0),
-(188, 1832.98, -1377.55, 13.5707, 180.091, 0, 0, 0),
-(193, 2404.09, -1983.35, 13.5468, 86.8666, 0, 0, 0),
-(198, 2404.64, -1229.86, 23.8535, 90.9688, 0, 0, 0),
-(202, 1889.66, -2319.97, 13.5468, 126.551, 0, 0, 0),
-(205, 2448.76, -2611.97, 13.6569, 85.9527, 0, 0, 0),
-(208, 2128.94, -1152.92, 23.9997, 252.642, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `backpackitems`
+-- Table structure for table `backpackitems`
 --
 
-CREATE TABLE IF NOT EXISTS `backpackitems` (
-  `ID` int(12) DEFAULT '0',
-`itemID` int(12) NOT NULL,
+CREATE TABLE `backpackitems` (
+  `ID` int(12) DEFAULT 0,
+  `itemID` int(12) NOT NULL,
   `itemName` varchar(32) DEFAULT NULL,
-  `itemModel` int(12) DEFAULT '0',
-  `itemQuantity` int(12) DEFAULT '0'
+  `itemModel` int(12) DEFAULT 0,
+  `itemQuantity` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `backpacks`
+-- Table structure for table `backpacks`
 --
 
-CREATE TABLE IF NOT EXISTS `backpacks` (
-`backpackID` int(12) NOT NULL,
-  `backpackPlayer` int(12) DEFAULT '0',
-  `backpackX` float DEFAULT '0',
-  `backpackY` float DEFAULT '0',
-  `backpackZ` float DEFAULT '0',
-  `backpackInterior` int(12) DEFAULT '0',
-  `backpackWorld` int(12) DEFAULT '0',
-  `backpackHouse` int(12) DEFAULT '0',
-  `backpackVehicle` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
+CREATE TABLE `backpacks` (
+  `backpackID` int(12) NOT NULL,
+  `backpackPlayer` int(12) DEFAULT 0,
+  `backpackX` float DEFAULT 0,
+  `backpackY` float DEFAULT 0,
+  `backpackZ` float DEFAULT 0,
+  `backpackInterior` int(12) DEFAULT 0,
+  `backpackWorld` int(12) DEFAULT 0,
+  `backpackHouse` int(12) DEFAULT 0,
+  `backpackVehicle` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `banqueentreprise`
+-- Table structure for table `banqueentreprise`
 --
 
-CREATE TABLE IF NOT EXISTS `banqueentreprise` (
-`id` int(11) NOT NULL,
+CREATE TABLE `banqueentreprise` (
+  `id` int(11) NOT NULL,
   `mecanozone3` int(11) NOT NULL,
   `mecanozone4` int(11) NOT NULL,
   `livraisonzone1` int(11) NOT NULL,
@@ -212,104 +140,60 @@ CREATE TABLE IF NOT EXISTS `banqueentreprise` (
   `vendeur` int(11) NOT NULL,
   `journaliste` int(11) NOT NULL,
   `banque` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `banqueentreprise`
+-- Dumping data for table `banqueentreprise`
 --
 
 INSERT INTO `banqueentreprise` (`id`, `mecanozone3`, `mecanozone4`, `livraisonzone1`, `mafiazone1`, `mafiazone4`, `police`, `fbi`, `swat`, `mairiels`, `medecin`, `fermier`, `vendeur`, `journaliste`, `banque`) VALUES
-(1, 0, 0, 1800, 0, 0, 4634204, 0, 0, 0, 558500, 0, 3, 2500, 195897);
+(1, 0, 0, 1800, 0, 0, 24587600, 0, 0, 1121122, 2964700, 0, 3, 2500, 1585014);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `batiements`
+-- Table structure for table `batiements`
 --
 
-CREATE TABLE IF NOT EXISTS `batiements` (
-`batiementID` int(12) NOT NULL,
-  `batiementModel` int(12) DEFAULT '0',
-  `batiementX` float DEFAULT '0',
-  `batiementY` float DEFAULT '0',
-  `batiementZ` float DEFAULT '0',
-  `batiementRX` float DEFAULT '0',
-  `batiementRY` float DEFAULT '0',
-  `batiementRZ` float DEFAULT '0',
-  `batiementInterior` int(12) DEFAULT '0',
-  `batiementWorld` int(12) DEFAULT '0'
+CREATE TABLE `batiements` (
+  `batiementID` int(12) NOT NULL,
+  `batiementModel` int(12) DEFAULT 0,
+  `batiementX` float DEFAULT 0,
+  `batiementY` float DEFAULT 0,
+  `batiementZ` float DEFAULT 0,
+  `batiementRX` float DEFAULT 0,
+  `batiementRY` float DEFAULT 0,
+  `batiementRZ` float DEFAULT 0,
+  `batiementInterior` int(12) DEFAULT 0,
+  `batiementWorld` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `billboards`
+-- Table structure for table `billboards`
 --
 
-CREATE TABLE IF NOT EXISTS `billboards` (
-`bbID` int(12) NOT NULL,
-  `bbExists` int(12) DEFAULT '0',
+CREATE TABLE `billboards` (
+  `bbID` int(12) NOT NULL,
+  `bbExists` int(12) DEFAULT 0,
   `bbName` varchar(32) DEFAULT NULL,
-  `bbOwner` int(12) NOT NULL DEFAULT '0',
-  `bbPrice` int(12) NOT NULL DEFAULT '0',
-  `bbRange` int(12) DEFAULT '10',
-  `bbPosX` float DEFAULT '0',
-  `bbPosY` float DEFAULT '0',
-  `bbPosZ` float DEFAULT '0',
+  `bbOwner` int(12) NOT NULL DEFAULT 0,
+  `bbPrice` int(12) NOT NULL DEFAULT 0,
+  `bbRange` int(12) DEFAULT 10,
+  `bbPosX` float DEFAULT 0,
+  `bbPosY` float DEFAULT 0,
+  `bbPosZ` float DEFAULT 0,
   `bbMessage` varchar(230) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `billboards`
---
-
-INSERT INTO `billboards` (`bbID`, `bbExists`, `bbName`, `bbOwner`, `bbPrice`, `bbRange`, `bbPosX`, `bbPosY`, `bbPosZ`, `bbMessage`) VALUES
-(1, 0, 'Panneau d''affichage', 35, 250, 75, 1413.32, -1721.69, 32.9529, 'HCLI entreprise de transport nous transportons : tous type d equipement contacter nous au 75714'),
-(5, 0, 'Panneau d''affichage', 0, 250, 125, 1863.48, -1448.62, 31.0076, ''),
-(6, 0, 'Panneau d''affichage', 0, 250, 200, 2099.63, -1477.89, 39.7654, ''),
-(7, 0, 'Panneau d''affichage', 0, 250, 125, 2062.47, -1826.62, 23.5781, 'Le LS Transport services, recherche des taximan pour sa nouvelle agence sur Market, tel: 91893.'),
-(8, 0, 'Panneau d''affichage', 0, 250, 175, 1934.94, -2140.59, 22.7733, ''),
-(9, 0, 'Panneau d''affichage', 0, 250, 10, 1680.9, -1919.15, 28.1326, 'Panneau d''affichage louer'),
-(10, 0, 'Panneau d''affichage', 0, 250, 200, 525.445, -1754.08, 29.3514, ''),
-(11, 0, 'Panneau d''affichage', 0, 250, 200, 487.255, -1334.69, 34.7265, ''),
-(12, 0, 'Panneau d''affichage', 0, 250, 200, 427.2, -1366.65, 43.3515, 'Panneau d''affichage louer'),
-(13, 0, 'Panneau d''affichage', 0, 250, 200, 562.198, -1256.97, 26.742, ''),
-(14, 0, 'Panneau d''affichage', 0, 250, 200, 813.249, -1164.43, 36.1091, ''),
-(15, 0, 'Panneau d''affichage', 0, 250, 200, 776.328, -1029.05, 42.0154, ''),
-(16, 0, 'Panneau d''affichage', 0, 250, 200, 875.541, -1022.32, 50.2028, 'Panneau d''affichage louer'),
-(18, 0, 'Panneau d''affichage', 0, 250, 200, 1351.94, -913.856, 51.664, ''),
-(19, 0, 'Panneau d''affichage', 0, 250, 200, 1495.64, -946.561, 53.4841, 'Panneau d''affichage louer'),
-(20, 0, 'Panneau d''affichage', 260, 250, 200, 2001.76, -1044.09, 43.125, ''),
-(21, 0, 'Panneau d''affichage', 0, 250, 200, 2143.97, -971.655, 78.9841, ''),
-(22, 0, 'Panneau d''affichage', 0, 250, 200, 2590.44, -1141.81, 68.8983, ''),
-(23, 0, 'Panneau d''affichage', 0, 250, 200, 2528.83, -1428.01, 64.414, ''),
-(24, 0, 'Panneau d''affichage', 0, 250, 200, 2537.92, -1490.71, 40.7341, ''),
-(25, 0, 'Panneau d''affichage', 0, 250, 200, 2444.34, -1518.76, 41.7265, ''),
-(26, 0, 'Panneau d''affichage', 0, 250, 200, 2359.84, -1540.42, 35.8828, ''),
-(27, 0, 'Panneau d''affichage', 0, 250, 200, 1408.77, -1407.91, 33.2966, 'Panneau d''affichage louer'),
-(29, 0, 'Panneau d''affichage', 0, 250, 150, 498.24, -1363.57, 34.7265, ''),
-(31, 0, 'Panneau d''affichage', 0, 250, 100, 1637.74, -1721.01, 32.664, 'Panneau d''affichage louer'),
-(32, 0, 'Panneau d''affichage', 0, 250, 125, 958.361, -1376.55, 28.8046, ''),
-(35, 0, 'Panneau d''affichage', 0, 250, 125, 883.308, -971.588, 53.125, ''),
-(36, 0, 'Panneau d''affichage', 0, 250, 125, 1864.36, -1274.16, 45.8515, ''),
-(37, 0, 'Panneau d''affichage', 0, 250, 125, 1727.19, -1313.04, 33.1093, ''),
-(38, 0, 'Panneau d''affichage', 0, 250, 125, 2368.9, -1404.36, 45.7109, ''),
-(39, 0, 'Panneau d''affichage', 0, 250, 125, 2356.4, -1314.12, 44.3671, ''),
-(40, 0, 'Panneau d''affichage', 0, 250, 125, 1886.32, -1551.11, 29.2109, ''),
-(41, 0, 'Panneau d''affichage', 0, 250, 125, 1038.5, -1300.51, 28.8046, ''),
-(42, 0, 'Panneau d''affichage', 0, 250, 120, 1680.63, -2016.64, 30.2109, ''),
-(43, 0, 'Panneau d''affichage', 0, 250, 125, 954.029, -1232.89, 28.8046, ''),
-(44, 0, 'Panneau d''affichage', 0, 250, 125, 233.955, -1477.87, 35.7343, ''),
-(45, 0, 'Panneau d''affichage', 0, 1000, 200, 2665.84, -1741.06, 30.6972, 'Panneau d''affichage louer'),
-(46, 0, 'Ile fermer pour rénovation', 0, 2349080, 75, 2928.59, -1930.56, 11.0573, 'Ile fermer pour rénovation');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `blacklist`
+-- Table structure for table `blacklist`
 --
 
-CREATE TABLE IF NOT EXISTS `blacklist` (
+CREATE TABLE `blacklist` (
   `IP` varchar(16) NOT NULL DEFAULT '0.0.0.0',
   `Username` varchar(24) NOT NULL DEFAULT '',
   `BannedBy` varchar(24) DEFAULT NULL,
@@ -317,521 +201,319 @@ CREATE TABLE IF NOT EXISTS `blacklist` (
   `Date` varchar(36) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `businesses`
+-- Table structure for table `businesses`
 --
 
-CREATE TABLE IF NOT EXISTS `businesses` (
-`bizID` int(12) NOT NULL,
+CREATE TABLE `businesses` (
+  `bizID` int(12) NOT NULL,
   `bizName` varchar(32) DEFAULT NULL,
-  `bizOwner` int(12) DEFAULT '0',
-  `bizType` int(12) DEFAULT '0',
-  `bizPrice` int(12) DEFAULT '0',
-  `bizPosX` float DEFAULT '0',
-  `bizPosY` float DEFAULT '0',
-  `bizPosZ` float DEFAULT '0',
-  `bizPosA` float DEFAULT '0',
-  `bizIntX` float DEFAULT '0',
-  `bizIntY` float DEFAULT '0',
-  `bizIntZ` float DEFAULT '0',
-  `bizIntA` float DEFAULT '0',
-  `bizInterior` int(12) DEFAULT '0',
-  `bizInteriorVW` int(4) NOT NULL DEFAULT '0',
-  `bizExterior` int(12) DEFAULT '0',
-  `bizExteriorVW` int(12) DEFAULT '0',
-  `bizLocked` int(4) DEFAULT '0',
-  `bizVault` int(12) DEFAULT '0',
-  `bizProducts` int(12) DEFAULT '0',
-  `bizPrice1` int(12) DEFAULT '0',
-  `bizPrice2` int(12) DEFAULT '0',
-  `bizPrice3` int(12) DEFAULT '0',
-  `bizPrice4` int(12) DEFAULT '0',
-  `bizPrice5` int(12) DEFAULT '0',
-  `bizPrice6` int(12) DEFAULT '0',
-  `bizPrice7` int(12) DEFAULT '0',
-  `bizPrice8` int(12) DEFAULT '0',
-  `bizPrice9` int(12) DEFAULT '0',
-  `bizPrice10` int(12) DEFAULT '0',
-  `bizSpawnX` float DEFAULT '0',
-  `bizSpawnY` float DEFAULT '0',
-  `bizSpawnZ` float DEFAULT '0',
-  `bizSpawnA` float DEFAULT '0',
-  `bizDeliverX` float DEFAULT '0',
-  `bizDeliverY` float DEFAULT '0',
-  `bizDeliverZ` float DEFAULT '0',
+  `bizOwner` int(12) DEFAULT 0,
+  `bizType` int(12) DEFAULT 0,
+  `bizPrice` int(12) DEFAULT 0,
+  `bizPosX` float DEFAULT 0,
+  `bizPosY` float DEFAULT 0,
+  `bizPosZ` float DEFAULT 0,
+  `bizPosA` float DEFAULT 0,
+  `bizIntX` float DEFAULT 0,
+  `bizIntY` float DEFAULT 0,
+  `bizIntZ` float DEFAULT 0,
+  `bizIntA` float DEFAULT 0,
+  `bizInterior` int(12) DEFAULT 0,
+  `bizInteriorVW` int(4) NOT NULL DEFAULT 0,
+  `bizExterior` int(12) DEFAULT 0,
+  `bizExteriorVW` int(12) DEFAULT 0,
+  `bizLocked` int(4) DEFAULT 0,
+  `bizVault` int(12) DEFAULT 0,
+  `bizProducts` int(12) DEFAULT 0,
+  `bizPrice1` int(12) DEFAULT 0,
+  `bizPrice2` int(12) DEFAULT 0,
+  `bizPrice3` int(12) DEFAULT 0,
+  `bizPrice4` int(12) DEFAULT 0,
+  `bizPrice5` int(12) DEFAULT 0,
+  `bizPrice6` int(12) DEFAULT 0,
+  `bizPrice7` int(12) DEFAULT 0,
+  `bizPrice8` int(12) DEFAULT 0,
+  `bizPrice9` int(12) DEFAULT 0,
+  `bizPrice10` int(12) DEFAULT 0,
+  `bizSpawnX` float DEFAULT 0,
+  `bizSpawnY` float DEFAULT 0,
+  `bizSpawnZ` float DEFAULT 0,
+  `bizSpawnA` float DEFAULT 0,
+  `bizDeliverX` float DEFAULT 0,
+  `bizDeliverY` float DEFAULT 0,
+  `bizDeliverZ` float DEFAULT 0,
   `bizMessage` varchar(128) DEFAULT NULL,
-  `bizPrice11` int(12) DEFAULT '0',
-  `bizPrice12` int(12) DEFAULT '0',
-  `bizPrice13` int(12) DEFAULT '0',
-  `bizPrice14` int(12) DEFAULT '0',
-  `bizPrice15` int(12) DEFAULT '0',
-  `bizPrice16` int(12) DEFAULT '0',
-  `bizPrice17` int(12) DEFAULT '0',
-  `bizPrice18` int(12) DEFAULT '0',
-  `bizPrice19` int(12) DEFAULT '0',
-  `bizPrice20` int(12) DEFAULT '0',
-  `bizShipment` int(4) DEFAULT '0',
-  `time1` int(4) NOT NULL DEFAULT '-1',
-  `time2` int(4) NOT NULL DEFAULT '-1',
-  `chancevole` int(4) NOT NULL DEFAULT '0',
+  `bizPrice11` int(12) DEFAULT 0,
+  `bizPrice12` int(12) DEFAULT 0,
+  `bizPrice13` int(12) DEFAULT 0,
+  `bizPrice14` int(12) DEFAULT 0,
+  `bizPrice15` int(12) DEFAULT 0,
+  `bizPrice16` int(12) DEFAULT 0,
+  `bizPrice17` int(12) DEFAULT 0,
+  `bizPrice18` int(12) DEFAULT 0,
+  `bizPrice19` int(12) DEFAULT 0,
+  `bizPrice20` int(12) DEFAULT 0,
+  `bizShipment` int(4) DEFAULT 0,
+  `time1` int(4) NOT NULL DEFAULT -1,
+  `time2` int(4) NOT NULL DEFAULT -1,
+  `chancevole` int(4) NOT NULL DEFAULT 0,
   `defoncer` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `businesses`
---
-
-INSERT INTO `businesses` (`bizID`, `bizName`, `bizOwner`, `bizType`, `bizPrice`, `bizPosX`, `bizPosY`, `bizPosZ`, `bizPosA`, `bizIntX`, `bizIntY`, `bizIntZ`, `bizIntA`, `bizInterior`, `bizInteriorVW`, `bizExterior`, `bizExteriorVW`, `bizLocked`, `bizVault`, `bizProducts`, `bizPrice1`, `bizPrice2`, `bizPrice3`, `bizPrice4`, `bizPrice5`, `bizPrice6`, `bizPrice7`, `bizPrice8`, `bizPrice9`, `bizPrice10`, `bizSpawnX`, `bizSpawnY`, `bizSpawnZ`, `bizSpawnA`, `bizDeliverX`, `bizDeliverY`, `bizDeliverZ`, `bizMessage`, `bizPrice11`, `bizPrice12`, `bizPrice13`, `bizPrice14`, `bizPrice15`, `bizPrice16`, `bizPrice17`, `bizPrice18`, `bizPrice19`, `bizPrice20`, `bizShipment`, `time1`, `time2`, `chancevole`, `defoncer`) VALUES
-(14, '24/7', 99999999, 1, 150000, 1833.77, -1842.52, 13.5781, 271.077, -27.4759, -58.0629, 1003.55, 352.335, 6, 0, 0, 0, 0, 1463, 4613, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 1833.77, -1842.52, 13.5781, 271.077, 1858.37, -1849.66, 13.5797, '', 150, 200, 50, 20, 20, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(15, 'The Well Stacked Pizza Co.', 0, 4, 300000, 2105.36, -1806.53, 13.5544, 88.943, 2109.19, -1806.24, 13.5495, 269.779, 0, 0, 0, 0, 0, 101, 3645, 3, 5, 7, 15, 15, 15, 9, 10, 0, 0, 2105.36, -1806.53, 13.5544, 88.943, 2108.72, -1789.62, 13.5607, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(16, 'Jefferson Dealership', 99999999, 5, 750000, 2131.91, -1151.03, 24.0937, 270.209, 396.51, 172.217, 1009.07, 0, 3, 0, 0, 0, 0, 186050, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2134.72, -1132.46, 25.6823, 87.7742, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(17, 'Rodéo Luxury Cars', 268, 5, 1, 545.52, -1293.58, 17.242, 180.257, 396.288, 172.13, 1009.07, 271.494, 3, 6004, 0, 0, 0, 192000, 100, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 561.242, -1285.38, 17.2481, 4.6437, 0, 0, 0, '((/acheter))', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(18, 'Ammu-Nation', 1, 2, 750000, 2400.44, -1982, 13.5466, 178.806, 316.396, -169.837, 999.601, 0, 6, 6005, 0, 0, 0, 0, 10011, 75, 150, 200, 350, 1750, 550, 0, 0, 0, 0, 2400.44, -1982, 13.5466, 178.806, 2389.65, -1980.79, 13.5466, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 20, 0, 0),
-(19, 'A vendre', 0, 4, 150000, 2397.83, -1899.18, 13.5467, 181.23, 363.34, -74.6679, 1001.51, 315, 10, 6006, 0, 0, 1, 0, 100, 2, 5, 5, 10, 10, 15, 10, 0, 0, 0, 2397.83, -1899.18, 13.5467, 181.23, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(20, 'A vendre', 0, 1, 150000, 2424.71, -1922.15, 13.5398, 310.896, -27.2828, -58.1948, 1003.09, 0, 6, 6007, 0, 0, 1, 0, 100, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 2424.71, -1922.15, 13.5398, 310.896, 0, 0, 0, '', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(21, 'A vendre', 0, 7, 150000, 2473.08, -1922.31, 13.5467, 2.2785, 807.752, -70.8423, 997.702, 181.494, 6, 6008, 0, 0, 1, 0, 100, 75, 115, 15, 95, 3, 2, 10, 100, 20, 10, 2473.08, -1922.31, 13.5467, 2.2785, 0, 0, 0, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(22, 'Epicerie', 0, 1, 150000, 2424.05, -1742.69, 13.5431, 223.082, -27.2828, -58.1948, 1003.09, 0, 6, 6009, 0, 0, 0, 290, 0, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 2424.05, -1742.69, 13.5431, 223.082, 0, 0, 0, '[Epicerie Leroy] Cindy : Salut toi ! Bienvenue dans l''epicerie de Hayden. Le Gangsta le plus chaud de la Teub.', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, 1, 24, 0, 0),
-(23, 'Binco', 99999999, 3, 150000, 2244.27, -1665.53, 15.4764, 162.416, 161.48, -96.5363, 1001.8, 0, 18, 60010, 0, 0, 0, 1287, 3746, 25, 15, 10, 10, 0, 0, 0, 0, 0, 0, 2244.27, -1665.53, 15.4764, 162.416, 2232.06, -1668.25, 15.1738, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(24, 'A vendre', 0, 7, 150000, 2292.18, -1722.69, 13.5467, 356.587, 807.71, -70.8448, 997.702, 182.434, 6, 60011, 0, 0, 1, 0, 100, 75, 115, 15, 95, 3, 2, 10, 100, 20, 10, 2292.18, -1722.69, 13.5467, 356.587, 0, 0, 0, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(25, 'A vendre', 0, 4, 150000, 2419.71, -1509.06, 24, 92.7063, 363.34, -74.6679, 1001.51, 315, 10, 60012, 0, 0, 1, 0, 100, 2, 5, 5, 10, 10, 15, 10, 0, 0, 0, 2419.71, -1509.06, 24, 92.7063, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(26, 'A vendre', 0, 7, 150000, 2395.7, -1455, 24.0111, 181.889, 807.763, -70.8435, 997.702, 179.301, 6, 60013, 0, 0, 1, 0, 100, 75, 115, 15, 95, 3, 2, 10, 100, 20, 10, 2395.7, -1455, 24.0111, 181.889, 0, 0, 0, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(27, 'A vendre', 0, 3, 150000, 2112.97, -1211.46, 23.9627, 357.392, 161.48, -96.5366, 1001.8, 0, 18, 60014, 0, 0, 1, 0, 100, 25, 15, 10, 10, 0, 0, 0, 0, 0, 0, 2112.97, -1211.46, 23.9627, 357.392, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(28, 'A vendre', 0, 1, 150000, 2095.87, -1211.58, 23.9629, 359.272, -27.2828, -58.1948, 1003.09, 0, 6, 60015, 0, 0, 1, 0, 100, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 2095.87, -1211.58, 23.9629, 359.272, 0, 0, 0, '', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(29, 'A vendre', 0, 7, 150000, 2139.42, -1176.86, 23.992, 92.0233, 807.637, -70.8467, 997.702, 181.807, 6, 60016, 0, 0, 1, 0, 100, 75, 115, 15, 95, 3, 2, 10, 100, 20, 10, 2139.42, -1176.86, 23.992, 92.0233, 0, 0, 0, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(30, 'Burger Temple', 99999999, 4, 300000, 1198.67, -915.368, 43.1707, 99.2124, 1196.44, -915.652, 43.1805, 96.7527, 0, 0, 0, 0, 0, 74, 81, 2, 5, 5, 10, 10, 15, 10, 5, 0, 0, 1199.29, -918.141, 43.1226, 11.7994, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(31, 'Vetement Mulholland', 99999999, 3, 300000, 1315.51, -897.941, 39.5778, 4.1984, 1315.24, -895.458, 39.5778, 3.3724, 0, 0, 0, 0, 0, 188, 94, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 1315.51, -897.941, 39.5778, 4.1984, 0, 0, 0, '', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(32, 'A vendre', 0, 3, 300000, 776.398, -1036.55, 24.2712, 13.0621, 161.48, -96.5366, 1001.8, 0, 18, 60019, 0, 0, 1, 0, 100, 25, 15, 10, 10, 0, 0, 0, 0, 0, 0, 776.398, -1036.55, 24.2712, 13.0621, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(33, 'A vendre', 0, 7, 300000, 914.315, -1004.26, 37.9866, 178.191, 808.077, -70.8408, 997.702, 177.879, 6, 60020, 0, 0, 1, 0, 100, 75, 115, 15, 95, 3, 2, 10, 100, 20, 10, 914.315, -1004.26, 37.9866, 178.191, 0, 0, 0, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(34, 'Hmmm Donut''s !!!', 0, 4, 300000, 1038.19, -1340.73, 13.7423, 181.329, 377.17, -192.704, 1000.64, 0.3871, 17, 2000, 0, 0, 0, 0, 185, 2, 4, 6, 8, 10, 14, 8, 6, 0, 0, 1038.19, -1340.73, 13.7423, 181.329, 1025.44, -1343.62, 13.7264, 'Bienvenue chez "Hmmm Donut''s", acheter des bons donut''s !', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(35, 'A vendre', 0, 4, 300000, 928.577, -1352.9, 13.3437, 270.026, 363.34, -74.6679, 1001.51, 315, 10, 60022, 0, 0, 1, 0, 100, 2, 5, 5, 10, 10, 15, 10, 0, 0, 0, 928.577, -1352.9, 13.3437, 270.026, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(40, 'A vendre', 0, 4, 300000, 810.485, -1616.23, 13.5467, 88.3024, 363.34, -74.6679, 1001.51, 315, 10, 60027, 0, 0, 1, 0, 100, 2, 5, 5, 10, 10, 15, 10, 0, 0, 0, 810.485, -1616.23, 13.5467, 88.3024, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(41, 'A vendre', 0, 1, 150000, 2380.74, -1213.53, 27.4221, 272.685, -27.3073, -30.874, 1003.56, 0, 4, 60028, 0, 0, 1, 0, 100, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 2380.74, -1213.53, 27.4221, 272.685, 0, 0, 0, '', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(42, 'Santana''s 24/7', 101, 1, 150000, 2352.01, -1412.15, 23.9923, 272.087, -27.2828, -58.1948, 1003.09, 0, 6, 60029, 0, 0, 0, 0, 100, 300, 200, 30, 95, 20, 100, 10, 100, 35, 25, 2352.01, -1412.15, 23.9923, 272.087, 0, 0, 0, 'Bienvenue dans le Santana''s 24/7.', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(43, 'Groove ST Meuble', 99999999, 7, 150000, 2467.3, -1744.21, 13.5538, 64.4275, 807.792, -70.8404, 997.702, 180.554, 6, 60030, 0, 0, 0, 5302, 2851, 50, 200, 40, 300, 130, 400, 150, 200, 50, 10, 2467.09, -1744.23, 13.5537, 179.526, 2476.4, -1750.5, 13.5466, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(44, 'Épicerie', 99999999, 9, 750000, 1848.33, -1871.67, 13.5781, 268.959, -27.3122, -29.2775, 1003.56, 315, 4, 60031, 0, 0, 0, 526, 3393, 50, 20, 30, 30, 15, 20, 5, 5, 10, 5, 1848.33, -1871.67, 13.5781, 268.959, 1858.99, -1870.45, 13.1105, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(45, '24/7', 99999999, 1, 300000, 1348.05, -1756.91, 13.5078, 175.673, 1347.51, -1760.87, 13.5522, 174.15, 0, 0, 0, 0, 0, 511, 4208, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 1352.42, -1759.25, 13.5078, 181.345, 1343.71, -1751.68, 13.362, '', 150, 200, 50, 20, 20, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(46, 'A vendre', 0, 1, 150000, 2101.09, -1359.52, 23.9843, 358.207, -27.2828, -58.1948, 1003.09, 0, 6, 0, 0, 0, 1, 0, 100, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 2101.09, -1359.52, 23.9843, 358.207, 0, 0, 0, '', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(47, 'Rostova Entiquity''s', 34, 7, 150000, 2139.44, -1184.9, 23.9921, 266.091, 807.758, -71.3722, 997.825, 270, 6, 0, 0, 0, 0, 450, 216, 35, 150, 25, 220, 80, 300, 110, 140, 25, 10, 2001.86, -1761.96, 13.5389, 177.373, 2010.54, -1759.97, 13.5389, 'Bienvenue chez Santos Mobilier', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, 8, 24, 0, 0),
-(48, 'A vendre', 0, 1, 300000, 461.286, -1500.9, 31.059, 280.232, -27.2828, -58.1948, 1003.09, 0, 6, 60035, 0, 0, 1, 0, 100, 25, 15, 10, 10, 0, 0, 0, 0, 0, 0, 461.286, -1500.9, 31.059, 280.232, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(49, 'A vendre', 0, 1, 150000, 2152.13, -1014.28, 62.8008, 127.037, -27.3073, -30.874, 1003.56, 0, 4, 60036, 0, 0, 1, 0, 100, 75, 125, 15, 100, 3, 20, 10, 100, 20, 10, 2152.13, -1014.28, 62.8008, 127.037, 0, 0, 0, '', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 0, -1, -1, 0, 0),
-(53, 'A vendre', 0, 3, 300000, 1457.56, -1137.67, 23.9824, 41.8507, 161.48, -96.5366, 1001.8, 0, 18, 60040, 0, 0, 1, 0, 100, 25, 15, 10, 10, 0, 0, 0, 0, 0, 0, 1457.56, -1137.67, 23.9824, 41.8507, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0),
-(54, 'Station Essence', 99999999, 6, 750000, 1929.24, -1776.11, 13.5466, 0.9907, -27.2828, -58.1948, 1003.09, 0, 6, 0, 0, 0, 0, 7048, 0, 75, 115, 15, 90, 3, 20, 10, 90, 20, 10, 1929.08, -1776.38, 13.5466, 102.131, 1923.68, -1761.68, 13.5466, '', 140, 150, 50, 40, 5, 10, 5, 5, 0, 0, 0, 0, 24, 0, 0),
-(56, 'Motorcycle''s Downtown', 99999999, 5, 750000, 1445.65, -1325.44, 13.537, 271.274, 1443.2, -1325.52, 13.5677, 91.2276, 0, 0, 0, 0, 0, 310750, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1447.83, -1330.7, 13.5466, 69.454, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(57, 'Idlewood Tout Terrain', 99999999, 5, 750000, 2045.41, -1918.54, 13.5466, 2.7781, 396.51, 172.217, 1009.07, 0, 3, 0, 0, 0, 0, 1258125, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2051.42, -1915.03, 13.5466, 181.178, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(58, 'Cantine', 99999999, 4, 9999999, 866.943, 4579.46, 363.099, 0.3449, 459.903, -88.5774, 999.555, 89.5466, 4, 69, 3, 69, 0, 25, 9999962, 1, 2, 4, 8, 8, 6, 5, 0, 0, 0, 866.943, 4579.46, 363.099, 0.3449, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(59, 'Industrial Dealership', 99999999, 5, 750000, 2449.69, -2620.4, 13.6646, 87.8738, 396.51, 172.217, 1009.07, 0, 3, 0, 0, 0, 0, 559625, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2460.35, -2588.65, 13.6541, 269.223, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(62, 'Napolitan Food', 0, 4, 150000, 1567.98, -1897.9, 13.5607, 176.449, -794.815, 490.422, 1376.2, 359.631, 1, 46000, 0, 0, 1, 13, 693, 1, 4, 5, 9, 9, 9, 7, 3, 0, 0, 1039.63, -983.511, 42.7966, 2.2216, 1574.36, -1879.62, 13.5466, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(63, 'Station-Essence Plage', 99999999, 6, 750000, 2869.93, -1567.89, 11.0937, 156.471, -27.2828, -58.1948, 1003.09, 0, 6, 0, 0, 0, 1, 140, 100, 75, 115, 15, 90, 3, 20, 10, 90, 20, 10, 2869.93, -1567.89, 11.0937, 156.471, 2855.77, -1582.2, 11.0937, '', 140, 150, 50, 40, 5, 10, 5, 0, 0, 0, 0, 0, 24, 0, 0),
-(64, 'Ten Green Bottle', 182, 8, 50000, 2309.69, -1643.75, 14.8268, 330.081, 502.08, -68.18, 998.758, 1.8825, 11, 4048, 0, 0, 0, 275, 2994, 25, 15, 0, 0, 0, 0, 0, 0, 0, 0, 2309.91, -1644.17, 14.8268, 13.9187, 2305.94, -1637.92, 14.4504, 'Bienvenue à Ten Green Bottle, Servez vous. (/acheter)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(65, 'Alhambra', 100, 8, 750000, 1836.44, -1682.29, 13.3472, 275.357, 493.528, -23.8479, 1000.68, 1.5887, 17, 0, 0, 0, 0, 940, 3808, 60, 10, 5, 10, 10, 15, 0, 0, 0, 0, 1836.44, -1682.29, 13.3472, 275.357, 1810.26, -1676.69, 13.5424, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(66, 'Ammu-Glen', 99999999, 2, 750000, 1838.34, -1398.91, 13.5625, 87.6324, 1834.99, -1398.63, 13.4294, 92.6501, 0, 0, 0, 0, 0, 30346, 2751, 150, 300, 500, 1400, 2000, 1800, 0, 0, 0, 0, 1838.34, -1398.91, 13.5625, 87.6324, 1812.41, -1414.07, 13.42, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(67, '69 n''Club', 0, 8, 500000, 2421.49, -1219.83, 25.5237, 181.691, 1204.86, -12.9722, 1000.92, 359.564, 2, 0, 0, 0, 0, 0, 1063, 150, 8, 15, 95, 3, 2, 10, 100, 20, 10, 2421.49, -1219.83, 25.5237, 181.691, 2409.29, -1223.76, 24.7259, '', 140, 190, 150, 60, 50, 5, 10, 5, 0, 0, 0, 0, 24, 0, 0),
-(70, 'Naval Dealership', 99999999, 5, 1985555968, 718.569, -1476.53, 5.4685, 177.8, 396.51, 172.217, 1009.07, 0, 3, 0, 0, 0, 0, 552500, 5000, 75, 115, 15, 90, 3, 20, 10, 90, 20, 10, 727.023, -1517.94, -0.5608, 179.614, 0, 0, 0, '', 140, 150, 50, 40, 5, 10, 5, 5, 0, 0, 0, 0, 24, 0, 0),
-(71, 'AIR DEALSERSHIP', 99999999, 5, 750000000, 1893.16, -2328.6, 13.5466, 272.293, 396.51, 172.217, 1009.07, 0, 3, 0, 0, 0, 0, 1020000, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1934.33, -2377.83, 13.5466, 182.155, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0),
-(72, 'Station HCLI', 35, 6, 1000000, 1000.59, -919.906, 42.3278, 284.277, -27.2828, -58.1948, 1003.09, 0, 6, 0, 0, 0, 1, 151, 98, 75, 125, 15, 100, 10, 20, 10, 100, 20, 10, 999.652, -919.987, 42.3278, 296.853, 1000.17, -906.961, 42.1856, 'Bienvenu a la Station HCLI', 150, 200, 160, 60, 50, 5, 10, 5, 0, 0, 1, 0, 23, 0, 0);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `caisses`
+-- Table structure for table `caisses`
 --
 
-CREATE TABLE IF NOT EXISTS `caisses` (
-`caisseID` int(12) NOT NULL,
-  `caisseX` float DEFAULT '0',
-  `caisseY` float DEFAULT '0',
-  `caisseZ` float DEFAULT '0',
-  `caisseRX` float DEFAULT '0',
-  `caisseRY` float DEFAULT '0',
-  `caisseRZ` float DEFAULT '0',
-  `caisseInterior` int(12) DEFAULT '0',
-  `caisseWorld` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `caisses`
---
-
-INSERT INTO `caisses` (`caisseID`, `caisseX`, `caisseY`, `caisseZ`, `caisseRX`, `caisseRY`, `caisseRZ`, `caisseInterior`, `caisseWorld`) VALUES
-(1, 159.477, -82.4396, 1002.04, 0, 0, 0.3483, 18, 60010),
-(2, 492.782, -81.5893, 999.038, 0, 0, -89.8661, 11, 4048),
-(3, 809.167, -78.2371, 997.892, 0, 0, 180.923, 6, 60030),
-(4, 375.879, -118.101, 1001.75, 0, 0, 0.3685, 5, 0),
-(5, -23.7602, -56.4615, 1003.72, 0, 0, 179.6, 6, 0),
-(6, -30.4767, -29.805, 1003.7, 0, 0, -176.191, 4, 60031),
-(7, 493.501, -76.9584, 999.008, 0, 0, 178.181, 11, 0),
-(8, -24.3535, -56.252, 1003.75, 0, 0, -179.999, 6, 6009);
+CREATE TABLE `caisses` (
+  `caisseID` int(12) NOT NULL,
+  `caisseX` float DEFAULT 0,
+  `caisseY` float DEFAULT 0,
+  `caisseZ` float DEFAULT 0,
+  `caisseRX` float DEFAULT 0,
+  `caisseRY` float DEFAULT 0,
+  `caisseRZ` float DEFAULT 0,
+  `caisseInterior` int(12) DEFAULT 0,
+  `caisseWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cars`
+-- Table structure for table `cars`
 --
 
-CREATE TABLE IF NOT EXISTS `cars` (
-`carID` int(12) NOT NULL,
-  `carModel` int(12) DEFAULT '0',
-  `carOwner` int(12) DEFAULT '0',
-  `carPosX` float DEFAULT '0',
-  `carPosY` float DEFAULT '0',
-  `carPosZ` float DEFAULT '0',
-  `carPosR` float DEFAULT '0',
-  `carColor1` int(12) DEFAULT '0',
-  `carColor2` int(12) DEFAULT '0',
-  `carPaintjob` int(12) DEFAULT '-1',
-  `carLocked` int(4) DEFAULT '0',
-  `carMod1` int(12) DEFAULT '0',
-  `carMod2` int(12) DEFAULT '0',
-  `carMod3` int(12) DEFAULT '0',
-  `carMod4` int(12) DEFAULT '0',
-  `carMod5` int(12) DEFAULT '0',
-  `carMod6` int(12) DEFAULT '0',
-  `carMod7` int(12) DEFAULT '0',
-  `carMod8` int(12) DEFAULT '0',
-  `carMod9` int(12) DEFAULT '0',
-  `carMod10` int(12) DEFAULT '0',
-  `carMod11` int(12) DEFAULT '0',
-  `carMod12` int(12) DEFAULT '0',
-  `carMod13` int(12) DEFAULT '0',
-  `carMod14` int(12) DEFAULT '0',
-  `carImpounded` int(12) DEFAULT '0',
-  `carWeapon1` int(12) DEFAULT '0',
-  `carAmmo1` int(12) DEFAULT '0',
-  `carWeapon2` int(12) DEFAULT '0',
-  `carAmmo2` int(12) DEFAULT '0',
-  `carWeapon3` int(12) DEFAULT '0',
-  `carAmmo3` int(12) DEFAULT '0',
-  `carWeapon4` int(12) DEFAULT '0',
-  `carAmmo4` int(12) DEFAULT '0',
-  `carWeapon5` int(12) DEFAULT '0',
-  `carAmmo5` int(12) DEFAULT '0',
-  `carImpoundPrice` int(12) DEFAULT '0',
-  `carFaction` int(12) DEFAULT '0',
-  `carLoca` int(11) NOT NULL DEFAULT '-1',
-  `carLocaID` int(11) NOT NULL DEFAULT '-1',
+CREATE TABLE `cars` (
+  `carID` int(12) NOT NULL,
+  `carModel` int(12) DEFAULT 0,
+  `carOwner` int(12) DEFAULT 0,
+  `carPosX` float DEFAULT 0,
+  `carPosY` float DEFAULT 0,
+  `carPosZ` float DEFAULT 0,
+  `carPosR` float DEFAULT 0,
+  `carColor1` int(12) DEFAULT 0,
+  `carColor2` int(12) DEFAULT 0,
+  `carPaintjob` int(12) DEFAULT -1,
+  `carLocked` int(4) DEFAULT 0,
+  `carMod1` int(12) DEFAULT 0,
+  `carMod2` int(12) DEFAULT 0,
+  `carMod3` int(12) DEFAULT 0,
+  `carMod4` int(12) DEFAULT 0,
+  `carMod5` int(12) DEFAULT 0,
+  `carMod6` int(12) DEFAULT 0,
+  `carMod7` int(12) DEFAULT 0,
+  `carMod8` int(12) DEFAULT 0,
+  `carMod9` int(12) DEFAULT 0,
+  `carMod10` int(12) DEFAULT 0,
+  `carMod11` int(12) DEFAULT 0,
+  `carMod12` int(12) DEFAULT 0,
+  `carMod13` int(12) DEFAULT 0,
+  `carMod14` int(12) DEFAULT 0,
+  `carImpounded` int(12) DEFAULT 0,
+  `carWeapon1` int(12) DEFAULT 0,
+  `carAmmo1` int(12) DEFAULT 0,
+  `carWeapon2` int(12) DEFAULT 0,
+  `carAmmo2` int(12) DEFAULT 0,
+  `carWeapon3` int(12) DEFAULT 0,
+  `carAmmo3` int(12) DEFAULT 0,
+  `carWeapon4` int(12) DEFAULT 0,
+  `carAmmo4` int(12) DEFAULT 0,
+  `carWeapon5` int(12) DEFAULT 0,
+  `carAmmo5` int(12) DEFAULT 0,
+  `carImpoundPrice` int(12) DEFAULT 0,
+  `carFaction` int(12) DEFAULT 0,
+  `carLoca` int(11) NOT NULL DEFAULT -1,
+  `carLocaID` int(11) NOT NULL DEFAULT -1,
   `carDouble` int(11) NOT NULL,
   `carSabot` int(11) NOT NULL,
   `carSabPri` int(11) NOT NULL,
-  `vkilometres` float NOT NULL DEFAULT '0',
-  `vmetre` int(11) NOT NULL DEFAULT '0',
-  `fuel` int(11) NOT NULL DEFAULT '100',
+  `vkilometres` float NOT NULL DEFAULT 0,
+  `vmetre` int(11) NOT NULL DEFAULT 0,
+  `fuel` int(11) NOT NULL DEFAULT 100,
   `carvie` float NOT NULL,
-  `alarme` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=269 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `cars`
---
-
-INSERT INTO `cars` (`carID`, `carModel`, `carOwner`, `carPosX`, `carPosY`, `carPosZ`, `carPosR`, `carColor1`, `carColor2`, `carPaintjob`, `carLocked`, `carMod1`, `carMod2`, `carMod3`, `carMod4`, `carMod5`, `carMod6`, `carMod7`, `carMod8`, `carMod9`, `carMod10`, `carMod11`, `carMod12`, `carMod13`, `carMod14`, `carImpounded`, `carWeapon1`, `carAmmo1`, `carWeapon2`, `carAmmo2`, `carWeapon3`, `carAmmo3`, `carWeapon4`, `carAmmo4`, `carWeapon5`, `carAmmo5`, `carImpoundPrice`, `carFaction`, `carLoca`, `carLocaID`, `carDouble`, `carSabot`, `carSabPri`, `vkilometres`, `vmetre`, `fuel`, `carvie`, `alarme`) VALUES
-(3, 499, 0, 1118.15, -1695.35, 13.542, 359.56, 1, 6, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, -1, 0, 0, 0, 511, 26, 991.2, 1),
-(4, 525, 0, 1106.57, -1696, 13.4172, 358.802, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, -1, 0, 0, 148, 419, 61, 852.7, 1),
-(5, 525, 0, 1112.71, -1694.93, 13.4172, 1.9519, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, -1, 0, 0, 120, 758, 31, 805.3, 1),
-(6, 578, 0, 1131.31, -1694.73, 14.1655, 2.3146, 1, 6, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, -1, 0, 0, 39, 922, 98, 857.7, 1),
-(9, 416, 0, 1275.09, -1549.31, 13.704, 279.812, 1, 3, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, -1, 0, 0, 17, 855, 69, 300, 1),
-(10, 416, 0, 1093.53, -1314.73, 13.8452, 85.7398, 1, 3, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 42, 428, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, -1, 0, 0, 230, 409, 76, 430.2, 1),
-(11, 407, 0, 1829.91, -1719.37, 13.7681, 173.462, 3, 3, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, -1, 0, 0, 13, 596, 0, 685.5, 1),
-(14, 405, 0, 2261.66, 63.8026, 26.3444, 80.3787, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 42, 997, 12, 300, 1),
-(15, 409, 0, 2200.38, -2279.61, 13.4856, 165.798, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 41, 30, 5, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 42, 321, 1, 941.7, 1),
-(25, 462, 0, 1305.93, -1371.28, 13.1862, 356.73, 0, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 5, 420, 53, 916.2, 1),
-(28, 462, 0, 2611.27, -2183.46, -0.6193, 94.355, 0, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 73, 73, 27, 981, 1),
-(29, 462, 0, 1614.95, -1894.7, 13.2174, 103.657, 0, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 31, 249, 67, 952.5, 1),
-(30, 462, 0, 2327.17, -1677.28, 13.9897, 89.61, 0, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 18, 266, 51, 997, 1),
-(33, 462, 0, 2165.08, -1707.54, 14.8183, 268.385, 0, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 328, -1, 0, 0, 0, 521, 15, 994.2, 1),
-(34, 462, 0, 2382.42, -1963.96, 13.1539, 69.4794, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 9, 366, 0, 964, 1),
-(35, 462, 0, 1828.24, -1577.53, 12.9561, 349.487, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 318, -1, 0, 0, 56, 199, 37, 920.4, 1),
-(36, 462, 0, 546.355, -1279.5, 16.8492, 206.225, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 316, -1, 0, 0, 92, 945, 74, 929, 1),
-(37, 462, 0, 2393.7, -1718.18, 13.2009, 0.6427, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 10, 288, 33, 948.7, 1),
-(38, 462, 0, 2381.29, -1722.4, 13.1581, 295.55, 16, 16, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 62, 951, 1),
-(39, 462, 0, 1349.82, -1863.71, 12.9785, 238.473, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 48, 230, 15, 791.7, 1),
-(42, 438, 0, 1275.39, -1698.66, 13.5516, 182.612, 6, 6, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 226, 686, 60, 979, 1),
-(43, 438, 0, 1268.42, -1698.95, 13.5495, 179.523, 6, 6, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 121, 967, 65, 999, 1),
-(44, 438, 0, 1261.15, -1699.44, 13.5017, 187.169, 6, 6, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 114, 172, 99, 974.9, 1),
-(53, 435, 0, 2434.83, -2076.38, 13.5466, 179.591, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 56, 300, 50, 1000, 1),
-(54, 450, 0, 2439.8, -2073.93, 13.5466, 183.272, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(57, 591, 0, 2455.74, -2071.54, 13.5466, 180, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(59, 515, 0, 1005.97, -939.935, 43.1938, 268.122, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 496, 312, 96, 1318920000, 1),
-(60, 515, 0, 2445.17, -2076.4, 14.6084, 180.564, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 627, 241, 73, 997.4, 1),
-(62, 584, 0, 2460.01, -2072.24, 13.5466, 178.104, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 151, 888, 50, 1000, 1),
-(63, 499, 0, 2466.9, -2077.22, 13.5123, 183.927, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 115, 533, 100, 937.9, 1),
-(64, 499, 0, 2471.25, -2076.79, 13.5361, 179.216, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, -1, 0, 0, 27, 234, 87, 976, 1),
-(88, 468, 116, 2668.6, -1544.26, 23.5663, 165.19, 1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, 80, 262, 11, 848.9, 1),
-(97, 444, 1, 2784.14, -1910.11, 13.9183, 356.248, 243, 243, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, 317, 197, 94, 860.2, 1),
-(104, 420, 0, 1265.12, -1699.03, 13.3274, 175.444, 6, 6, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 19, 792, 100, 664.5, 1),
-(123, 497, 0, 183.309, 1412.11, 10.7594, 40.1809, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 27, 47, 100, 904, 1),
-(137, 568, 1, 2791.98, -1909.48, 13.4131, 182.886, 1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, 83, 721, 93, 748, 1),
-(184, 528, 0, 1894.14, -2332.9, 13.5925, 4.5918, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 1, 783, 48, 831.9, 1),
-(191, 579, 0, 1281.94, -1342.24, 13.3113, 91.3786, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 6, 50, 1000, 1),
-(192, 408, 0, 1258.34, -1266.06, 13.3828, 264.773, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 3, 50, 1000, 1),
-(193, 408, 0, 1258.93, -1260.81, 13.2225, 251.946, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(194, 408, 0, 1265.02, -1255.77, 13.0711, 234.19, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(201, 568, 136, 2266.87, -1630.92, 15.2186, 213.086, 1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, 0, 390, 50, 1000, 1),
-(210, 582, 0, 777.867, -1345.28, 13.77, 180.046, 3, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 175, 297, 50, 1000, 1),
-(211, 582, 0, 772.7, -1345.67, 13.7756, 180.756, 3, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 225, 453, 49, 999, 1),
-(212, 496, 0, 783.084, -1344.52, 13.4333, 179.948, 3, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 46, 888, 49, 999, 1),
-(213, 488, 0, 710.47, -1356.27, 24.2036, 270.626, 3, 73, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, -1, 0, 0, 210, 720, 49, 999, 1),
-(214, 402, 269, 2270.14, -1446.74, 23.6987, 177.51, 6, 62, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 104, 541, 11, 962.9, 1),
-(219, 420, 0, 1428.78, -1588.66, 13.177, 85.8528, 95, 83, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, -1, 0, 0, 0, 878, 48, 972, 1),
-(223, 462, 0, 1671.48, -1721.13, 20.4843, 351.54, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 2, 547, 50, 1000, 1),
-(224, 462, 0, 1668.75, -1720.97, 20.4843, 6.92, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 8, 586, 50, 1000, 1),
-(225, 462, 0, 1665.22, -1721.12, 20.4843, 0.2211, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 87, 50, 1000, 1),
-(226, 462, 0, 1661.92, -1722.11, 20.4843, 355.758, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 10, 50, 1000, 1),
-(227, 462, 0, 1659.44, -1721.62, 20.4843, 4.6875, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(228, 462, 0, 1656.88, -1721.7, 20.4843, 359.727, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(229, 462, 0, 1654.38, -1721.23, 20.4843, 2.703, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(230, 462, 0, 1652.3, -1721.45, 20.4771, 352.037, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(231, 462, 0, 1649.51, -1721.5, 20.4771, 357.742, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(232, 462, 0, 1647.4, -1721.36, 20.4771, 8.4085, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(233, 462, 0, 1645.09, -1721.26, 20.0252, 335.492, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(235, 462, 0, 1415.97, -1716.45, 13.5468, 96.3569, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(236, 462, 0, 1416.02, -1718.38, 13.5468, 91.3958, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(237, 462, 0, 1282.14, -1693.24, 13.5517, 91.1477, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(238, 462, 0, 1280.94, -1691.24, 13.1466, 97.968, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(239, 462, 0, 1281, -1688.83, 13.5468, 91.1477, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(240, 462, 0, 1281.67, -1685.7, 13.5468, 83.706, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(241, 462, 0, 1239.04, -1414.57, 13.3213, 0.4969, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(242, 462, 0, 1236.46, -1414.08, 12.9041, 13.434, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(243, 462, 0, 1182.27, -1331.52, 13.5833, 273.857, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(244, 462, 0, 1182.28, -1330.17, 13.5852, 265.919, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(245, 462, 0, 1181.91, -1313.16, 13.5676, 273.856, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(246, 462, 0, 1181.46, -1314.86, 13.5713, 268.647, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(247, 462, 0, 1302.43, -1382.11, 13.7425, 171.34, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(248, 462, 0, 1702.41, -1637.01, 19.8001, 167.245, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 325, -1, 0, 0, 7, 429, 46, 939.5, 1),
-(249, 462, 0, 954.486, -1758.18, 13.1452, 347.094, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 1, 931, 49, 1000, 1),
-(250, 462, 0, 1541.24, -1661.52, 13.5521, 81.7914, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, 50, 1000, 1),
-(251, 462, 0, 2038.42, -1760.82, 13.1424, 242.208, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 319, -1, 0, 0, 31, 708, 22, 924, 1),
-(252, 462, 0, 2050.81, -1919.4, 13.1471, 353.496, 6, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 320, -1, 0, 0, 11, 687, 41, 992, 1);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `carstorage`
---
-
-CREATE TABLE IF NOT EXISTS `carstorage` (
-  `ID` int(12) DEFAULT '0',
-`itemID` int(12) NOT NULL,
-  `itemName` varchar(32) DEFAULT NULL,
-  `itemModel` int(12) DEFAULT '0',
-  `itemQuantity` int(12) DEFAULT '0'
+  `alarme` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `characters`
+-- Table structure for table `carstorage`
 --
 
-CREATE TABLE IF NOT EXISTS `characters` (
-`ID` int(12) NOT NULL,
+CREATE TABLE `carstorage` (
+  `ID` int(12) DEFAULT 0,
+  `itemID` int(12) NOT NULL,
+  `itemName` varchar(32) DEFAULT NULL,
+  `itemModel` int(12) DEFAULT 0,
+  `itemQuantity` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `characters`
+--
+
+CREATE TABLE `characters` (
+  `ID` int(12) NOT NULL,
   `Username` varchar(24) DEFAULT NULL,
   `Character` varchar(24) DEFAULT NULL,
-  `Created` int(4) DEFAULT '0',
-  `Gender` int(4) DEFAULT '0',
+  `Created` int(4) DEFAULT 0,
+  `Gender` int(4) DEFAULT 0,
   `Birthdate` varchar(32) DEFAULT '01/01/1970',
   `Origin` varchar(32) DEFAULT 'Not Specified',
-  `Skin` int(12) DEFAULT '0',
-  `Glasses` int(12) DEFAULT '0',
-  `Hat` int(12) DEFAULT '0',
-  `Bandana` int(12) DEFAULT '0',
-  `PosX` float DEFAULT '0',
-  `PosY` float DEFAULT '0',
-  `PosZ` float DEFAULT '0',
-  `PosA` float DEFAULT '0',
-  `Interior` int(12) DEFAULT '0',
-  `World` int(12) DEFAULT '0',
+  `Skin` int(12) DEFAULT 0,
+  `Glasses` int(12) DEFAULT 0,
+  `Hat` int(12) DEFAULT 0,
+  `Bandana` int(12) DEFAULT 0,
+  `PosX` float DEFAULT 0,
+  `PosY` float DEFAULT 0,
+  `PosZ` float DEFAULT 0,
+  `PosA` float DEFAULT 0,
+  `Interior` int(12) DEFAULT 0,
+  `World` int(12) DEFAULT 0,
   `GlassesPos` varchar(100) DEFAULT NULL,
   `HatPos` varchar(100) DEFAULT NULL,
   `BandanaPos` varchar(100) DEFAULT NULL,
-  `Hospital` int(12) DEFAULT '-1',
-  `HospitalInt` int(12) DEFAULT '0',
-  `Money` int(12) DEFAULT '0',
-  `BankMoney` int(12) DEFAULT '0',
-  `OwnsBillboard` int(12) DEFAULT '-1',
-  `Savings` int(12) DEFAULT '0',
-  `Admin` int(12) DEFAULT '0',
-  `JailTime` int(12) DEFAULT '0',
-  `Muted` int(4) DEFAULT '0',
-  `CreateDate` int(12) DEFAULT '0',
-  `LastLogin` int(12) DEFAULT '0',
-  `Tester` int(4) DEFAULT '0',
-  `Gun1` int(12) DEFAULT '0',
-  `Gun2` int(12) DEFAULT '0',
-  `Gun3` int(12) DEFAULT '0',
-  `Gun4` int(12) DEFAULT '0',
-  `Gun5` int(12) DEFAULT '0',
-  `Gun6` int(12) DEFAULT '0',
-  `Gun7` int(12) DEFAULT '0',
-  `Gun8` int(12) DEFAULT '0',
-  `Gun9` int(12) DEFAULT '0',
-  `Gun10` int(12) DEFAULT '0',
-  `Gun11` int(12) DEFAULT '0',
-  `Gun12` int(12) DEFAULT '0',
-  `Gun13` int(12) DEFAULT '0',
-  `Ammo1` int(12) DEFAULT '0',
-  `Ammo2` int(12) DEFAULT '0',
-  `Ammo3` int(12) DEFAULT '0',
-  `Ammo4` int(12) DEFAULT '0',
-  `Ammo5` int(12) DEFAULT '0',
-  `Ammo6` int(12) DEFAULT '0',
-  `Ammo7` int(12) DEFAULT '0',
-  `Ammo8` int(12) DEFAULT '0',
-  `Ammo9` int(12) DEFAULT '0',
-  `Ammo10` int(12) DEFAULT '0',
-  `Ammo11` int(12) DEFAULT '0',
-  `Ammo12` int(12) DEFAULT '0',
-  `Ammo13` int(12) DEFAULT '0',
-  `House` int(12) DEFAULT '-1',
-  `Business` int(12) DEFAULT '-1',
-  `Phone` int(12) DEFAULT '0',
-  `Lottery` int(12) DEFAULT '0',
-  `Hunger` int(12) DEFAULT '100',
-  `Thirst` int(12) DEFAULT '100',
-  `PlayingHours` int(12) DEFAULT '0',
-  `Minutes` int(12) DEFAULT '0',
-  `ArmorStatus` float DEFAULT '0',
-  `Entrance` int(12) DEFAULT '0',
-  `Job` int(12) DEFAULT '0',
-  `Faction` int(12) DEFAULT '-1',
-  `FactionRank` int(12) DEFAULT '0',
-  `Prisoned` int(4) DEFAULT '0',
-  `Warrants` int(12) DEFAULT '0',
-  `Injured` int(4) DEFAULT '0',
-  `Health` float DEFAULT '0',
-  `Channel` int(12) DEFAULT '0',
+  `Hospital` int(12) DEFAULT -1,
+  `HospitalInt` int(12) DEFAULT 0,
+  `Money` int(12) DEFAULT 0,
+  `BankMoney` int(12) DEFAULT 0,
+  `OwnsBillboard` int(12) DEFAULT -1,
+  `Savings` int(12) DEFAULT 0,
+  `Admin` int(12) DEFAULT 0,
+  `JailTime` int(12) DEFAULT 0,
+  `Muted` int(4) DEFAULT 0,
+  `CreateDate` int(12) DEFAULT 0,
+  `LastLogin` int(12) DEFAULT 0,
+  `Tester` int(4) DEFAULT 0,
+  `Gun1` int(12) DEFAULT 0,
+  `Gun2` int(12) DEFAULT 0,
+  `Gun3` int(12) DEFAULT 0,
+  `Gun4` int(12) DEFAULT 0,
+  `Gun5` int(12) DEFAULT 0,
+  `Gun6` int(12) DEFAULT 0,
+  `Gun7` int(12) DEFAULT 0,
+  `Gun8` int(12) DEFAULT 0,
+  `Gun9` int(12) DEFAULT 0,
+  `Gun10` int(12) DEFAULT 0,
+  `Gun11` int(12) DEFAULT 0,
+  `Gun12` int(12) DEFAULT 0,
+  `Gun13` int(12) DEFAULT 0,
+  `Ammo1` int(12) DEFAULT 0,
+  `Ammo2` int(12) DEFAULT 0,
+  `Ammo3` int(12) DEFAULT 0,
+  `Ammo4` int(12) DEFAULT 0,
+  `Ammo5` int(12) DEFAULT 0,
+  `Ammo6` int(12) DEFAULT 0,
+  `Ammo7` int(12) DEFAULT 0,
+  `Ammo8` int(12) DEFAULT 0,
+  `Ammo9` int(12) DEFAULT 0,
+  `Ammo10` int(12) DEFAULT 0,
+  `Ammo11` int(12) DEFAULT 0,
+  `Ammo12` int(12) DEFAULT 0,
+  `Ammo13` int(12) DEFAULT 0,
+  `House` int(12) DEFAULT -1,
+  `Business` int(12) DEFAULT -1,
+  `Phone` int(12) DEFAULT 0,
+  `Lottery` int(12) DEFAULT 0,
+  `Hunger` int(12) DEFAULT 100,
+  `Thirst` int(12) DEFAULT 100,
+  `PlayingHours` int(12) DEFAULT 0,
+  `Minutes` int(12) DEFAULT 0,
+  `ArmorStatus` float DEFAULT 0,
+  `Entrance` int(12) DEFAULT 0,
+  `Job` int(12) DEFAULT 0,
+  `Faction` int(12) DEFAULT -1,
+  `FactionRank` int(12) DEFAULT 0,
+  `Prisoned` int(4) DEFAULT 0,
+  `Warrants` int(12) DEFAULT 0,
+  `Injured` int(4) DEFAULT 0,
+  `Health` float DEFAULT 0,
+  `Channel` int(12) DEFAULT 0,
   `Accent` varchar(24) DEFAULT NULL,
-  `Bleeding` int(4) DEFAULT '0',
-  `Warnings` int(12) DEFAULT '0',
+  `Bleeding` int(4) DEFAULT 0,
+  `Warnings` int(12) DEFAULT 0,
   `Warn1` varchar(32) DEFAULT NULL,
   `Warn2` varchar(32) DEFAULT NULL,
-  `MaskID` int(12) DEFAULT '0',
-  `FactionMod` int(12) DEFAULT '0',
-  `Capacity` int(12) DEFAULT '35',
-  `AdminHide` int(4) DEFAULT '0',
+  `MaskID` int(12) DEFAULT 0,
+  `FactionMod` int(12) DEFAULT 0,
+  `Capacity` int(12) DEFAULT 35,
+  `AdminHide` int(4) DEFAULT 0,
   `LotteryB` int(11) NOT NULL,
   `SpawnPoint` int(11) NOT NULL,
-  `connecter` int(4) NOT NULL DEFAULT '0',
-  `bracelet` int(4) NOT NULL DEFAULT '0',
-  `braceletdist` int(4) NOT NULL DEFAULT '0',
-  `LocaID` int(4) NOT NULL DEFAULT '0',
-  `CarD` int(4) NOT NULL DEFAULT '-1',
-  `LocaMaisonID` int(4) NOT NULL DEFAULT '0',
-  `baterietel` int(4) NOT NULL DEFAULT '20',
-  `BestScore` int(4) NOT NULL DEFAULT '0',
-  `Strike` int(4) NOT NULL DEFAULT '0',
-  `Repetition` int(8) NOT NULL DEFAULT '0',
-  `Parcouru` int(8) NOT NULL DEFAULT '0',
-  `Noob` int(4) NOT NULL DEFAULT '1',
-  `ZombieKill` int(4) NOT NULL DEFAULT '0',
-  `skill0` int(4) NOT NULL DEFAULT '0',
-  `skill1` int(4) NOT NULL DEFAULT '0',
-  `skill2` int(4) NOT NULL DEFAULT '0',
-  `skill3` int(4) NOT NULL DEFAULT '0',
-  `skill4` int(4) NOT NULL DEFAULT '0',
-  `skill5` int(4) NOT NULL DEFAULT '0',
-  `skill6` int(4) NOT NULL DEFAULT '0',
-  `skill7` int(4) NOT NULL DEFAULT '0',
-  `skill8` int(4) NOT NULL DEFAULT '0',
-  `skill9` int(4) NOT NULL DEFAULT '0',
-  `skill10` int(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=330 DEFAULT CHARSET=latin1;
+  `connecter` int(4) NOT NULL DEFAULT 0,
+  `bracelet` int(4) NOT NULL DEFAULT 0,
+  `braceletdist` int(4) NOT NULL DEFAULT 0,
+  `LocaID` int(4) NOT NULL DEFAULT 0,
+  `CarD` int(4) NOT NULL DEFAULT -1,
+  `LocaMaisonID` int(4) NOT NULL DEFAULT 0,
+  `baterietel` int(4) NOT NULL DEFAULT 20,
+  `BestScore` int(4) NOT NULL DEFAULT 0,
+  `Strike` int(4) NOT NULL DEFAULT 0,
+  `Repetition` int(8) NOT NULL DEFAULT 0,
+  `Parcouru` int(8) NOT NULL DEFAULT 0,
+  `Noob` int(4) NOT NULL DEFAULT 1,
+  `ZombieKill` int(4) NOT NULL DEFAULT 0,
+  `skill0` int(4) NOT NULL DEFAULT 0,
+  `skill1` int(4) NOT NULL DEFAULT 0,
+  `skill2` int(4) NOT NULL DEFAULT 0,
+  `skill3` int(4) NOT NULL DEFAULT 0,
+  `skill4` int(4) NOT NULL DEFAULT 0,
+  `skill5` int(4) NOT NULL DEFAULT 0,
+  `skill6` int(4) NOT NULL DEFAULT 0,
+  `skill7` int(4) NOT NULL DEFAULT 0,
+  `skill8` int(4) NOT NULL DEFAULT 0,
+  `skill9` int(4) NOT NULL DEFAULT 0,
+  `skill10` int(4) NOT NULL DEFAULT 0,
+  `DA` int(4) NOT NULL DEFAULT 0,
+  `Death` int(4) NOT NULL DEFAULT 0,
+  `Role` varchar(20) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `contacts`
+-- Table structure for table `contacts`
 --
 
-CREATE TABLE IF NOT EXISTS `contacts` (
-  `ID` int(12) DEFAULT '0',
-`contactID` int(12) NOT NULL,
+CREATE TABLE `contacts` (
+  `ID` int(12) DEFAULT 0,
+  `contactID` int(12) NOT NULL,
   `contactName` varchar(32) DEFAULT NULL,
-  `contactNumber` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=latin1;
-
-
--- --------------------------------------------------------
-
---
--- Structure de la table `crates`
---
-
-CREATE TABLE IF NOT EXISTS `crates` (
-`crateID` int(12) NOT NULL,
-  `crateType` int(12) DEFAULT '0',
-  `crateX` float DEFAULT '0',
-  `crateY` float DEFAULT '0',
-  `crateZ` float DEFAULT '0',
-  `crateA` float DEFAULT '0',
-  `crateInterior` int(12) DEFAULT '0',
-  `crateWorld` int(12) DEFAULT '0'
+  `contactNumber` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvfbi`
+-- Table structure for table `crates`
 --
 
-CREATE TABLE IF NOT EXISTS `cvfbi` (
-`id` int(11) NOT NULL,
-  `pseudo` varchar(24) NOT NULL,
-  `telephone` int(12) NOT NULL,
-  `naissance` varchar(32) NOT NULL,
-  `sexe` int(4) NOT NULL,
-  `origine` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `cvfbi`
---
-
+CREATE TABLE `crates` (
+  `crateID` int(12) NOT NULL,
+  `crateType` int(12) DEFAULT 0,
+  `crateX` float DEFAULT 0,
+  `crateY` float DEFAULT 0,
+  `crateZ` float DEFAULT 0,
+  `crateA` float DEFAULT 0,
+  `crateInterior` int(12) DEFAULT 0,
+  `crateWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvjournaliste`
+-- Table structure for table `cvfbi`
 --
 
-CREATE TABLE IF NOT EXISTS `cvjournaliste` (
-`id` int(11) NOT NULL,
-  `pseudo` varchar(24) NOT NULL,
-  `telephone` int(12) NOT NULL,
-  `naissance` varchar(32) NOT NULL,
-  `sexe` int(4) NOT NULL,
-  `origine` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `cvjournaliste`
---
-
--- --------------------------------------------------------
-
---
--- Structure de la table `cvlivraisonbiz`
---
-
-CREATE TABLE IF NOT EXISTS `cvlivraisonbiz` (
-`id` int(11) NOT NULL,
-  `pseudo` varchar(24) NOT NULL,
-  `telephone` int(12) NOT NULL,
-  `naissance` varchar(32) NOT NULL,
-  `sexe` int(4) NOT NULL,
-  `origine` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-
-
--- --------------------------------------------------------
-
---
--- Structure de la table `cvmairie`
---
-
-CREATE TABLE IF NOT EXISTS `cvmairie` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvfbi` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -842,11 +524,11 @@ CREATE TABLE IF NOT EXISTS `cvmairie` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvmecanozone3`
+-- Table structure for table `cvjournaliste`
 --
 
-CREATE TABLE IF NOT EXISTS `cvmecanozone3` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvjournaliste` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -857,11 +539,11 @@ CREATE TABLE IF NOT EXISTS `cvmecanozone3` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvmecanozone4`
+-- Table structure for table `cvlivraisonbiz`
 --
 
-CREATE TABLE IF NOT EXISTS `cvmecanozone4` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvlivraisonbiz` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -872,11 +554,11 @@ CREATE TABLE IF NOT EXISTS `cvmecanozone4` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvpetitlivreur`
+-- Table structure for table `cvmairie`
 --
 
-CREATE TABLE IF NOT EXISTS `cvpetitlivreur` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvmairie` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -887,47 +569,11 @@ CREATE TABLE IF NOT EXISTS `cvpetitlivreur` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvpolice`
+-- Table structure for table `cvmecanozone3`
 --
 
-CREATE TABLE IF NOT EXISTS `cvpolice` (
-`id` int(11) NOT NULL,
-  `pseudo` varchar(24) NOT NULL,
-  `telephone` int(12) NOT NULL,
-  `naissance` varchar(32) NOT NULL,
-  `sexe` int(4) NOT NULL,
-  `origine` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `cvpolice`
---
--- --------------------------------------------------------
-
---
--- Structure de la table `cvswat`
---
-
-CREATE TABLE IF NOT EXISTS `cvswat` (
-`id` int(11) NOT NULL,
-  `pseudo` varchar(24) NOT NULL,
-  `telephone` int(12) NOT NULL,
-  `naissance` varchar(32) NOT NULL,
-  `sexe` int(4) NOT NULL,
-  `origine` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `cvswat`
---
--- --------------------------------------------------------
-
---
--- Structure de la table `cvtaxi`
---
-
-CREATE TABLE IF NOT EXISTS `cvtaxi` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvmecanozone3` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -938,11 +584,11 @@ CREATE TABLE IF NOT EXISTS `cvtaxi` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvurgentiste`
+-- Table structure for table `cvmecanozone4`
 --
 
-CREATE TABLE IF NOT EXISTS `cvurgentiste` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvmecanozone4` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -953,11 +599,11 @@ CREATE TABLE IF NOT EXISTS `cvurgentiste` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cvvendeurrue`
+-- Table structure for table `cvpetitlivreur`
 --
 
-CREATE TABLE IF NOT EXISTS `cvvendeurrue` (
-`id` int(11) NOT NULL,
+CREATE TABLE `cvpetitlivreur` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(24) NOT NULL,
   `telephone` int(12) NOT NULL,
   `naissance` varchar(32) NOT NULL,
@@ -968,247 +614,249 @@ CREATE TABLE IF NOT EXISTS `cvvendeurrue` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `dealervehicles`
+-- Table structure for table `cvpolice`
 --
 
-CREATE TABLE IF NOT EXISTS `dealervehicles` (
-  `ID` int(12) DEFAULT '0',
-`vehID` int(12) NOT NULL,
-  `vehModel` int(12) DEFAULT '0',
-  `vehPrice` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `dealervehicles`
---
-
-INSERT INTO `dealervehicles` (`ID`, `vehID`, `vehModel`, `vehPrice`) VALUES
-(56, 1, 471, 7500),
-(56, 2, 468, 15000),
-(56, 3, 463, 30000),
-(56, 4, 461, 25000),
-(56, 5, 462, 4000),
-(56, 6, 481, 2500),
-(56, 7, 510, 3000),
-(56, 8, 509, 1000),
-(56, 9, 586, 20000),
-(56, 10, 521, 28000),
-(56, 11, 581, 17000),
-(59, 12, 435, 50000),
-(59, 13, 450, 50000),
-(59, 14, 514, 100000),
-(59, 15, 403, 125000),
-(59, 16, 515, 150000),
-(59, 17, 591, 50000),
-(59, 18, 584, 50000),
-(59, 19, 456, 40000),
-(59, 20, 414, 30000),
-(59, 21, 499, 50000),
-(59, 22, 459, 50000),
-(59, 23, 482, 70000),
-(59, 24, 498, 90000),
-(59, 25, 413, 35000),
-(59, 26, 440, 65000),
-(17, 28, 402, 90000),
-(17, 29, 451, 900000),
-(17, 30, 429, 350000),
-(17, 31, 480, 450000),
-(17, 32, 541, 540000),
-(17, 33, 411, 1300000),
-(17, 34, 603, 80000),
-(17, 35, 565, 126000),
-(17, 36, 587, 76000),
-(17, 37, 558, 130000),
-(17, 38, 560, 140000),
-(17, 39, 562, 150000),
-(17, 40, 477, 326000),
-(17, 41, 415, 850000),
-(17, 42, 506, 750000),
-(17, 43, 559, 115000),
-(17, 44, 602, 70000),
-(57, 45, 400, 70000),
-(57, 46, 424, 55000),
-(57, 48, 470, 120000),
-(57, 49, 478, 30000),
-(57, 50, 489, 80000),
-(57, 51, 554, 100000),
-(57, 52, 579, 250000),
-(16, 53, 401, 35000),
-(16, 54, 405, 65000),
-(16, 55, 410, 30000),
-(16, 56, 412, 60000),
-(16, 57, 418, 50000),
-(16, 58, 419, 45000),
-(16, 59, 420, 62500),
-(16, 60, 421, 75000),
-(16, 61, 426, 75500),
-(16, 62, 436, 55000),
-(16, 63, 439, 60000),
-(16, 64, 438, 67500),
-(16, 65, 445, 47500),
-(16, 66, 458, 85000),
-(16, 67, 466, 39000),
-(16, 68, 467, 43500),
-(16, 69, 474, 56500),
-(16, 70, 475, 90000),
-(16, 71, 491, 70000),
-(16, 72, 492, 75000),
-(16, 73, 507, 75000),
-(16, 74, 516, 60000),
-(16, 75, 517, 55000),
-(16, 76, 518, 69999),
-(16, 77, 534, 49999),
-(16, 78, 533, 59999),
-(16, 79, 536, 67500),
-(16, 80, 542, 67500),
-(16, 81, 543, 27500),
-(57, 82, 568, 40000),
-(71, 84, 469, 900000),
-(71, 86, 487, 1200000),
-(16, 87, 567, 30000),
-(16, 88, 522, 790000);
+CREATE TABLE `cvpolice` (
+  `id` int(11) NOT NULL,
+  `pseudo` varchar(24) NOT NULL,
+  `telephone` int(12) NOT NULL,
+  `naissance` varchar(32) NOT NULL,
+  `sexe` int(4) NOT NULL,
+  `origine` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `detectors`
+-- Table structure for table `cvswat`
 --
 
-CREATE TABLE IF NOT EXISTS `detectors` (
-`detectorID` int(12) NOT NULL,
-  `detectorX` float DEFAULT '0',
-  `detectorY` float DEFAULT '0',
-  `detectorZ` float DEFAULT '0',
-  `detectorAngle` float DEFAULT '0',
-  `detectorInterior` int(12) DEFAULT '0',
-  `detectorWorld` int(12) DEFAULT '0'
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+CREATE TABLE `cvswat` (
+  `id` int(11) NOT NULL,
+  `pseudo` varchar(24) NOT NULL,
+  `telephone` int(12) NOT NULL,
+  `naissance` varchar(32) NOT NULL,
+  `sexe` int(4) NOT NULL,
+  `origine` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `dropped`
+-- Table structure for table `cvtaxi`
 --
 
-CREATE TABLE IF NOT EXISTS `dropped` (
-`ID` int(12) NOT NULL,
+CREATE TABLE `cvtaxi` (
+  `id` int(11) NOT NULL,
+  `pseudo` varchar(24) NOT NULL,
+  `telephone` int(12) NOT NULL,
+  `naissance` varchar(32) NOT NULL,
+  `sexe` int(4) NOT NULL,
+  `origine` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cvurgentiste`
+--
+
+CREATE TABLE `cvurgentiste` (
+  `id` int(11) NOT NULL,
+  `pseudo` varchar(24) NOT NULL,
+  `telephone` int(12) NOT NULL,
+  `naissance` varchar(32) NOT NULL,
+  `sexe` int(4) NOT NULL,
+  `origine` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cvvendeurrue`
+--
+
+CREATE TABLE `cvvendeurrue` (
+  `id` int(11) NOT NULL,
+  `pseudo` varchar(24) NOT NULL,
+  `telephone` int(12) NOT NULL,
+  `naissance` varchar(32) NOT NULL,
+  `sexe` int(4) NOT NULL,
+  `origine` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dealervehicles`
+--
+
+CREATE TABLE `dealervehicles` (
+  `ID` int(12) DEFAULT 0,
+  `vehID` int(12) NOT NULL,
+  `vehModel` int(12) DEFAULT 0,
+  `vehPrice` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `death`
+--
+
+CREATE TABLE `death` (
+  `dID` int(4) NOT NULL,
+  `dName` varchar(32) NOT NULL,
+  `dDate` varchar(36) NOT NULL DEFAULT '10/10/2020'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `death`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detectors`
+--
+
+CREATE TABLE `detectors` (
+  `detectorID` int(12) NOT NULL,
+  `detectorX` float DEFAULT 0,
+  `detectorY` float DEFAULT 0,
+  `detectorZ` float DEFAULT 0,
+  `detectorAngle` float DEFAULT 0,
+  `detectorInterior` int(12) DEFAULT 0,
+  `detectorWorld` int(12) DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dropped`
+--
+
+CREATE TABLE `dropped` (
+  `ID` int(12) NOT NULL,
   `itemName` varchar(32) DEFAULT NULL,
-  `itemModel` int(12) DEFAULT '0',
-  `itemX` float DEFAULT '0',
-  `itemY` float DEFAULT '0',
-  `itemZ` float DEFAULT '0',
-  `itemInt` int(12) DEFAULT '0',
-  `itemWorld` int(12) DEFAULT '0',
-  `itemQuantity` int(12) DEFAULT '0',
-  `itemAmmo` int(12) DEFAULT '0',
-  `itemWeapon` int(12) DEFAULT '0',
+  `itemModel` int(12) DEFAULT 0,
+  `itemX` float DEFAULT 0,
+  `itemY` float DEFAULT 0,
+  `itemZ` float DEFAULT 0,
+  `itemInt` int(12) DEFAULT 0,
+  `itemWorld` int(12) DEFAULT 0,
+  `itemQuantity` int(12) DEFAULT 0,
+  `itemAmmo` int(12) DEFAULT 0,
+  `itemWeapon` int(12) DEFAULT 0,
   `itemPlayer` varchar(24) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `entrances`
+-- Table structure for table `entrances`
 --
 
-CREATE TABLE IF NOT EXISTS `entrances` (
-`entranceID` int(12) NOT NULL,
+CREATE TABLE `entrances` (
+  `entranceID` int(12) NOT NULL,
   `entranceName` varchar(32) DEFAULT NULL,
-  `entranceIcon` int(12) DEFAULT '0',
-  `entrancePosX` float DEFAULT '0',
-  `entrancePosY` float DEFAULT '0',
-  `entrancePosZ` float DEFAULT '0',
-  `entrancePosA` float DEFAULT '0',
-  `entranceIntX` float DEFAULT '0',
-  `entranceIntY` float DEFAULT '0',
-  `entranceIntZ` float DEFAULT '0',
-  `entranceIntA` float DEFAULT '0',
-  `entranceInterior` int(12) DEFAULT '0',
-  `entranceExterior` int(12) DEFAULT '0',
-  `entranceExteriorVW` int(12) DEFAULT '0',
-  `entranceType` int(12) DEFAULT '0',
+  `entranceIcon` int(12) DEFAULT 0,
+  `entrancePosX` float DEFAULT 0,
+  `entrancePosY` float DEFAULT 0,
+  `entrancePosZ` float DEFAULT 0,
+  `entrancePosA` float DEFAULT 0,
+  `entranceIntX` float DEFAULT 0,
+  `entranceIntY` float DEFAULT 0,
+  `entranceIntZ` float DEFAULT 0,
+  `entranceIntA` float DEFAULT 0,
+  `entranceInterior` int(12) DEFAULT 0,
+  `entranceExterior` int(12) DEFAULT 0,
+  `entranceExteriorVW` int(12) DEFAULT 0,
+  `entranceType` int(12) DEFAULT 0,
   `entrancePass` varchar(32) DEFAULT NULL,
-  `entranceLocked` int(12) DEFAULT '0',
-  `entranceCustom` int(4) DEFAULT '0',
-  `entranceWorld` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=latin1;
+  `entranceLocked` int(12) DEFAULT 0,
+  `entranceCustom` int(4) DEFAULT 0,
+  `entranceWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `entrances`
+-- Dumping data for table `entrances`
 --
 
 INSERT INTO `entrances` (`entranceID`, `entranceName`, `entranceIcon`, `entrancePosX`, `entrancePosY`, `entrancePosZ`, `entrancePosA`, `entranceIntX`, `entranceIntY`, `entranceIntZ`, `entranceIntA`, `entranceInterior`, `entranceExterior`, `entranceExteriorVW`, `entranceType`, `entrancePass`, `entranceLocked`, `entranceCustom`, `entranceWorld`) VALUES
-(2, 'Auto-Ecole', 55, 2045.04, -1908.06, 13.5467, 100.882, -2029.55, -118.8, 1035.17, 0, 3, 0, 0, 1, '', 0, 0, 7002),
-(5, 'Mairie', 35, 1309.98, -1367.57, 13.5374, 352.201, -501.114, 286.605, 2001.09, 3.6551, 1, 0, 0, 4, '', 0, 1, 7005),
-(25, 'A.N.P.E', 13, 1699.2, -1667.9, 20.1949, 268.779, 316.874, 119.304, 1011.76, 9.612, 1, 0, 0, 10, '', 0, 1, 0),
-(27, 'Abatoire', 0, 1111.52, -976.441, 42.7656, 181.98, 964.355, 2107.85, 1011.03, 90.1714, 1, 0, 0, 0, '', 0, 1, 7027),
-(28, 'Cariste', 0, 998.808, -1246.43, 19.3977, 275.553, 1291.82, 5.8713, 1001.01, 180, 18, 0, 0, 3, '', 0, 1, 7028),
-(29, 'Usine', 0, 2657.46, -1589.32, 13.9792, 33.1244, 2570.17, -1301.73, 1044.12, 349.603, 2, 0, 0, 0, '', 0, 1, 7029),
-(30, 'Salle des machines', 0, 2490.97, -2468.47, 17.8828, 58.3809, -959.683, 1954.82, 9, 179.966, 17, 0, 0, 0, '', 0, 1, 7030),
-(31, 'Central éléctrique', 0, 2466.93, -2495.67, 13.6509, 312.305, 813.416, -69.8078, 1000.78, 75.4156, 1, 0, 0, 0, '', 0, 1, 7031),
-(32, 'Banque Riche', 52, 597.049, -1249.52, 18.2972, 354.704, 1455.83, -987.753, 996.105, 83.7797, 6, 0, 0, 2, '', 0, 0, 7010),
-(34, 'Casino', 25, 1284.34, -1585.31, 13.5466, 155.66, -251.957, -21.1578, 1004.69, 90, 3, 0, 0, 6, '', 0, 1, 7034),
-(35, 'Taxi', 0, 1275.05, -1662.61, 19.7343, 80.6309, -1972.14, -897.436, 757.898, 270.44, 1, 0, 0, 0, '', 0, 1, 7035),
-(36, 'Shooting Range', 0, 1368.91, -1279.8, 13.5468, 289.02, 304.017, -141.989, 1004.06, 90, 7, 0, 0, 5, '', 0, 0, 7036),
-(38, 'Bowling', 0, 1007.27, -1342.73, 13.3608, 181.6, -1992.7, 407.879, 2.5009, 268.706, 1, 0, 0, 9, '', 0, 1, 7038),
-(39, 'Entrepôt', 0, 1083.02, -1226.58, 15.8203, 93.8062, 2606.47, -1233.46, 1022.03, 272.707, 1, 0, 0, 0, '', 0, 1, 7039),
-(51, 'Gymnase', 0, 2229.89, -1721.25, 13.5611, 324.435, 772.428, -5.4299, 1000.73, 356.914, 5, 0, 0, 0, '', 0, 0, 7051),
-(55, 'HCLI', 0, 2460.17, -2132.67, 17.2712, 351.867, 1280.18, -867.876, 1085.62, 92.5365, 0, 0, 0, 0, '', 0, 0, 0),
-(58, 'Hall de la tour', 0, 1571.17, -1337.04, 16.4843, 118.575, 1395.28, -1586.44, 1087.09, 104.783, 6, 0, 0, 0, '', 0, 0, 3000),
-(59, 'PMU', 0, 1631.93, -1172.93, 24.0842, 176.667, 833.491, 7.3242, 1003.52, 90, 3, 0, 0, 7, '', 0, 0, 7059),
-(64, 'Usine de meubles', 0, 614.623, -1529.62, 15.1874, 80.4841, 1626.63, -1811.32, 1013.43, 90.6977, 210, 0, 0, 0, '', 0, 0, 7064),
-(73, 'Fabrique d''arme', 0, 1616.25, -1897.09, 13.5491, 157.742, 2332.91, 5.5956, 1026.5, 92.287, 1, 0, 0, 0, '', 0, 1, 1),
-(79, 'Los Santos Police Departement', 0, 1555.46, -1675.62, 16.1951, 276.081, 1561.44, -1675.98, 16.1898, 263.661, 0, 0, 0, 8, '', 0, 2, 0),
-(80, 'Los Santos Custom', 0, 1069.18, -1681.58, 13.5303, 11.2569, 1068.88, -1679.88, 13.5401, 3.146, 0, 0, 0, 0, '', 0, 0, 7080),
-(83, 'Banque', 0, 2751.88, -1438.14, 30.4531, 262.264, 1456.19, -987.942, 996.105, 90, 6, 0, 0, 2, '', 0, 0, 7083),
-(84, 'Stationnement', 0, 1524.56, -1677.86, 6.2186, 93.2238, 1571.47, -1667.98, 16.1898, 278.766, 0, 0, 0, 0, '', 0, 2, 0),
-(86, 'Stationnement', 0, 1570.9, -1668, 16.1899, 269.366, 1524.48, -1677.81, 6.2187, 91.5085, 0, 0, 0, 0, '', 0, 2, 0),
-(87, 'Sortie', 0, 1560.98, -1675.63, 16.1899, 85.2128, 1554.62, -1675.76, 16.1953, 87.1788, 0, 0, 0, 0, '', 0, 2, 0),
-(90, 'Toit', 0, 1562.56, -1654.79, 16.1909, 274.513, 1557.59, -1675.55, 28.3954, 101.731, 0, 0, 0, 0, '', 0, 2, 0),
-(91, 'Retour => Bureau', 0, 1557.55, -1675.51, 28.3954, 266.457, 1562.56, -1654.77, 16.1909, 153.996, 0, 0, 0, 0, '', 0, 2, 0),
-(92, 'Bureau de la Fourriere', 0, 2232.6, -2218.11, 13.5468, 41.7055, 441.11, 132.703, 1008.4, 171.598, 0, 0, 0, 0, '', 0, 0, 7092),
-(94, 'Event 1', 0, 2695.67, -1704.61, 11.8437, 211.046, 2744.15, -1741.82, 422.822, 129.705, 0, 0, 0, 0, '', 0, 2, 100),
-(95, 'San News', 36, 756.778, -1374.83, 14.2329, 221.52, 304.122, 1894.16, 904.376, 182.331, 15, 0, 0, 0, '', 0, 0, 7095),
-(96, 'Interieur San News', 0, 723.481, -1371.16, 24.047, 357.9, 324.565, 1891.08, 907.896, 91.1101, 15, 0, 0, 0, '', 0, 0, 7095),
-(97, 'Toît San News', 0, 324.184, 1891.07, 907.896, 91.1101, 723.481, -1371.16, 24.047, 0, 0, 15, 7095, 0, '', 0, 0, 0);
+(2, 'Auto-Ecole', 55, 1166.24, -1858.82, 506.589, 86.3585, -2029.55, -118.8, 1035.17, 0, 3, 0, 0, 1, '', 0, 0, 7002),
+(5, 'Mairie', 35, 2088.2, -1760.32, 13.4048, 196.125, -501.114, 286.605, 2001.09, 3.6551, 1, 0, 0, 4, '', 0, 1, 7005),
+(25, 'A.N.P.E', 13, 2147.54, -1757.27, 13.392, 270.047, 316.874, 119.304, 1011.76, 9.612, 1, 0, 0, 10, '', 0, 1, 0),
+(27, 'Abatoire', 0, 2113.97, -1765.5, 13.3965, 117.085, 964.355, 2107.85, 1011.03, 90.1714, 1, 0, 0, 0, '', 0, 1, 7027),
+(28, 'Cariste', 0, 2134.96, -1726.19, 13.5392, 276.902, 1291.82, 5.8713, 1001.01, 180, 18, 0, 0, 3, '', 0, 1, 7028),
+(29, 'Usine', 0, 2058.43, -1747.74, 13.3865, 102.449, 2569.84, -1301.05, 1044.95, 109.236, 2, 0, 0, 0, '', 0, 1, -1),
+(30, 'Salle des machines', 0, 2016.18, -1754.86, 13.3828, 71.6902, -959.683, 1954.82, 1009, 179.966, 17, 0, 0, 0, '', 0, 1, 0),
+(31, 'Central éléctrique', 0, 2008.16, -1709.52, 13.5468, 343.63, 813.416, -69.8078, 1000.78, 75.4156, 1, 0, 0, 0, '', 0, 1, 7031),
+(32, 'Banque Riche', 52, 2029.12, -1679.64, 13.5468, 275.662, 1101.17, -1290.47, 507.843, 89.8749, 0, 0, 0, 2, '', 0, 0, 0),
+(34, 'Casino', 25, 2078.09, -1656.56, 13.3906, 312.374, -251.957, -21.1578, 1004.69, 90, 3, 0, 0, 6, '', 0, 1, 7034),
+(35, 'Taxi', 0, 2127.31, -1673.89, 14.8699, 243.166, -1972.14, -897.436, 757.898, 270.44, 1, 0, 0, 0, '', 0, 1, 7035),
+(36, 'Shooting Range', 0, 2171.01, -1692.8, 15.0784, 177.183, 304.017, -141.989, 1004.06, 90, 7, 0, 0, 5, '', 0, 0, 7036),
+(38, 'Bowling', 0, 2180.56, -1727.68, 13.375, 187.353, -1992.7, 407.879, 802.501, 268.706, 1, 0, 0, 9, '', 0, 1, 7038),
+(39, 'Entrepôt', 0, 2181.34, -1752.13, 13.375, 153.121, 2606.47, -1233.46, 1022.03, 272.707, 1, 0, 0, 0, '', 0, 1, 7039),
+(51, 'Gymnase', 0, 2185.3, -1796.48, 13.3672, 176.19, 772.428, -5.4299, 1000.73, 356.914, 5, 0, 0, 0, '', 0, 0, 7051),
+(59, 'PMU', 0, 2162.53, -1801.13, 13.3747, 107.726, 833.491, 7.3242, 1003.52, 90, 3, 0, 0, 7, '', 0, 0, 7059),
+(64, 'Usine de meubles', 0, 2190.85, -1706.98, 13.5884, 3.0458, 1626.63, -1811.32, 1013.43, 90.6977, 210, 0, 0, 0, '', 0, 0, 7064),
+(73, 'Fabrique d\'arme', 0, 2149.71, -1703.18, 15.0784, 90.6104, 2332.91, 5.5956, 1026.5, 92.287, 1, 0, 0, 0, '', 0, 1, 1),
+(92, 'Bureau de la Fourriere', 0, 2106.74, -1702.59, 13.3828, 90.6104, 441.11, 132.703, 1008.4, 171.598, 0, 0, 0, 0, '', 0, 0, 7092),
+(94, 'Event 1', 0, 2089.07, -1705.84, 13.539, 180.407, 2744.15, -1741.82, 422.822, 129.705, 0, 0, 0, 0, '', 0, 2, 100),
+(95, 'San News', 36, 2070.56, -1732.15, 13.5546, 205.957, 304.122, 1894.16, 904.376, 182.331, 15, 0, 0, 0, '', 0, 0, 7095);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `factions`
+-- Table structure for table `factions`
 --
 
-CREATE TABLE IF NOT EXISTS `factions` (
-`factionID` int(12) NOT NULL,
+CREATE TABLE `factions` (
+  `factionID` int(12) NOT NULL,
   `factionName` varchar(32) DEFAULT NULL,
-  `factionRanks` int(12) DEFAULT '0',
-  `factionLockerX` float DEFAULT '0',
-  `factionLockerY` float DEFAULT '0',
-  `factionLockerZ` float DEFAULT '0',
-  `factionLockerInt` int(12) DEFAULT '0',
-  `factionLockerWorld` int(12) DEFAULT '0',
-  `factioncoffre` int(12) NOT NULL DEFAULT '0',
+  `factionRanks` int(12) DEFAULT 0,
+  `factionLockerX` float DEFAULT 0,
+  `factionLockerY` float DEFAULT 0,
+  `factionLockerZ` float DEFAULT 0,
+  `factionLockerInt` int(12) DEFAULT 0,
+  `factionLockerWorld` int(12) DEFAULT 0,
+  `factioncoffre` int(12) NOT NULL DEFAULT 0,
   `factiondiscord` varchar(20) NOT NULL DEFAULT '0',
-  `factionWeapon1` int(12) DEFAULT '0',
-  `factionAmmo1` int(12) DEFAULT '0',
-  `factionWeapon2` int(12) DEFAULT '0',
-  `factionAmmo2` int(12) DEFAULT '0',
-  `factionWeapon3` int(12) DEFAULT '0',
-  `factionAmmo3` int(12) DEFAULT '0',
-  `factionWeapon4` int(12) DEFAULT '0',
-  `factionAmmo4` int(12) DEFAULT '0',
-  `factionWeapon5` int(12) DEFAULT '0',
-  `factionAmmo5` int(12) DEFAULT '0',
-  `factionWeapon6` int(12) DEFAULT '0',
-  `factionAmmo6` int(12) DEFAULT '0',
-  `factionWeapon7` int(12) DEFAULT '0',
-  `factionAmmo7` int(12) DEFAULT '0',
-  `factionWeapon8` int(12) DEFAULT '0',
-  `factionAmmo8` int(12) DEFAULT '0',
-  `factionWeapon9` int(12) DEFAULT '0',
-  `factionAmmo9` int(12) DEFAULT '0',
-  `factionWeapon10` int(12) DEFAULT '0',
-  `factionAmmo10` int(12) DEFAULT '0',
+  `factionrole` varchar(20) NOT NULL DEFAULT '0',
+  `factionaction1X` float NOT NULL DEFAULT 0,
+  `factionaction1Y` float NOT NULL DEFAULT 0,
+  `factionaction1Z` float NOT NULL DEFAULT 0,
+  `factionaction1R` float NOT NULL DEFAULT 0,
+  `factionaction2X` float NOT NULL DEFAULT 0,
+  `factionaction2Y` float NOT NULL DEFAULT 0,
+  `factionaction2Z` float NOT NULL DEFAULT 0,
+  `factionaction2R` float DEFAULT 0,
+  `factionaction3X` float NOT NULL DEFAULT 0,
+  `factionaction3Y` float NOT NULL DEFAULT 0,
+  `factionaction3Z` float NOT NULL DEFAULT 0,
+  `factionaction3R` float NOT NULL DEFAULT 0,
+  `factionWeapon1` int(12) DEFAULT 0,
+  `factionAmmo1` int(12) DEFAULT 0,
+  `factionWeapon2` int(12) DEFAULT 0,
+  `factionAmmo2` int(12) DEFAULT 0,
+  `factionWeapon3` int(12) DEFAULT 0,
+  `factionAmmo3` int(12) DEFAULT 0,
+  `factionWeapon4` int(12) DEFAULT 0,
+  `factionAmmo4` int(12) DEFAULT 0,
+  `factionWeapon5` int(12) DEFAULT 0,
+  `factionAmmo5` int(12) DEFAULT 0,
+  `factionWeapon6` int(12) DEFAULT 0,
+  `factionAmmo6` int(12) DEFAULT 0,
+  `factionWeapon7` int(12) DEFAULT 0,
+  `factionAmmo7` int(12) DEFAULT 0,
+  `factionWeapon8` int(12) DEFAULT 0,
+  `factionAmmo8` int(12) DEFAULT 0,
+  `factionWeapon9` int(12) DEFAULT 0,
+  `factionAmmo9` int(12) DEFAULT 0,
+  `factionWeapon10` int(12) DEFAULT 0,
+  `factionAmmo10` int(12) DEFAULT 0,
   `factionRank1` varchar(32) DEFAULT NULL,
   `factionRank2` varchar(32) DEFAULT NULL,
   `factionRank3` varchar(32) DEFAULT NULL,
@@ -1224,64 +872,53 @@ CREATE TABLE IF NOT EXISTS `factions` (
   `factionRank13` varchar(32) DEFAULT NULL,
   `factionRank14` varchar(32) DEFAULT NULL,
   `factionRank15` varchar(32) DEFAULT NULL,
-  `factionSkin1` int(12) DEFAULT '0',
-  `factionSkin2` int(12) DEFAULT '0',
-  `factionSkin3` int(12) DEFAULT '0',
-  `factionSkin4` int(12) DEFAULT '0',
-  `factionSkin5` int(12) DEFAULT '0',
-  `factionSkin6` int(12) DEFAULT '0',
-  `factionSkin7` int(12) DEFAULT '0',
-  `factionSkin8` int(12) DEFAULT '0',
-  `factionacces1` int(4) NOT NULL DEFAULT '0',
-  `factionacces2` int(4) NOT NULL DEFAULT '0',
-  `factionacces3` int(4) NOT NULL DEFAULT '0',
-  `factionacces4` int(4) NOT NULL DEFAULT '0',
-  `factionacces5` int(4) NOT NULL DEFAULT '0',
-  `factionacces6` int(4) NOT NULL DEFAULT '0',
-  `factionacces7` int(4) NOT NULL DEFAULT '0',
-  `factionacces8` int(4) NOT NULL DEFAULT '0',
-  `factionacces9` int(4) NOT NULL DEFAULT '0',
-  `factionacces10` int(4) NOT NULL DEFAULT '0',
-  `factionacces11` int(4) NOT NULL DEFAULT '0',
-  `factionacces12` int(4) NOT NULL DEFAULT '0',
-  `factionacces13` int(4) NOT NULL DEFAULT '0',
-  `factionacces14` int(4) NOT NULL DEFAULT '0',
-  `factionacces15` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank1` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank2` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank3` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank4` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank5` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank6` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank7` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank8` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank9` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank10` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank11` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank12` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank13` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank14` int(4) NOT NULL DEFAULT '0',
-  `SalaireRank15` int(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `factions`
---
-
-INSERT INTO `factions` (`factionID`, `factionName`, `factionRanks`, `factionLockerX`, `factionLockerY`, `factionLockerZ`, `factionLockerInt`, `factionLockerWorld`, `factioncoffre`, `factiondiscord`, `factionWeapon1`, `factionAmmo1`, `factionWeapon2`, `factionAmmo2`, `factionWeapon3`, `factionAmmo3`, `factionWeapon4`, `factionAmmo4`, `factionWeapon5`, `factionAmmo5`, `factionWeapon6`, `factionAmmo6`, `factionWeapon7`, `factionAmmo7`, `factionWeapon8`, `factionAmmo8`, `factionWeapon9`, `factionAmmo9`, `factionWeapon10`, `factionAmmo10`, `factionRank1`, `factionRank2`, `factionRank3`, `factionRank4`, `factionRank5`, `factionRank6`, `factionRank7`, `factionRank8`, `factionRank9`, `factionRank10`, `factionRank11`, `factionRank12`, `factionRank13`, `factionRank14`, `factionRank15`, `factionSkin1`, `factionSkin2`, `factionSkin3`, `factionSkin4`, `factionSkin5`, `factionSkin6`, `factionSkin7`, `factionSkin8`, `factionacces1`, `factionacces2`, `factionacces3`, `factionacces4`, `factionacces5`, `factionacces6`, `factionacces7`, `factionacces8`, `factionacces9`, `factionacces10`, `factionacces11`, `factionacces12`, `factionacces13`, `factionacces14`, `factionacces15`, `SalaireRank1`, `SalaireRank2`, `SalaireRank3`, `SalaireRank4`, `SalaireRank5`, `SalaireRank6`, `SalaireRank7`, `SalaireRank8`, `SalaireRank9`, `SalaireRank10`, `SalaireRank11`, `SalaireRank12`, `SalaireRank13`, `SalaireRank14`, `SalaireRank15`) VALUES
-(9, 'Mairie de Los Santos', 9, 309.159, 133.8, 1011.76, 10, 0, 1031290, '0', 22, 68, 41, 30, 24, 2400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Eboueur', 'Agent de Sécurité', 'Officier de la sécurité', 'Chef de la Sécurité', 'Secretaire', 'Secretaire administratif', 'Conseiller Municipal', 'Adjoint au maire', 'Maire de Los Santos', 'Maire de Los Santos', 'Rank 11', 'Rank 12', 'Rank 13', 'Rank 14', 'Rank 15', 163, 164, 165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 'Los Santos Police Departement', 9, 1559.63, -1653.16, 16.1898, 0, 0, 0, '545331377139351563', 3, 1, 43, 0, 41, 50, 0, 0, 22, 50, 24, 50, 25, 50, 29, 250, 31, 250, 34, 25, 'Cadet', 'Officier I', 'Officier II', 'Sergeant', 'Lieutenant', 'Capitaine', 'Commandant', 'Assistant Chief of Swat', 'Assistant Chief of Police', 'Chief of Swat', 'Chief of Police', 'Commandant', 'Chef', 'Chef Département', 'Rank 15', 288, 281, 267, 233, 306, 309, 284, 285, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1456, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1500, 0, 0, 0),
-(11, 'Los Santos Medical Center', 5, -196.348, -1748.74, 675.769, 3, 5003, 1013824, '0', 42, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Stagiaire', 'Médecin', 'Pompier', 'Sous-Directeur', 'Directeur', 'Rank 6', 'Rank 7', 'Rank 8', 'Rank 9', 'Rank 10', 'Rank 11', 'Rank 12', 'Rank 13', 'Rank 14', 'Rank 15', 70, 71, 274, 276, 279, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 251, 250, 500, 245, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 'Los Santos Custom', 5, 1075.44, -1665.16, 13.5401, 0, 7080, 1454121, '0', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Stagiaire', 'Remorqueur', 'Mécanicien', 'Sous-Directeur', 'Directeur', 'Rank 6', 'Rank 7', 'Rank 8', 'Rank 9', 'Rank 10', 'Rank 11', 'Rank 12', 'Rank 13', 'Rank 14', 'Rank 15', 50, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1500, 0, 0, 0, 0, 0, 0, 0, 0, 2500, 0, 0, 0, 0, 0),
-(25, 'San News', 5, 320.13, 1891.99, 907.896, 15, 7095, 0, '0', 43, 15000, 43, 15000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Rank 1', 'Rank 2', 'Rank 3', 'Rank 4', 'Rank 5', 'Rank 6', 'Rank 7', 'Rank 8', 'Rank 9', 'Rank 10', 'Rank 11', 'Rank 12', 'Rank 13', 'Rank 14', 'Rank 15', 91, 171, 172, 141, 165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  `factionSkin1` int(12) DEFAULT 0,
+  `factionSkin2` int(12) DEFAULT 0,
+  `factionSkin3` int(12) DEFAULT 0,
+  `factionSkin4` int(12) DEFAULT 0,
+  `factionSkin5` int(12) DEFAULT 0,
+  `factionSkin6` int(12) DEFAULT 0,
+  `factionSkin7` int(12) DEFAULT 0,
+  `factionSkin8` int(12) DEFAULT 0,
+  `factionacces1` int(4) NOT NULL DEFAULT 0,
+  `factionacces2` int(4) NOT NULL DEFAULT 0,
+  `factionacces3` int(4) NOT NULL DEFAULT 0,
+  `factionacces4` int(4) NOT NULL DEFAULT 0,
+  `factionacces5` int(4) NOT NULL DEFAULT 0,
+  `factionacces6` int(4) NOT NULL DEFAULT 0,
+  `factionacces7` int(4) NOT NULL DEFAULT 0,
+  `factionacces8` int(4) NOT NULL DEFAULT 0,
+  `factionacces9` int(4) NOT NULL DEFAULT 0,
+  `factionacces10` int(4) NOT NULL DEFAULT 0,
+  `factionacces11` int(4) NOT NULL DEFAULT 0,
+  `factionacces12` int(4) NOT NULL DEFAULT 0,
+  `factionacces13` int(4) NOT NULL DEFAULT 0,
+  `factionacces14` int(4) NOT NULL DEFAULT 0,
+  `factionacces15` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank1` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank2` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank3` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank4` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank5` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank6` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank7` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank8` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank9` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank10` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank11` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank12` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank13` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank14` int(4) NOT NULL DEFAULT 0,
+  `SalaireRank15` int(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `factorystock`
+-- Table structure for table `factorystock`
 --
 
-CREATE TABLE IF NOT EXISTS `factorystock` (
-`id` int(11) NOT NULL,
+CREATE TABLE `factorystock` (
+  `id` int(11) NOT NULL,
   `bois` int(11) NOT NULL,
   `viande` int(11) NOT NULL,
   `meuble` int(11) NOT NULL,
@@ -1309,42 +946,42 @@ CREATE TABLE IF NOT EXISTS `factorystock` (
   `hydrolic` int(11) NOT NULL,
   `roue` int(11) NOT NULL,
   `caro` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `factorystock`
+-- Dumping data for table `factorystock`
 --
 
 INSERT INTO `factorystock` (`id`, `bois`, `viande`, `meuble`, `central1`, `central2`, `central3`, `central4`, `central5`, `electronic`, `petrol`, `essencegenerator`, `boismeuble`, `magasinstock`, `dockstock`, `manutentionnairestock`, `caristestock`, `minerstock`, `armesstock`, `frontbumper`, `rearbumper`, `roof`, `hood`, `spoiler`, `sideskirt`, `hydrolic`, `roue`, `caro`) VALUES
-(1, 0, 0, 0, 248773, 248773, 248773, 248773, 248773, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(1, 3, 2, 0, 98884, 98884, 98884, 98884, 98884, 6, 10, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `furniture`
+-- Table structure for table `furniture`
 --
 
-CREATE TABLE IF NOT EXISTS `furniture` (
-  `ID` int(12) DEFAULT '0',
-`furnitureID` int(12) NOT NULL,
+CREATE TABLE `furniture` (
+  `ID` int(12) DEFAULT 0,
+  `furnitureID` int(12) NOT NULL,
   `furnitureName` varchar(32) DEFAULT NULL,
-  `furnitureModel` int(12) DEFAULT '0',
-  `furnitureX` float DEFAULT '0',
-  `furnitureY` float DEFAULT '0',
-  `furnitureZ` float DEFAULT '0',
-  `furnitureRX` float DEFAULT '0',
-  `furnitureRY` float DEFAULT '0',
-  `furnitureRZ` float DEFAULT '0',
-  `furnitureType` int(12) DEFAULT '0'
+  `furnitureModel` int(12) DEFAULT 0,
+  `furnitureX` float DEFAULT 0,
+  `furnitureY` float DEFAULT 0,
+  `furnitureZ` float DEFAULT 0,
+  `furnitureRX` float DEFAULT 0,
+  `furnitureRY` float DEFAULT 0,
+  `furnitureRZ` float DEFAULT 0,
+  `furnitureType` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `furnitures`
+-- Table structure for table `furnitures`
 --
 
-CREATE TABLE IF NOT EXISTS `furnitures` (
+CREATE TABLE `furnitures` (
   `id` int(12) NOT NULL,
   `name` varchar(100) NOT NULL,
   `model` int(12) NOT NULL,
@@ -1363,197 +1000,60 @@ CREATE TABLE IF NOT EXISTS `furnitures` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `garbage`
+-- Table structure for table `garbage`
 --
 
-CREATE TABLE IF NOT EXISTS `garbage` (
-`garbageID` int(12) NOT NULL,
-  `garbageModel` int(12) DEFAULT '1236',
-  `garbageCapacity` int(12) DEFAULT '0',
-  `garbageX` float DEFAULT '0',
-  `garbageY` float DEFAULT '0',
-  `garbageZ` float DEFAULT '0',
-  `garbageA` float DEFAULT '0',
-  `garbageInterior` int(12) DEFAULT '0',
-  `garbageWorld` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `garbage`
---
-
-INSERT INTO `garbage` (`garbageID`, `garbageModel`, `garbageCapacity`, `garbageX`, `garbageY`, `garbageZ`, `garbageA`, `garbageInterior`, `garbageWorld`) VALUES
-(1, 1236, 4, 1866.36, -1864.26, 13.5621, 357.712, 0, 0),
-(13, 1236, 12, 1174.49, -1317.57, 13.9863, 175.984, 0, 0),
-(18, 1300, 3, 2402.59, -1787, 13.5537, 268.693, 0, 0),
-(20, 1300, 2, 1718.28, -1582.76, 13.5467, 273.971, 0, 0),
-(21, 1300, 20, 1806.8, -1685.75, 13.522, 180, 0, 0),
-(25, 1300, 0, 1203.02, -1763.83, 13.5862, 254.839, 0, 0),
-(26, 1300, 15, 754.384, -1376.02, 14.2328, 42.511, 0, 0),
-(40, 1300, 20, 2046.26, -1898.24, 13.5537, 0.6807, 0, 0),
-(43, 1236, 0, 2252.93, -1688.14, 13.7539, 1.5884, 0, 0),
-(52, 1300, 20, 2308.26, -1634.57, 14.8268, 271.59, 0, 0),
-(53, 1300, 19, 2462.64, -1743.7, 13.5466, 90.1138, 0, 0),
-(54, 1300, 3, 2428.52, -1922.87, 13.5467, 1.4517, 0, 0),
-(56, 1300, 0, 2401.31, -1913.33, 13.5468, 88.5594, 0, 0),
-(64, 1236, 0, 2385.59, -1941.33, 13.5468, 178.8, 0, 0),
-(68, 1300, 1, 2404.31, -1985.1, 13.5467, 92.7823, 0, 0),
-(69, 1236, 15, 2124.66, -1804.28, 13.5542, 89.0783, 0, 0),
-(73, 1300, 3, 2104.83, -1821.24, 13.5544, 267.918, 0, 0),
-(74, 1236, 18, 1939.33, -1887.98, 13.5397, 90.4016, 0, 0),
-(76, 1236, 20, 1863.25, -1864.2, 13.5593, 358.594, 0, 0),
-(77, 1236, 0, 2062.73, -1787, 13.5468, 179.703, 0, 0),
-(78, 1236, 0, 2045.68, -1718.51, 13.5468, 267.437, 0, 0),
-(79, 1236, 0, 2037.65, -1643.94, 13.5468, 90.7152, 0, 0),
-(80, 1300, 0, 2230.28, -1640.45, 15.4896, 335.744, 0, 0),
-(81, 1236, 1, 2061.63, -1585.26, 13.4814, 89.4353, 0, 0),
-(82, 1236, 12, 2070.36, -1547.99, 13.43, 359.532, 0, 0),
-(87, 1236, 5, 1991.96, -1786.24, 13.5536, 178.895, 0, 0),
-(99, 1236, 20, 1901.59, -1776.43, 13.5466, 91.7873, 0, 0),
-(103, 1300, 14, 2176.54, -1788.47, 13.5156, 34.796, 0, 0),
-(104, 1236, 0, 2516.68, -1712.27, 13.5093, 178.304, 0, 0),
-(108, 1236, 0, 2408.26, -1469.03, 23.9563, 358.449, 0, 0),
-(111, 1236, 0, 2337.71, -1291.88, 24.1545, 0.9553, 0, 0),
-(112, 1236, 0, 1922.5, -1091.94, 24.6298, 175.171, 0, 0),
-(116, 1300, 0, 1830.54, -1113.96, 23.8765, 268.522, 0, 0),
-(117, 1300, 0, 1830.54, -1084.31, 23.8812, 269.462, 0, 0),
-(118, 1300, 0, 1830.54, -1097.28, 23.8822, 267.582, 0, 0),
-(119, 1300, 0, 1830.59, -1143.8, 23.8807, 268.835, 0, 0),
-(120, 1300, 0, 1830.53, -1147.37, 23.8824, 268.835, 0, 0),
-(121, 1300, 0, 1800.46, -1148.27, 23.8409, 180.811, 0, 0),
-(122, 1300, 0, 1786.25, -1148.27, 23.8722, 180.811, 0, 0),
-(123, 1300, 0, 1789.88, -1112.63, 24.0859, 270.715, 0, 0),
-(124, 1300, 0, 1789.74, -1115.97, 24.0859, 270.715, 0, 0),
-(125, 1236, 2, 2725.7, -1980.31, 13.5515, 79.8864, 0, 0),
-(126, 1236, 0, 2728.86, -1982.72, 13.5517, 178.366, 0, 0),
-(127, 1300, 1, 2777.27, -1927.6, 13.5392, 274.86, 0, 0),
-(128, 1300, 0, 2776.78, -1977.99, 13.5441, 241.62, 0, 0),
-(129, 1236, 2, 2729.15, -1905.44, 13.5391, 338.679, 0, 0),
-(130, 1300, 0, 2814.32, -1926.71, 11.1093, 105.008, 0, 0),
-(131, 1300, 0, 2815.19, -1907.95, 11.1093, 101.535, 0, 0),
-(136, 1236, 15, 2079.27, -1597.8, 13.5291, 352.693, 0, 0),
-(137, 1236, 0, 2082.31, -1595.12, 13.5112, 69.3432, 0, 0),
-(143, 1236, 20, 1901.35, -1773.78, 13.5466, 88.666, 0, 0),
-(146, 1236, 20, 1901.66, -1771.06, 13.5466, 89.9197, 0, 0),
-(149, 1236, 20, 1901.73, -1767.93, 13.5466, 90.1604, 0, 0),
-(162, 1236, 7, 940.655, -1750.69, 13.5466, 354.01, 0, 0),
-(170, 1236, 1, 2099.53, -1694.87, 13.5545, 262.084, 0, 0),
-(171, 1236, 2, 2101.23, -1661.16, 13.8759, 264.813, 0, 0),
-(182, 1236, 3, 330.97, -1182.24, 76.5493, 35.354, 0, 0),
-(183, 1236, 0, 338.508, -1197.78, 76.4658, 216.684, 0, 0),
-(185, 1236, 9, -46.0205, -277.746, 5.4295, 267.841, 0, 0),
-(186, 1236, 20, 2424.57, -1680.02, 13.736, 182.563, 0, 0),
-(187, 1236, 20, 2428.09, -1680.28, 13.7461, 182.563, 0, 0),
-(191, 1236, 0, 2136.05, -2408.17, 13.5468, 94.9723, 0, 0),
-(192, 1236, 0, 2136.14, -2404.8, 13.5468, 94.9723, 0, 0),
-(193, 1236, 0, 2136.67, -2400.66, 13.5468, 94.9723, 0, 0),
-(194, 1236, 0, 2783.64, -1626.28, 10.9218, 181.505, 0, 0),
-(195, 1236, 2, 2780.68, -1626.22, 10.9217, 181.505, 0, 0),
-(202, 1236, 1, 1249.86, -759.655, 92.879, 271.707, 0, 0),
-(203, 1236, 9, 1249.53, -762.727, 92.5009, 271.707, 0, 0),
-(204, 1236, 1, 1285.12, -609.743, 101.6, 209.595, 0, 0),
-(211, 1236, 4, 2405.27, -1242.6, 23.8125, 92.5585, 0, 0),
-(212, 1236, 3, 2405.04, -1240.04, 23.8125, 92.5585, 0, 0),
-(213, 1236, 3, 2404.96, -1236.9, 23.8125, 89.1118, 0, 0),
-(214, 1236, 1, 393.734, -2051.03, 7.8359, 264.948, 0, 0),
-(216, 1236, 0, 392.819, -2054.36, 7.8359, 267.924, 0, 0),
-(217, 1236, 0, 2434.66, -1679.73, 13.7346, 185.902, 0, 0),
-(218, 1236, 3, 2437.87, -1679.94, 13.7391, 185.902, 0, 0),
-(219, 1236, 13, 2431.3, -1680.16, 13.7437, 180.445, 0, 0),
-(220, 1236, 0, 1456.37, -1754.48, 13.5468, 182.723, 0, 0),
-(221, 1236, 0, 1453.35, -1754.07, 13.5468, 182.723, 0, 0),
-(222, 1236, 0, 1505.68, -1753.66, 13.5468, 180.242, 0, 0),
-(223, 1236, 0, 1508.86, -1753.57, 13.5468, 180.242, 0, 0),
-(224, 1236, 1, 1759.41, -1704.67, 13.5069, 269.543, 0, 0),
-(225, 1236, 1, 1559.51, -1881.62, 13.5468, 174.308, 0, 0),
-(226, 1236, 20, 143.439, -1746.82, 5.6114, 87.1789, 0, 0),
-(228, 1236, 0, 1759.6, -1277.18, 13.5923, 359.425, 0, 0),
-(229, 1236, 1, 1755.97, -1276.31, 13.5875, 356.448, 0, 0),
-(230, 1236, 0, 1764.01, -1277.25, 13.623, 1.6571, 0, 0),
-(231, 1236, 1, 154.182, -1729.93, 5.1795, 2.7576, 0, 0),
-(232, 1236, 0, 156.921, -1729.63, 5.0614, 2.7576, 0, 0),
-(233, 1236, 0, 159.447, -1729.67, 4.9535, 2.7576, 0, 0),
-(234, 1236, 0, 162.006, -1729.43, 4.8431, 2.7576, 0, 0),
-(235, 1236, 0, 164.709, -1729.33, 4.7272, 2.7576, 0, 0),
-(236, 1236, 0, 167.657, -1729, 4.5999, 2.7576, 0, 0),
-(241, 1300, 20, 1831.74, -1832.25, 13.5781, 270.099, 0, 0),
-(242, 1236, 0, 1862.51, -1838.69, 13.576, 92.9914, 0, 0),
-(243, 1236, 0, 1862.9, -1842.19, 13.5767, 93.6906, 0, 0),
-(244, 1236, 0, 1012.97, -1342.14, 13.3672, 180.103, 0, 0),
-(246, 1236, 0, 1024.94, -1310.86, 13.5468, 2.7416, 0, 0),
-(248, 1236, 2, 1547.28, -1651.66, 13.5588, 2.6605, 0, 0),
-(249, 1236, 2, 1552.01, -1663.85, 13.5628, 267.406, 0, 0),
-(250, 1236, 0, 1552.41, -1666.88, 13.562, 267.406, 0, 0),
-(251, 1236, 1, 1548.99, -1699.63, 13.5479, 178.354, 0, 0),
-(252, 1236, 5, 2073.53, -1896.08, 13.5468, 6.7791, 0, 0);
+CREATE TABLE `garbage` (
+  `garbageID` int(12) NOT NULL,
+  `garbageModel` int(12) DEFAULT 1236,
+  `garbageCapacity` int(12) DEFAULT 0,
+  `garbageX` float DEFAULT 0,
+  `garbageY` float DEFAULT 0,
+  `garbageZ` float DEFAULT 0,
+  `garbageA` float DEFAULT 0,
+  `garbageInterior` int(12) DEFAULT 0,
+  `garbageWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `gates`
+-- Table structure for table `gates`
 --
 
-CREATE TABLE IF NOT EXISTS `gates` (
-`gateID` int(12) NOT NULL,
-  `gateModel` int(12) DEFAULT '0',
-  `gateSpeed` float DEFAULT '0',
-  `gateTime` int(12) DEFAULT '0',
-  `gateX` float DEFAULT '0',
-  `gateY` float DEFAULT '0',
-  `gateZ` float DEFAULT '0',
-  `gateRX` float DEFAULT '0',
-  `gateRY` float DEFAULT '0',
-  `gateRZ` float DEFAULT '0',
-  `gateInterior` int(12) DEFAULT '0',
-  `gateWorld` int(12) DEFAULT '0',
-  `gateMoveX` float DEFAULT '0',
-  `gateMoveY` float DEFAULT '0',
-  `gateMoveZ` float DEFAULT '0',
-  `gateMoveRX` float DEFAULT '0',
-  `gateMoveRY` float DEFAULT '0',
-  `gateMoveRZ` float DEFAULT '0',
-  `gateLinkID` int(12) DEFAULT '0',
-  `gateFaction` int(12) DEFAULT '0',
+CREATE TABLE `gates` (
+  `gateID` int(12) NOT NULL,
+  `gateModel` int(12) DEFAULT 0,
+  `gateSpeed` float DEFAULT 0,
+  `gateTime` int(12) DEFAULT 0,
+  `gateX` float DEFAULT 0,
+  `gateY` float DEFAULT 0,
+  `gateZ` float DEFAULT 0,
+  `gateRX` float DEFAULT 0,
+  `gateRY` float DEFAULT 0,
+  `gateRZ` float DEFAULT 0,
+  `gateInterior` int(12) DEFAULT 0,
+  `gateWorld` int(12) DEFAULT 0,
+  `gateMoveX` float DEFAULT 0,
+  `gateMoveY` float DEFAULT 0,
+  `gateMoveZ` float DEFAULT 0,
+  `gateMoveRX` float DEFAULT 0,
+  `gateMoveRY` float DEFAULT 0,
+  `gateMoveRZ` float DEFAULT 0,
+  `gateLinkID` int(12) DEFAULT 0,
+  `gateFaction` int(12) DEFAULT 0,
   `gatePass` varchar(32) DEFAULT NULL,
-  `gateRadius` float DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `gates`
---
-
-INSERT INTO `gates` (`gateID`, `gateModel`, `gateSpeed`, `gateTime`, `gateX`, `gateY`, `gateZ`, `gateRX`, `gateRY`, `gateRZ`, `gateInterior`, `gateWorld`, `gateMoveX`, `gateMoveY`, `gateMoveZ`, `gateMoveRX`, `gateMoveRY`, `gateMoveRZ`, `gateLinkID`, `gateFaction`, `gatePass`, `gateRadius`) VALUES
-(1, 2938, 3, 0, 1086.58, -1678.28, 13.48, 0, 0, 89.6222, 0, 0, 1086.58, -1678.28, 9.9801, 0, 0, 89.6222, -1, 12, '', 5),
-(2, 980, 1, 60000, 2423.84, -2090.13, 15.2671, 0, 0, -92.186, 0, 0, 2423.84, -2090.13, 9.6371, 0, 0, -92.186, -1, 18, '', 20),
-(4, 1507, 3, 0, 1287.5, -866.065, 1084.6, -0.1999, 0, 90.2141, 0, 0, 1287.5, -866.065, 1084.6, -0.1999, 0, -4.6858, -1, 18, '', 2),
-(5, 1566, 3, 0, -1965.91, -905.732, 757.849, 0, 0, -66.1946, 1, 7035, -1966.53, -904.323, 757.849, 0, 0, -66.1946, -1, 13, '', 5),
-(7, 1566, 3, 0, -228.807, -20.3657, 1004.15, 0, 0, 358.896, 3, 7034, -230.367, -20.3357, 1004.15, 0, 0, 358.896, -1, 14, '', 5),
-(8, 1566, 3, 0, 1292.3, -863.101, 1085.63, 0, 0, -177.931, 0, 0, 1292.3, -863.101, 1085.63, 0, 0, 89.1687, -1, -1, 'trool', 3),
-(9, 11313, 3, 0, 1810.98, -1419.06, 13.9565, 0, -0.1999, -90.4542, 0, 0, 1810.98, -1419.01, 10.3763, 0, 0, -91.6542, -1, 18, '', 5),
-(10, 980, 3, 0, 1812.62, -2071.87, 13.381, 0, 0, 89.7175, 0, 0, 1812.77, -2061.69, 13.4456, 0, 0, 89.4339, -1, 21, '', 5),
-(11, 2930, 3, 0, 1566.17, -1661.06, 17.7698, 0, 0, -179.917, 0, 0, 1566.17, -1661.06, 20.3698, 0, 0, -179.917, -1, 10, '', 2),
-(12, 2930, 3, 0, 1566.16, -1664.25, 17.7598, 0, 0, 179.876, 0, 0, 1566.16, -1664.25, 20.3498, 0, 0, 179.876, -1, 10, '', 2),
-(13, 2930, 3, 0, 1566.24, -1657.85, 17.7798, 0, 0, -178.214, 0, 0, 1566.24, -1657.85, 20.3598, 0, 0, -178.214, -1, 10, '', 2),
-(14, 2930, 3, 0, 1566.24, -1654.66, 17.7879, 0, 0, -177.627, 0, 0, 1566.24, -1654.66, 20.3278, 0, 0, -177.627, -1, 10, '', 2),
-(16, 1566, 5, 0, 1565.46, -1670.95, 16.3514, -0.2998, -0.2998, 179.785, 0, 0, 1566.94, -1670.96, 16.3436, -0.2998, -0.2998, 179.785, -1, 10, '', 5),
-(19, 968, 0.0197, 0, 1544.71, -1630.87, 13.091, -1.8997, 89.1997, 89.8348, 0, 0, 1544.71, -1630.87, 13.091, -1.8997, -2.9999, 89.8348, -1, 10, '', 10),
-(23, 980, 3, 0, 1590.35, -1638.18, 14.6928, 0, 0, -179.896, 0, 0, 1597.78, -1638.2, 14.6928, 0, 0, -179.997, -1, 10, '', 10),
-(29, 19872, 3, 0, 1090.86, -1669.13, 10.6627, 0, 0, 0.9811, 0, 0, 1090.86, -1669.13, 12.3628, 0, 0, 0.9811, -1, 12, '', 5),
-(30, 19872, 3, 0, 1082.25, -1669.31, 10.6327, 0, 0, 1.5482, 0, 0, 1082.25, -1669.31, 12.4327, 0, 0, 1.5482, -1, 12, '', 5),
-(31, 986, 3, 0, 2237.53, -2218.42, 11.9968, 0, 0, 135.072, 0, 0, 2242.2, -2223.08, 11.9968, 0, 0, 135.072, -1, -1, 'mecanobla', 5),
-(34, 980, 3, 0, 1119.37, -1159.6, 25.1881, 0, 0, -178.219, 0, 0, 1119.37, -1159.6, 19.6881, 0, 0, -178.219, -1, 13, 'AlejSant', 10),
-(42, 980, 3, 0, 2931.43, -1930.39, 12.8273, 0, 0, 88.2463, 0, 0, 2931.44, -1929.32, 1.0573, -1000, -1000, -1000, -1, -1, '', 5),
-(43, 980, 3, 0, 1275.72, -1270.26, 15.2326, 0, 0, -179.558, 0, 0, 1264.83, -1270.34, 15.2326, 0, 0, -179.558, -1, 9, '', 10),
-(44, 980, 3, 0, 1245.61, -767.319, 91.4329, 0, 0, -0.4352, 0, 0, 1245.61, -767.319, 88.2829, 0, 0, -0.4352, -1, -1, '1816', 5);
+  `gateRadius` float DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `gouvernement`
+-- Table structure for table `gouvernement`
 --
 
-CREATE TABLE IF NOT EXISTS `gouvernement` (
-`id` int(11) NOT NULL,
+CREATE TABLE `gouvernement` (
+  `id` int(11) NOT NULL,
   `taxe` int(11) NOT NULL,
   `taxerevenue` int(11) NOT NULL,
   `taxeentreprise` int(11) NOT NULL,
@@ -1566,10 +1066,10 @@ CREATE TABLE IF NOT EXISTS `gouvernement` (
   `bizhouse` int(11) NOT NULL,
   `maison` int(11) NOT NULL,
   `magasin` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `gouvernement`
+-- Dumping data for table `gouvernement`
 --
 
 INSERT INTO `gouvernement` (`id`, `taxe`, `taxerevenue`, `taxeentreprise`, `chomage`, `subventionpolice`, `subventionfbi`, `subventionmedecin`, `subventionswat`, `aidebanque`, `bizhouse`, `maison`, `magasin`) VALUES
@@ -1578,1071 +1078,300 @@ INSERT INTO `gouvernement` (`id`, `taxe`, `taxerevenue`, `taxeentreprise`, `chom
 -- --------------------------------------------------------
 
 --
--- Structure de la table `gps`
+-- Table structure for table `gps`
 --
 
-CREATE TABLE IF NOT EXISTS `gps` (
-  `ID` int(12) DEFAULT '0',
-`locationID` int(12) NOT NULL,
+CREATE TABLE `gps` (
+  `ID` int(12) DEFAULT 0,
+  `locationID` int(12) NOT NULL,
   `locationName` varchar(32) DEFAULT NULL,
-  `locationX` float DEFAULT '0',
-  `locationY` float DEFAULT '0',
-  `locationZ` float DEFAULT '0'
+  `locationX` float DEFAULT 0,
+  `locationY` float DEFAULT 0,
+  `locationZ` float DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `graffiti`
+-- Table structure for table `graffiti`
 --
 
-CREATE TABLE IF NOT EXISTS `graffiti` (
-`graffitiID` int(12) NOT NULL,
-  `graffitiX` float DEFAULT '0',
-  `graffitiY` float DEFAULT '0',
-  `graffitiZ` float DEFAULT '0',
-  `graffitiAngle` float DEFAULT '0',
-  `graffitiColor` int(12) DEFAULT '0',
+CREATE TABLE `graffiti` (
+  `graffitiID` int(12) NOT NULL,
+  `graffitiX` float DEFAULT 0,
+  `graffitiY` float DEFAULT 0,
+  `graffitiZ` float DEFAULT 0,
+  `graffitiAngle` float DEFAULT 0,
+  `graffitiColor` int(12) DEFAULT 0,
   `graffitiText` varchar(64) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `graffiti`
---
-
-INSERT INTO `graffiti` (`graffitiID`, `graffitiX`, `graffitiY`, `graffitiZ`, `graffitiAngle`, `graffitiColor`, `graffitiText`) VALUES
-(5, 2067.32, -1630.97, 13.1168, 1.3741, -256, 'Locots XIII'),
-(4, 2066.4, -1652.43, 12.7667, 0.4018, -256, 'Locots XIII');
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `gunracks`
+-- Table structure for table `gunracks`
 --
 
-CREATE TABLE IF NOT EXISTS `gunracks` (
-`rackID` int(12) NOT NULL,
-  `rackHouse` int(12) DEFAULT '0',
-  `rackX` float DEFAULT '0',
-  `rackY` float DEFAULT '0',
-  `rackZ` float DEFAULT '0',
-  `rackA` float DEFAULT '0',
-  `rackInterior` int(12) DEFAULT '0',
-  `rackWorld` int(12) DEFAULT '0',
-  `rackWeapon1` int(12) DEFAULT '0',
-  `rackAmmo1` int(12) DEFAULT '0',
-  `rackWeapon2` int(12) DEFAULT '0',
-  `rackAmmo2` int(12) DEFAULT '0',
-  `rackWeapon3` int(12) DEFAULT '0',
-  `rackAmmo3` int(12) DEFAULT '0',
-  `rackWeapon4` int(12) DEFAULT '0',
-  `rackAmmo4` int(12) DEFAULT '0'
+CREATE TABLE `gunracks` (
+  `rackID` int(12) NOT NULL,
+  `rackHouse` int(12) DEFAULT 0,
+  `rackX` float DEFAULT 0,
+  `rackY` float DEFAULT 0,
+  `rackZ` float DEFAULT 0,
+  `rackA` float DEFAULT 0,
+  `rackInterior` int(12) DEFAULT 0,
+  `rackWorld` int(12) DEFAULT 0,
+  `rackWeapon1` int(12) DEFAULT 0,
+  `rackAmmo1` int(12) DEFAULT 0,
+  `rackWeapon2` int(12) DEFAULT 0,
+  `rackAmmo2` int(12) DEFAULT 0,
+  `rackWeapon3` int(12) DEFAULT 0,
+  `rackAmmo3` int(12) DEFAULT 0,
+  `rackWeapon4` int(12) DEFAULT 0,
+  `rackAmmo4` int(12) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `houses`
+-- Table structure for table `houses`
 --
 
-CREATE TABLE IF NOT EXISTS `houses` (
-`houseID` int(12) NOT NULL,
-  `houseOwner` int(12) DEFAULT '0',
-  `housePrice` int(12) DEFAULT '0',
+CREATE TABLE `houses` (
+  `houseID` int(12) NOT NULL,
+  `houseOwner` int(12) DEFAULT 0,
+  `housePrice` int(12) DEFAULT 0,
   `houseAddress` varchar(32) DEFAULT NULL,
-  `housePosX` float DEFAULT '0',
-  `housePosY` float DEFAULT '0',
-  `housePosZ` float DEFAULT '0',
-  `housePosA` float DEFAULT '0',
-  `houseIntX` float DEFAULT '0',
-  `houseIntY` float DEFAULT '0',
-  `houseIntZ` float DEFAULT '0',
-  `houseIntA` float DEFAULT '0',
-  `houseInterior` int(12) DEFAULT '0',
-  `houseInteriorVW` int(4) NOT NULL DEFAULT '0',
-  `houseExterior` int(12) DEFAULT '0',
-  `houseExteriorVW` int(12) DEFAULT '0',
-  `houseLocked` int(4) DEFAULT '0',
-  `houseWeapon1` int(12) DEFAULT '0',
-  `houseAmmo1` int(12) DEFAULT '0',
-  `houseWeapon2` int(12) DEFAULT '0',
-  `houseAmmo2` int(12) DEFAULT '0',
-  `houseWeapon3` int(12) DEFAULT '0',
-  `houseAmmo3` int(12) DEFAULT '0',
-  `houseWeapon4` int(12) DEFAULT '0',
-  `houseAmmo4` int(12) DEFAULT '0',
-  `houseWeapon5` int(12) DEFAULT '0',
-  `houseAmmo5` int(12) DEFAULT '0',
-  `houseWeapon6` int(12) DEFAULT '0',
-  `houseAmmo6` int(12) DEFAULT '0',
-  `houseWeapon7` int(12) DEFAULT '0',
-  `houseAmmo7` int(12) DEFAULT '0',
-  `houseWeapon8` int(12) DEFAULT '0',
-  `houseAmmo8` int(12) DEFAULT '0',
-  `houseWeapon9` int(12) DEFAULT '0',
-  `houseAmmo9` int(12) DEFAULT '0',
-  `houseWeapon10` int(12) DEFAULT '0',
-  `houseAmmo10` int(12) DEFAULT '0',
-  `houseMoney` int(12) DEFAULT '0',
-  `houseLocation` int(4) NOT NULL DEFAULT '0',
-  `houseMaxLoc` int(4) NOT NULL DEFAULT '0',
-  `houseLocNum` int(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=804 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `houses`
---
-
-INSERT INTO `houses` (`houseID`, `houseOwner`, `housePrice`, `houseAddress`, `housePosX`, `housePosY`, `housePosZ`, `housePosA`, `houseIntX`, `houseIntY`, `houseIntZ`, `houseIntA`, `houseInterior`, `houseInteriorVW`, `houseExterior`, `houseExteriorVW`, `houseLocked`, `houseWeapon1`, `houseAmmo1`, `houseWeapon2`, `houseAmmo2`, `houseWeapon3`, `houseAmmo3`, `houseWeapon4`, `houseAmmo4`, `houseWeapon5`, `houseAmmo5`, `houseWeapon6`, `houseAmmo6`, `houseWeapon7`, `houseAmmo7`, `houseWeapon8`, `houseAmmo8`, `houseWeapon9`, `houseAmmo9`, `houseWeapon10`, `houseAmmo10`, `houseMoney`, `houseLocation`, `houseMaxLoc`, `houseLocNum`) VALUES
-(1, 0, 11000, 'Studio N°1', 2192.18, -1814.75, 13.5468, 199.721, 2269.88, -1210.32, 1047.56, 90, 10, 6001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 0, 11000, 'Studio N°2', 2185.82, -1814.93, 13.5466, 161.157, 2233.79, -1114.27, 1050.88, 0, 5, 6002, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 0, 11000, 'Studio N°3', 2176.29, -1815.2, 13.5466, 175.884, 2269.88, -1210.32, 1047.56, 90, 10, 6003, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(4, 0, 11000, 'Studio N°4', 2168.89, -1815.23, 13.5468, 113.53, 2269.88, -1210.32, 1047.56, 90, 10, 6004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(5, 0, 11000, 'Studio N°5', 2162.83, -1815.05, 13.5468, 293.53, 2269.88, -1210.32, 1047.56, 90, 10, 6005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(6, 0, 11000, 'Studio N°6', 2155.95, -1815.23, 13.5468, 113.53, 2269.88, -1210.32, 1047.56, 90, 10, 6006, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 0, 11000, 'Studio N°7', 2151.04, -1815.15, 13.5498, 113.53, 2269.88, -1210.32, 1047.56, 90, 10, 6007, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(8, 0, 11000, 'Studio N°8', 2151.05, -1808.13, 13.5464, 39.5829, 2269.88, -1210.32, 1047.56, 90, 10, 6008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 247, 11000, 'Studio N°9', 2151.05, -1789.39, 13.5092, 30.4001, 2269.88, -1210.32, 1047.56, 90, 10, 6009, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 0, 11000, 'Studio N°10', 2176.49, -1821.82, 16.1458, 279.575, 2269.88, -1210.32, 1047.56, 90, 10, 6010, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(11, 139, 11000, 'Studio N°11', 2176.49, -1828.57, 16.1408, 189.575, 2269.88, -1210.32, 1047.56, 90, 10, 6011, 0, 0, 1, 5, 2, 32, 250, 25, 46, 22, 141, 28, 450, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(12, 0, 11000, 'Studio N°12', 2172.42, -1819.47, 16.1406, 171.497, 2269.88, -1210.32, 1047.56, 90, 10, 6012, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(13, 0, 11000, 'Studio N°13', 2165.06, -1819.69, 16.1406, 171.497, 2269.88, -1210.32, 1047.56, 90, 10, 6013, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14, 0, 11000, 'Studio N°14', 2158.39, -1819.69, 16.1406, 177.764, 2269.88, -1210.32, 1047.56, 90, 10, 6014, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(15, 0, 11000, 'Studio N°15', 2152.22, -1819.69, 16.1406, 166.797, 2269.88, -1210.32, 1047.56, 90, 10, 6015, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(16, 0, 11000, 'Studio N°16', 2146.47, -1815.25, 16.1406, 74.6765, 2269.88, -1210.32, 1047.56, 90, 10, 6016, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(17, 0, 11000, 'Studio N°18', 2146.52, -1808.6, 16.1406, 23.916, 2269.88, -1210.32, 1047.56, 90, 10, 6017, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(18, 0, 11000, 'Studio N°19', 2141.27, -1802.08, 16.1474, 75.3032, 2269.88, -1210.32, 1047.56, 90, 10, 6018, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(19, 0, 11000, 'Studio N°20', 2144.96, -1801.77, 16.1406, 318.742, 2269.88, -1210.32, 1047.56, 90, 10, 6019, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(20, 0, 45000, '1st Unity Road', 1938.23, -1911.3, 15.2567, 268.265, 2269.88, -1210.32, 1047.56, 90, 10, 6020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(21, 0, 45000, '2nd Unity Road', 1928.75, -1916.56, 15.2566, 0.609, 2269.88, -1210.32, 1047.56, 90, 10, 6021, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(22, 0, 45000, '3rd Unity Road', 1913.52, -1912.77, 15.2567, 17.193, 2269.88, -1210.32, 1047.56, 90, 10, 6022, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(23, 0, 45000, '4th Unity Road', 1891.89, -1915, 15.2567, 8.1062, 2269.88, -1210.32, 1047.56, 90, 10, 6023, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(24, 0, 45000, '5th Unity Road', 1872.25, -1912.31, 15.2567, 2.466, 2269.88, -1210.32, 1047.56, 90, 10, 6024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(25, 0, 45000, '1st Idlewood Street', 2067.21, -1731.61, 14.2066, 90.9141, 2269.88, -1210.32, 1047.56, 90, 10, 6025, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(26, 0, 45000, '6th Unity Road', 1854, -1914.87, 15.2567, 354.006, 2269.88, -1210.32, 1047.56, 90, 10, 6026, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(27, 0, 45000, '2nd Idlewood Street', 2066.48, -1717.13, 13.8058, 89.3474, 2269.88, -1210.32, 1047.56, 90, 10, 6027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(28, 0, 45000, '3rd Idlewood Street', 2065.13, -1703.48, 14.1484, 88.0941, 2269.88, -1210.32, 1047.56, 90, 10, 6028, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 0, 0),
-(30, 0, 45000, '5, Idlewood Street', 2067.84, -1643.76, 13.8058, 87.1539, 2269.88, -1210.32, 1047.56, 90, 10, 6030, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(31, 196, 45000, '6th Idlewood Street', 2067.97, -1628.89, 13.876, 88.4073, 2269.88, -1210.32, 1047.56, 90, 10, 6031, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450000, 0, 0, 0),
-(33, 0, 45000, '8th Idlewood Street', 2016, -1641.51, 13.7824, 270.697, 2269.88, -1210.32, 1047.56, 90, 10, 6033, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(34, 0, 45000, '9th Idlewood Street', 2013.07, -1656.45, 13.8058, 270.142, 2269.88, -1210.32, 1047.56, 90, 10, 6034, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(35, 0, 45000, '10th Idlewood Street', 2017.81, -1703.13, 14.2342, 269.202, 2269.88, -1210.32, 1047.56, 90, 10, 6035, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 10, 0),
-(36, 0, 45000, '11th Idlewood Street', 2015.76, -1716.97, 13.9369, 271.082, 2269.88, -1210.32, 1047.56, 90, 10, 6036, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(37, 0, 45000, '12th Idlewood Street', 2014.65, -1732.57, 14.2341, 269.203, 223.162, 1287.52, 1082.14, 0, 1, 6037, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(38, 0, 75000, '1st Gym Street', 2308.83, -1714.66, 14.6495, 90.6267, 2269.88, -1210.32, 1047.56, 90, 10, 6038, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(39, 0, 75000, '2nd Gym Street', 2326.71, -1717.12, 13.9074, 349.66, 2269.88, -1210.32, 1047.56, 90, 10, 6039, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(40, 0, 75000, '3rd Gym Street', 2385.3, -1711.86, 14.2419, 349.684, 2269.88, -1210.32, 1047.56, 90, 10, 6040, 0, 0, 1, 9, 1, 25, 97, 0, 0, 30, 149, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(41, 0, 75000, '4th Gym Street', 2402.39, -1715.31, 14.1328, 265.707, 2269.88, -1210.32, 1047.56, 90, 10, 6041, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(42, 0, 125000, '1st Mulholland Road', 1421.77, -885.631, 50.6643, 192.272, 2269.88, -1210.32, 1047.56, 90, 10, 6042, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(43, 0, 125000, '2nd Mulholland Road', 1468.58, -905.353, 54.8359, 186.632, 2269.88, -1210.32, 1047.56, 90, 10, 6043, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(44, 0, 125000, '3rd Mulholland Road', 1536.16, -884.647, 57.6574, 136.208, 2269.88, -1210.32, 1047.56, 90, 10, 6044, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(45, 0, 140000, '4th Mulholland Road', 1539.57, -851.401, 64.336, 271.546, 2269.88, -1210.32, 1047.56, 90, 10, 6045, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(46, 0, 140000, '5th Mulholland Road', 1534.61, -800.276, 72.8494, 271.233, 2269.88, -1210.32, 1047.56, 90, 10, 6046, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(47, 0, 140000, '6th Mulholland Road', 1527.4, -772.962, 80.5781, 314.16, 2269.88, -1210.32, 1047.56, 90, 10, 6047, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(48, 0, 450000, '7th Mulholland Road', 1497.05, -688.312, 95.4759, 2.4135, 1261.25, -785.566, 1091.91, 272.962, 5, 460, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(49, 0, 600000, '70th Mulholland Road', 1298.3, -799.027, 84.1406, 348.314, 1299.02, -796.18, 1084.01, 0.5888, 5, 460, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(50, 0, 250000, '9th Mulholland Road', 1111.94, -742.103, 100.133, 268.749, 2269.88, -1210.32, 1047.56, 90, 10, 6050, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(51, 0, 300000, '10th Mulholland Road', 1093.7, -806.045, 107.42, 190.729, 2269.88, -1210.32, 1047.56, 90, 10, 6051, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(52, 0, 220000, '11th Mulholland Road', 1034.43, -812.062, 101.852, 204.202, 2269.88, -1210.32, 1047.56, 90, 10, 6052, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(53, 0, 200000, '12th Mulholland Road', 1016.88, -762.828, 112.563, 186.342, 2269.88, -1210.32, 1047.56, 90, 10, 6053, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(54, 0, 200000, '13th Mulholland Road', 989.941, -828.58, 95.4685, 256.529, 2269.88, -1210.32, 1047.56, 90, 10, 6054, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(55, 0, 200000, '14th Mulholland Road', 937.575, -847.578, 93.7423, 203.889, 2269.88, -1210.32, 1047.56, 90, 10, 6055, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(56, 0, 200000, '15th Mulholland Road', 924.663, -853.018, 93.4564, 114.275, 2269.88, -1210.32, 1047.56, 90, 10, 6056, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(57, 0, 240000, '16th Mulholland Road', 909.743, -816.773, 103.126, 217.989, 2269.88, -1210.32, 1047.56, 90, 10, 6057, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(58, 0, 45000, '1° Ganton Street', 2244.35, -1637.91, 15.9074, 343.473, 223.162, 1287.52, 1082.14, 0, 1, 6058, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(59, 0, 220000, '17th Mulholland Road', 827.933, -858.311, 70.3308, 23.7205, 223.162, 1287.52, 1082.14, 0, 1, 6059, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(60, 136, 45000, '2° Ganton Street', 2257, -1644.72, 15.5179, 343.786, 223.162, 1287.52, 1082.14, 0, 1, 6060, 0, 0, 1, 30, 599, 43, 44, 31, 31, 30, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0),
-(61, 0, 300000, '18th Mulholland Road', 836.313, -894.228, 68.7687, 142.162, 223.162, 1287.52, 1082.14, 0, 1, 6061, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(62, 0, 45000, '3° Ganton Street', 2282.18, -1641.6, 15.8896, 356.006, 223.162, 1287.52, 1082.14, 0, 1, 6062, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(63, 0, 220000, '19th Mulholland Road', 725.362, -998.772, 52.7341, 142.475, 223.162, 1287.52, 1082.14, 0, 1, 6063, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(64, 0, 220000, '20th Mulholland Road', 672.125, -1019.78, 55.7596, 334.599, 223.162, 1287.52, 1082.14, 0, 1, 6064, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(65, 0, 220000, '21th Mulholland Road', 699.587, -1060.24, 49.4216, 249.299, 223.162, 1287.52, 1082.14, 0, 1, 6065, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(66, 0, 45000, '4° Ganton Street', 2362.79, -1643.5, 14.2202, 3.8164, 223.162, 1287.52, 1082.14, 0, 1, 6066, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(67, 0, 45000, '5° Ganton Street', 2393.48, -1646.3, 13.9076, 182.919, 2393.05, -1644.66, 13.9076, 0.6912, 0, 0, 0, 0, 1, 0, 0, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 3, 3),
-(68, 139, 45000, '6° Ganton Street', 2413.96, -1647.08, 14.0136, 0.5633, 2413.54, -1644.75, 14.0136, 355.592, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 5, 3),
-(69, 0, 45000, '7° Ganton Street', 2451.97, -1641.68, 13.7356, 177.236, 2451.71, -1640.25, 14.0675, 348.513, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 15, 0),
-(70, 0, 45000, '8° Ganton Street', 2469.31, -1646.75, 13.7798, 348.463, 2469.37, -1645.06, 13.7778, 3.4215, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(71, 0, 65000, '9° Ganton Street', 2486.44, -1644.92, 14.0771, 7.8898, 2269.88, -1210.32, 1047.56, 90, 10, 6071, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(72, 0, 45000, '10° Ganton Street', 2498.42, -1642.43, 13.7826, 356.61, 2498.36, -1641.05, 14.0866, 0.0342, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(73, 0, 220000, '22th Mulholland Road', 647.764, -1058.04, 52.5798, 230.981, 2269.88, -1210.32, 1047.56, 90, 10, 6073, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(74, 0, 45000, '11° Ganton Street', 2512.1, -1648.24, 14.1872, 315.3, 2513.88, -1646.79, 14.4578, 314.827, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(75, 455, 200000, '1st Santa Maria Bay', 315.752, -1769.57, 4.6248, 346.707, 2269.88, -1210.32, 1047.56, 90, 10, 6075, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(76, 0, 45000, '12° Ganton Street', 2524.36, -1658.49, 15.4933, 281.096, 2526.21, -1658.27, 15.5942, 275.918, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(77, 0, 80000, '2nd Santa Maria Bay', 305.31, -1770.35, 4.5382, 320.7, 2269.88, -1210.32, 1047.56, 90, 10, 6077, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(79, 0, 130000, '3rd Santa Maria Bay', 295.274, -1764.34, 4.6807, 2.6866, 2269.88, -1210.32, 1047.56, 90, 10, 6079, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(80, 0, 45000, '14° Ganton Street', 2514.64, -1691.16, 14.0439, 228.4, 2515.74, -1691.83, 14.0514, 223.7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(81, 0, 65000, '15° Ganton Street', 2495.56, -1690.93, 14.7656, 88.3448, 2269.88, -1210.32, 1047.56, 90, 10, 6081, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(82, 0, 150000, '23th Mulholland Road', 645.987, -1117.43, 44.207, 220.954, 2269.88, -1210.32, 1047.56, 90, 10, 6082, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(83, 0, 170000, '4th Santa Maria Bay', 280.84, -1767.52, 4.545, 358.927, 2269.88, -1210.32, 1047.56, 90, 10, 6083, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(84, 0, 220000, '24th Mulholland Road', 611.833, -1085.72, 58.8265, 255.375, 2269.88, -1210.32, 1047.56, 90, 10, 6084, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(85, 0, 56000, '16° Ganton Street', 2459.49, -1691.22, 13.5448, 283.385, 2269.88, -1210.32, 1047.56, 90, 10, 6085, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(87, 0, 45000, '17° Ganton Street', 2409.22, -1674.92, 14.375, 197.554, 2269.88, -1210.32, 1047.56, 90, 10, 6087, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(88, 0, 170000, '6th Santa Maria Bay', 206.831, -1769.91, 4.352, 356.13, 2269.88, -1210.32, 1047.56, 90, 10, 6088, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(89, 0, 120000, '7th Santa Maria Bay', 192.81, -1769.89, 4.3111, 358.01, 2269.88, -1210.32, 1047.56, 90, 10, 6089, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(90, 0, 47000, '18° Ganton Street', 2384.7, -1675.83, 15.2456, 185.262, 2269.88, -1210.32, 1047.56, 90, 10, 6090, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(91, 0, 45000, '19° Ganton Street', 2368.32, -1675.39, 14.1739, 185.313, 2368.23, -1677.72, 14.1814, 182.629, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(92, 0, 52000, '20° Ganton Street', 2327.1, -1681.92, 14.9294, 95.9605, -2294.88, 364.722, -86.4309, 0, 1, 1092, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(93, 0, 45000, '21° Ganton Street', 2307.02, -1679.2, 14.3316, 192.155, 2269.88, -1210.32, 1047.56, 90, 10, 6093, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(94, 268, 150000, '25th Mulholland Road', 431.986, -1253.64, 51.5806, 195.46, 2269.88, -1210.32, 1047.56, 90, 10, 6094, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(95, 0, 150000, '26th Mulholland Road', 398.236, -1271.34, 50.0196, 203.63, 2269.88, -1210.32, 1047.56, 90, 10, 6095, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(96, 0, 120000, '27th Mulholland Road', 354.836, -1280.23, 53.7036, 203.027, 2269.88, -1210.32, 1047.56, 90, 10, 6096, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(97, 0, 120000, '28th Mulholland Road', 345.622, -1297.86, 50.7589, 109.676, 2269.88, -1210.32, 1047.56, 90, 10, 6097, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(98, 0, 230000, '29th Mulholland Road', 298.099, -1337.67, 53.4415, 219.344, 2269.88, -1210.32, 1047.56, 90, 10, 6098, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(99, 0, 450000, '30th Mulholland Road', 254.38, -1367.13, 53.1092, 132.709, 2269.88, -1210.32, 1047.56, 90, 10, 6099, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(100, 0, 150000, '31th Mulholland Road', 227.98, -1405.35, 51.6091, 162.35, 295.148, 1473.11, 1080.26, 0, 15, 6100, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8000, 0, 0, 0),
-(101, 0, 350000, '32th Mulholland Road', 161.792, -1456.22, 32.8449, 138.889, 2269.88, -1210.32, 1047.56, 90, 10, 6101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(102, 0, 150000, '33th Mulholland Road', 142.935, -1469.51, 25.2035, 138.503, 2269.88, -1210.32, 1047.56, 90, 10, 6102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(103, 0, 350000, '34th Mulholland Road', 189.974, -1308.13, 70.2565, 86.8028, 2269.88, -1210.32, 1047.56, 90, 10, 6103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(104, 0, 35000, '1st All Saint Street', 1187.11, -1260.99, 15.1796, 290.354, 2269.88, -1210.32, 1047.56, 90, 10, 6104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(105, 0, 35000, '2nd All Saint Street', 1180.36, -1261.02, 15.1796, 89.5287, 2269.88, -1210.32, 1047.56, 90, 10, 6105, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(106, 0, 35000, '3rd All Saint Street', 1187.22, -1254.68, 15.1796, 301.007, 2269.88, -1210.32, 1047.56, 90, 10, 6106, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(107, 0, 350000, '35th Mulholland Road', 253.211, -1269.98, 74.4225, 203.364, 2269.88, -1210.32, 1047.56, 90, 10, 6107, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(108, 0, 35000, '4th All Saint Street', 1180.59, -1254.86, 15.1796, 91.4087, 2269.88, -1210.32, 1047.56, 90, 10, 6108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(109, 0, 35000, '5th All Saint Street', 1180.11, -1261, 18.8984, 4.9278, 2269.88, -1210.32, 1047.56, 90, 10, 6109, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(110, 0, 35000, '6th All Saint Street', 1187.08, -1261.02, 18.8984, 26.6206, 2269.88, -1210.32, 1047.56, 90, 10, 6110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(111, 0, 35000, '7th All Saint Street', 1179.96, -1254.78, 18.8907, 74.8019, 2269.88, -1210.32, 1047.56, 90, 10, 6111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(112, 0, 35000, '8th All Saint Street', 1186.79, -1254.68, 18.8907, 280.014, 2269.88, -1210.32, 1047.56, 90, 10, 6112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(113, 0, 35000, '9th All Saint Street', 1180.28, -1233.46, 18.5546, 359.918, 2269.88, -1210.32, 1047.56, 90, 10, 6113, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(114, 0, 35000, '10th All Saint Street', 1186.98, -1233.31, 18.5546, 283.774, 2269.88, -1210.32, 1047.56, 90, 10, 6114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(115, 0, 35000, '11th All Saint Street', 1179.99, -1227.24, 18.5546, 74.1753, 2269.88, -1210.32, 1047.56, 90, 10, 6115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(116, 0, 35000, '12th All Saint Street', 1186.69, -1227, 18.5546, 266.854, 2269.88, -1210.32, 1047.56, 90, 10, 6116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(117, 122, 1, 'Cuisine Hmmm Donut''s', 377.222, -178.38, 1000.63, 180.387, -789.526, 509.292, 1367.37, 181.288, 1, 1120, 17, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(118, 0, 35000, '14th All Saint Street', 1187.29, -1233.31, 22.1406, 88.1071, 2269.88, -1210.32, 1047.56, 90, 10, 6118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(119, 0, 35000, '15th All Saint Street', 1180.16, -1227.25, 22.1329, 73.5486, 2269.88, -1210.32, 1047.56, 90, 10, 6119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(120, 0, 35000, '16th All Saint Street', 1187.28, -1227.04, 22.1329, 270.3, 2269.88, -1210.32, 1047.56, 90, 10, 6120, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(121, 0, 450000, '36th Mulholland Road', 219.602, -1250.4, 78.3331, 31.0991, 2269.88, -1210.32, 1047.56, 90, 10, 6121, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(122, 0, 450000, '37th Mulholland Road', 251.719, -1220.58, 75.9961, 31.0991, 1497.8, -1721.11, 1361.91, 0, 16, 1122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(123, 0, 800000, '38th Mulholland Road', 300.209, -1154.57, 81.3423, 308.692, 234.79, 1066.44, 1084.21, 11.28, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1),
-(124, 0, 170000, '39th Mulholland Road', 351.644, -1197.44, 76.5156, 232.238, 2269.88, -1210.32, 1047.56, 90, 10, 6124, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1),
-(125, 0, 275000, '40th Mulholland Road', 416.179, -1154.61, 76.6875, 319.659, 2269.88, -1210.32, 1047.56, 90, 10, 6125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(126, 0, 220000, '41th Mulholland Road', 471.157, -1164.22, 67.1987, 16.3724, 2269.88, -1210.32, 1047.56, 90, 10, 6126, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(127, 0, 350000, '42th Mulholland Road', 497.315, -1094.61, 82.3591, 183.044, 2269.88, -1210.32, 1047.56, 90, 10, 6127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(128, 0, 220000, '43th Mulholland Road', 559, -1075.91, 72.9218, 137.851, 2269.88, -1210.32, 1047.56, 90, 10, 6128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(129, 0, 150000, '44th Mulholland Road', 785.875, -828.2, 70.2894, 189.021, 2269.88, -1210.32, 1047.56, 90, 10, 6129, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(130, 0, 200000, '45th Mulholland Road', 809.171, -759.201, 76.5313, 100.057, 2269.88, -1210.32, 1047.56, 90, 10, 6130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(131, 0, 200000, '46th Mulholland Road', 848.44, -745.021, 94.9692, 129.824, 2269.88, -1210.32, 1047.56, 90, 10, 6131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(132, 0, 220000, '47th Mulholland Road', 891.188, -782.535, 101.309, 207.531, 2269.88, -1210.32, 1047.56, 90, 10, 6132, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(133, 0, 250000, '48th Mulholland Road', 977.366, -770.47, 112.203, 173.064, 2269.88, -1210.32, 1047.56, 90, 10, 6133, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(134, 0, 200000, '49th Mulholland Road', 867.855, -716.926, 105.68, 157.084, 2269.88, -1210.32, 1047.56, 90, 10, 6134, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(135, 0, 220000, '50th Mulholland Road', 898.186, -677.608, 116.89, 57.1531, 2269.88, -1210.32, 1047.56, 90, 10, 6135, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(136, 0, 200000, '51th Mulholland Road', 946.139, -710.382, 122.62, 208.471, 2269.88, -1210.32, 1047.56, 90, 10, 6136, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(137, 0, 450000, '52th Mulholland Road', 980.361, -677.338, 121.976, 208.471, 2269.88, -1210.32, 1047.56, 90, 10, 6137, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(138, 0, 380000, '53th Mulholland Road', 1044.85, -642.151, 120.117, 222.258, 2269.88, -1210.32, 1047.56, 90, 10, 6138, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(139, 0, 450000, '54th Mulholland Road', 1095.18, -647.271, 113.648, 176.824, 1497.8, -1721.11, 1361.91, 0, 16, 1139, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(140, 0, 380000, '55th Mulholland Road', 1331.76, -632.794, 109.135, 309.125, 2269.88, -1210.32, 1047.56, 90, 10, 6140, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(141, 0, 350000, '56th Mulholland Road', 1442.61, -629.432, 95.7184, 358.246, 2269.88, -1210.32, 1047.56, 90, 10, 6141, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(142, 0, 30000, '1st ElCorona Street', 1917.35, -2038.04, 13.5468, 85.7353, 2269.88, -1210.32, 1047.56, 90, 10, 6142, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(143, 0, 30000, '2nd ElCorona Street', 1920.15, -2021.48, 13.5468, 86.6753, 2269.88, -1210.32, 1047.56, 90, 10, 6143, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(144, 0, 30000, '3rd ElCorona Street', 1919.76, -2019.33, 13.5468, 107.692, 2269.88, -1210.32, 1047.56, 90, 10, 6144, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(145, 0, 30000, '4th ElCorona Street', 1919.98, -1993.46, 13.5468, 88.892, 2269.88, -1210.32, 1047.56, 90, 10, 6145, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(146, 0, 30000, '5th ElCorona Street', 1919.72, -1991.45, 13.5468, 81.372, 2269.88, -1210.32, 1047.56, 90, 10, 6146, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(147, 0, 30000, '6th ElCorona Street', 1916.79, -1981.92, 13.5468, 180.386, 2269.88, -1210.32, 1047.56, 90, 10, 6147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(148, 0, 30000, '7th ElCorona Street', 1900.32, -1979.56, 13.5468, 271.64, 2269.88, -1210.32, 1047.56, 90, 10, 6148, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(149, 0, 30000, '8th ElCorona Street', 1898.12, -1979.62, 13.5467, 96.6528, 223.162, 1287.52, 1082.14, 0, 1, 6149, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(150, 0, 30000, '9th ElCorona Street', 1867.82, -1979.65, 13.5467, 177.879, 223.162, 1287.52, 1082.14, 0, 1, 6150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(151, 0, 30000, '10th ElCorona Street', 1865.41, -1979.65, 13.5467, 177.879, 223.162, 1287.52, 1082.14, 0, 1, 6151, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(152, 0, 30000, '11th ElCorona Street', 1849.7, -1982.86, 13.5467, 170.986, 223.162, 1287.52, 1082.14, 0, 1, 6152, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(153, 0, 30000, '12th ElCorona Street', 1828.28, -1980.44, 13.5467, 0.2176, 223.162, 1287.52, 1082.14, 0, 1, 6153, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(154, 0, 30000, '13th ElCorona Street', 1825.92, -1980.5, 13.5467, 1.4708, 223.162, 1287.52, 1082.14, 0, 1, 6154, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(155, 0, 30000, '14th ElCorona Street', 1820.25, -1994.16, 13.5543, 90.4352, 223.162, 1287.52, 1082.14, 0, 1, 6155, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(156, 0, 30000, '15th ElCorona Street', 1820.28, -1996.28, 13.5543, 90.4352, 223.162, 1287.52, 1082.14, 0, 1, 6156, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(157, 0, 30000, '16th ElCorona Street', 1832.88, -1994.05, 13.5467, 270.893, 223.162, 1287.52, 1082.14, 0, 1, 6157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(158, 0, 30000, '17th ElCorona Street', 1832.69, -1996.11, 13.5467, 275.907, 223.162, 1287.52, 1082.14, 0, 1, 6158, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(159, 0, 30000, '18th ElCorona Street', 1817.41, -2005.55, 13.5543, 5.5211, 223.162, 1287.52, 1082.14, 0, 1, 6159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(160, 0, 30000, '19th ElCorona Street', 1835.79, -2005.49, 13.5467, 308.108, 223.162, 1287.52, 1082.14, 0, 1, 6160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(161, 0, 30000, '20th ElCorona Street', 1846.39, -2019.49, 13.5467, 267.134, 223.162, 1287.52, 1082.14, 0, 1, 6161, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(162, 0, 30000, '21st ElCorona Street', 1846.53, -2021.71, 13.5467, 262.433, 223.162, 1287.52, 1082.14, 0, 1, 6162, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(163, 0, 30000, '22nd ElCorona Street', 1849.46, -2037.99, 13.5468, 9.2811, 2269.88, -1210.32, 1047.56, 90, 10, 6163, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(164, 0, 30000, '23rd ElCorona Street', 1857.12, -2040.94, 13.5468, 1.761, 2269.88, -1210.32, 1047.56, 90, 10, 6164, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(165, 0, 30000, '24th ElCorona Street', 1859.09, -2040.85, 13.5468, 276.774, 2269.88, -1210.32, 1047.56, 90, 10, 6165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(166, 0, 30000, '25th ElCorona Street', 1868.85, -2037.99, 13.5468, 100.775, 2269.88, -1210.32, 1047.56, 90, 10, 6166, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(167, 0, 30000, '26th ElCorona Street', 1898.98, -2038, 13.5468, 270.267, 2269.88, -1210.32, 1047.56, 90, 10, 6167, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(168, 0, 30000, '27th ElCorona Street', 1871.11, -2021.37, 13.5468, 77.275, 2269.88, -1210.32, 1047.56, 90, 10, 6168, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(169, 0, 30000, '28th ElCorona Street', 1870.76, -2019.29, 13.5468, 53.1481, 2269.88, -1210.32, 1047.56, 90, 10, 6169, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(170, 0, 30000, '29th ElCorona Street', 1895.53, -2019.58, 13.5467, 263.06, 223.162, 1287.52, 1082.14, 0, 1, 6170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(171, 0, 30000, '30th ElCorona Street', 1895.53, -2021.41, 13.5467, 263.373, 223.162, 1287.52, 1082.14, 0, 1, 6171, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(172, 0, 30000, '31st ElCorona Street', 1888.93, -2000.92, 13.5467, 273.713, 223.162, 1287.52, 1082.14, 0, 1, 6172, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(173, 0, 30000, '32nd ElCorona Street', 1877.93, -2000.9, 13.5468, 88.5551, 2269.88, -1210.32, 1047.56, 90, 10, 6173, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(174, 0, 30000, '33rd ElCorona Street', 1877.54, -1982.4, 13.5467, 196.319, 223.162, 1287.52, 1082.14, 0, 1, 6174, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(175, 0, 30000, '34th ElCorona Street', 1888.16, -1982.44, 13.5467, 94.3399, 223.162, 1287.52, 1082.14, 0, 1, 6175, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(176, 0, 50000, '35th ElCorona Street', 1895.54, -2068.88, 15.6688, 77.1791, 223.162, 1287.52, 1082.14, 0, 1, 6176, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(177, 0, 50000, '36th ElCorona Street', 1873.49, -2070.76, 15.4969, 151.826, 223.162, 1287.52, 1082.14, 0, 1, 6177, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(178, 0, 50000, '37th ElCorona Street', 1851.79, -2070.15, 15.4812, 180.966, 223.162, 1287.52, 1082.14, 0, 1, 6178, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(179, 0, 50000, '38th ElCorona Street', 1801.9, -2098.96, 14.0209, 357.061, 223.162, 1287.52, 1082.14, 0, 1, 6179, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(180, 67, 50000, '39th ElCorona Street', 1804.19, -2124.9, 13.9421, 181.616, 243.847, -1850.8, 3333.93, 94.05, 5, 1180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(181, 0, 50000, '40th ElCorona Street', 1781.53, -2101.72, 14.0565, 0.5077, 223.162, 1287.52, 1082.14, 0, 1, 6181, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(182, 0, 50000, '41st ElCorona Street', 1782.26, -2126.27, 14.0677, 180.989, 223.162, 1287.52, 1082.14, 0, 1, 6182, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(183, 0, 50000, '42nd ElCorona Street', 1762.33, -2102.02, 13.8569, 355.808, 223.162, 1287.52, 1082.14, 0, 1, 6183, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(184, 0, 50000, '43rd ElCorona Street', 1761.22, -2125.36, 14.0565, 182.533, 223.162, 1287.52, 1082.14, 0, 1, 6184, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(185, 0, 50000, '44th ElCorona Street', 1734.03, -2097.98, 14.0366, 264.844, 223.162, 1287.52, 1082.14, 0, 1, 6185, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(186, 0, 50000, '45th ElCorona Street', 1734.7, -2129.98, 14.0209, 179.4, 223.162, 1287.52, 1082.14, 0, 1, 6186, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(187, 0, 50000, '46th ElCorona Street', 1711.55, -2101.45, 14.021, 359.231, 2269.88, -1210.32, 1047.56, 90, 10, 6187, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(188, 0, 50000, '47th ElCorona Street', 1715.14, -2125.31, 14.0565, 177.52, 223.162, 1287.52, 1082.14, 0, 1, 6188, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(189, 0, 50000, '48th ElCorona Street', 1684.74, -2098.51, 13.8343, 8.3179, 223.162, 1287.52, 1082.14, 0, 1, 6189, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(190, 0, 50000, '49th ElCorona Street', 1695.63, -2125.8, 13.81, 202.563, 223.162, 1287.52, 1082.14, 0, 1, 6190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(191, 0, 50000, '50th ElCorona Street', 1673.77, -2122.55, 14.1459, 127.989, 223.162, 1287.52, 1082.14, 0, 1, 6191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(192, 0, 50000, '51st ElCorona Street', 1667.49, -2107.55, 14.0721, 3.9077, 223.162, 1287.52, 1082.14, 0, 1, 6192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(193, 0, 40000, '1St WillowField', 2240.72, -1882.1, 14.2343, 2.5278, 2240.61, -1882.34, 14.2343, 92.5279, 0, 6193, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(194, 0, 40000, '2Nd WillowField', 2242.49, -1882.01, 14.2343, 8.7945, 2269.88, -1210.32, 1047.56, 90, 10, 6194, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(195, 0, 40000, '3Rd WillowField', 2268.43, -1882.01, 14.2343, 2.841, 2269.88, -1210.32, 1047.56, 90, 10, 6195, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(196, 0, 40000, '4Th WillowField', 2269.96, -1882.01, 14.2343, 2.841, 2269.88, -1210.32, 1047.56, 90, 10, 6196, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(197, 0, 40000, '5Th WillowField', 2295.69, -1882.01, 14.2343, 336.834, 2269.88, -1210.32, 1047.56, 90, 10, 6197, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(198, 0, 40000, '6Th WillowField', 2297.1, -1882.01, 14.2343, 336.834, 2269.88, -1210.32, 1047.56, 90, 10, 6198, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(199, 0, 85000, '7Th WillowField', 2333.29, -1883.56, 15, 207.113, 2269.88, -1210.32, 1047.56, 90, 10, 6199, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(200, 0, 85000, '8Th WillowField', 2333.27, -1943.24, 14.9687, 19.1111, 2269.88, -1210.32, 1047.56, 90, 10, 6200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(201, 0, 85000, '9Th WillowField', 2284.86, -1906.6, 14.9296, 163.246, 2269.88, -1210.32, 1047.56, 90, 10, 6201, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(202, 0, 85000, '10Th WillowField', 2261.69, -1906.76, 14.9375, 123.452, 2269.88, -1210.32, 1047.56, 90, 10, 6202, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(203, 0, 85000, '11Th WillowField', 2238.32, -1906.84, 14.9375, 159.799, 2269.88, -1210.32, 1047.56, 90, 10, 6203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(206, 269, 60000, '13Th Idlewood Street', 1980.38, -1719.12, 17.0305, 89.9245, 2269.88, -1210.32, 1047.56, 90, 10, 6206, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 10, 0),
-(207, 0, 38000, '14Th Idlewood Street', 1973.19, -1705.39, 15.9687, 357.177, 2269.88, -1210.32, 1047.56, 90, 10, 6207, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(208, 0, 38000, '15Th Idlewood Street', 1969.24, -1705.15, 15.9687, 0.9373, 2269.88, -1210.32, 1047.56, 90, 10, 6208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(209, 67, 60000, '16Th Idlewood Street', 1981, -1682.92, 17.0538, 87.0811, 2269.88, -1210.32, 1047.56, 90, 10, 6209, 0, 0, 1, 31, 350, 29, 350, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-(210, 0, 25000, '17Th Idlewood Street', 1974.52, -1671.27, 15.9687, 336.787, 2269.88, -1210.32, 1047.56, 90, 10, 6210, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(211, 0, 25000, '18Th Idlewood Street', 1970.11, -1671.2, 15.9687, 343.367, 2269.88, -1210.32, 1047.56, 90, 10, 6211, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(212, 0, 25000, '19Th Idlewood Street', 1969.89, -1671.19, 18.5455, 343.367, 2269.88, -1210.32, 1047.56, 90, 10, 6212, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(213, 0, 25000, '20Th Idlewood Street', 1974.67, -1671.19, 18.5455, 343.367, 2269.88, -1210.32, 1047.56, 90, 10, 6213, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(214, 0, 30000, '21Th Idlewood Street', 1973.33, -1654.67, 15.9687, 6.554, 2269.88, -1210.32, 1047.56, 90, 10, 6214, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(215, 0, 30000, '22Th Idlewood Street', 1969.5, -1654.67, 15.9687, 6.554, 2269.88, -1210.32, 1047.56, 90, 10, 6215, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(217, 0, 25000, '23Th Idlewood Street', 1972.44, -1633.71, 15.9687, 4.9874, 2269.88, -1210.32, 1047.56, 90, 10, 6217, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(218, 0, 25000, '24Th Idlewood Street', 1967.44, -1633.71, 15.9687, 359.034, 2269.88, -1210.32, 1047.56, 90, 10, 6218, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(219, 0, 25000, '25Th Idlewood Street', 1967.5, -1633.71, 18.5689, 350.887, 2269.88, -1210.32, 1047.56, 90, 10, 6219, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(220, 0, 25000, '26Th Idlewood Street', 1972.31, -1633.71, 18.5689, 2.794, 2269.88, -1210.32, 1047.56, 90, 10, 6220, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(221, 0, 85000, '27Th Idlewood Street', 1986.72, -1604.94, 13.532, 51.001, 2269.88, -1210.32, 1047.56, 90, 10, 6221, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(222, 0, 35000, '28Th Idlewood Street', 2002.28, -1594.14, 13.5773, 42.8545, 2269.88, -1210.32, 1047.56, 90, 10, 6222, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(223, 0, 35000, '29Th Idlewood Street', 2011.33, -1594.42, 13.5832, 42.5412, 2269.88, -1210.32, 1047.56, 90, 10, 6223, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(224, 0, 35000, '30Th Idlewood Street', 1972.83, -1559.99, 13.6394, 42.5412, 2269.88, -1210.32, 1047.56, 90, 10, 6224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(225, 0, 35000, '31Th Idlewood Street', 1958.7, -1560.32, 13.5943, 27.1877, 2269.88, -1210.32, 1047.56, 90, 10, 6225, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(226, 0, 85000, '32Th Idlewood Street', 1909.85, -1597.41, 14.3062, 359.905, 2269.88, -1210.32, 1047.56, 90, 10, 6226, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(227, 0, 85000, '33Th Idlewood Street', 1863.87, -1597.28, 14.3062, 3.0374, 2269.88, -1210.32, 1047.56, 90, 10, 6227, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(228, 0, 25000, '34Th Idlewood Street', 1848.15, -1593.54, 19.1244, 264.697, 2269.88, -1210.32, 1047.56, 90, 10, 6228, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(229, 0, 25000, '35Th Idlewood Street', 1848.15, -1593.54, 23.8834, 272.867, 2269.88, -1210.32, 1047.56, 90, 10, 6229, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(230, 0, 59000, '1° Dowtown Residence', 1692.66, -1458.63, 13.6718, 278.123, 2269.88, -1210.32, 1047.56, 90, 10, 6230, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(231, 0, 59000, '2° Dowtown Residence', 1685.37, -1464.5, 13.6718, 175.975, 2269.88, -1210.32, 1047.56, 90, 10, 6231, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(232, 0, 59000, '3° Dowtown Residence', 1675.61, -1462.13, 13.6718, 95.4478, 2269.88, -1210.32, 1047.56, 90, 10, 6232, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(233, 0, 75000, '1st Verona Road', 847.386, -1717.38, 14.9296, 176.793, 2269.88, -1210.32, 1047.56, 90, 10, 6233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(234, 0, 200000, '2nd Verona Road', 865.209, -1634.15, 14.9295, 354.045, 2269.88, -1210.32, 1047.56, 90, 10, 6234, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(235, 0, 200000, '3rd Verona Road', 893.571, -1635.7, 14.9357, 355.926, 2269.88, -1210.32, 1047.56, 90, 10, 6235, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(236, 0, 200000, '4th Verona Road', 987.039, -1624.45, 14.9295, 167.225, 2269.88, -1210.32, 1047.56, 90, 10, 6236, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(237, 0, 200000, '5th Verona Road', 901.643, -1514.98, 14.3695, 3.1087, 2269.88, -1210.32, 1047.56, 90, 10, 6237, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(238, 0, 200000, '6th Verona Road', 877.938, -1515.36, 14.1893, 357.155, 2269.88, -1210.32, 1047.56, 90, 10, 6238, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(239, 0, 200000, '7th Verona Road', 849.799, -1520.02, 14.3498, 66.7162, 2269.88, -1210.32, 1047.56, 90, 10, 6239, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(240, 0, 200000, '8th Verona Road', 822.409, -1504.86, 14.28, 182.024, 2269.88, -1210.32, 1047.56, 90, 10, 6240, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(241, 0, 200000, '9th Verona Road', 841.297, -1471.36, 14.3131, 267.469, 2269.88, -1210.32, 1047.56, 90, 10, 6241, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(242, 0, 200000, '10th Verona Road', 813.69, -1456.69, 14.2277, 353.155, 2269.88, -1210.32, 1047.56, 90, 10, 6242, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(243, 0, 200000, '11th Verona Road', 898.391, -1473.49, 14.2185, 4.3857, 2269.88, -1210.32, 1047.56, 90, 10, 6243, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(244, 0, 200000, '12th Verona Road', 900.488, -1447.39, 14.3701, 178.36, 2269.88, -1210.32, 1047.56, 90, 10, 6244, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(245, 0, 50000, '1st Market Road', 880.116, -1423.89, 14.4861, 181.444, 2269.88, -1210.32, 1047.56, 90, 10, 6245, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(246, 0, 50000, '2nd Market Road', 852.364, -1422.79, 14.1197, 73.8974, 2269.88, -1210.32, 1047.56, 90, 10, 6246, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(247, 0, 50000, '3rd Market Road', 824.689, -1424.2, 14.4988, 269.854, 2269.88, -1210.32, 1047.56, 90, 10, 6247, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(249, 0, 95000, '1st Marina Street', 783.543, -1464.55, 13.5466, 92.1203, 226.291, 1240.06, 1082.14, 90, 2, 6249, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(250, 0, 95000, '2nd Marina Street', 771.285, -1510.76, 13.5466, 75.5132, 2269.88, -1210.32, 1047.56, 90, 10, 6250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(251, 0, 95000, '3rd Marina Street', 761.597, -1564.07, 13.697, 255.827, 2269.88, -1210.32, 1047.56, 90, 10, 6251, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(252, 0, 95000, 'N°9 - Petite Villa - Marina', 766.92, -1605.75, 13.8037, 270.722, 2269.88, -1210.32, 1047.56, 90, 10, 6252, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(253, 0, 95000, 'N°8 - Petite Villa - Marina', 768.08, -1655.78, 5.6093, 275.736, 2269.88, -1210.32, 1047.56, 90, 10, 6253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(254, 0, 95000, 'N°7 - Petite Villa - Marina', 769.224, -1696.49, 5.1553, 271.036, 324.269, -1579.49, 10.1469, 179.115, 3, 245000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(255, 0, 95000, 'N°6 - Petite Villa - Marina', 769.228, -1745.87, 13.077, 270.723, 2269.88, -1210.32, 1047.56, 90, 10, 6255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(256, 0, 95000, 'N°14 - Petite Villa - Marina', 693.546, -1705.78, 3.8194, 92.4573, 2269.88, -1210.32, 1047.56, 90, 10, 6256, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(257, 0, 25000, 'N°13 - Petite Villa - Marina', 694.798, -1690.74, 4.346, 183.325, 2269.88, -1210.32, 1047.56, 90, 10, 6257, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(258, 0, 95000, 'N°12 - Petite Villa - Marina', 693.759, -1645.82, 4.0935, 86.8406, 2269.88, -1210.32, 1047.56, 90, 10, 6258, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(259, 0, 95000, 'N°11 - Petite Villa - Marina', 697.28, -1627.02, 3.749, 89.0342, 2269.88, -1210.32, 1047.56, 90, 10, 6259, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `houses` (`houseID`, `houseOwner`, `housePrice`, `houseAddress`, `housePosX`, `housePosY`, `housePosZ`, `housePosA`, `houseIntX`, `houseIntY`, `houseIntZ`, `houseIntA`, `houseInterior`, `houseInteriorVW`, `houseExterior`, `houseExteriorVW`, `houseLocked`, `houseWeapon1`, `houseAmmo1`, `houseWeapon2`, `houseAmmo2`, `houseWeapon3`, `houseAmmo3`, `houseWeapon4`, `houseAmmo4`, `houseWeapon5`, `houseAmmo5`, `houseWeapon6`, `houseAmmo6`, `houseWeapon7`, `houseAmmo7`, `houseWeapon8`, `houseAmmo8`, `houseWeapon9`, `houseAmmo9`, `houseWeapon10`, `houseAmmo10`, `houseMoney`, `houseLocation`, `houseMaxLoc`, `houseLocNum`) VALUES
-(260, 0, 95000, 'N°10 - Petite Villa - Marina', 692.924, -1602.78, 15.0466, 179.905, 2269.88, -1210.32, 1047.56, 90, 10, 6260, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(264, 0, 150000, '1st Main Street', 1326.51, -1067.76, 31.5546, 85.4029, 2269.88, -1210.32, 1047.56, 90, 10, 6264, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(265, 0, 150000, '2nd Main Street', 1326.46, -1090.67, 27.9765, 87.9097, 2269.88, -1210.32, 1047.56, 90, 10, 6265, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(266, 0, 35000, '1st Bank Street', 1233.67, -1016.16, 32.6066, 272.151, 2269.88, -1210.32, 1047.56, 90, 10, 6266, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(267, 0, 35000, '2nd Bank Street', 1227.84, -1017.06, 32.6015, 101.093, 2269.88, -1210.32, 1047.56, 90, 10, 6267, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(268, 0, 35000, '3rd Bank Street', 1227.93, -1017, 36.3359, 2.3195, 2269.88, -1210.32, 1047.56, 90, 10, 6268, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(269, 0, 35000, '4th Bank Street', 1233.97, -1016.29, 36.3359, 279.358, 2269.88, -1210.32, 1047.56, 90, 10, 6269, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(270, 0, 35000, '5th Bank Street', 1233.45, -1010.05, 36.3282, 275.285, 2269.88, -1210.32, 1047.56, 90, 10, 6270, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(271, 0, 35000, '6th Bank Street', 1227.01, -1010.95, 36.3282, 90.1263, 2269.88, -1210.32, 1047.56, 90, 10, 6271, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(272, 0, 35000, '7th Bank Street', 1233.63, -1009.99, 32.6015, 278.128, 2269.88, -1210.32, 1047.56, 90, 10, 6272, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(273, 0, 35000, '8th Bank Street', 1226.92, -1010.85, 32.6015, 105.816, 2269.88, -1210.32, 1047.56, 90, 10, 6273, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(274, 0, 35000, '9th Bank Street', 1195.85, -1017.38, 32.5468, 300.375, 2269.88, -1210.32, 1047.56, 90, 10, 6274, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(275, 0, 35000, '10th Bank Street', 1189.55, -1017.97, 32.5468, 94.2231, 2269.88, -1210.32, 1047.56, 90, 10, 6275, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(276, 0, 35000, '11th Bank Street', 1189.69, -1018.1, 36.2343, 97.0431, 2269.88, -1210.32, 1047.56, 90, 10, 6276, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(277, 0, 35000, '12th Bank Street', 1195.95, -1017.21, 36.2343, 282.515, 2269.88, -1210.32, 1047.56, 90, 10, 6277, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(278, 0, 35000, '13th Bank Street', 1188.71, -1011.79, 36.2266, 90.463, 2269.88, -1210.32, 1047.56, 90, 10, 6278, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(279, 0, 35000, '14th Bank Street', 1194.98, -1011.04, 36.2266, 281.262, 2269.88, -1210.32, 1047.56, 90, 10, 6279, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(280, 0, 35000, '15th Bank Street', 1195.11, -1011.03, 32.5522, 274.078, 2269.88, -1210.32, 1047.56, 90, 10, 6280, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(281, 0, 35000, '16th Bank Street', 1188.6, -1011.83, 32.5468, 88.9197, 2269.88, -1210.32, 1047.56, 90, 10, 6281, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(282, 0, 120000, '17th Bank Street', 1128.05, -1021.99, 34.9921, 2.4621, 2269.88, -1210.32, 1047.56, 90, 10, 6282, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(283, 0, 120000, '18th Bank Street', 1118.11, -1021.87, 34.9921, 4.6556, 2269.88, -1210.32, 1047.56, 90, 10, 6283, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(284, 0, 120000, '19th Bank Street', 1051.13, -1058.69, 34.7966, 181.377, 2269.88, -1210.32, 1047.56, 90, 10, 6284, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(285, 0, 120000, '20th Bank Street', 993.728, -1058.46, 33.6995, 182.654, 2269.88, -1210.32, 1047.56, 90, 10, 6285, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(286, 0, 35000, '1st Felini Road', 1283.96, -897.721, 42.8753, 118.733, 2269.88, -1210.32, 1047.56, 90, 10, 6286, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(287, 0, 35000, '2nd Felini Road', 1290.37, -897.036, 42.8828, 287.308, 2269.88, -1210.32, 1047.56, 90, 10, 6287, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(288, 0, 35000, '3rd Felini Road', 1290.47, -896.988, 46.6251, 101.427, 2269.88, -1210.32, 1047.56, 90, 10, 6288, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(289, 0, 35000, '4th Felini Road', 1284.11, -897.737, 46.6251, 101.187, 2269.88, -1210.32, 1047.56, 90, 10, 6289, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(290, 0, 35000, '5th Felini Road', 1291.22, -903.053, 46.6328, 274.775, 2269.88, -1210.32, 1047.56, 90, 10, 6290, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(291, 0, 35000, '6th Felini Road', 1284.81, -903.894, 46.6328, 101.187, 2269.88, -1210.32, 1047.56, 90, 10, 6291, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(292, 0, 35000, '7th Felini Road', 1285.05, -903.789, 42.8828, 151.103, 2269.88, -1210.32, 1047.56, 90, 10, 6292, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(293, 0, 35000, '8th Felini Road', 1291.18, -903.154, 42.8828, 325.535, 2269.88, -1210.32, 1047.56, 90, 10, 6293, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(294, 0, 35000, '9th Felini Road', 1288.08, -873.806, 43.0686, 318.956, 2269.88, -1210.32, 1047.56, 90, 10, 6294, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(295, 0, 35000, '10th Felini Road', 1281.19, -874.84, 42.9496, 102.777, 2269.88, -1210.32, 1047.56, 90, 10, 6295, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(296, 0, 35000, '11th Felini Road', 1281.41, -874.784, 46.8437, 326.716, 2269.88, -1210.32, 1047.56, 90, 10, 6296, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(297, 0, 35000, '12th Felini Road', 1287.72, -874.021, 46.8437, 281.982, 2269.88, -1210.32, 1047.56, 90, 10, 6297, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(298, 0, 35000, '13th Felini Road', 1280.55, -868.616, 46.836, 103.404, 2269.88, -1210.32, 1047.56, 90, 10, 6298, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(299, 0, 35000, '14th Felini Road', 1287.19, -867.751, 46.836, 280.125, 2269.88, -1210.32, 1047.56, 90, 10, 6299, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(300, 0, 35000, '15th Felini Road', 1286.98, -867.869, 43.1321, 286.415, 2269.88, -1210.32, 1047.56, 90, 10, 6300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(301, 0, 35000, '16th Felini Road', 1280.59, -868.602, 42.9391, 102.51, 2269.88, -1210.32, 1047.56, 90, 10, 6301, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(302, 0, 35000, '17th Felini Road', 1245.93, -902.864, 42.8828, 88.4102, 2269.88, -1210.32, 1047.56, 90, 10, 6302, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(303, 0, 35000, '18th Felini Road', 1252.5, -901.911, 42.8828, 282.029, 2269.88, -1210.32, 1047.56, 90, 10, 6303, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(304, 0, 35000, '19th Felini Road', 1252.29, -901.927, 46.5938, 158.502, 2269.88, -1210.32, 1047.56, 90, 10, 6304, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(305, 0, 35000, '20th Felini Road', 1245.87, -902.758, 46.5938, 102.197, 2269.88, -1210.32, 1047.56, 90, 10, 6305, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(306, 0, 35000, '21th Felini Road', 1253.28, -908.058, 46.6015, 271.712, 2269.88, -1210.32, 1047.56, 90, 10, 6306, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(307, 0, 35000, '22th Felini Road', 1246.49, -908.911, 46.6015, 100.944, 2269.88, -1210.32, 1047.56, 90, 10, 6307, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(308, 0, 35000, '23th Felini Road', 1246.53, -908.926, 42.8828, 121.334, 2269.88, -1210.32, 1047.56, 90, 10, 6308, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(309, 0, 35000, '24th Felini Road', 1253.49, -908.122, 42.8828, 279.256, 2269.88, -1210.32, 1047.56, 90, 10, 6309, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(310, 0, 35000, '25th Felini Road', 1249.17, -877.335, 42.8828, 239.462, 2269.88, -1210.32, 1047.56, 90, 10, 6310, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(311, 0, 35000, '26th Felini Road', 1242.45, -878.229, 42.8753, 99.4005, 2269.88, -1210.32, 1047.56, 90, 10, 6311, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(312, 0, 35000, '27th Felini Road', 1242.63, -878.128, 46.6406, 113.187, 2269.88, -1210.32, 1047.56, 90, 10, 6312, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(313, 0, 35000, '28th Felini Road', 1249.31, -877.352, 46.6406, 282.389, 2269.88, -1210.32, 1047.56, 90, 10, 6313, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(314, 0, 35000, '30th Felini Road', 1248.28, -871.326, 46.6329, 280.195, 2269.88, -1210.32, 1047.56, 90, 10, 6314, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(315, 0, 35000, '29th Felini Road', 1241.6, -872.06, 46.6329, 97.8572, 2269.88, -1210.32, 1047.56, 90, 10, 6315, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(316, 0, 35000, '31th Felini Road', 1248.33, -871.184, 42.8828, 265.179, 2269.88, -1210.32, 1047.56, 90, 10, 6316, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(317, 0, 35000, '32th Felini Road', 1241.45, -872.071, 42.8828, 95.0372, 2269.88, -1210.32, 1047.56, 90, 10, 6317, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(318, 0, 135000, '2nd Studio Lane', 985.727, -1094.79, 27.604, 284.165, 2269.88, -1210.32, 1047.56, 90, 10, 6318, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(319, 0, 135000, '1st Studio Lane', 976.237, -1070.67, 26.9639, 20.432, 2269.88, -1210.32, 1047.56, 90, 10, 6319, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(320, 0, 120000, '1st Vand Street', 1103.04, -1069.71, 31.8828, 279.465, 2269.88, -1210.32, 1047.56, 90, 10, 6320, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(321, 0, 120000, '2nd Vand Street', 1069.01, -1081.34, 27.4479, 179.607, 2269.88, -1210.32, 1047.56, 90, 10, 6321, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(322, 0, 120000, '3rd Vand Street', 1103.21, -1092.6, 28.4687, 91.0287, 2269.88, -1210.32, 1047.56, 90, 10, 6322, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(323, 0, 120000, '4th Vand Street', 1059.27, -1105.67, 28.045, 352.159, 2269.88, -1210.32, 1047.56, 90, 10, 6323, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(324, 0, 120000, '1st Newtown Street', 1183.22, -1075.92, 31.6789, 261.315, 2269.88, -1210.32, 1047.56, 90, 10, 6324, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(325, 0, 120000, '2nd Newtown Street', 1142.08, -1069.86, 31.7656, 91.8005, 2269.88, -1210.32, 1047.56, 90, 10, 6325, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(326, 0, 120000, '3rd Newtown Street', 1142.32, -1092.87, 28.1875, 93.6805, 2269.88, -1210.32, 1047.56, 90, 10, 6326, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(327, 0, 120000, '4th Newtown Street', 1183.17, -1098.99, 28.2578, 272.596, 2269.88, -1210.32, 1047.56, 90, 10, 6327, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(328, 0, 120000, '1st Idews Street', 1284.91, -1067.39, 31.6718, 267.269, 2269.88, -1210.32, 1047.56, 90, 10, 6328, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(329, 0, 120000, '2nd Idews Street', 1242.06, -1076.56, 31.5546, 120.024, 2269.88, -1210.32, 1047.56, 90, 10, 6329, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(330, 0, 120000, '3rd Idews Street', 1285.03, -1090.37, 28.2578, 306.46, 2269.88, -1210.32, 1047.56, 90, 10, 6330, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(331, 0, 120000, '4th Idews Street', 1242.27, -1099.3, 27.9765, 93.1008, 2269.88, -1210.32, 1047.56, 90, 10, 6331, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(332, 0, 55000, '1st Jefferson Road', 2148.86, -1484.86, 26.624, 274.53, 2269.88, -1210.32, 1047.56, 90, 10, 6332, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(333, 0, 35000, '2nd Jefferson Road', 2146.8, -1470.61, 26.0425, 267.323, 2269.88, -1210.32, 1047.56, 90, 10, 6333, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(334, 0, 35000, '3rd Jefferson Road', 2152.21, -1446.35, 26.105, 268.24, 2269.88, -1210.32, 1047.56, 90, 10, 6334, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(335, 0, 35000, '4th Jefferson Road', 2149.5, -1433.65, 25.9386, 265.42, 2269.88, -1210.32, 1047.56, 90, 10, 6335, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(336, 0, 45000, '5th Jefferson Road', 2150.62, -1419.13, 25.9218, 271.373, 2269.88, -1210.32, 1047.56, 90, 10, 6336, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(337, 0, 45000, '6th Jefferson Road', 2151.18, -1400.69, 26.1285, 271.373, 2269.88, -1210.32, 1047.56, 90, 10, 6337, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(338, 0, 45000, '7th Jefferson Road', 2147.71, -1366.12, 25.9722, 3.7604, 2269.88, -1210.32, 1047.56, 90, 10, 6338, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(339, 0, 45000, '8th Jefferson Road', 2129.47, -1361.69, 26.1363, 357.494, 2269.88, -1210.32, 1047.56, 90, 10, 6339, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(340, 0, 45000, '9th Jefferson Road', 2185.16, -1363.89, 25.8292, 355.927, 2269.88, -1210.32, 1047.56, 90, 10, 6340, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(341, 0, 45000, '10th Jefferson Road', 2202.68, -1363.94, 25.8605, 0, 2269.88, -1210.32, 1047.56, 90, 10, 6341, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(342, 0, 30000, '11th Jefferson Road', 2230.46, -1397.03, 24.2433, 178.266, 2269.88, -1210.32, 1047.56, 90, 10, 6342, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(343, 0, 30000, '12th Jefferson Road', 2243.48, -1397.07, 24.2433, 177.326, 2269.88, -1210.32, 1047.56, 90, 10, 6343, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(344, 0, 30000, '13th Jefferson Road', 2256.59, -1397.24, 24.5738, 172.939, 2269.88, -1210.32, 1047.56, 90, 10, 6344, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(345, 0, 45000, '14th Jefferson Road', 2196.42, -1404.14, 25.6183, 88.6514, 2269.88, -1210.32, 1047.56, 90, 10, 6345, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(346, 0, 45000, '15th Jefferson Road', 2189.05, -1419.32, 26.1562, 89.8813, 2269.88, -1210.32, 1047.56, 90, 10, 6346, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(347, 0, 45000, '16th Jefferson Road', 2194.35, -1443.02, 26.0738, 76.0946, 2269.88, -1210.32, 1047.56, 90, 10, 6347, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(348, 0, 45000, '17th Jefferson Road', 2191.58, -1456.07, 25.7906, 95.5214, 2269.88, -1210.32, 1047.56, 90, 10, 6348, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(349, 0, 45000, '18th Jefferson Road', 2190.56, -1470.35, 25.914, 91.7614, 2269.88, -1210.32, 1047.56, 90, 10, 6349, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(350, 0, 50000, 'Cave', 662.461, -1534.87, 14.8515, 77.5861, 2269.88, -1210.32, 1047.56, 90, 10, 6350, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(356, 0, 25000, '1 Los Flores', 2670.28, -1238.12, 55.7231, 87.3425, 2269.88, -1210.32, 1047.56, 90, 10, 6356, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(357, 0, 25000, '2 Los Flores', 2671.23, -1233.51, 57.1417, 87.9692, 2269.88, -1210.32, 1047.56, 90, 10, 6357, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(358, 0, 25000, '3 Los Flores', 2671.2, -1229.4, 58.3609, 88.2825, 2269.88, -1210.32, 1047.56, 90, 10, 6358, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(359, 0, 25000, '4 Los Flores', 2671.22, -1224.7, 59.6536, 87.6558, 2269.88, -1210.32, 1047.56, 90, 10, 6359, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(361, 0, 25000, '5 Los Flores', 2671.02, -1220.56, 60.9335, 87.6559, 2269.88, -1210.32, 1047.56, 90, 10, 6361, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(362, 0, 25000, '6 Los Flores', 2670.82, -1216.35, 62.2751, 87.6559, 2269.88, -1210.32, 1047.56, 90, 10, 6362, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(363, 0, 25000, '1 East Los Santos', 2495.12, -1423.95, 28.8437, 176.87, 2269.88, -1210.32, 1047.56, 90, 10, 6363, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(364, 0, 25000, '2 East Los Santos', 2492.28, -1423.94, 28.8437, 172.797, 2269.88, -1210.32, 1047.56, 90, 10, 6364, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(365, 0, 25000, '3 East Los Santos', 2487.27, -1423.96, 28.8437, 187.21, 2269.88, -1210.32, 1047.56, 90, 10, 6365, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(366, 0, 25000, '4 East Los Santos', 2495.32, -1417.73, 28.8375, 5.7653, 2269.88, -1210.32, 1047.56, 90, 10, 6366, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(367, 0, 25000, '7 Los Flores', 2670.94, -1211.7, 63.6896, 90.1626, 2269.88, -1210.32, 1047.56, 90, 10, 6367, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(368, 0, 25000, '5 East Los Santos', 2492.2, -1418.08, 28.8377, 276.465, 2269.88, -1210.32, 1047.56, 90, 10, 6368, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(369, 0, 25000, '6 East Los Santos', 2487.33, -1417.73, 28.8375, 330.985, 2269.88, -1210.32, 1047.56, 90, 10, 6369, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(370, 0, 25000, '7 East Los Santos', 2476.47, -1424.27, 28.8407, 179.98, 2269.88, -1210.32, 1047.56, 90, 10, 6370, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(372, 0, 25000, '8 East Los Santos', 2473.1, -1424.27, 28.8407, 214.447, 2269.88, -1210.32, 1047.56, 90, 10, 6372, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(373, 0, 25000, '9 East Los Santos', 2468.44, -1424.27, 28.8407, 157.733, 2269.88, -1210.32, 1047.56, 90, 10, 6373, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(374, 0, 25000, '10 East Los Santos', 2468.17, -1417.73, 28.8375, 0.4379, 2269.88, -1210.32, 1047.56, 90, 10, 6374, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(375, 0, 25000, '8 Los Flores', 2670.41, -1207.71, 64.794, 90.1626, 2269.88, -1210.32, 1047.56, 90, 10, 6375, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(376, 0, 25000, '11 East Los Santos', 2473.15, -1417.73, 28.8375, 339.445, 2269.88, -1210.32, 1047.56, 90, 10, 6376, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(377, 0, 25000, '12 East Los Santos', 2476.47, -1417.73, 28.8375, 13.2854, 2269.88, -1210.32, 1047.56, 90, 10, 6377, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(378, 0, 25000, '9 Los Flores', 2670.96, -1203.05, 65.7429, 89.5359, 2269.88, -1210.32, 1047.56, 90, 10, 6378, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(379, 0, 25000, '10 Los Flores', 2670.53, -1200.02, 66.5031, 90.4759, 2269.88, -1210.32, 1047.56, 90, 10, 6379, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(380, 0, 25000, '13 East Los Santos', 2495.31, -1410.03, 28.8393, 169.037, 2269.88, -1210.32, 1047.56, 90, 10, 6380, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(381, 0, 25000, '14 East Los Santos', 2495.49, -1399.09, 28.8394, 6.7287, 2269.88, -1210.32, 1047.56, 90, 10, 6381, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(382, 0, 25000, '15 East Los Santos', 2492.18, -1399.09, 28.8386, 15.1888, 2269.88, -1210.32, 1047.56, 90, 10, 6382, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(383, 0, 25000, '12 Los Flores', 2683.33, -1200.13, 66.783, 269.994, 2269.88, -1210.32, 1047.56, 90, 10, 6383, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(384, 0, 25000, '16 East Los Santos', 2492.15, -1410.03, 28.8386, 174.99, 2269.88, -1210.32, 1047.56, 90, 10, 6384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(385, 0, 25000, '17 East Los Santos', 2487.28, -1399.1, 28.8374, 358.269, 2269.88, -1210.32, 1047.56, 90, 10, 6385, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(386, 0, 25000, '13 Los Flores', 2683.44, -1203.03, 66.0318, 269.054, 2269.88, -1210.32, 1047.56, 90, 10, 6386, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(387, 0, 25000, '18 East Los Santos', 2487.39, -1410.02, 28.8374, 173.737, 2269.88, -1210.32, 1047.56, 90, 10, 6387, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(388, 0, 25000, '14 Los Flores', 2683.43, -1207.56, 65.0966, 266.548, 2269.88, -1210.32, 1047.56, 90, 10, 6388, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(389, 0, 25000, '15 Los Flores', 2683.31, -1211.84, 63.9377, 265.294, 2269.88, -1210.32, 1047.56, 90, 10, 6389, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(390, 0, 25000, '19 East Los Santos', 2476.5, -1410.02, 28.8337, 167.784, 2269.88, -1210.32, 1047.56, 90, 10, 6390, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(391, 0, 25000, '16 Los Flores', 2683.21, -1216.4, 62.4836, 272.814, 2269.88, -1210.32, 1047.56, 90, 10, 6391, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(392, 0, 25000, '20 East Los Santos', 2476.44, -1399.1, 28.8347, 14.5622, 2269.88, -1210.32, 1047.56, 90, 10, 6392, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(393, 0, 25000, '17 Los Flores', 2683.44, -1220.57, 61.2254, 269.994, 2269.88, -1210.32, 1047.56, 90, 10, 6393, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(394, 0, 25000, '21 East Los Santos', 2473.28, -1399.1, 28.834, 12.3689, 2269.88, -1210.32, 1047.56, 90, 10, 6394, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(395, 0, 25000, '18 Los Flores', 2683.44, -1224.81, 59.9314, 272.501, 2269.88, -1210.32, 1047.56, 90, 10, 6395, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(396, 0, 25000, '22 East Los Santos', 2473.17, -1410.01, 28.8337, 177.811, 2269.88, -1210.32, 1047.56, 90, 10, 6396, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(397, 0, 25000, '19 Los Flores', 2683.44, -1229.35, 58.6468, 269.054, 2269.88, -1210.32, 1047.56, 90, 10, 6397, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(398, 0, 25000, '20 Los Flores', 2683.44, -1233.6, 57.4169, 271.561, 2269.88, -1210.32, 1047.56, 90, 10, 6398, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(399, 0, 25000, '23 East Los Santos', 2468.25, -1410.02, 28.8337, 181.257, 2269.88, -1210.32, 1047.56, 90, 10, 6399, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(400, 0, 25000, '21 Los Flores', 2683.44, -1238.05, 56.02, 272.814, 2269.88, -1210.32, 1047.56, 90, 10, 6400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(401, 0, 25000, '24 East Los Santos', 2468.23, -1399.12, 28.8281, 334.455, 2269.88, -1210.32, 1047.56, 90, 10, 6401, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(402, 0, 25000, '25 East Los Santos', 2495.4, -1391.39, 28.8394, 174.34, 2269.88, -1210.32, 1047.56, 90, 10, 6402, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(403, 0, 25000, '26 East Los Santos', 2495.35, -1383.65, 28.8394, 1.3785, 2269.88, -1210.32, 1047.56, 90, 10, 6403, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(404, 0, 25000, '22 Los Flores', 2690.54, -1238.05, 57.5104, 89.2456, 2269.88, -1210.32, 1047.56, 90, 10, 6404, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(405, 0, 25000, '27 East Los Santos', 2492.23, -1383.65, 28.8386, 6.0787, 2269.88, -1210.32, 1047.56, 90, 10, 6405, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(406, 0, 25000, '23 Los Flores', 2690.55, -1233.53, 58.9082, 85.4856, 2269.88, -1210.32, 1047.56, 90, 10, 6406, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(407, 0, 25000, '28 East Los Santos', 2492.15, -1391.39, 28.8386, 184.367, 2269.88, -1210.32, 1047.56, 90, 10, 6407, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(408, 0, 25000, '29 East Los Santos', 2487.32, -1383.66, 28.8374, 352.292, 2269.88, -1210.32, 1047.56, 90, 10, 6408, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(409, 0, 25000, '30 East Los Santos', 2487.26, -1391.39, 28.8374, 189.694, 2269.88, -1210.32, 1047.56, 90, 10, 6409, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(410, 0, 25000, '24 Los Flores', 2690.54, -1229.17, 60.1369, 93.0057, 2269.88, -1210.32, 1047.56, 90, 10, 6410, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(411, 0, 25000, '31 East Los Santos', 2476.42, -1391.38, 28.8347, 174.34, 2269.88, -1210.32, 1047.56, 90, 10, 6411, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(412, 0, 25000, '25 Los Flores', 2690.54, -1224.8, 61.4224, 88.3056, 2269.88, -1210.32, 1047.56, 90, 10, 6412, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(413, 0, 25000, '32 East Los Santos', 2476.29, -1383.67, 28.8347, 357.932, 2269.88, -1210.32, 1047.56, 90, 10, 6413, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(414, 0, 25000, '26 Los Flores', 2690.54, -1220.54, 62.7157, 91.439, 2269.88, -1210.32, 1047.56, 90, 10, 6414, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(415, 0, 25000, '27 Los Flores', 2690.54, -1216.27, 64.065, 87.0523, 2269.88, -1210.32, 1047.56, 90, 10, 6415, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(416, 0, 25000, '33 East Los Santos', 2473.02, -1383.66, 28.8339, 345.399, 2269.88, -1210.32, 1047.56, 90, 10, 6416, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(417, 0, 25000, '28 Los Flores', 2690.54, -1211.7, 65.4542, 87.679, 2269.88, -1210.32, 1047.56, 90, 10, 6417, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(418, 0, 25000, '34 East Los Santos', 2473.34, -1391.38, 28.834, 172.437, 2269.88, -1210.32, 1047.56, 90, 10, 6418, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(419, 0, 25000, '35 East Los Santos', 2468.44, -1391.37, 28.8281, 169.93, 2269.88, -1210.32, 1047.56, 90, 10, 6419, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(420, 0, 25000, '29 Los Flores', 2690.54, -1207.64, 66.588, 88.619, 2269.88, -1210.32, 1047.56, 90, 10, 6420, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(421, 0, 25000, '36 East Los Santos', 2468.36, -1383.68, 28.8281, 0.4387, 2269.88, -1210.32, 1047.56, 90, 10, 6421, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(422, 0, 25000, '30 Los Flores', 2690.54, -1203, 67.522, 89.559, 2269.88, -1210.32, 1047.56, 90, 10, 6422, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(423, 0, 25000, '31 Los Flores', 2690.54, -1200.11, 68.2963, 90.1857, 2269.88, -1210.32, 1047.56, 90, 10, 6423, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(424, 0, 25000, '37 East Los Santos', 2495.45, -1375.96, 28.8394, 170.87, 2269.88, -1210.32, 1047.56, 90, 10, 6424, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(425, 0, 25000, '32 Los Flores', 2700.2, -1200.04, 68.9703, 267.534, 2269.88, -1210.32, 1047.56, 90, 10, 6425, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(428, 0, 25000, '33 Los Flores', 2700.21, -1203.15, 68.1961, 269.414, 2269.88, -1210.32, 1047.56, 90, 10, 6428, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(429, 0, 25000, '34 Los Flores', 2700.2, -1207.56, 67.2609, 270.667, 2269.88, -1210.32, 1047.56, 90, 10, 6429, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(430, 0, 25000, '38 East Los Santos', 2495.42, -1366.5, 28.8394, 4.4886, 2269.88, -1210.32, 1047.56, 90, 10, 6430, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(431, 0, 25000, '35 Los Flores', 2700.2, -1211.82, 66.1275, 268.161, 2269.88, -1210.32, 1047.56, 90, 10, 6431, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(432, 0, 25000, '39 East Los Santos', 2492.32, -1366.5, 28.8386, 19.2154, 2269.88, -1210.32, 1047.56, 90, 10, 6432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(433, 0, 25000, '36 Los Flores', 2700.2, -1216.42, 64.7383, 273.487, 2269.88, -1210.32, 1047.56, 90, 10, 6433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(434, 0, 25000, '37 Los Flores', 2700.2, -1220.67, 63.3891, 268.474, 2269.88, -1210.32, 1047.56, 90, 10, 6434, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(435, 0, 25000, '40 East Los Santos', 2492.02, -1375.95, 28.8385, 182.464, 2269.88, -1210.32, 1047.56, 90, 10, 6435, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(436, 0, 25000, '38 Los Flores', 2700.21, -1224.81, 62.0963, 268.787, 2269.88, -1210.32, 1047.56, 90, 10, 6436, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(437, 0, 25000, '41 East Los Santos', 2487.38, -1366.5, 28.8374, 358.222, 2269.88, -1210.32, 1047.56, 90, 10, 6437, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(438, 0, 25000, '39 Los Flores', 2700.21, -1229.24, 60.8107, 269.414, 2269.88, -1210.32, 1047.56, 90, 10, 6438, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(439, 0, 25000, '42 East Los Santos', 2487.34, -1375.96, 28.8374, 179.017, 2269.88, -1210.32, 1047.56, 90, 10, 6439, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(440, 0, 25000, '40 Los Flores', 2700.21, -1233.52, 59.5813, 269.414, 2269.88, -1210.32, 1047.56, 90, 10, 6440, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(441, 0, 25000, '43 East Los Santos', 2476.26, -1375.95, 28.8347, 181.524, 2269.88, -1210.32, 1047.56, 90, 10, 6441, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(442, 0, 25000, '41 Los Flores', 2700.2, -1238.04, 58.1832, 266.907, 2269.88, -1210.32, 1047.56, 90, 10, 6442, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(443, 0, 25000, '44 East Los Santos', 2476.3, -1366.49, 28.8347, 356.969, 2269.88, -1210.32, 1047.56, 90, 10, 6443, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(444, 0, 25000, '45 East Los Santos', 2473.26, -1366.51, 28.8281, 3.862, 2269.88, -1210.32, 1047.56, 90, 10, 6444, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(445, 0, 25000, '42 Los Flores', 2707.31, -1238.01, 59.6744, 89.8956, 2269.88, -1210.32, 1047.56, 90, 10, 6445, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(446, 0, 25000, '46 East Los Santos', 2473.18, -1375.95, 28.8339, 186.537, 2269.88, -1210.32, 1047.56, 90, 10, 6446, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(447, 0, 25000, '47 East Los Santos', 2468.12, -1375.93, 28.8281, 193.117, 2269.88, -1210.32, 1047.56, 90, 10, 6447, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(448, 0, 25000, '43 Los Flores', 2707.31, -1233.57, 61.0713, 91.149, 2269.88, -1210.32, 1047.56, 90, 10, 6448, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(449, 0, 25000, '48 East Los Santos', 2468.29, -1366.51, 28.8281, 7.6454, 2269.88, -1210.32, 1047.56, 90, 10, 6449, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(450, 0, 25000, '44 Los Flores', 2707.31, -1229.3, 62.3008, 87.3889, 2269.88, -1210.32, 1047.56, 90, 10, 6450, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(451, 0, 25000, '45 Los Flores', 2707.31, -1224.81, 63.5863, 84.8823, 2269.88, -1210.32, 1047.56, 90, 10, 6451, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(452, 0, 25000, '46 Los Flores', 2707.31, -1220.54, 64.8804, 93.3424, 2269.88, -1210.32, 1047.56, 90, 10, 6452, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(453, 0, 25000, '47 Los Flores', 2707.31, -1216.46, 66.2294, 89.269, 2269.88, -1210.32, 1047.56, 90, 10, 6453, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(454, 0, 25000, '48 Los Flores', 2707.31, -1211.77, 67.6181, 91.7757, 2269.88, -1210.32, 1047.56, 90, 10, 6454, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(455, 0, 25000, '49 Los Flores', 2707.31, -1207.68, 68.7522, 87.3889, 2269.88, -1210.32, 1047.56, 90, 10, 6455, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(456, 0, 25000, '50 Los Flores', 2707.31, -1203.07, 69.6866, 89.8957, 2269.88, -1210.32, 1047.56, 90, 10, 6456, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(457, 0, 25000, '51 Los Flores', 2707.31, -1200.08, 70.4604, 90.209, 2269.88, -1210.32, 1047.56, 90, 10, 6457, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(459, 0, 50000, '49 East Los santos', 2439.59, -1357.15, 24.1005, 88.6529, 2269.88, -1210.32, 1047.56, 90, 10, 6459, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(460, 0, 50000, '50 East Los santos', 2439.59, -1338.9, 24.1015, 88.0262, 2269.88, -1210.32, 1047.56, 90, 10, 6460, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(461, 0, 50000, '51 East Los santos', 2433.93, -1320.69, 25.3234, 88.9662, 2269.88, -1210.32, 1047.56, 90, 10, 6461, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(462, 0, 50000, '52 East Los santos', 2433.93, -1303.36, 25.3234, 91.4729, 2269.88, -1210.32, 1047.56, 90, 10, 6462, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(463, 0, 50000, '53 East Los santos', 2434.8, -1289.33, 25.3478, 93.6663, 2269.88, -1210.32, 1047.56, 90, 10, 6463, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(464, 0, 60000, '1 Jefferson', 2250.2, -1280.44, 25.4765, 358.872, 2269.88, -1210.32, 1047.56, 90, 10, 6464, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(465, 0, 50000, '54 East Los santos', 2433.6, -1275, 24.7565, 91.4729, 2431.79, -1275.3, 24.7578, 76.0551, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(466, 0, 60000, '2 Jefferson', 2229.93, -1280.08, 25.6285, 11.7187, 2269.88, -1210.32, 1047.56, 90, 10, 6466, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(467, 0, 50000, '55 East Los santos', 2388.42, -1279.63, 25.1291, 269.111, 2472.07, -1295.7, 30.2378, 271.677, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(468, 0, 60000, '3 Jefferson', 2208.08, -1280.97, 25.1206, 3.8853, 2269.88, -1210.32, 1047.56, 90, 10, 6468, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(469, 0, 50000, '56 East Los santos', 2387.86, -1328.42, 25.1241, 272.245, 2269.88, -1210.32, 1047.56, 90, 10, 6469, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(470, 0, 60000, '4 Jefferson', 2191.49, -1275.6, 25.1562, 274.199, 2269.88, -1210.32, 1047.56, 90, 10, 6470, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(471, 0, 50000, '57 East Los santos', 2389.73, -1346.11, 25.0769, 270.051, 2391.91, -1345.97, 25.3878, 267.164, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(472, 0, 50000, '58 East Los santos', 2383.53, -1366.26, 24.4913, 270.991, 2269.88, -1210.32, 1047.56, 90, 10, 6472, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(473, 0, 60000, '5 Jefferson', 2150.2, -1285.04, 24.5269, 348.532, 2269.88, -1210.32, 1047.56, 90, 10, 6473, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(474, 0, 60000, '6 Jefferson', 2148.39, -1320.08, 26.0738, 236.068, 2269.88, -1210.32, 1047.56, 90, 10, 6474, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(475, 0, 60000, '7 Jefferson', 2132.65, -1280.05, 25.8906, 60.9359, 2269.88, -1210.32, 1047.56, 90, 10, 6475, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(476, 0, 50000, '59 East Los santos', 2470.37, -1295.42, 30.2332, 269.424, 2472.52, -1295.21, 30.2378, 261.203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(477, 0, 70000, '8 Jefferson', 2126.58, -1320.86, 26.6239, 189.09, 2269.88, -1210.32, 1047.56, 90, 10, 6477, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(478, 0, 50000, '60 East Los santos', 2469.18, -1278.35, 30.3663, 269.111, 2269.88, -1210.32, 1047.56, 90, 10, 6478, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(479, 0, 60000, '9 Jefferson', 2111.11, -1279.16, 25.8359, 356.412, 2269.88, -1210.32, 1047.56, 90, 10, 6479, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(480, 0, 50000, '61 East Los santos', 2472.85, -1238.12, 32.5694, 0.292, 2269.88, -1210.32, 1047.56, 90, 10, 6480, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(481, 0, 60000, '10 Jefferson', 2100.93, -1321.89, 25.9531, 182.534, 2269.88, -1210.32, 1047.56, 90, 10, 6481, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(482, 0, 50000, '62 East Los santos', 2492.04, -1239.01, 37.9053, 357.785, 2472.69, -1295.43, 30.9578, 148.294, 0, 6482, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(483, 104, 60000, '11 Jefferson', 2090.95, -1277.84, 26.1795, 6.4619, 2269.88, -1210.32, 1047.56, 90, 10, 6483, 0, 0, 1, 23, 49, 25, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(484, 0, 50000, '63 East Los santos', 2514.54, -1240.46, 39.3405, 359.039, 2269.88, -1210.32, 1047.56, 90, 10, 6484, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(485, 0, 50000, '64 East Los santos', 2529.55, -1243.32, 43.9718, 0.9181, 2269.88, -1210.32, 1047.56, 90, 10, 6485, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(486, 0, 50000, '65 East Los santos', 2550.96, -1233.79, 49.3318, 358.725, 2269.88, -1210.32, 1047.56, 90, 10, 6486, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(487, 0, 60000, '19th Jefferson Road', 2190.32, -1487.69, 26.105, 86.6762, 2269.88, -1210.32, 1047.56, 90, 10, 6487, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(488, 0, 50000, '12 Jefferson', 2231.98, -1458.47, 24.0165, 265.759, 2468.26, -1698.24, 1013.51, 90, 2, 6488, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1),
-(489, 0, 50000, '13 Jefferson', 2247.47, -1469.34, 24.48, 305.362, 2269.88, -1210.32, 1047.56, 90, 10, 6489, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(490, 0, 50000, '14 Jefferson', 2263.77, -1469.34, 24.3706, 349.542, 2269.88, -1210.32, 1047.56, 90, 10, 6490, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(491, 0, 50000, '66 East Los santos', 2550.23, -1209.06, 54.5405, 358.411, 2473.02, -1296.1, 30.9578, 284.043, 0, 6491, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(492, 0, 50000, '15 Jefferson', 2230.83, -1407.62, 24, 2.0755, 2269.88, -1210.32, 1047.56, 90, 10, 6492, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(493, 0, 50000, '67 East Los santos', 2520.66, -1209.48, 50.2938, 359.352, 2269.88, -1210.32, 1047.56, 90, 10, 6493, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(494, 0, 50000, '16 Jefferson', 2243.92, -1407.79, 24, 284.368, 2269.88, -1210.32, 1047.56, 90, 10, 6494, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(495, 0, 50000, '17 Jefferson', 2256.75, -1407.62, 24, 357.689, 2269.88, -1210.32, 1047.56, 90, 10, 6495, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(496, 0, 50000, '68 East Los santos', 2467.59, -1200.41, 36.8116, 180.773, 2269.88, -1210.32, 1047.56, 90, 10, 6496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(498, 0, 50000, '69 East Los santos', 2520.75, -1198, 56.5992, 179.833, 2269.88, -1210.32, 1047.56, 90, 10, 6498, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(499, 107, 50000, '70 East Los santos', 2550.25, -1197.53, 60.8428, 177.327, 2269.88, -1210.32, 1047.56, 90, 10, 6499, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-(500, 0, 60000, '18 Jefferson', 2249.9, -1238.92, 25.8984, 163.757, 2269.88, -1210.32, 1047.56, 90, 10, 6500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(501, 0, 60000, '19 Jefferson', 2229.61, -1241.5, 25.6562, 185.064, 2269.88, -1210.32, 1047.56, 90, 10, 6501, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(502, 0, 60000, '20 Jefferson', 2209.7, -1240.24, 24.48, 196.971, 2269.88, -1210.32, 1047.56, 90, 10, 6502, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(503, 0, 60000, '21 Jefferson', 2191.89, -1239.23, 24.4878, 175.351, 2269.88, -1210.32, 1047.56, 90, 10, 6503, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(504, 0, 60000, '22 Jefferson', 2153.7, -1243.81, 25.367, 187.884, 2269.88, -1210.32, 1047.56, 90, 10, 6504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(505, 0, 60000, '23 Jefferson', 2133.36, -1233, 24.4218, 190.391, 2269.88, -1210.32, 1047.56, 90, 10, 6505, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(506, 0, 60000, '24 Jefferson', 2111.05, -1244.39, 25.8515, 170.674, 2269.88, -1210.32, 1047.56, 90, 10, 6506, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(507, 0, 60000, '25Jefferson', 2090.77, -1235.18, 26.0191, 182.267, 2269.88, -1210.32, 1047.56, 90, 10, 6507, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(508, 0, 60000, 'N°26 - Maison - Jefferson', 2091.51, -1184.3, 27.0569, 1.7855, 2091.83, -1181.9, 27.0568, 98.7428, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(509, 0, 120000, 'N°27 - Maison - Jefferson', 2092.24, -1166.62, 26.5858, 277.498, 2269.88, -1210.32, 1047.56, 90, 10, 6509, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(510, 0, 110000, 'N°28 - Maison - Jefferson', 2095.07, -1145.42, 26.5928, 283.475, 2269.88, -1210.32, 1047.56, 90, 10, 6510, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(511, 0, 60000, 'N°29 - Maison - Jefferson', 2093.95, -1122.86, 27.6898, 350.216, 2093.97, -1120.44, 27.6868, 80.664, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(517, 0, 30000, 'Bloc B - East Los Santos', 2324.32, -1250.06, 27.9765, 359.784, 23.9584, 1340.61, 1084.38, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(519, 0, 30000, 'Bloc C - East Los Santos', 2334.74, -1234.66, 27.9764, 179.247, 2269.88, -1210.32, 1047.56, 90, 10, 6519, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(520, 0, 30000, 'Bloc D - East Los Santos', 2324.36, -1218.84, 27.9764, 1.5848, 2269.88, -1210.32, 1047.56, 90, 10, 6520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(521, 0, 30000, 'Bloc F - East Los Santos', 2334.7, -1204, 27.9764, 179.851, 2269.88, -1210.32, 1047.56, 90, 10, 6521, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(522, 0, 75000, 'N°1 - Maison - East Los Santos', 2750.39, -1238.68, 61.5245, 269.777, 2269.88, -1210.32, 1047.56, 90, 10, 6522, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(523, 0, 75000, 'N°2 - Maison - East Los Santos', 2750.39, -1222.23, 64.6015, 268.211, 2269.88, -1210.32, 1047.56, 90, 10, 6523, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(524, 0, 75000, 'N°3 - Maison - East Los Santos', 2750.39, -1205.62, 67.4843, 270.091, 2269.88, -1210.32, 1047.56, 90, 10, 6524, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(525, 0, 75000, 'N°4 - Maison - East Los Santos', 2756.26, -1182.81, 69.4034, 180.477, 2269.88, -1210.32, 1047.56, 90, 10, 6525, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(526, 0, 75000, 'N°1 - Appartement - East Los Sa', 2776, -1245.38, 49.5765, 357.825, 2269.88, -1210.32, 1047.56, 90, 10, 6526, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(527, 0, 75000, 'N°2 - Appartement - East Los Sa', 2797.83, -1245.37, 47.3846, 1.9217, 2269.88, -1210.32, 1047.56, 90, 10, 6527, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(528, 0, 75000, 'N°3 - Appartement - East Los Sa', 2809.53, -1280.98, 43.9032, 269.174, 2269.88, -1210.32, 1047.56, 90, 10, 6528, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(529, 0, 75000, 'N°4 - Appartement - East Los Sa', 2809.53, -1302.92, 38.9286, 271.368, 2269.88, -1210.32, 1047.56, 90, 10, 6529, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(530, 0, 75000, 'N°5 - Appartement - East Los Sa', 2809.53, -1324.76, 33.8726, 271.368, 2269.88, -1210.32, 1047.56, 90, 10, 6530, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(531, 0, 75000, 'N°6 - Appartement - East Los Sa', 2807.98, -1354, 27.2185, 272.284, 2269.88, -1210.32, 1047.56, 90, 10, 6531, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(532, 0, 75000, 'N°7 - Appartement - East Los Sa', 2807.99, -1369.51, 23.583, 268.838, 2269.88, -1210.32, 1047.56, 90, 10, 6532, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `houses` (`houseID`, `houseOwner`, `housePrice`, `houseAddress`, `housePosX`, `housePosY`, `housePosZ`, `housePosA`, `houseIntX`, `houseIntY`, `houseIntZ`, `houseIntA`, `houseInterior`, `houseInteriorVW`, `houseExterior`, `houseExteriorVW`, `houseLocked`, `houseWeapon1`, `houseAmmo1`, `houseWeapon2`, `houseAmmo2`, `houseWeapon3`, `houseAmmo3`, `houseWeapon4`, `houseAmmo4`, `houseWeapon5`, `houseAmmo5`, `houseWeapon6`, `houseAmmo6`, `houseWeapon7`, `houseAmmo7`, `houseWeapon8`, `houseAmmo8`, `houseWeapon9`, `houseAmmo9`, `houseWeapon10`, `houseAmmo10`, `houseMoney`, `houseLocation`, `houseMaxLoc`, `houseLocNum`) VALUES
-(533, 0, 75000, 'N°8 - Appartement - East Los Sa', 2781.94, -1358.5, 26.3705, 92.1395, 2269.88, -1210.32, 1047.56, 90, 10, 6533, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(534, 0, 75000, 'N°9 - Appartement - East Los Sa', 2781.94, -1333.53, 32.3967, 89.0061, 2269.88, -1210.32, 1047.56, 90, 10, 6534, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(535, 0, 75000, 'N°10 - Appartement - East Los S', 2782.15, -1306.23, 38.8895, 92.1395, 2269.88, -1210.32, 1047.56, 90, 10, 6535, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(536, 0, 75000, 'N°11 - Appartement - East Los S', 2782.16, -1281.31, 44.3702, 92.7662, 2269.88, -1210.32, 1047.56, 90, 10, 6536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(537, 0, 75000, 'N°12 - Appartement - East Los S', 2755.85, -1276.6, 56.5937, 271.994, 2269.88, -1210.32, 1047.56, 90, 10, 6537, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(538, 0, 75000, 'N°13 - Appartement - East Los S', 2756.29, -1302.57, 53.0937, 273.874, 2269.88, -1210.32, 1047.56, 90, 10, 6538, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(539, 0, 75000, 'N°14 - Appartement - East Los S', 2747.39, -1351.95, 44.6094, 270.427, 2269.88, -1210.32, 1047.56, 90, 10, 6539, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(540, 0, 75000, 'N°15 - Appartement - East Los S', 2755.71, -1400.45, 39.3767, 271.681, 2269.88, -1210.32, 1047.56, 90, 10, 6540, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(542, 1, 1, '5 East Playa', 2784.78, -1943.89, 13.8149, 273.542, 2786.78, -1943.89, 13.8148, 273.542, 0, 0, 0, 0, 1, 25, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(544, 0, 25000, '4 East Playa', 2784.2, -1966.39, 13.5466, 268.94, 2786.28, -1965.98, 13.5921, 269.807, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(546, 0, 25000, '3 East Playa', 2748.72, -1972.14, 14.1884, 177.74, 2748.73, -1973.51, 14.0432, 177.891, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(548, 0, 25000, '1 East Playa', 2745.8, -1921.95, 14.0417, 359.901, 2745.81, -1920.01, 14.0495, 6.6055, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(549, 0, 25000, '2 East Playa', 2734.64, -1947.29, 16.3957, 87.4365, 2733.3, -1947.43, 16.4034, 88.3432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(550, 0, 50000, 'N°1 Maison - Playa Del Seville', 2695.42, -2020.55, 14.0222, 179.606, 2269.88, -1210.32, 1047.56, 90, 10, 6550, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(551, 0, 50000, 'N°2 Maison - Playa Del Seville', 2696.29, -1990.36, 14.2228, 357.558, 2269.88, -1210.32, 1047.56, 90, 10, 6551, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(552, 0, 50000, 'N°3 Maison - Playa Del Seville', 2673.35, -2020.29, 14.1681, 182.426, 2269.88, -1210.32, 1047.56, 90, 10, 6552, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(553, 0, 50000, 'N°4 Maison - Playa Del Seville', 2672.67, -1989.47, 14.324, 1.0275, 2269.88, -1210.32, 1047.56, 90, 10, 6553, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(554, 0, 50000, 'N°5 Maison - Playa Del Seville', 2650.7, -2021.88, 14.1766, 268.617, 2269.88, -1210.32, 1047.56, 90, 10, 6554, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(555, 0, 50000, 'N°6 Maison - Playa Del Seville', 2635.63, -2012.95, 14.1443, 122.939, 2269.88, -1210.32, 1047.56, 90, 10, 6555, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(556, 0, 50000, 'N°7 Maison - Playa Del Seville', 2637.09, -1991.69, 14.324, 43.3515, 2269.88, -1210.32, 1047.56, 90, 10, 6556, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(557, 0, 50000, 'N°8 Maison - Playa Del Seville', 2652.64, -1989.43, 13.9988, 0.7378, 2269.88, -1210.32, 1047.56, 90, 10, 6557, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(558, 0, 50000, 'N°4 Maison - Idlewood Street', 2066.74, -1656.61, 14.1328, 88.7853, 2269.88, -1210.32, 1047.56, 90, 10, 6558, 0, 0, 1, 31, 150, 22, 50, 5, 1, 0, 0, 30, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 1),
-(559, 113, 15000, 'N°3 - Skouat - Idlewood Street', 2073.37, -1583.2, 13.4736, 269.557, 2269.88, -1210.32, 1047.56, 90, 10, 6559, 0, 0, 1, 22, 45, 22, 53, 25, 40, 25, 44, 25, 40, 25, 40, 5, 1, 0, 0, 0, 0, 0, 0, 0, 350, 4, 0),
-(562, 0, 55000, 'N°1 Maison - Las Colinas', 2625.95, -1112.57, 67.9953, 87.8919, 2269.88, -1210.32, 1047.56, 90, 10, 6562, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(563, 0, 55000, 'N°2 Maison - Las Colinas', 2625.93, -1098.77, 69.3546, 87.2652, 2269.88, -1210.32, 1047.56, 90, 10, 6563, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(564, 0, 55000, 'N°3 Maison - Las Colinas', 2627.64, -1085.19, 69.7155, 89.1452, 2269.88, -1210.32, 1047.56, 90, 10, 6564, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(565, 0, 55000, 'N°4 Maison - Las Colinas', 2628.1, -1067.82, 69.7155, 92.9053, 2269.88, -1210.32, 1047.56, 90, 10, 6565, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(566, 0, 55000, 'N°5 Maison - Las Colinas', 2576.68, -1070.73, 69.8322, 270.88, 2269.88, -1210.32, 1047.56, 90, 10, 6566, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(567, 0, 55000, 'N°6 Maison - Las Colinas', 2572.29, -1091.87, 67.2257, 227.64, 2269.88, -1210.32, 1047.56, 90, 10, 6567, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(568, 0, 55000, 'N°7 Maison - Las Colinas', 2519.03, -1113.02, 56.5924, 92.2783, 2516.87, -1113.31, 56.5978, 27.253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(569, 0, 55000, 'N°8 Maison - Las Colinas', 2470.8, -1105.32, 44.4878, 178.133, 2269.88, -1210.32, 1047.56, 90, 10, 6569, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(570, 0, 55000, 'N°9 Maison - Las Colinas', 2457, -1102.5, 43.8671, 180.639, 2269.88, -1210.32, 1047.56, 90, 10, 6570, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(571, 0, 55000, 'N°10 Maison - Las Colinas', 2438.72, -1105.79, 43.0816, 179.072, 2269.88, -1210.32, 1047.56, 90, 10, 6571, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(572, 0, 55000, 'N°11 Maison - Las Colinas', 2407.92, -1106.97, 40.2957, 180.952, 2407.94, -1108.82, 40.6478, 181.752, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(573, 0, 55000, 'N°1 - Mobil Home - Las Colinas', 2534.49, -1063.52, 69.5653, 273.073, 2269.88, -1210.32, 1047.56, 90, 10, 6573, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(574, 0, 55000, 'N°2 - Mobil Home - Las Colinas', 2526.09, -1060.65, 69.9707, 89.7949, 2269.88, -1210.32, 1047.56, 90, 10, 6574, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(575, 0, 55000, 'N°3 - Mobil Home - Las Colinas', 2499.75, -1065.55, 70.2359, 267.143, 2269.88, -1210.32, 1047.56, 90, 10, 6575, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(576, 0, 55000, 'N°4 - Mobil Home - Las Colinas', 2479.69, -1063.97, 66.9982, 252.44, 2269.88, -1210.32, 1047.56, 90, 10, 6576, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(577, 0, 55000, 'N°5 - Mobil Home - Las Colinas', 2562.11, -1034.42, 69.8692, 266.563, 2269.88, -1210.32, 1047.56, 90, 10, 6577, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(578, 0, 55000, 'N°6 - Mobil Home - Las Colinas', 2549.2, -1032.2, 69.5788, 85.165, 2269.88, -1210.32, 1047.56, 90, 10, 6578, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(579, 0, 55000, 'N°7 - Mobil Home - Las Colinas', 2526.72, -1033.53, 69.579, 358.058, 2269.88, -1210.32, 1047.56, 90, 10, 6579, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(580, 0, 55000, 'N°8 - Mobil Home - Las Colinas', 2462.43, -1011.12, 60.1136, 355.888, 2269.88, -1210.32, 1047.56, 90, 10, 6580, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(581, 0, 55000, 'N°9 - Mobil Home - Las Colinas', 2439.88, -1010.8, 54.3437, 103.675, 2269.88, -1210.32, 1047.56, 90, 10, 6581, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(582, 0, 55000, 'N°10 - Mobil Home - Las Colinas', 2457.76, -1054.65, 59.9591, 261.284, 2269.88, -1210.32, 1047.56, 90, 10, 6582, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(583, 0, 55000, 'N°11 - Mobil Home - Las Colinas', 2440.56, -1057.34, 54.7386, 177.019, 2269.88, -1210.32, 1047.56, 90, 10, 6583, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(584, 0, 40000, 'N°1 - Petite maison - Las Colin', 2579.69, -1033.2, 69.5797, 358.731, 2269.88, -1210.32, 1047.56, 90, 10, 6584, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(585, 0, 40000, 'N°2 - Petite maison - Las Colin', 2512.74, -1027.16, 70.0859, 356.851, 2269.88, -1210.32, 1047.56, 90, 10, 6585, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(586, 0, 40000, 'N°3 - Petite maison - Las Colin', 2491.31, -1012.22, 65.3984, 239.71, 2269.88, -1210.32, 1047.56, 90, 10, 6586, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(587, 0, 40000, 'N°4 - Petite maison - Las Colin', 2582.79, -952.951, 81.3877, 10.9977, 2269.88, -1210.32, 1047.56, 90, 10, 6587, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(588, 0, 40000, 'N°5 - Petite maison - Las Colin', 2459.36, -947.701, 80.0825, 0.3443, 2269.88, -1210.32, 1047.56, 90, 10, 6588, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(589, 0, 40000, 'N°6 - Petite maison - Las Colin', 2472.44, -962.105, 80.5254, 3.1643, 2269.88, -1210.32, 1047.56, 90, 10, 6589, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(590, 0, 40000, 'N°7 - Petite maison - Las Colin', 2454.18, -964.957, 80.0731, 90.8985, 2269.88, -1210.32, 1047.56, 90, 10, 6590, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(591, 0, 40000, 'N°8 - Petite maison - Las Colin', 2517.86, -965.429, 82.3283, 87.1384, 2269.88, -1210.32, 1047.56, 90, 10, 6591, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(592, 0, 40000, 'N°9 - Petite maison - Las Colin', 2492.11, -965.66, 82.5489, 267.91, 2269.88, -1210.32, 1047.56, 90, 10, 6592, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(593, 0, 40000, 'N°10 - Petite maison - Las Coli', 2499.37, -946.993, 82.4707, 356.271, 2269.88, -1210.32, 1047.56, 90, 10, 6593, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(594, 0, 40000, 'N°11 - Petite maison - Las Coli', 2389.36, -1037.16, 53.5509, 40.7647, 2269.88, -1210.32, 1047.56, 90, 10, 6594, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(595, 0, 15000, 'N°1- Caravane - Las Colinas', 2362.75, -1046.4, 54.2733, 20.7112, 2269.88, -1210.32, 1047.56, 90, 10, 6595, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(596, 0, 15000, 'N°2 - Caravane - Las Colinas', 2372.94, -1051.36, 54.1343, 23.5544, 2269.88, -1210.32, 1047.56, 90, 10, 6596, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(597, 0, 15000, 'N°3 - Caravane - Las Colinas', 2355.8, -1058.8, 54.0779, 14.781, 2269.88, -1210.32, 1047.56, 90, 10, 6597, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(598, 0, 15000, 'N°4 - Caravane - Las Colinas', 2348.17, -1047.55, 53.8749, 192.443, 2269.88, -1210.32, 1047.56, 90, 10, 6598, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(599, 0, 15000, 'N°5 - Caravane - Las Colinas', 2355.54, -1038.58, 54.3358, 12.9243, 2269.88, -1210.32, 1047.56, 90, 10, 6599, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(600, 0, 15000, 'N°6 - Caravane - Las Colinas', 2330.2, -1060.91, 52.4686, 184.006, 2269.88, -1210.32, 1047.56, 90, 10, 6600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(601, 0, 15000, 'N°7 - Caravane - Las Colinas', 2319.75, -1053.23, 52.4608, 283.31, 2269.88, -1210.32, 1047.56, 90, 10, 6601, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(602, 0, 55000, 'N°12 - Mobil Home - Las Colinas', 2370.25, -1034.55, 54.4105, 0.3906, 2269.88, -1210.32, 1047.56, 90, 10, 6602, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(603, 0, 55000, 'N°13 - Mobil Home - Las Colinas', 2335.02, -1046.01, 52.5529, 181.186, 2269.88, -1210.32, 1047.56, 90, 10, 6603, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(604, 0, 55000, 'N°14 - Mobil Home - Las Colinas', 2297.6, -1053.02, 49.9339, 336.891, 2269.88, -1210.32, 1047.56, 90, 10, 6604, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(605, 0, 55000, 'N°15 - Mobil Home - Las Colinas', 2284.18, -1046.09, 49.8871, 329.057, 2269.88, -1210.32, 1047.56, 90, 10, 6605, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(606, 0, 55000, 'N°12 - Maison - Las Colinas', 2287.54, -1081.06, 48.2474, 152.069, 2269.88, -1210.32, 1047.56, 90, 10, 6606, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(607, 0, 55000, 'N°13 - Maison - Las Colinas', 2278.73, -1077.41, 48.2383, 155.202, 2269.88, -1210.32, 1047.56, 90, 10, 6607, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(608, 0, 55000, 'N°14 - Maison - Las Colinas', 2249.26, -1060.25, 55.9687, 137.029, 2269.88, -1210.32, 1047.56, 90, 10, 6608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(609, 0, 75000, 'N°1 - Grande Maison  - Las Coli', 2259.48, -1019.05, 59.2975, 51.1745, 2269.88, -1210.32, 1047.56, 90, 10, 6609, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(610, 0, 55000, 'N°15 - Maison - Las Colinas', 2218.79, -1031.73, 60.268, 147.345, 2269.88, -1210.32, 1047.56, 90, 10, 6610, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(611, 0, 55000, 'N°16 - Maison - Las Colinas', 2208.15, -1026.62, 61.3485, 152.672, 2269.88, -1210.32, 1047.56, 90, 10, 6611, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(612, 0, 55000, 'N°17 - Maison - Las Colinas', 2186.39, -997.305, 66.4687, 347.231, 2269.88, -1210.32, 1047.56, 90, 10, 6612, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(613, 0, 55000, 'N°18 - Maison - Las Colinas', 2139.97, -1008.49, 61.9873, 163.012, 2269.88, -1210.32, 1047.56, 90, 10, 6613, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(614, 0, 55000, 'N°19 - Maison - Las Colinas', 2108.9, -1000.77, 60.5078, 164.579, 2269.88, -1210.32, 1047.56, 90, 10, 6614, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(615, 0, 75000, 'N°2 - Grande Maison  - Las Coli', 2089.53, -996.252, 53.0627, 168.339, 2269.88, -1210.32, 1047.56, 90, 10, 6615, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(616, 0, 55000, 'N°20 - Maison - Las Colinas', 2090.71, -972.518, 51.8784, 36.1346, 2269.88, -1210.32, 1047.56, 90, 10, 6616, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(617, 0, 75000, 'N°3 - Grande Maison  - Las Coli', 2066.18, -993.203, 48.7996, 162.096, 2269.88, -1210.32, 1047.56, 90, 10, 6617, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(618, 0, 55000, 'N°21 - Maison - Las Colinas', 2073.37, -965.153, 49.3915, 352.894, 2269.88, -1210.32, 1047.56, 90, 10, 6618, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(619, 0, 55000, 'N°22 - Maison - Las Colinas', 2049.26, -987.278, 44.9792, 176.196, 2269.88, -1210.32, 1047.56, 90, 10, 6619, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(620, 0, 55000, 'N°23 - Maison - Las Colinas', 2045.17, -965.71, 44.5546, 267.04, 2269.88, -1210.32, 1047.56, 90, 10, 6620, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(621, 0, 55000, 'N°24 - Maison - Las Colinas', 2044.77, -991.3, 43.2668, 189.333, 2269.88, -1210.32, 1047.56, 90, 10, 6621, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(622, 0, 55000, 'N°25 - Maison - Las Colinas', 2015.6, -977.554, 36.9531, 30.1578, 2269.88, -1210.32, 1047.56, 90, 10, 6622, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(623, 0, 55000, 'N°26 - Maison - Las Colinas', 2007.36, -984.58, 34.4609, 38.9312, 2269.88, -1210.32, 1047.56, 90, 10, 6623, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(624, 0, 55000, 'N°27 - Maison - Las Colinas', 2000.17, -991.681, 32.1313, 38.6179, 2269.88, -1210.32, 1047.56, 90, 10, 6624, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(625, 0, 55000, 'N°16 - Mobil Home - Las Colinas', 2154.13, -979.82, 63.2933, 257.617, 2269.88, -1210.32, 1047.56, 90, 10, 6625, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(626, 0, 55000, 'N°17 - Mobil Home - Las Colinas', 2142.67, -978.206, 61.3793, 75.8817, 2269.88, -1210.32, 1047.56, 90, 10, 6626, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(627, 0, 55000, 'N°18 - Mobil Home - Las Colinas', 2131.94, -974.066, 59.7855, 256.027, 2269.88, -1210.32, 1047.56, 90, 10, 6627, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(628, 0, 55000, 'N°19 - Mobil Home - Las Colinas', 2122.05, -970.333, 58.2074, 76.5083, 2269.88, -1210.32, 1047.56, 90, 10, 6628, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(629, 0, 55000, 'N°28 - Maison - Las Colinas', 2083.11, -1039.7, 32.2095, 324.357, 2269.88, -1210.32, 1047.56, 90, 10, 6629, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(630, 0, 55000, 'N°29 - Maison - Las Colinas', 2093.74, -1047.3, 30.1059, 322.477, 2269.88, -1210.32, 1047.56, 90, 10, 6630, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(631, 0, 55000, 'N°30 - Maison - Las Colinas', 2099.81, -1051.73, 28.816, 316.837, 2269.88, -1210.32, 1047.56, 90, 10, 6631, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(632, 0, 55000, 'N°31 - Maison - Las Colinas', 2105.49, -1056.05, 27.154, 317.464, 2269.88, -1210.32, 1047.56, 90, 10, 6632, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(633, 0, 55000, 'N°32 - Maison - Las Colinas', 2157.12, -1072.47, 40.4953, 241.926, 2269.88, -1210.32, 1047.56, 90, 10, 6633, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(634, 0, 55000, 'N°33 - Maison - Las Colinas', 2140.73, -1082.58, 25.0312, 334.987, 2269.88, -1210.32, 1047.56, 90, 10, 6634, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(635, 0, 55000, 'N°34 - Maison - Las Colinas', 2145.2, -1084.64, 25.037, 338.121, 2269.88, -1210.32, 1047.56, 90, 10, 6635, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(636, 0, 55000, 'N°35 - Maison - Las Colinas', 2207.42, -1100.48, 31.5546, 35.1478, 2269.88, -1210.32, 1047.56, 90, 10, 6636, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(637, 0, 55000, 'N°36 - Maison - Las Colinas', 2188.81, -1081.44, 43.8344, 59.2514, 2269.88, -1210.32, 1047.56, 90, 10, 6637, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(638, 0, 55000, 'N°37 - Maison - Las Colinas', 2221.13, -1083, 41.7798, 300.81, 2269.88, -1210.32, 1047.56, 90, 10, 6638, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(639, 0, 55000, 'N°38 - Maison - Las Colinas', 2077.33, -1057, 31.3442, 145.709, 2269.88, -1210.32, 1047.56, 90, 10, 6639, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(640, 0, 55000, 'N°39 - Maison - Las Colinas', 2091.61, -1068.23, 28.0857, 135.682, 2269.88, -1210.32, 1047.56, 90, 10, 6640, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(641, 0, 55000, 'N°40 - Maison - Las Colinas', 2101.59, -1075.84, 25.9312, 135.369, 2269.88, -1210.32, 1047.56, 90, 10, 6641, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(642, 0, 55000, 'N°41 - Maison - Las Colinas', 2108.73, -1082.27, 25.4909, 135.682, 2269.88, -1210.32, 1047.56, 90, 10, 6642, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(643, 0, 55000, 'N°42 - Maison - Las Colinas', 2082.4, -1085.13, 25.687, 334.941, 2269.88, -1210.32, 1047.56, 90, 10, 6643, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(644, 0, 55000, 'N°43 - Maison - Las Colinas', 2075.13, -1081.82, 25.6819, 330.867, 2269.88, -1210.32, 1047.56, 90, 10, 6644, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(645, 0, 55000, 'N°44 - Maison - Las Colinas', 2060.97, -1075.31, 25.6857, 334.001, 2269.88, -1210.32, 1047.56, 90, 10, 6645, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(646, 0, 55000, 'N°45 - Maison - Las Colinas', 2050.72, -1065.76, 25.7836, 68.6283, 2269.88, -1210.32, 1047.56, 90, 10, 6646, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(647, 0, 55000, 'N°46 - Maison - Las Colinas', 2035.83, -1059.31, 25.6508, 63.9281, 2033.74, -1059.33, 25.9486, 65.5112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(648, 0, 55000, 'N°47 - Maison - Las Colinas', 2023.05, -1052.88, 25.596, 63.9282, 2020.95, -1052.87, 25.6492, 77.779, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(649, 0, 15000, 'N°1 - Skouat - Glen Park', 1891.77, -1070.56, 23.9375, 91.4785, 2269.88, -1210.32, 1047.56, 90, 10, 6649, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(650, 0, 15000, 'N°2 - Skouat - Glen Park', 1896.05, -1064.83, 23.9375, 272.877, 2269.88, -1210.32, 1047.56, 90, 10, 6650, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(651, 244, 15000, 'Skouat Ganton Circle', 2523.08, -1679.18, 15.4968, 89.7686, 318.629, 1115.85, 1083.88, 359.072, 5, 6190, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 1),
-(652, 0, 15000, 'N°4 - Skouat - Glen Park', 1916.89, -1064.77, 24.1246, 268.803, 2269.88, -1210.32, 1047.56, 90, 10, 6652, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(653, 0, 15000, 'N°5 - Skouat - Glen Park', 1934.03, -1071.55, 24.4157, 74.8716, 2269.88, -1210.32, 1047.56, 90, 10, 6653, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(654, 0, 15000, 'N°6 - Skouat - Glen Park', 1939.24, -1066.6, 24.4184, 257.21, 2269.88, -1210.32, 1047.56, 90, 10, 6654, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(655, 0, 15000, 'N°7 - Skouat - Glen Park', 1954.39, -1074.94, 24.7967, 80.5116, 2269.88, -1210.32, 1047.56, 90, 10, 6655, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(656, 0, 15000, 'N°8 - Skouat - Glen Park', 1959.6, -1069.99, 24.7967, 260.657, 2269.88, -1210.32, 1047.56, 90, 10, 6656, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(657, 0, 60000, 'N°1 - Maison - Glen Park', 2045.37, -1116.65, 26.3617, 181.766, 2045.54, -1119.3, 26.3568, 7.5826, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(658, 0, 120000, 'N°2 - Maison - Glen Park', 2022.98, -1120.26, 26.421, 1.9108, 2269.88, -1210.32, 1047.56, 90, 10, 6658, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(659, 0, 120000, 'N°3 - Maison - Glen Park', 2000.05, -1114.05, 27.125, 0.9709, 2269.88, -1210.32, 1047.56, 90, 10, 6659, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(660, 0, 60000, 'N°4 - Maison - Glen Park', 1955.13, -1115.41, 27.8304, 90.8983, 1953.13, -1115.28, 27.8268, 79.5249, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(661, 0, 120000, 'N°5 - Maison - Glen Park', 1939.02, -1114.49, 27.4522, 358.464, 2269.88, -1210.32, 1047.56, 90, 10, 6661, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(662, 0, 60000, 'N°6 - Maison - Glen Park', 1921.3, -1115.21, 27.0883, 88.0783, 1918.73, -1115.05, 27.0868, 334.983, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(663, 0, 120000, 'N°7 - Maison - Glen Park', 1906.03, -1112.95, 26.664, 2.5376, 2269.88, -1210.32, 1047.56, 90, 10, 6663, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(664, 0, 60000, 'N°8 - Maison - Glen Park', 1885.88, -1113.54, 26.2758, 90.5849, 1883.72, -1113.88, 26.2768, 90.5824, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(673, 0, 75000, 'N°9 - Bloc - Idlewood Street', 2143.08, -1604.7, 14.3515, 339.803, 2269.88, -1210.32, 1047.56, 90, 10, 6673, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(674, 0, 75000, 'N°10 - Bloc - Idlewood Street', 2151.18, -1598.48, 14.3457, 156.502, 2269.88, -1210.32, 1047.56, 90, 10, 6674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(675, 0, 75000, 'N°11 - Bloc - Idlewood Street', 2150.31, -1583.93, 14.336, 338.527, 2269.88, -1210.32, 1047.56, 90, 10, 6675, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(676, 0, 75000, 'N°12 - Bloc - Idlewood Street', 2179.11, -1600.05, 14.3459, 250.166, 2269.88, -1210.32, 1047.56, 90, 10, 6676, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(677, 0, 75000, 'N°13 - Bloc - Idlewood Street', 2185.73, -1608.23, 14.355, 70.0208, 2269.88, -1210.32, 1047.56, 90, 10, 6677, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(678, 0, 15000, 'N°1 - Skouat - Idlewood Street', 2068.14, -1588.92, 13.4906, 91.9544, 2269.88, -1210.32, 1047.56, 90, 10, 6678, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(679, 0, 15000, 'N°2 - Skouat - Idlewood Street', 2065.29, -1583.36, 13.481, 0.1467, 2269.88, -1210.32, 1047.56, 90, 10, 6679, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(680, 0, 15000, 'N°4 - Skouat - Idlewood Street', 2066.96, -1562.19, 13.4285, 90.0743, 2269.88, -1210.32, 1047.56, 90, 10, 6680, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(681, 0, 15000, 'N°5 - Skouat - Idlewood Street', 2066.7, -1554.09, 13.4353, 359.207, 2269.88, -1210.32, 1047.56, 90, 10, 6681, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(682, 0, 15000, 'N°6 - Skouat - Idlewood Street', 2072.48, -1559.31, 13.409, 182.485, 2269.88, -1210.32, 1047.56, 90, 10, 6682, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(683, 109, 15000, 'N°7 - Skouat - Idlewood Street', 2072.27, -1551.21, 13.4232, 268.003, 2269.88, -1210.32, 1047.56, 90, 10, 6683, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(684, 0, 50000, 'N°1 - Maison - WillowField', 2437.93, -2020.84, 13.9025, 178.678, 2269.88, -1210.32, 1047.56, 90, 10, 6684, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(685, 0, 50000, 'N°2 - Maison - WillowField', 2465.4, -2020.79, 14.1241, 178.052, 2269.88, -1210.32, 1047.56, 90, 10, 6685, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(686, 0, 50000, 'N°3 - Maison - WillowField', 2465.03, -1995.76, 14.0193, 0.0766, 2269.88, -1210.32, 1047.56, 90, 10, 6686, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(687, 0, 50000, 'N°4 - Maison - WillowField', 2486.4, -2021.55, 13.9988, 182.728, 2269.88, -1210.32, 1047.56, 90, 10, 6687, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(688, 0, 50000, 'N°5 - Maison - WillowField', 2483.4, -1995.34, 13.8343, 0.703, 2269.88, -1210.32, 1047.56, 90, 10, 6688, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(689, 0, 50000, 'N°6 - Maison - WillowField', 2507.87, -2021.05, 14.2101, 178.969, 2269.88, -1210.32, 1047.56, 90, 10, 6689, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(690, 0, 50000, 'N°7 - Maison - WillowField', 2508.1, -1998.37, 13.9025, 357.57, 2269.88, -1210.32, 1047.56, 90, 10, 6690, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(691, 113, 50000, 'N°8 - Maison - WillowField', 2522.81, -2018.94, 14.0742, 228.162, 2269.88, -1210.32, 1047.56, 90, 10, 6691, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 5, 0),
-(692, 0, 50000, 'N°9 - Maison - WillowField', 2524.31, -1998.27, 14.113, 318.09, 2269.88, -1210.32, 1047.56, 90, 10, 6692, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(696, 0, 60000, 'N°20 - Maison - East Los Santos', 2427.43, -1135.77, 34.7109, 4.9446, 2269.88, -1210.32, 1047.56, 90, 10, 6696, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(697, 0, 60000, 'N°21 - Maison - East Los Santos', 2394.85, -1133.55, 30.7187, 4.9446, 2269.88, -1210.32, 1047.56, 90, 10, 6697, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(698, 0, 60000, 'N°22 - Maison - East Los Santos', 2373.97, -1138.92, 29.0587, 4.9446, 2269.88, -1210.32, 1047.56, 90, 10, 6698, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(699, 0, 95000, 'N°1 - Petite Villa - Rodeo', 653.242, -1619.75, 15, 267.865, 2269.88, -1210.32, 1047.56, 90, 10, 6699, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(700, 0, 95000, 'N°2 - Petite Villa - Rodeo', 656.052, -1635.87, 15.8617, 2.1791, 2269.88, -1210.32, 1047.56, 90, 10, 6700, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(701, 0, 95000, 'N°3 - Petite Villa - Rodeo', 657.227, -1652.63, 15.4062, 269.455, 2269.88, -1210.32, 1047.56, 90, 10, 6701, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(702, 0, 95000, 'N°4 - Petite Villa - Rodeo', 652.665, -1694.01, 14.55, 269.455, 2269.88, -1210.32, 1047.56, 90, 10, 6702, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(703, 0, 95000, 'N°5 - Petite Villa - Rodeo', 653.594, -1714.12, 14.7646, 269.142, 2269.88, -1210.32, 1047.56, 90, 10, 6703, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(704, 0, 95000, 'N°1 - Petite Villa - Marina', 790.827, -1661.14, 13.4841, 357.576, 2269.88, -1210.32, 1047.56, 90, 10, 6704, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(705, 0, 95000, 'N°2 - Petite Villa - Marina', 794.843, -1692.1, 14.4632, 180.489, 2269.88, -1210.32, 1047.56, 90, 10, 6705, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(706, 0, 95000, 'N°3 - Petite Villa - Marina', 793.979, -1707.61, 14.0382, 92.4413, 2269.88, -1210.32, 1047.56, 90, 10, 6706, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(707, 0, 95000, 'N°4 - Petite Villa - Marina', 797.235, -1729.22, 13.5467, 90.248, 2269.88, -1210.32, 1047.56, 90, 10, 6707, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(708, 0, 225000, 'N°5 - Petite Villa - Marina', 791.558, -1753.2, 13.4607, 359.694, 2269.88, -1210.32, 1047.56, 90, 10, 6708, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(709, 0, 150000, 'Market appartement 1', 1180.49, -1180.71, 38.9473, 96.6306, 1178.25, -1180.63, 38.9141, 85.4869, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(710, 0, 150000, 'Market appartement 2', 1180.22, -1180.56, 44.1513, 89.6378, 1177.7, -1180.94, 44.119, 284.77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(711, 0, 150000, 'Market appartement 3', 1180.18, -1180.87, 49.3553, 68.0054, 1178.26, -1180.74, 49.3234, 282.345, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(712, 0, 150000, 'Market appartement 4', 1180.49, -1180.75, 54.5592, 91.8966, 1178.3, -1180.75, 54.5156, 91.0632, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(713, 0, 150000, 'Market appartement 5', 1180.44, -1180.68, 59.7632, 88.1345, 1178.46, -1180.56, 59.7222, 271.171, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(714, 0, 150000, 'Market appartement 6', 1180.42, -1180.61, 64.9672, 88.1354, 1177.93, -1180.39, 64.9141, 68.2739, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(715, 0, 150000, 'Market appartement 7', 1180.36, -1180.78, 70.1712, 87.6167, 1178.37, -1180.51, 70.1172, 88.1955, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(716, 0, 150000, 'Market appartement 8', 1180.29, -1180.95, 75.3751, 90.1622, 1178.2, -1180.83, 75.3125, 86.1081, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(717, 0, 150000, 'Market appartement 9', 1180.2, -1180.83, 80.5791, 86.1081, 1178.17, -1180.54, 80.5088, 93.8218, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(720, 458, 150000, 'Rodéo appartement 3', 294.636, -1623.53, 51.5, 263.129, 296.088, -1623.72, 51.5, 265.61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(721, 0, 150000, 'Rodéo appartement 4', 276.353, -1620.47, 51.5, 82.1381, 274.75, -1620.01, 51.5, 82.2282, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(722, 0, 150000, 'Rodéo appartement 5', 294.529, -1623.6, 56, 265.258, 296.223, -1623.66, 56, 282.927, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(723, 0, 150000, 'Rodéo appartement 6', 276.649, -1620.45, 56, 79.1138, 274.649, -1620.45, 56, 79.1138, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(724, 0, 150000, 'Rodéo appartement 7', 294.704, -1623.56, 60.5, 254.463, 296.704, -1623.56, 60.5, 254.463, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(725, 0, 150000, 'Rodéo appartement 8', 276.332, -1620.41, 60.5, 66.8158, 274.332, -1620.41, 60.5, 66.8158, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(726, 0, 150000, 'Rodéo appartement 9', 294.618, -1623.67, 65, 243.179, 296.618, -1623.67, 65, 243.179, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(727, 0, 150000, 'Rodéo appartement 10', 276.584, -1620.57, 65, 79.0318, 274.584, -1620.57, 65, 79.0318, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(728, 0, 150000, 'Rodéo appartement 11', 294.66, -1623.53, 69.5, 257.412, 296.66, -1623.53, 69.5, 257.412, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(729, 0, 150000, 'Rodéo appartement 12', 276.516, -1620.59, 69.5, 79.5489, 274.516, -1620.59, 69.5, 79.5489, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(730, 0, 150000, 'Rodéo appartement 13', 294.602, -1623.69, 74, 258.491, 296.602, -1623.69, 74, 258.491, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(731, 0, 150000, 'Rodéo appartement 14', 276.352, -1620.34, 74, 82.9134, 274.352, -1620.34, 74, 82.9134, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(732, 0, 150000, 'Rodéo appartement 15', 294.57, -1623.52, 78.5, 260.091, 296.57, -1623.52, 78.5, 260.091, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(733, 0, 150000, 'Rodéo appartement 16', 276.471, -1620.51, 78.5, 78.5791, 274.471, -1620.51, 78.5, 78.5791, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(734, 0, 150000, 'Rodéo appartement 17', 294.509, -1623.65, 83, 258.506, 296.509, -1623.65, 83, 258.506, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(735, 0, 150000, 'Rodéo appartement 18', 276.469, -1620.45, 83, 81.171, 274.469, -1620.45, 83, 81.171, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(736, 0, 150000, 'Rodéo appartement 19', 294.539, -1623.52, 87.5, 255.984, 296.539, -1623.52, 87.5, 255.984, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(737, 0, 150000, 'Rodéo appartement 20', 276.484, -1620.35, 87.5, 81.6756, 274.484, -1620.35, 87.5, 81.6756, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(738, 0, 150000, 'Rodéo appartement 21', 294.544, -1623.59, 92, 265.969, 296.544, -1623.59, 92, 265.969, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(739, 0, 150000, 'Rodéo appartement 22', 276.424, -1620.4, 92, 80.1181, 274.424, -1620.4, 92, 80.1181, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(740, 0, 150000, 'Rodéo appartement 23', 294.686, -1623.54, 96.5, 261.451, 296.686, -1623.54, 96.5, 261.451, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(760, 0, 25000, 'Appartement n°1 - 69', 1351.59, -1585.46, 1097.09, 0.9031, 1901.16, -1853.55, 1501.52, 92.3938, 4, 7220, 7, 4970, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 2, 2),
-(761, 71, 25000, 'Appartement n°2 - 69', 1351.49, -1588.56, 1097.09, 180.589, 300.362, 310.033, 1003.3, 273.651, 4, 7230, 7, 4970, 1, 0, 0, 28, 635, 30, 969, 22, 422, 0, 0, 0, 0, 0, 0, 6, 1, 5, 1, 0, 0, 0, 0, 0, 0),
-(762, 0, 25000, 'Appartement n°3 - 69', 1357.87, -1585.58, 1097.09, 90.9029, 1900.72, -1853.35, 1501.52, 90.3059, 4, 7250, 7, 4970, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(763, 72, 25000, 'Appartement n°4 - 69', 1357.87, -1588.64, 1097.09, 272.593, 1900.94, -1853.39, 1501.52, 90.7773, 4, 7260, 7, 4970, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1),
-(766, 175, 1, 'Jefferson Motel', 2232.37, -1159.77, 25.8906, 299.756, 2215.43, -1150.48, 1025.8, 268.632, 15, 726, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 20, 0),
-(767, 175, 1, 'Idlewood Motel', 2178.12, -1770.72, 13.5452, 88.5827, 967.88, -53.1245, 1001.12, 90.2478, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 10, 1),
-(770, 458, 500000, 'Bureau n°2', 1383.47, -1584.69, 1087.09, 352.741, 1540.02, -1355.85, 226.485, 268.957, 0, 7300, 6, 3000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(771, 0, 60000, '8th Santa Maria Bay', 168.339, -1769.34, 4.4731, 359.166, 226.928, 1114.28, 1081, 270, 5, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 1, 1),
-(774, 0, 125000, 'Appartement 1 Glen-Park', 1791.84, -1298.11, 125.727, 269.335, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(775, 0, 125000, 'Appartement 2 Glen-Park', 1796.56, -1298.61, 125.727, 270.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(776, 0, 125000, 'Appartement 3 Glen-Park', 1800.39, -1298.61, 125.727, 270.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(777, 0, 125000, 'Appartement 4 Glen-Park', 1804.7, -1295.91, 125.727, 270.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(778, 0, 125000, 'Appartement 5 Glen-Park', 1807.58, -1293.1, 125.727, 0.0791, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(779, 0, 125000, 'Appartement 6 Glen-Park', 1810.48, -1290.1, 125.727, 315.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(780, 0, 125000, 'Appartement 7 Glen-Park', 1813.39, -1287.3, 125.727, 0.0791, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(781, 0, 125000, 'Appartement 8 Glen-Park', 1816.83, -1284.51, 125.727, 270.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(782, 0, 125000, 'Appartement 9 Glen-Park', 1821.29, -1283.53, 125.727, 270.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(783, 0, 125000, 'Appartement 10 Glen-Park', 1827.18, -1283.52, 125.727, 270.079, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(784, 0, 125000, 'Appartement 11 Glen-Park', 1828.78, -1286.86, 125.727, 141.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(785, 0, 125000, 'Appartement 12 Glen-Park', 1829.48, -1291.19, 125.727, 231.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(786, 0, 125000, 'Appartement 13 Glen-Park', 1830.16, -1297.71, 125.727, 141.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(787, 0, 125000, 'Appartement 14 Glen-Park', 1830.12, -1302.91, 125.727, 141.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(788, 0, 125000, 'Appartement 15 Glen-Park', 1828.39, -1305.62, 125.727, 141.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(789, 0, 125000, 'Appartement 16 Glen-Park', 1828.27, -1309.56, 125.727, 141.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(790, 0, 125000, 'Appartement 17 Glen-Park', 1825.46, -1313.07, 125.727, 141.337, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(791, 0, 125000, 'Appartement 18 Glen-Park', 1821.45, -1314.83, 125.727, 51.3373, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(792, 0, 125000, 'Appartement 19 Glen-Park', 1818.15, -1314.09, 125.727, 67.168, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(793, 0, 125000, 'Appartement 20 Glen-Park', 1813.31, -1310.84, 125.727, 67.168, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(794, 0, 125000, 'Appartement 21 Glen-Park', 1806.04, -1308.23, 125.721, 67.168, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(795, 0, 125000, 'Appartement 22 Glen-Park', 1801.74, -1307.25, 125.721, 67.168, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(796, 0, 125000, 'Appartement 23 Glen-Park', 1797.66, -1306.33, 125.721, 67.168, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(797, 0, 125000, 'Appartement 24 Glen-Park', 1792.67, -1308.14, 125.727, 67.168, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(798, 0, 150000, 'Rodéo appartement 2', 276.465, -1620.45, 47, 76.9005, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(799, 0, 150000, 'Rodéo appartement 1', 294.654, -1623.52, 47, 253.902, 2269.88, -1210.32, 1047.56, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(800, 350, 500000, 'Bureau n°1', 1383.46, -1589.36, 1087.09, 191.211, 1539.04, -1355.86, 226.485, 92.5077, 0, 3000, 6, 3000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(801, 0, 175000, '5th Santa Maria Bay', 263.823, -1766.03, 4.7555, 353.245, 2233.79, -1114.27, 1050.88, 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(802, 455, 500000, 'Bureau n°3', 1377.17, -1589.29, 1087.09, 171.637, 1539.2, -1355.28, 226.485, 258.605, 0, 3000, 6, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(803, 0, 500000, 'Bureau n°4', 1377.15, -1584.69, 1087.09, 2.711, 1539.29, -1356.05, 226.485, 276.655, 0, 3000, 6, 3000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `housestorage`
---
-
-CREATE TABLE IF NOT EXISTS `housestorage` (
-  `ID` int(12) DEFAULT '0',
-`itemID` int(12) NOT NULL,
-  `itemName` varchar(32) DEFAULT NULL,
-  `itemModel` int(12) DEFAULT '0',
-  `itemQuantity` int(12) DEFAULT '0'
+  `housePosX` float DEFAULT 0,
+  `housePosY` float DEFAULT 0,
+  `housePosZ` float DEFAULT 0,
+  `housePosA` float DEFAULT 0,
+  `houseIntX` float DEFAULT 0,
+  `houseIntY` float DEFAULT 0,
+  `houseIntZ` float DEFAULT 0,
+  `houseIntA` float DEFAULT 0,
+  `houseInterior` int(12) DEFAULT 0,
+  `houseInteriorVW` int(4) NOT NULL DEFAULT 0,
+  `houseExterior` int(12) DEFAULT 0,
+  `houseExteriorVW` int(12) DEFAULT 0,
+  `houseLocked` int(4) DEFAULT 0,
+  `houseWeapon1` int(12) DEFAULT 0,
+  `houseAmmo1` int(12) DEFAULT 0,
+  `houseWeapon2` int(12) DEFAULT 0,
+  `houseAmmo2` int(12) DEFAULT 0,
+  `houseWeapon3` int(12) DEFAULT 0,
+  `houseAmmo3` int(12) DEFAULT 0,
+  `houseWeapon4` int(12) DEFAULT 0,
+  `houseAmmo4` int(12) DEFAULT 0,
+  `houseWeapon5` int(12) DEFAULT 0,
+  `houseAmmo5` int(12) DEFAULT 0,
+  `houseWeapon6` int(12) DEFAULT 0,
+  `houseAmmo6` int(12) DEFAULT 0,
+  `houseWeapon7` int(12) DEFAULT 0,
+  `houseAmmo7` int(12) DEFAULT 0,
+  `houseWeapon8` int(12) DEFAULT 0,
+  `houseAmmo8` int(12) DEFAULT 0,
+  `houseWeapon9` int(12) DEFAULT 0,
+  `houseAmmo9` int(12) DEFAULT 0,
+  `houseWeapon10` int(12) DEFAULT 0,
+  `houseAmmo10` int(12) DEFAULT 0,
+  `houseMoney` int(12) DEFAULT 0,
+  `houseLocation` int(4) NOT NULL DEFAULT 0,
+  `houseMaxLoc` int(4) NOT NULL DEFAULT 0,
+  `houseLocNum` int(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `impoundlots`
+-- Table structure for table `housestorage`
 --
 
-CREATE TABLE IF NOT EXISTS `impoundlots` (
-`impoundID` int(12) NOT NULL,
-  `impoundLotX` float DEFAULT '0',
-  `impoundLotY` float DEFAULT '0',
-  `impoundLotZ` float DEFAULT '0',
-  `impoundReleaseX` float DEFAULT '0',
-  `impoundReleaseY` float DEFAULT '0',
-  `impoundReleaseZ` float DEFAULT '0',
-  `impoundReleaseInt` int(12) DEFAULT '0',
-  `impoundReleaseWorld` int(12) DEFAULT '0',
-  `impoundReleaseA` float DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `impoundlots`
---
-
-INSERT INTO `impoundlots` (`impoundID`, `impoundLotX`, `impoundLotY`, `impoundLotZ`, `impoundReleaseX`, `impoundReleaseY`, `impoundReleaseZ`, `impoundReleaseInt`, `impoundReleaseWorld`, `impoundReleaseA`) VALUES
-(1, 2236.73, -2247.28, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(2, 2229.74, -2254.99, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(3, 2222.54, -2262.47, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(4, 2214.72, -2269.56, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(5, 2207.59, -2277.14, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(6, 2188.57, -2228.6, 13.5015, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(7, 2191.96, -2225.35, 13.5387, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(8, 2195.91, -2220.55, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(9, 2198.7, -2217.68, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(10, 2203.15, -2213.61, 13.5546, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(11, 2206.45, -2210.27, 13.5468, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(12, 2200.14, -2281.21, 13.5468, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(13, 2197.69, -2284.74, 13.5468, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(14, 2194.79, -2288.32, 13.5468, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(15, 2192.31, -2291.27, 13.5468, 2235.25, -2210.07, 13.5468, 0, 0, 227.569),
-(16, 2189.84, -2293.79, 13.5468, 2235.25, -2210.07, 13.5468, 0, 0, 227.569);
+CREATE TABLE `housestorage` (
+  `ID` int(12) DEFAULT 0,
+  `itemID` int(12) NOT NULL,
+  `itemName` varchar(32) DEFAULT NULL,
+  `itemModel` int(12) DEFAULT 0,
+  `itemQuantity` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `inventory`
+-- Table structure for table `impoundlots`
 --
 
-CREATE TABLE IF NOT EXISTS `inventory` (
-  `ID` int(12) DEFAULT '0',
-`invID` int(12) NOT NULL,
+CREATE TABLE `impoundlots` (
+  `impoundID` int(12) NOT NULL,
+  `impoundLotX` float DEFAULT 0,
+  `impoundLotY` float DEFAULT 0,
+  `impoundLotZ` float DEFAULT 0,
+  `impoundReleaseX` float DEFAULT 0,
+  `impoundReleaseY` float DEFAULT 0,
+  `impoundReleaseZ` float DEFAULT 0,
+  `impoundReleaseInt` int(12) DEFAULT 0,
+  `impoundReleaseWorld` int(12) DEFAULT 0,
+  `impoundReleaseA` float DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `ID` int(12) DEFAULT 0,
+  `invID` int(12) NOT NULL,
   `invItem` varchar(32) DEFAULT NULL,
-  `invModel` int(12) DEFAULT '0',
-  `invQuantity` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+  `invModel` int(12) DEFAULT 0,
+  `invQuantity` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `jobs`
+-- Table structure for table `jobs`
 --
 
-CREATE TABLE IF NOT EXISTS `jobs` (
-`jobID` int(12) NOT NULL,
-  `jobPosX` float DEFAULT '0',
-  `jobPosY` float DEFAULT '0',
-  `jobPosZ` float DEFAULT '0',
-  `jobPointX` float DEFAULT '0',
-  `jobPointY` float DEFAULT '0',
-  `jobPointZ` float DEFAULT '0',
-  `jobDeliverX` float DEFAULT '0',
-  `jobDeliverY` float DEFAULT '0',
-  `jobDeliverZ` float DEFAULT '0',
-  `jobInterior` int(12) DEFAULT '0',
-  `jobWorld` int(12) DEFAULT '0',
-  `jobType` int(12) DEFAULT '0',
-  `jobPointInt` int(12) DEFAULT '0',
-  `jobPointWorld` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `jobs`
---
-
-INSERT INTO `jobs` (`jobID`, `jobPosX`, `jobPosY`, `jobPosZ`, `jobPointX`, `jobPointY`, `jobPointZ`, `jobDeliverX`, `jobDeliverY`, `jobDeliverZ`, `jobInterior`, `jobWorld`, `jobType`, `jobPointInt`, `jobPointWorld`) VALUES
-(31, 310.94, 130.122, 1011.76, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0),
-(32, 304.103, 125.186, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0),
-(33, 304.501, 127.687, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 0),
-(34, 304.227, 130.172, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 4, 0, 0),
-(35, 312.006, 129.869, 1011.76, 0, 0, 0, 0, 0, 0, 10, 0, 5, 0, 0),
-(36, 304.32, 134.273, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 6, 0, 0),
-(37, 303.858, 136.449, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 7, 0, 0),
-(38, 303.845, 138.493, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 8, 0, 0),
-(39, 304.655, 125.121, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 9, 0, 0),
-(40, 312.745, 123.924, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 10, 0, 0),
-(41, 304.236, 122.544, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 11, 0, 0),
-(42, 307.286, 123.898, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 12, 0, 0),
-(43, 304.329, 132.444, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 13, 0, 0),
-(44, 303.795, 138.611, 1011.76, 0, 0, 0, 0, 0, 0, 1, 0, 14, 0, 0),
-(45, 310.197, 131.615, 1011.76, 0, 0, 0, 0, 0, 0, 10, 0, 15, 0, 0);
+CREATE TABLE `jobs` (
+  `jobID` int(12) NOT NULL,
+  `jobPosX` float DEFAULT 0,
+  `jobPosY` float DEFAULT 0,
+  `jobPosZ` float DEFAULT 0,
+  `jobPointX` float DEFAULT 0,
+  `jobPointY` float DEFAULT 0,
+  `jobPointZ` float DEFAULT 0,
+  `jobDeliverX` float DEFAULT 0,
+  `jobDeliverY` float DEFAULT 0,
+  `jobDeliverZ` float DEFAULT 0,
+  `jobInterior` int(12) DEFAULT 0,
+  `jobWorld` int(12) DEFAULT 0,
+  `jobType` int(12) DEFAULT 0,
+  `jobPointInt` int(12) DEFAULT 0,
+  `jobPointWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `namechanges`
+-- Table structure for table `namechanges`
 --
 
-CREATE TABLE IF NOT EXISTS `namechanges` (
-`ID` int(12) NOT NULL,
+CREATE TABLE `namechanges` (
+  `ID` int(12) NOT NULL,
   `OldName` varchar(24) DEFAULT NULL,
   `NewName` varchar(24) DEFAULT NULL,
   `Date` varchar(36) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `news`
+-- Table structure for table `news`
 --
 
-CREATE TABLE IF NOT EXISTS `news` (
-`news_id` int(4) NOT NULL,
+CREATE TABLE `news` (
+  `news_id` int(4) NOT NULL,
   `news_name` text NOT NULL,
   `news_desc` text NOT NULL,
   `news_postedby` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `plants`
---
-
-CREATE TABLE IF NOT EXISTS `plants` (
-`plantID` int(12) NOT NULL,
-  `plantType` int(12) DEFAULT '0',
-  `plantDrugs` int(12) DEFAULT '0',
-  `plantX` float DEFAULT '0',
-  `plantY` float DEFAULT '0',
-  `plantZ` float DEFAULT '0',
-  `plantA` float DEFAULT '0',
-  `plantInterior` int(12) DEFAULT '0',
-  `plantWorld` int(12) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `pumps`
+-- Table structure for table `openworldmaison`
 --
 
-CREATE TABLE IF NOT EXISTS `pumps` (
-  `ID` int(12) DEFAULT '0',
-`pumpID` int(12) NOT NULL,
-  `pumpPosX` float DEFAULT '0',
-  `pumpPosY` float DEFAULT '0',
-  `pumpPosZ` float DEFAULT '0',
-  `pumpPosA` float DEFAULT '0',
-  `pumpFuel` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+CREATE TABLE `openworldmaison` (
+  `OpenWorldMID` int(4) NOT NULL,
+  `OpenWorldMModel` int(8) NOT NULL DEFAULT 2000,
+  `OpenWorldMX` float DEFAULT NULL,
+  `OpenWorldMY` float DEFAULT NULL,
+  `OpenWorldMZ` float DEFAULT NULL,
+  `OpenWorldMRX` float DEFAULT NULL,
+  `OpenWorldMRY` float DEFAULT NULL,
+  `OpenWorldMRZ` float DEFAULT NULL,
+  `OpenWorldMX1` float DEFAULT NULL,
+  `OpenWorldMY1` float DEFAULT NULL,
+  `OpenWorldMZ1` float DEFAULT NULL,
+  `OpenWorldMRX1` float DEFAULT NULL,
+  `OpenWorldMRY1` float DEFAULT NULL,
+  `OpenWorldMRZ1` float DEFAULT NULL,
+  `OpenWorldMOwner` int(4) DEFAULT -1,
+  `OpenWorldMAddress` varchar(32) NOT NULL,
+  `OpenWorldMPrice` int(8) NOT NULL DEFAULT 1000,
+  `OpenWorldMBoom` int(4) NOT NULL DEFAULT 0,
+  `OpenWorldMCommandX` float DEFAULT NULL,
+  `OpenWorldMCommandY` float DEFAULT NULL,
+  `OpenWorldMCommandZ` float DEFAULT NULL,
+  `OpenWorldMCommandR` float DEFAULT NULL,
+  `OpenWorldMLocked` int(4) DEFAULT NULL,
+  `OpenWorldMSpeed` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
 --
--- Contenu de la table `pumps`
+-- Table structure for table `plants`
 --
 
-INSERT INTO `pumps` (`ID`, `pumpID`, `pumpPosX`, `pumpPosY`, `pumpPosZ`, `pumpPosA`, `pumpFuel`) VALUES
-(54, 1, 1941.58, -1767.27, 14.1328, 274.35, 789),
-(54, 2, 1941.6, -1771.33, 14.1428, 274.795, 1217),
-(54, 3, 1941.68, -1774.25, 14.1527, 273.486, 1701),
-(54, 4, 1941.68, -1778.43, 14.1428, 272.502, 1193),
-(72, 5, 999.089, -937.39, 42.8395, -168.894, 1925),
-(72, 6, 1001.95, -937.214, 42.8096, -166.281, 2000),
-(72, 7, 1009.57, -935.808, 42.8496, -173.261, 2000),
-(72, 8, 1006.24, -936.408, 42.6996, 190.173, 1907);
+CREATE TABLE `plants` (
+  `plantID` int(12) NOT NULL,
+  `plantType` int(12) DEFAULT 0,
+  `plantDrugs` int(12) DEFAULT 0,
+  `plantX` float DEFAULT 0,
+  `plantY` float DEFAULT 0,
+  `plantZ` float DEFAULT 0,
+  `plantA` float DEFAULT 0,
+  `plantInterior` int(12) DEFAULT 0,
+  `plantWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairefbi`
+-- Table structure for table `pumps`
 --
 
-CREATE TABLE IF NOT EXISTS `salairefbi` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `pumps` (
+  `ID` int(12) DEFAULT 0,
+  `pumpID` int(12) NOT NULL,
+  `pumpPosX` float DEFAULT 0,
+  `pumpPosY` float DEFAULT 0,
+  `pumpPosZ` float DEFAULT 0,
+  `pumpPosA` float DEFAULT 0,
+  `pumpFuel` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
--- Contenu de la table `salairefbi`
+-- Table structure for table `salairefbi`
+--
+
+CREATE TABLE `salairefbi` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `salairefbi`
 --
 
 INSERT INTO `salairefbi` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2651,28 +1380,28 @@ INSERT INTO `salairefbi` (`idfaction`, `salairerang1`, `salairerang2`, `salairer
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairejob`
+-- Table structure for table `salairejob`
 --
 
-CREATE TABLE IF NOT EXISTS `salairejob` (
-  `id` int(12) DEFAULT '50',
-  `salairecariste` int(12) DEFAULT '50',
-  `salairemanutentionnaire` int(12) DEFAULT '50',
-  `salairedock` int(12) DEFAULT '50',
-  `salairelaitier` int(12) DEFAULT '50',
-  `salaireminer` int(12) DEFAULT '50',
-  `salaireusineelectronic` int(12) DEFAULT '50',
-  `salairebucheron` int(12) DEFAULT '50',
-  `salairemenuisier` int(12) DEFAULT '50',
-  `salairegenerateur` int(12) DEFAULT '50',
-  `salaireelectricien` int(12) DEFAULT '50',
-  `salairearme` int(12) DEFAULT '50',
-  `salairepetrolier` int(12) DEFAULT '50',
-  `salaireboucher` int(12) DEFAULT '50'
+CREATE TABLE `salairejob` (
+  `id` int(12) DEFAULT 50,
+  `salairecariste` int(12) DEFAULT 50,
+  `salairemanutentionnaire` int(12) DEFAULT 50,
+  `salairedock` int(12) DEFAULT 50,
+  `salairelaitier` int(12) DEFAULT 50,
+  `salaireminer` int(12) DEFAULT 50,
+  `salaireusineelectronic` int(12) DEFAULT 50,
+  `salairebucheron` int(12) DEFAULT 50,
+  `salairemenuisier` int(12) DEFAULT 50,
+  `salairegenerateur` int(12) DEFAULT 50,
+  `salaireelectricien` int(12) DEFAULT 50,
+  `salairearme` int(12) DEFAULT 50,
+  `salairepetrolier` int(12) DEFAULT 50,
+  `salaireboucher` int(12) DEFAULT 50
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairejob`
+-- Dumping data for table `salairejob`
 --
 
 INSERT INTO `salairejob` (`id`, `salairecariste`, `salairemanutentionnaire`, `salairedock`, `salairelaitier`, `salaireminer`, `salaireusineelectronic`, `salairebucheron`, `salairemenuisier`, `salairegenerateur`, `salaireelectricien`, `salairearme`, `salairepetrolier`, `salaireboucher`) VALUES
@@ -2681,30 +1410,30 @@ INSERT INTO `salairejob` (`id`, `salairecariste`, `salairemanutentionnaire`, `sa
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairejournaliste`
+-- Table structure for table `salairejournaliste`
 --
 
-CREATE TABLE IF NOT EXISTS `salairejournaliste` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairejournaliste` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairejournaliste`
+-- Dumping data for table `salairejournaliste`
 --
 
 INSERT INTO `salairejournaliste` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2713,30 +1442,30 @@ INSERT INTO `salairejournaliste` (`idfaction`, `salairerang1`, `salairerang2`, `
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairelivreurbiz`
+-- Table structure for table `salairelivreurbiz`
 --
 
-CREATE TABLE IF NOT EXISTS `salairelivreurbiz` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairelivreurbiz` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairelivreurbiz`
+-- Dumping data for table `salairelivreurbiz`
 --
 
 INSERT INTO `salairelivreurbiz` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2745,30 +1474,30 @@ INSERT INTO `salairelivreurbiz` (`idfaction`, `salairerang1`, `salairerang2`, `s
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairemairie`
+-- Table structure for table `salairemairie`
 --
 
-CREATE TABLE IF NOT EXISTS `salairemairie` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairemairie` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairemairie`
+-- Dumping data for table `salairemairie`
 --
 
 INSERT INTO `salairemairie` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2777,30 +1506,30 @@ INSERT INTO `salairemairie` (`idfaction`, `salairerang1`, `salairerang2`, `salai
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairemecano3`
+-- Table structure for table `salairemecano3`
 --
 
-CREATE TABLE IF NOT EXISTS `salairemecano3` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairemecano3` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairemecano3`
+-- Dumping data for table `salairemecano3`
 --
 
 INSERT INTO `salairemecano3` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2809,30 +1538,30 @@ INSERT INTO `salairemecano3` (`idfaction`, `salairerang1`, `salairerang2`, `sala
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairemecano4`
+-- Table structure for table `salairemecano4`
 --
 
-CREATE TABLE IF NOT EXISTS `salairemecano4` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairemecano4` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairemecano4`
+-- Dumping data for table `salairemecano4`
 --
 
 INSERT INTO `salairemecano4` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2841,30 +1570,30 @@ INSERT INTO `salairemecano4` (`idfaction`, `salairerang1`, `salairerang2`, `sala
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairepolice`
+-- Table structure for table `salairepolice`
 --
 
-CREATE TABLE IF NOT EXISTS `salairepolice` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairepolice` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairepolice`
+-- Dumping data for table `salairepolice`
 --
 
 INSERT INTO `salairepolice` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2873,30 +1602,30 @@ INSERT INTO `salairepolice` (`idfaction`, `salairerang1`, `salairerang2`, `salai
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salaireswat`
+-- Table structure for table `salaireswat`
 --
 
-CREATE TABLE IF NOT EXISTS `salaireswat` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salaireswat` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salaireswat`
+-- Dumping data for table `salaireswat`
 --
 
 INSERT INTO `salaireswat` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2905,30 +1634,30 @@ INSERT INTO `salaireswat` (`idfaction`, `salairerang1`, `salairerang2`, `salaire
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salaireurgentiste`
+-- Table structure for table `salaireurgentiste`
 --
 
-CREATE TABLE IF NOT EXISTS `salaireurgentiste` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salaireurgentiste` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salaireurgentiste`
+-- Dumping data for table `salaireurgentiste`
 --
 
 INSERT INTO `salaireurgentiste` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2937,30 +1666,30 @@ INSERT INTO `salaireurgentiste` (`idfaction`, `salairerang1`, `salairerang2`, `s
 -- --------------------------------------------------------
 
 --
--- Structure de la table `salairevendeurrue`
+-- Table structure for table `salairevendeurrue`
 --
 
-CREATE TABLE IF NOT EXISTS `salairevendeurrue` (
-`idfaction` int(11) NOT NULL,
-  `salairerang1` int(11) DEFAULT '0',
-  `salairerang2` int(11) DEFAULT '0',
-  `salairerang3` int(11) DEFAULT '0',
-  `salairerang4` int(11) DEFAULT '0',
-  `salairerang5` int(11) DEFAULT '0',
-  `salairerang6` int(11) DEFAULT '0',
-  `salairerang7` int(11) DEFAULT '0',
-  `salairerang8` int(11) DEFAULT '0',
-  `salairerang9` int(11) DEFAULT '0',
-  `salairerang10` int(11) DEFAULT '0',
-  `salairerang11` int(11) DEFAULT '0',
-  `salairerang12` int(11) DEFAULT '0',
-  `salairerang13` int(11) DEFAULT '0',
-  `salairerang14` int(11) DEFAULT '0',
-  `salairerang15` int(11) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE `salairevendeurrue` (
+  `idfaction` int(11) NOT NULL,
+  `salairerang1` int(11) DEFAULT 0,
+  `salairerang2` int(11) DEFAULT 0,
+  `salairerang3` int(11) DEFAULT 0,
+  `salairerang4` int(11) DEFAULT 0,
+  `salairerang5` int(11) DEFAULT 0,
+  `salairerang6` int(11) DEFAULT 0,
+  `salairerang7` int(11) DEFAULT 0,
+  `salairerang8` int(11) DEFAULT 0,
+  `salairerang9` int(11) DEFAULT 0,
+  `salairerang10` int(11) DEFAULT 0,
+  `salairerang11` int(11) DEFAULT 0,
+  `salairerang12` int(11) DEFAULT 0,
+  `salairerang13` int(11) DEFAULT 0,
+  `salairerang14` int(11) DEFAULT 0,
+  `salairerang15` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `salairevendeurrue`
+-- Dumping data for table `salairevendeurrue`
 --
 
 INSERT INTO `salairevendeurrue` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
@@ -2969,967 +1698,967 @@ INSERT INTO `salairevendeurrue` (`idfaction`, `salairerang1`, `salairerang2`, `s
 -- --------------------------------------------------------
 
 --
--- Structure de la table `serveursetting`
+-- Table structure for table `serveursetting`
 --
 
-CREATE TABLE IF NOT EXISTS `serveursetting` (
+CREATE TABLE `serveursetting` (
   `id` int(11) NOT NULL,
   `motd` varchar(128) NOT NULL DEFAULT '00',
-  `afkactive` int(11) DEFAULT '1',
-  `afktime` int(11) DEFAULT '0',
-  `braquagenpcactive` int(11) DEFAULT '0',
-  `braquagebanqueactive` int(11) DEFAULT '0',
-  `oocactive` int(11) DEFAULT '0',
-  `pmactive` int(11) DEFAULT '0',
-  `villeactive` int(4) NOT NULL DEFAULT '1',
+  `afkactive` int(11) DEFAULT 1,
+  `afktime` int(11) DEFAULT 0,
+  `braquagenpcactive` int(11) DEFAULT 0,
+  `braquagebanqueactive` int(11) DEFAULT 0,
+  `oocactive` int(11) DEFAULT 0,
+  `pmactive` int(11) DEFAULT 0,
+  `villeactive` int(4) NOT NULL DEFAULT 1,
   `nouveau` int(11) NOT NULL,
-  `police` int(4) NOT NULL DEFAULT '0',
-  `swat` int(4) NOT NULL DEFAULT '0'
+  `police` int(4) NOT NULL DEFAULT 0,
+  `swat` int(4) NOT NULL DEFAULT 0,
+  `whiteliste` int(4) NOT NULL DEFAULT 0,
+  `discord` varchar(128) NOT NULL DEFAULT '0',
+  `verifier` varchar(20) NOT NULL DEFAULT '0',
+  `admin1` varchar(20) NOT NULL DEFAULT '0',
+  `admin2` varchar(20) NOT NULL DEFAULT '0',
+  `admin3` varchar(20) NOT NULL DEFAULT '0',
+  `admin4` varchar(20) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `serveursetting`
+-- Dumping data for table `serveursetting`
 --
 
-INSERT INTO `serveursetting` (`id`, `motd`, `afkactive`, `afktime`, `braquagenpcactive`, `braquagebanqueactive`, `oocactive`, `pmactive`, `villeactive`, `nouveau`, `police`, `swat`) VALUES
-(1, 'test', 1, 15, 1, 1, 1, 1, 1, 0, 0, 0);
+INSERT INTO `serveursetting` (`id`, `motd`, `afkactive`, `afktime`, `braquagenpcactive`, `braquagebanqueactive`, `oocactive`, `pmactive`, `villeactive`, `nouveau`, `police`, `swat`, `whiteliste`, `discord`, `verifier`, `admin1`, `admin2`, `admin3`, `admin4`) VALUES
+(1, 'Sun Vice vous souhaites la bienvenue!', 1, 15, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `slotmachine`
+-- Table structure for table `slotmachine`
 --
 
-CREATE TABLE IF NOT EXISTS `slotmachine` (
-`id` int(4) NOT NULL,
-  `X` float DEFAULT '0',
-  `Y` float DEFAULT '0',
-  `Z` float DEFAULT '0',
-  `RX` float DEFAULT '0',
-  `RY` float DEFAULT '0',
-  `RZ` float DEFAULT '0',
-  `slotint` float DEFAULT '0',
-  `slotvw` float DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `slotmachine`
---
-
-INSERT INTO `slotmachine` (`id`, `X`, `Y`, `Z`, `RX`, `RY`, `RZ`, `slotint`, `slotvw`) VALUES
-(1, -236.548, -11.1281, 1004.75, 0, 0, 0, 3, 7034),
-(2, -241.584, -11.1802, 1004.73, 0, 0, 0, 3, 7034),
-(3, 2790.09, -1950.58, 12.8148, 0, 0, 178.619, 0, 0),
-(4, -496.879, 311.501, 2004.59, 0, 0, 0, 1, 7005),
-(5, -494.986, 310.011, 2004.59, 0, 0, 178.619, 1, 7005),
-(6, 1119.75, -2037.39, 69.8942, 0, 0, 0, 0, 0),
-(7, 1120.42, -2037.38, 69.8873, 0, 0, 178.619, 0, 0);
+CREATE TABLE `slotmachine` (
+  `id` int(4) NOT NULL,
+  `X` float DEFAULT 0,
+  `Y` float DEFAULT 0,
+  `Z` float DEFAULT 0,
+  `RX` float DEFAULT 0,
+  `RY` float DEFAULT 0,
+  `RZ` float DEFAULT 0,
+  `slotint` float DEFAULT 0,
+  `slotvw` float DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `speedcameras`
+-- Table structure for table `speedcameras`
 --
 
-CREATE TABLE IF NOT EXISTS `speedcameras` (
-`speedID` int(12) NOT NULL,
-  `speedRange` float DEFAULT '0',
-  `speedLimit` float DEFAULT '0',
-  `speedX` float DEFAULT '0',
-  `speedY` float DEFAULT '0',
-  `speedZ` float DEFAULT '0',
-  `speedAngle` float DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=351 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `speedcameras`
---
-
-INSERT INTO `speedcameras` (`speedID`, `speedRange`, `speedLimit`, `speedX`, `speedY`, `speedZ`, `speedAngle`) VALUES
-(242, 30, 121, 1286.11, -1609.02, 12.3468, 91.2798),
-(243, 30, 121, 1330.55, -1530.17, 12.3468, 249.809),
-(244, 30, 81, 1443.59, -1451.11, 12.3504, 88.2413),
-(246, 30, 81, 1862.58, -1293.38, 12.3468, 269.283),
-(250, 30, 81, 1640.29, -1721.41, 12.3468, 359.756),
-(252, 30, 121, 1368.05, -1250.81, 12.3468, 178.854),
-(253, 30, 81, 1527.41, -1173.49, 22.8781, 180.367),
-(257, 30, 81, 2071.95, -1840.45, 12.3468, 89.5216),
-(258, 30, 81, 2030.1, -1921.93, 12.3468, 359.402),
-(262, 30, 81, 2011.43, -1763.46, 12.339, 179.434),
-(263, 30, 81, 2231.33, -1687, 12.9507, 266.277),
-(266, 30, 81, 2463.72, -1745.18, 12.3468, 176.331),
-(269, 30, 81, 2129.03, -1762.97, 12.3625, 180.681),
-(270, 30, 81, 1345.31, -1721.77, 12.3682, 357.613),
-(271, 30, 81, 1379, -1774.78, 12.3468, 90.7976),
-(274, 30, 81, 1540.3, -1882.95, 12.3468, 179.184),
-(275, 30, 121, 1367.82, -1164.06, 22.8656, 269.303),
-(276, 30, 121, 1331.54, -1291.24, 12.3468, 90.8161),
-(278, 30, 81, 2160.31, -1905.21, 12.3424, 178.414),
-(279, 30, 81, 2251.16, -1721.9, 12.3468, 358.872),
-(281, 30, 81, 1950.62, -2008.56, 12.3468, 86.3519),
-(282, 30, 81, 2354.67, -1469.35, 22.7999, 268.352),
-(283, 30, 81, 1810.58, -1806.87, 12.3606, 88.8594),
-(284, 30, 81, 1704.3, -1581.37, 12.347, 3.3527),
-(286, 30, 81, 2092.8, -1942.01, 12.3441, 266.555),
-(287, 30, 81, 1048.67, -1561.77, 12.3447, 267.404),
-(288, 30, 81, 896.372, -1337.37, 12.3468, 176.103),
-(289, 30, 81, 953.539, -1269.49, 14.3185, 269.676),
-(290, 30, 81, 1009.94, -1028.69, 30.8111, 0.8602),
-(292, 30, 81, 1465.13, -1312.02, 12.3585, 180.666),
-(294, 30, 81, 1711.92, -1451.25, 12.3468, 179.209),
-(337, 50, 81, -128.247, -1318.04, 1.3775, 339.52),
-(341, 50, 121, 601.446, -1733.45, 12.4057, 258.438),
-(342, 50, 81, 1223.06, -1862.28, 12.3468, 93.3102),
-(349, 30, 81, 1802.77, -1170.32, 22.6281, 244.024),
-(350, 30, 81, -83.9878, -418.446, 0.1412, 238.392);
+CREATE TABLE `speedcameras` (
+  `speedID` int(12) NOT NULL,
+  `speedRange` float DEFAULT 0,
+  `speedLimit` float DEFAULT 0,
+  `speedX` float DEFAULT 0,
+  `speedY` float DEFAULT 0,
+  `speedZ` float DEFAULT 0,
+  `speedAngle` float DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `tickets`
+-- Table structure for table `tickets`
 --
 
-CREATE TABLE IF NOT EXISTS `tickets` (
-  `ID` int(12) DEFAULT '0',
-`ticketID` int(12) NOT NULL,
-  `ticketFee` int(12) DEFAULT '0',
+CREATE TABLE `tickets` (
+  `ID` int(12) DEFAULT 0,
+  `ticketID` int(12) NOT NULL,
+  `ticketFee` int(12) DEFAULT 0,
   `ticketBy` varchar(24) DEFAULT NULL,
   `ticketDate` varchar(36) DEFAULT NULL,
   `ticketReason` varchar(32) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
-
-
--- --------------------------------------------------------
-
---
--- Structure de la table `vendors`
---
-
-CREATE TABLE IF NOT EXISTS `vendors` (
-`vendorID` int(12) NOT NULL,
-  `vendorType` int(12) DEFAULT '0',
-  `vendorX` float DEFAULT '0',
-  `vendorY` float DEFAULT '0',
-  `vendorZ` float DEFAULT '0',
-  `vendorA` float DEFAULT '0',
-  `vendorInterior` int(12) DEFAULT '0',
-  `vendorWorld` int(12) DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=224 DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `vendors`
---
-
-INSERT INTO `vendors` (`vendorID`, `vendorType`, `vendorX`, `vendorY`, `vendorZ`, `vendorA`, `vendorInterior`, `vendorWorld`) VALUES
-(165, 2, -53.9236, -277.645, 5.4296, 88.4397, 0, 0),
-(166, 2, 989.444, -1007.26, 42.7951, 87.8826, 0, 0),
-(170, 2, 989.469, -1005.98, 42.7951, 87.8826, 0, 0),
-(171, 1, -52.69, -281.883, 5.4296, 90.2997, 0, 0),
-(176, 2, 565.987, 1217.64, 11.7187, 36.2471, 0, 0),
-(177, 2, -383.352, -1421.13, 25.7265, 93.9682, 0, 0),
-(178, 1, -383.694, -1418.17, 25.7265, 120.014, 0, 0),
-(182, 1, 1687.75, -2311.81, -2.6697, 358.451, 0, 0),
-(183, 1, 2886.11, -1706.55, 11.0403, 254.987, 0, 0),
-(184, 1, 814.026, -1803.59, 13.0234, 86.8212, 0, 0),
-(186, 1, 415.904, -1810.31, 5.6858, 89.8527, 0, 0),
-(188, 2, 2228.4, -1714.3, 13.5266, 275.988, 0, 0),
-(191, 2, 1851.27, -1866.19, 13.5781, 178.079, 0, 0),
-(192, 2, 2326.09, -1645.33, 14.827, 350.728, 0, 0),
-(197, 2, 2134.51, -1152.62, 24.0229, 110.967, 0, 0),
-(198, 2, 2450.56, -1981.92, 13.5468, 180.919, 0, 0),
-(199, 1, 851.108, -2052.28, 12.8671, 134.781, 0, 0),
-(200, 2, 2054.34, -1897.36, 13.5468, 357.441, 0, 0),
-(203, 1, 388.287, -1527.87, 32.2734, 173.409, 0, 0),
-(204, 1, 394.234, -1523.1, 32.2662, 265.687, 0, 0),
-(206, 1, 334.262, -1817.78, 4.3102, 178.623, 0, 0),
-(207, 1, 385.208, -2014.05, 7.8359, 273.381, 0, 0),
-(209, 2, 378.777, -2059.74, 7.8359, 94.0355, 0, 0),
-(212, 1, 2103.38, -1360.77, 23.9843, 1.9011, 0, 0),
-(215, 2, 1285.93, -857.094, 1085.63, 0.9159, 0, 0),
-(217, 1, 1808.89, -1864.57, 13.583, 144.941, 0, 0),
-(221, 1, 2406.15, -2063.94, 13.5468, 84.3509, 0, 0),
-(222, 2, 2744.36, -1822.14, 422.822, 264.472, 0, 0),
-(223, 2, 2744.42, -1798.01, 422.822, 273.154, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `votes`
---
-
-CREATE TABLE IF NOT EXISTS `votes` (
-  `Name` varchar(24) NOT NULL,
-  `Votes` int(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `warrants`
+-- Table structure for table `vendors`
 --
 
-CREATE TABLE IF NOT EXISTS `warrants` (
-`ID` int(12) NOT NULL,
+CREATE TABLE `vendors` (
+  `vendorID` int(12) NOT NULL,
+  `vendorType` int(12) DEFAULT 0,
+  `vendorX` float DEFAULT 0,
+  `vendorY` float DEFAULT 0,
+  `vendorZ` float DEFAULT 0,
+  `vendorA` float DEFAULT 0,
+  `vendorInterior` int(12) DEFAULT 0,
+  `vendorWorld` int(12) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `votes`
+--
+
+CREATE TABLE `votes` (
+  `Name` varchar(24) NOT NULL,
+  `Votes` int(4) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `warrants`
+--
+
+CREATE TABLE `warrants` (
+  `ID` int(12) NOT NULL,
   `Suspect` varchar(24) DEFAULT NULL,
   `Username` varchar(24) DEFAULT NULL,
   `Date` varchar(36) DEFAULT NULL,
   `Description` varchar(128) DEFAULT NULL,
-  `IDchar` int(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `zones`
---
-
-CREATE TABLE IF NOT EXISTS `zones` (
-  `zID` int(12) NOT NULL,
-  `zName` int(12) DEFAULT '0',
-  `zMinX` float DEFAULT '0',
-  `zMinY` float DEFAULT '0',
-  `zMaxX` float DEFAULT '0',
-  `zMaxY` float DEFAULT '0',
-  `zCPX` float DEFAULT '0',
-  `zCPY` float DEFAULT '0',
-  `zCPZ` float DEFAULT '0',
-  `zTeam` int(12) DEFAULT '0',
-  `zMoney` int(12) DEFAULT '0',
-  `zEXP` int(12) DEFAULT '0',
-  `zTime` int(12) DEFAULT '0'
+  `IDchar` int(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Index pour les tables exportées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `accounts`
+-- Indexes for table `accounts`
 --
 ALTER TABLE `accounts`
- ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Index pour la table `atm`
+-- Indexes for table `actors`
+--
+ALTER TABLE `actors`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `ID` (`ID`);
+
+--
+-- Indexes for table `atm`
 --
 ALTER TABLE `atm`
- ADD PRIMARY KEY (`atmID`);
+  ADD PRIMARY KEY (`atmID`);
 
 --
--- Index pour la table `backpackitems`
+-- Indexes for table `backpackitems`
 --
 ALTER TABLE `backpackitems`
- ADD PRIMARY KEY (`itemID`);
+  ADD PRIMARY KEY (`itemID`);
 
 --
--- Index pour la table `backpacks`
+-- Indexes for table `backpacks`
 --
 ALTER TABLE `backpacks`
- ADD PRIMARY KEY (`backpackID`);
+  ADD PRIMARY KEY (`backpackID`);
 
 --
--- Index pour la table `banqueentreprise`
+-- Indexes for table `banqueentreprise`
 --
 ALTER TABLE `banqueentreprise`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `batiements`
+-- Indexes for table `batiements`
 --
 ALTER TABLE `batiements`
- ADD PRIMARY KEY (`batiementID`), ADD UNIQUE KEY `batiementID` (`batiementID`);
+  ADD PRIMARY KEY (`batiementID`),
+  ADD UNIQUE KEY `batiementID` (`batiementID`);
 
 --
--- Index pour la table `billboards`
+-- Indexes for table `billboards`
 --
 ALTER TABLE `billboards`
- ADD PRIMARY KEY (`bbID`);
+  ADD PRIMARY KEY (`bbID`);
 
 --
--- Index pour la table `blacklist`
+-- Indexes for table `blacklist`
 --
 ALTER TABLE `blacklist`
- ADD PRIMARY KEY (`Username`), ADD UNIQUE KEY `Username` (`Username`);
+  ADD PRIMARY KEY (`Username`),
+  ADD UNIQUE KEY `Username` (`Username`);
 
 --
--- Index pour la table `businesses`
+-- Indexes for table `businesses`
 --
 ALTER TABLE `businesses`
- ADD PRIMARY KEY (`bizID`);
+  ADD PRIMARY KEY (`bizID`);
 
 --
--- Index pour la table `caisses`
+-- Indexes for table `caisses`
 --
 ALTER TABLE `caisses`
- ADD PRIMARY KEY (`caisseID`), ADD KEY `caisseID` (`caisseID`);
+  ADD PRIMARY KEY (`caisseID`),
+  ADD KEY `caisseID` (`caisseID`);
 
 --
--- Index pour la table `cars`
+-- Indexes for table `cars`
 --
 ALTER TABLE `cars`
- ADD PRIMARY KEY (`carID`);
+  ADD PRIMARY KEY (`carID`);
 
 --
--- Index pour la table `carstorage`
+-- Indexes for table `carstorage`
 --
 ALTER TABLE `carstorage`
- ADD PRIMARY KEY (`itemID`);
+  ADD PRIMARY KEY (`itemID`);
 
 --
--- Index pour la table `characters`
+-- Indexes for table `characters`
 --
 ALTER TABLE `characters`
- ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Index pour la table `contacts`
+-- Indexes for table `contacts`
 --
 ALTER TABLE `contacts`
- ADD PRIMARY KEY (`contactID`);
+  ADD PRIMARY KEY (`contactID`);
 
 --
--- Index pour la table `crates`
+-- Indexes for table `crates`
 --
 ALTER TABLE `crates`
- ADD PRIMARY KEY (`crateID`);
+  ADD PRIMARY KEY (`crateID`);
 
 --
--- Index pour la table `cvfbi`
+-- Indexes for table `cvfbi`
 --
 ALTER TABLE `cvfbi`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvjournaliste`
+-- Indexes for table `cvjournaliste`
 --
 ALTER TABLE `cvjournaliste`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvlivraisonbiz`
+-- Indexes for table `cvlivraisonbiz`
 --
 ALTER TABLE `cvlivraisonbiz`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvmairie`
+-- Indexes for table `cvmairie`
 --
 ALTER TABLE `cvmairie`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvmecanozone3`
+-- Indexes for table `cvmecanozone3`
 --
 ALTER TABLE `cvmecanozone3`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvmecanozone4`
+-- Indexes for table `cvmecanozone4`
 --
 ALTER TABLE `cvmecanozone4`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvpetitlivreur`
+-- Indexes for table `cvpetitlivreur`
 --
 ALTER TABLE `cvpetitlivreur`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvpolice`
+-- Indexes for table `cvpolice`
 --
 ALTER TABLE `cvpolice`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvswat`
+-- Indexes for table `cvswat`
 --
 ALTER TABLE `cvswat`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvtaxi`
+-- Indexes for table `cvtaxi`
 --
 ALTER TABLE `cvtaxi`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvurgentiste`
+-- Indexes for table `cvurgentiste`
 --
 ALTER TABLE `cvurgentiste`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `cvvendeurrue`
+-- Indexes for table `cvvendeurrue`
 --
 ALTER TABLE `cvvendeurrue`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `dealervehicles`
+-- Indexes for table `dealervehicles`
 --
 ALTER TABLE `dealervehicles`
- ADD PRIMARY KEY (`vehID`);
+  ADD PRIMARY KEY (`vehID`);
 
 --
--- Index pour la table `detectors`
+-- Indexes for table `death`
+--
+ALTER TABLE `death`
+  ADD PRIMARY KEY (`dID`);
+
+--
+-- Indexes for table `detectors`
 --
 ALTER TABLE `detectors`
- ADD PRIMARY KEY (`detectorID`);
+  ADD PRIMARY KEY (`detectorID`);
 
 --
--- Index pour la table `dropped`
+-- Indexes for table `dropped`
 --
 ALTER TABLE `dropped`
- ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Index pour la table `entrances`
+-- Indexes for table `entrances`
 --
 ALTER TABLE `entrances`
- ADD PRIMARY KEY (`entranceID`);
+  ADD PRIMARY KEY (`entranceID`);
 
 --
--- Index pour la table `factions`
+-- Indexes for table `factions`
 --
 ALTER TABLE `factions`
- ADD PRIMARY KEY (`factionID`);
+  ADD PRIMARY KEY (`factionID`);
 
 --
--- Index pour la table `factorystock`
+-- Indexes for table `factorystock`
 --
 ALTER TABLE `factorystock`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `furniture`
+-- Indexes for table `furniture`
 --
 ALTER TABLE `furniture`
- ADD PRIMARY KEY (`furnitureID`);
+  ADD PRIMARY KEY (`furnitureID`);
 
 --
--- Index pour la table `furnitures`
+-- Indexes for table `furnitures`
 --
 ALTER TABLE `furnitures`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `garbage`
+-- Indexes for table `garbage`
 --
 ALTER TABLE `garbage`
- ADD PRIMARY KEY (`garbageID`);
+  ADD PRIMARY KEY (`garbageID`);
 
 --
--- Index pour la table `gates`
+-- Indexes for table `gates`
 --
 ALTER TABLE `gates`
- ADD PRIMARY KEY (`gateID`);
+  ADD PRIMARY KEY (`gateID`);
 
 --
--- Index pour la table `gouvernement`
+-- Indexes for table `gouvernement`
 --
 ALTER TABLE `gouvernement`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `gps`
+-- Indexes for table `gps`
 --
 ALTER TABLE `gps`
- ADD PRIMARY KEY (`locationID`);
+  ADD PRIMARY KEY (`locationID`);
 
 --
--- Index pour la table `graffiti`
+-- Indexes for table `graffiti`
 --
 ALTER TABLE `graffiti`
- ADD PRIMARY KEY (`graffitiID`);
+  ADD PRIMARY KEY (`graffitiID`);
 
 --
--- Index pour la table `gunracks`
+-- Indexes for table `gunracks`
 --
 ALTER TABLE `gunracks`
- ADD PRIMARY KEY (`rackID`);
+  ADD PRIMARY KEY (`rackID`);
 
 --
--- Index pour la table `houses`
+-- Indexes for table `houses`
 --
 ALTER TABLE `houses`
- ADD PRIMARY KEY (`houseID`);
+  ADD PRIMARY KEY (`houseID`);
 
 --
--- Index pour la table `housestorage`
+-- Indexes for table `housestorage`
 --
 ALTER TABLE `housestorage`
- ADD PRIMARY KEY (`itemID`);
+  ADD PRIMARY KEY (`itemID`);
 
 --
--- Index pour la table `impoundlots`
+-- Indexes for table `impoundlots`
 --
 ALTER TABLE `impoundlots`
- ADD PRIMARY KEY (`impoundID`);
+  ADD PRIMARY KEY (`impoundID`);
 
 --
--- Index pour la table `inventory`
+-- Indexes for table `inventory`
 --
 ALTER TABLE `inventory`
- ADD PRIMARY KEY (`invID`);
+  ADD PRIMARY KEY (`invID`);
 
 --
--- Index pour la table `jobs`
+-- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
- ADD PRIMARY KEY (`jobID`);
+  ADD PRIMARY KEY (`jobID`);
 
 --
--- Index pour la table `namechanges`
+-- Indexes for table `namechanges`
 --
 ALTER TABLE `namechanges`
- ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Index pour la table `news`
+-- Indexes for table `news`
 --
 ALTER TABLE `news`
- ADD PRIMARY KEY (`news_id`);
+  ADD PRIMARY KEY (`news_id`);
 
 --
--- Index pour la table `plants`
+-- Indexes for table `openworldmaison`
+--
+ALTER TABLE `openworldmaison`
+  ADD PRIMARY KEY (`OpenWorldMID`);
+
+--
+-- Indexes for table `plants`
 --
 ALTER TABLE `plants`
- ADD PRIMARY KEY (`plantID`);
+  ADD PRIMARY KEY (`plantID`);
 
 --
--- Index pour la table `pumps`
+-- Indexes for table `pumps`
 --
 ALTER TABLE `pumps`
- ADD PRIMARY KEY (`pumpID`);
+  ADD PRIMARY KEY (`pumpID`);
 
 --
--- Index pour la table `salairefbi`
+-- Indexes for table `salairefbi`
 --
 ALTER TABLE `salairefbi`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairejob`
+-- Indexes for table `salairejob`
 --
 ALTER TABLE `salairejob`
- ADD KEY `id` (`id`);
+  ADD KEY `id` (`id`);
 
 --
--- Index pour la table `salairejournaliste`
+-- Indexes for table `salairejournaliste`
 --
 ALTER TABLE `salairejournaliste`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairelivreurbiz`
+-- Indexes for table `salairelivreurbiz`
 --
 ALTER TABLE `salairelivreurbiz`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairemairie`
+-- Indexes for table `salairemairie`
 --
 ALTER TABLE `salairemairie`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairemecano3`
+-- Indexes for table `salairemecano3`
 --
 ALTER TABLE `salairemecano3`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairemecano4`
+-- Indexes for table `salairemecano4`
 --
 ALTER TABLE `salairemecano4`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairepolice`
+-- Indexes for table `salairepolice`
 --
 ALTER TABLE `salairepolice`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salaireswat`
+-- Indexes for table `salaireswat`
 --
 ALTER TABLE `salaireswat`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salaireurgentiste`
+-- Indexes for table `salaireurgentiste`
 --
 ALTER TABLE `salaireurgentiste`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairevendeurrue`
+-- Indexes for table `salairevendeurrue`
 --
 ALTER TABLE `salairevendeurrue`
- ADD PRIMARY KEY (`idfaction`);
+  ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `serveursetting`
+-- Indexes for table `serveursetting`
 --
 ALTER TABLE `serveursetting`
- ADD PRIMARY KEY (`id`), ADD KEY `id` (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `verifier` (`verifier`),
+  ADD KEY `id` (`id`);
 
 --
--- Index pour la table `slotmachine`
+-- Indexes for table `slotmachine`
 --
 ALTER TABLE `slotmachine`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `speedcameras`
+-- Indexes for table `speedcameras`
 --
 ALTER TABLE `speedcameras`
- ADD PRIMARY KEY (`speedID`);
+  ADD PRIMARY KEY (`speedID`);
 
 --
--- Index pour la table `tickets`
+-- Indexes for table `tickets`
 --
 ALTER TABLE `tickets`
- ADD PRIMARY KEY (`ticketID`);
+  ADD PRIMARY KEY (`ticketID`);
 
 --
--- Index pour la table `vendors`
+-- Indexes for table `vendors`
 --
 ALTER TABLE `vendors`
- ADD PRIMARY KEY (`vendorID`);
+  ADD PRIMARY KEY (`vendorID`);
 
 --
--- Index pour la table `votes`
+-- Indexes for table `votes`
 --
 ALTER TABLE `votes`
- ADD UNIQUE KEY `Names` (`Name`);
+  ADD UNIQUE KEY `Names` (`Name`);
 
 --
--- Index pour la table `warrants`
+-- Indexes for table `warrants`
 --
 ALTER TABLE `warrants`
- ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`);
 
 --
--- AUTO_INCREMENT pour les tables exportées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `accounts`
+-- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=284;
+  MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=380;
+
 --
--- AUTO_INCREMENT pour la table `atm`
+-- AUTO_INCREMENT for table `actors`
+--
+ALTER TABLE `actors`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `atm`
 --
 ALTER TABLE `atm`
-MODIFY `atmID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=209;
+  MODIFY `atmID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `backpackitems`
+-- AUTO_INCREMENT for table `backpackitems`
 --
 ALTER TABLE `backpackitems`
-MODIFY `itemID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `itemID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `backpacks`
+-- AUTO_INCREMENT for table `backpacks`
 --
 ALTER TABLE `backpacks`
-MODIFY `backpackID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `backpackID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `banqueentreprise`
+-- AUTO_INCREMENT for table `banqueentreprise`
 --
 ALTER TABLE `banqueentreprise`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `batiements`
+-- AUTO_INCREMENT for table `batiements`
 --
 ALTER TABLE `batiements`
-MODIFY `batiementID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `batiementID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `billboards`
+-- AUTO_INCREMENT for table `billboards`
 --
 ALTER TABLE `billboards`
-MODIFY `bbID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+  MODIFY `bbID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `businesses`
+-- AUTO_INCREMENT for table `businesses`
 --
 ALTER TABLE `businesses`
-MODIFY `bizID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=75;
+  MODIFY `bizID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
--- AUTO_INCREMENT pour la table `caisses`
+-- AUTO_INCREMENT for table `caisses`
 --
 ALTER TABLE `caisses`
-MODIFY `caisseID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `caisseID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `cars`
+-- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=269;
+  MODIFY `carID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+
 --
--- AUTO_INCREMENT pour la table `carstorage`
+-- AUTO_INCREMENT for table `carstorage`
 --
 ALTER TABLE `carstorage`
-MODIFY `itemID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `itemID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `characters`
+-- AUTO_INCREMENT for table `characters`
 --
 ALTER TABLE `characters`
-MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=330;
+  MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
+
 --
--- AUTO_INCREMENT pour la table `contacts`
+-- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-MODIFY `contactID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
+  MODIFY `contactID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `crates`
+-- AUTO_INCREMENT for table `crates`
 --
 ALTER TABLE `crates`
-MODIFY `crateID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `crateID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
--- AUTO_INCREMENT pour la table `cvfbi`
+-- AUTO_INCREMENT for table `cvfbi`
 --
 ALTER TABLE `cvfbi`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvjournaliste`
+-- AUTO_INCREMENT for table `cvjournaliste`
 --
 ALTER TABLE `cvjournaliste`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvlivraisonbiz`
+-- AUTO_INCREMENT for table `cvlivraisonbiz`
 --
 ALTER TABLE `cvlivraisonbiz`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvmairie`
+-- AUTO_INCREMENT for table `cvmairie`
 --
 ALTER TABLE `cvmairie`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvmecanozone3`
+-- AUTO_INCREMENT for table `cvmecanozone3`
 --
 ALTER TABLE `cvmecanozone3`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvmecanozone4`
+-- AUTO_INCREMENT for table `cvmecanozone4`
 --
 ALTER TABLE `cvmecanozone4`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvpetitlivreur`
+-- AUTO_INCREMENT for table `cvpetitlivreur`
 --
 ALTER TABLE `cvpetitlivreur`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvpolice`
+-- AUTO_INCREMENT for table `cvpolice`
 --
 ALTER TABLE `cvpolice`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvswat`
+-- AUTO_INCREMENT for table `cvswat`
 --
 ALTER TABLE `cvswat`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvtaxi`
+-- AUTO_INCREMENT for table `cvtaxi`
 --
 ALTER TABLE `cvtaxi`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvurgentiste`
+-- AUTO_INCREMENT for table `cvurgentiste`
 --
 ALTER TABLE `cvurgentiste`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `cvvendeurrue`
+-- AUTO_INCREMENT for table `cvvendeurrue`
 --
 ALTER TABLE `cvvendeurrue`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `dealervehicles`
+-- AUTO_INCREMENT for table `dealervehicles`
 --
 ALTER TABLE `dealervehicles`
-MODIFY `vehID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=89;
+  MODIFY `vehID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
--- AUTO_INCREMENT pour la table `detectors`
+-- AUTO_INCREMENT for table `death`
+--
+ALTER TABLE `death`
+  MODIFY `dID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `detectors`
 --
 ALTER TABLE `detectors`
-MODIFY `detectorID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `detectorID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
--- AUTO_INCREMENT pour la table `dropped`
+-- AUTO_INCREMENT for table `dropped`
 --
 ALTER TABLE `dropped`
-MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=48;
+  MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+
 --
--- AUTO_INCREMENT pour la table `entrances`
+-- AUTO_INCREMENT for table `entrances`
 --
 ALTER TABLE `entrances`
-MODIFY `entranceID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=98;
+  MODIFY `entranceID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+
 --
--- AUTO_INCREMENT pour la table `factions`
+-- AUTO_INCREMENT for table `factions`
 --
 ALTER TABLE `factions`
-MODIFY `factionID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+  MODIFY `factionID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
 --
--- AUTO_INCREMENT pour la table `factorystock`
+-- AUTO_INCREMENT for table `factorystock`
 --
 ALTER TABLE `factorystock`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `furniture`
+-- AUTO_INCREMENT for table `furniture`
 --
 ALTER TABLE `furniture`
-MODIFY `furnitureID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `furnitureID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
--- AUTO_INCREMENT pour la table `garbage`
+-- AUTO_INCREMENT for table `garbage`
 --
 ALTER TABLE `garbage`
-MODIFY `garbageID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=253;
+  MODIFY `garbageID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+
 --
--- AUTO_INCREMENT pour la table `gates`
+-- AUTO_INCREMENT for table `gates`
 --
 ALTER TABLE `gates`
-MODIFY `gateID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
+  MODIFY `gateID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
--- AUTO_INCREMENT pour la table `gouvernement`
+-- AUTO_INCREMENT for table `gouvernement`
 --
 ALTER TABLE `gouvernement`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `gps`
+-- AUTO_INCREMENT for table `gps`
 --
 ALTER TABLE `gps`
-MODIFY `locationID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `locationID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `graffiti`
+-- AUTO_INCREMENT for table `graffiti`
 --
 ALTER TABLE `graffiti`
-MODIFY `graffitiID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `graffitiID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `gunracks`
+-- AUTO_INCREMENT for table `gunracks`
 --
 ALTER TABLE `gunracks`
-MODIFY `rackID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `rackID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `houses`
+-- AUTO_INCREMENT for table `houses`
 --
 ALTER TABLE `houses`
-MODIFY `houseID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=804;
+  MODIFY `houseID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `housestorage`
+-- AUTO_INCREMENT for table `housestorage`
 --
 ALTER TABLE `housestorage`
-MODIFY `itemID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `itemID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `impoundlots`
+-- AUTO_INCREMENT for table `impoundlots`
 --
 ALTER TABLE `impoundlots`
-MODIFY `impoundID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+  MODIFY `impoundID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `inventory`
+-- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-MODIFY `invID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=40;
+  MODIFY `invID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `jobs`
+-- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-MODIFY `jobID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+  MODIFY `jobID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
 --
--- AUTO_INCREMENT pour la table `namechanges`
+-- AUTO_INCREMENT for table `namechanges`
 --
 ALTER TABLE `namechanges`
-MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `news`
+-- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-MODIFY `news_id` int(4) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `news_id` int(4) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `plants`
+-- AUTO_INCREMENT for table `openworldmaison`
+--
+ALTER TABLE `openworldmaison`
+  MODIFY `OpenWorldMID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `plants`
 --
 ALTER TABLE `plants`
-MODIFY `plantID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `plantID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
--- AUTO_INCREMENT pour la table `pumps`
+-- AUTO_INCREMENT for table `pumps`
 --
 ALTER TABLE `pumps`
-MODIFY `pumpID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `pumpID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `salairefbi`
+-- AUTO_INCREMENT for table `salairefbi`
 --
 ALTER TABLE `salairefbi`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairejournaliste`
+-- AUTO_INCREMENT for table `salairejournaliste`
 --
 ALTER TABLE `salairejournaliste`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairelivreurbiz`
+-- AUTO_INCREMENT for table `salairelivreurbiz`
 --
 ALTER TABLE `salairelivreurbiz`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairemairie`
+-- AUTO_INCREMENT for table `salairemairie`
 --
 ALTER TABLE `salairemairie`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairemecano3`
+-- AUTO_INCREMENT for table `salairemecano3`
 --
 ALTER TABLE `salairemecano3`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairemecano4`
+-- AUTO_INCREMENT for table `salairemecano4`
 --
 ALTER TABLE `salairemecano4`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairepolice`
+-- AUTO_INCREMENT for table `salairepolice`
 --
 ALTER TABLE `salairepolice`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salaireswat`
+-- AUTO_INCREMENT for table `salaireswat`
 --
 ALTER TABLE `salaireswat`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salaireurgentiste`
+-- AUTO_INCREMENT for table `salaireurgentiste`
 --
 ALTER TABLE `salaireurgentiste`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `salairevendeurrue`
+-- AUTO_INCREMENT for table `salairevendeurrue`
 --
 ALTER TABLE `salairevendeurrue`
-MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idfaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `slotmachine`
+-- AUTO_INCREMENT for table `slotmachine`
 --
 ALTER TABLE `slotmachine`
-MODIFY `id` int(4) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `speedcameras`
+-- AUTO_INCREMENT for table `speedcameras`
 --
 ALTER TABLE `speedcameras`
-MODIFY `speedID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=351;
+  MODIFY `speedID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT pour la table `tickets`
+-- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-MODIFY `ticketID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+  MODIFY `ticketID` int(12) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT pour la table `vendors`
+-- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-MODIFY `vendorID` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=224;
+  MODIFY `vendorID` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
--- AUTO_INCREMENT pour la table `warrants`
+-- AUTO_INCREMENT for table `warrants`
 --
 ALTER TABLE `warrants`
-MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(12) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

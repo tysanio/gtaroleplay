@@ -23,3 +23,30 @@ la stamina est représenté par la bar en haut a droite et peut etre modifier se
 on change les job comment il sont fait pour avoir une uniformisation partout
 -------------modification des commande faction
 on peut maintenant déterminer lemplacement de group de commande avec 3 emplacement
+
+
+01/10
+modification complete du tuning maintenant complete!
+modification de quelque typos
+ajoute de la fonction de l'object gold bar pour la commande echanger
+
+01/12
+Finission de la factionacces mécano avec les positions 1,2,3-reparer 1 tunning 2 poser boite 3
+Finission de la factionacces mafia création d'armes pos 1,2
+Ajout de bandage et de paquet de bandage qui est livrée au médecin
+Finission de la faction camionneur et des points a faire 1=job 2=entrepot 3=job au besoin
+
+01/20
+Correction de certain typos
+
+01/28
+Refont du tutoriel pour revenir comme celui de base *pas de bug
+Ajoute des systemes pour le bot discord et sont arrangement de gens vérifier
+-------modification du systeme discord et le joueur doit etre vérifier pour continuer sinon il restera bloquer dans le tuto - peut etre désactivé dans le systeme de whiteliste PS peut causé des probleme si on utilise le systeme complet d'ajout automatique
+-------on poura définir les options de auto-role de faction/vérifier/admin dans le /serveur
+
+02/01
+Correction prépatch de la v80 avec tout les tables mysql corrigé
+Correction de tout se qui est role discord id et role vérifier
+Ajoute des ID role admin 1 a 4 qui servira plutard (v81)
+Modification dans le /editfaction ID role qui servira a ajouter automatiquement le role au joueur sur discord qui servira plutard (v81)
