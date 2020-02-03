@@ -6687,7 +6687,7 @@ Dialog:DateBirth(playerid, response, listitem, inputtext[])
 	        Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iYear < 1900 || iYear > 1950) { // a changer pour les année qu'on veux
-			return Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année) entre 1900 et 1950:", "Envoyer", "Annuler");
+			return Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année) entre 1900 et 1950:", "Envoyer", "Annuler");
 		}
 		else if (iMonth < 1 || iMonth > 12) {
 		    Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
@@ -22008,7 +22008,7 @@ Dialog:ModifcationInfoPlus0(playerid, response, listitem, inputtext[])
 	        Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iYear < 1945 || iYear > 2000) {
-		    Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		    Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
 		else if (iMonth < 1 || iMonth > 12) {
 		    Dialog_Show(playerid, ModifcationInfoPlus10, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");

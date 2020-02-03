@@ -3137,7 +3137,6 @@ script PlayerCheck()
 		                PlayerData[i][pTutorialTime] = 0;
 		                SetPlayerCameraLookAt(i,1404.5933, -1594.4730, 595.4797);
 						SetPlayerCameraPos(i, 1403.7042, -1594.0187, 596.0647);//nImmigrant
-						Dialog_Show(i, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
 		            }
 		        }
 		    }
@@ -4869,7 +4868,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 	    static string[320];
 	    
-		if (oldkeys & KEY_CROUCH || PlayerData[playerid][pTutorialStage] == 2 && (IsPlayerInRangeOfPoint(playerid, 1.5,-70.9738,-1574.2937,3.0855) || IsPlayerInRangeOfPoint(playerid, 1.5,2510.9900,-1728.5364,778.3384) || IsPlayerInRangeOfPoint(playerid, 3.0,1742.7317,-1948.1010,14.5589) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.8559) || IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) ||IsPlayerInRangeOfPoint(playerid, 1.5,-1967.6317,146.4278,28.2107) || IsPlayerInRangeOfPoint(playerid, 1.5,1646.6123,-2299.5503,-0.355) ||IsPlayerInRangeOfPoint(playerid, 1.5,-1437.2219,-297.3453,14.6334) || IsPlayerInRangeOfPoint(playerid, 1.5,529.4365,-1817.3754,15.3615) || IsPlayerInRangeOfPoint(playerid, 1.5,529.4365,-1817.3754,515.3615)))
+		if (PlayerData[playerid][pTutorialStage] == 2 && IsPlayerInRangeOfPoint(playerid, 1.5, -226.4219, 1408.4594, 26.7734) && GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK)
 		{
 		    Inventory_Add(playerid, "Demo Soda", 1543);
 		    DestroyPlayerObject(playerid, PlayerData[playerid][pTutorialObject]);
@@ -6021,12 +6020,12 @@ script OnPlayerEnterCheckpoint(playerid)
 	    DisablePlayerCheckpoint(playerid);
 		if (PlayerData[playerid][pTutorialStage] == 5)
 		{
-		    Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici", "Voila", "Non");
+		    Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!", "Voila", "Non");
 		}
 		if (PlayerData[playerid][pTutorialStage] == 6 && IsPlayerInRangeOfPoint(playerid, 1.5, -228.8403, 1401.1831, 27.7656))
 		{
 		    for (new i = 0; i < 5; i ++) {
-		        SendClientMessage(playerid, -1, "");
+		        SendClientMessage(playerid,-1,"");
 			}
 			new serveurinfo;
 			if(info_serveursetting[serveurinfo][settingvilleactive] ==  1 || info_serveursetting[serveurinfo][settingvilleactive] == 2)
@@ -8834,9 +8833,28 @@ script OnPlayerSpawn(playerid)
 	}
 	else if (!PlayerData[playerid][pCreated])
 	{
-	    Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
-        SetPlayerCameraLookAt(playerid,1404.5933, -1594.4730, 595.4797);
-		SetPlayerCameraPos(playerid, 1403.7042, -1594.0187, 596.0647);
+		for (new i = 23; i < 34; i ++) {
+			PlayerTextDrawHide(playerid, PlayerData[playerid][pTextdraws][i]);
+		}
+		for (new i = 0; i < 25; i ++) {
+			SendClientMessage(playerid, -1, "");
+		}
+		CancelSelectTextDraw(playerid);
+		TogglePlayerControllable(playerid, 1);
+        SendTutorialMessage(playerid,"Dirigez-vous vers la bouteille et accroupisser vous au dessus de celle-ci.");
+		PlayerData[playerid][pTutorialStage] = 1;
+		PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid, 1543, -226.4219, 1408.4594, 26.7734, 0.0, 0.0, 0.0);
+
+		SetPlayerCheckpoint(playerid, -226.4219, 1408.4594, 27.7734, 0.5);
+
+		SetPlayerPos(playerid, -226.2436, 1400.4767, 27.7656);
+		SetPlayerFacingAngle(playerid, 0.0000);
+
+		SetPlayerInterior(playerid, 18);
+		SetPlayerVirtualWorld(playerid, (playerid + 2000));
+
+		SetCameraBehindPlayer(playerid);
+		PlayerData[playerid][pThirst] = 80;
 	}
 	else
 	{
@@ -10353,7 +10371,6 @@ script OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 
 				SetCameraBehindPlayer(playerid);
 				ShowHungerTextdraw(playerid, 1);
-
 				PlayerData[playerid][pThirst] = 80;
 			}
 			else if (playertextid == PlayerData[playerid][pTextdraws][47])
