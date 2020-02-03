@@ -38,8 +38,8 @@
 #if !defined FLOAT_NEG_INFINITY
         #define FLOAT_NEG_INFINITY (Float:0xFF800000)
 #endif
-#if !defined FLOAT_NAN
-        #define FLOAT_NAN     (Float:0xFFFFFFFF)
+#if !defined FLOAT_NAN1
+        #define FLOAT_NAN1     (Float:0xFFFFFFFF)
 #endif
 
 /* Callbacks */
@@ -441,7 +441,7 @@ modelid - object's modelid, used to get its size with modelsizes include.
 mass - object's mass, it is like its weight and is used in collisions.
 size - object's sphere radius, taken from modelsizes.inc by default.
 mode - PHY_MODE_3D or PHY_MODE_2D. */
-stock PHY_InitObject(objectid, modelid = 0, Float:mass = 1.0, Float:size = FLOAT_NAN, mode = PHY_MODE_3D)
+stock PHY_InitObject(objectid, modelid = 0, Float:mass = 1.0, Float:size = FLOAT_NAN1, mode = PHY_MODE_3D)
 {
         if(IsValidObject(objectid))
         {
@@ -598,7 +598,7 @@ high - The highest Z that the object can have (you can use FLOAT_INFINITY). If i
 (When you use PHY_InitObject lowest Z is set to the current object's Z and highest Z to FLOAT_INFINITY.
 constant - It should be from 0.0 to 1.0. If it is 1.0 the object doesn't lose velocity,
 if it is 0.0 the object stops when it bounces. It could be a middle ground.*/
-stock PHY_SetObjectZBound(objectid, Float:low = FLOAT_NAN, Float:high = FLOAT_NAN, Float:constant = 0.0)
+stock PHY_SetObjectZBound(objectid, Float:low = FLOAT_NAN1, Float:high = FLOAT_NAN1, Float:constant = 0.0)
 {
     if(PHY_Object[objectid][PHY_Properties] & PHY_OBJECT_USED)
         {

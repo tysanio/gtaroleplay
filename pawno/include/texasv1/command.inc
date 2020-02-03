@@ -236,7 +236,7 @@ CMD:ahelp(playerid, params[])
  	}
 	if (PlayerData[playerid][pAdmin] >= 2) {
 	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber, /blacklist.");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /addseat, /unban.");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /unban.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 3) {
         SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /asellmaison, /asellbiz, /jetpack, /setweather, /setfuel, /setcarhp, /spawnitem.");
@@ -540,9 +540,7 @@ CMD:rapport(playerid, params[])
 			if(PlayerData[i][pTester] > 0){
 				SendClientMessageEx(i, COLOR_PINK, "[RAPPORT %d]: %s (ID: %d) reporte: %s", reportid, ReturnName(playerid, 0), playerid, params);
 			}
-			if(PlayerData[i][pDiscordChat] == 1){
-			SendDC(channelaide, "[RAPPORT %d]: %s (ID: %d) reporte: %s",reportid, ReturnName(playerid, 0), playerid, params);
-			}
+			SendDC(channelstaff, "[RAPPORT %d]: %s (ID: %d) reporte: %s",reportid, ReturnName(playerid, 0), playerid, params);
 		}
 		PlayerData[playerid][pReportTime] = gettime() + 60;
 		SendServerMessage(playerid, "Rapport envoyé aux admins connectés et sur discord si vous avez activé l'option.");
@@ -1161,7 +1159,7 @@ CMD:clearchat(playerid, params[])
 CMD:creermaison(playerid, params[])
 {
 	static price,id,address[32];
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[32]", price, address))
 	    return SendSyntaxMessage(playerid, "/creermaison [price] [addresse]");
@@ -1177,7 +1175,7 @@ CMD:creermaison(playerid, params[])
 CMD:supmaison(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supmaison [id]");
@@ -1798,6 +1796,8 @@ CMD:accepter(playerid, params[])
 	    new targetid = PlayerData[playerid][pck],query[256];
 	    if (!IsPlayerNearPlayer(playerid, targetid, 3.0))
 		    return SendErrorMessage(playerid, "Vous n'êtes pas proche de ce joueur.");
+		mysql_format(g_iHandle,query, sizeof(query), "INSERT INTO `death` (`dName`,`dDate`) VALUES('%s','%s')",ReturnName(playerid),ReturnDate());
+		mysql_tquery(g_iHandle, query);
 		mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `inventory` WHERE `ID` = %d",PlayerData[playerid][pID]);
 		mysql_tquery(g_iHandle, query);
 		mysql_format(g_iHandle,query, sizeof(query), "DELETE FROM `characters` WHERE `ID` = %d",PlayerData[playerid][pID]);
@@ -1904,7 +1904,7 @@ CMD:accepter(playerid, params[])
 CMD:editmaison(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -2039,7 +2039,7 @@ CMD:proche(playerid, params[])
 CMD:editbiz(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -2258,7 +2258,7 @@ CMD:produits(playerid, params[])
 CMD:creerbiz(playerid, params[])
 {
     static type, price,id;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "dd", type, price))
  	{
@@ -2302,7 +2302,7 @@ CMD:bheures(playerid,params[])
 CMD:bizstate(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/bizstate [biz id]");
@@ -2317,7 +2317,7 @@ CMD:bizstate(playerid, params[])
 CMD:supbiz(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supbiz [biz id]");
@@ -2367,10 +2367,10 @@ CMD:boire(playerid, params[])
  		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
 	}
-	else if (!strcmp(params, "aBTool", true))
+	else if (!strcmp(params, "alcool", true))
 	{
-	    if (!Inventory_HasItem(playerid, "aBTool"))
-	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'aBTool sur vous.");
+	    if (!Inventory_HasItem(playerid, "alcool"))
+	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'alcool sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
         PlayerData[playerid][pDrinking] = 2;
@@ -2378,7 +2378,7 @@ CMD:boire(playerid, params[])
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
 		Inventory_Add(playerid, "Bouteille vide", 1484);
-		Inventory_Remove(playerid, "aBTool");
+		Inventory_Remove(playerid, "alcool");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_WINE);
  		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
@@ -2583,7 +2583,7 @@ CMD:passerpermis4321(playerid, params[])
 }
 CMD:creerentrer(playerid, params[])
 {
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (isnull(params) || strlen(params) > 32)
 	    return SendSyntaxMessage(playerid, "/creerentrer [name]");
@@ -2596,7 +2596,7 @@ CMD:creerentrer(playerid, params[])
 CMD:editentrer(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -2824,7 +2824,7 @@ CMD:editentrer(playerid, params[])
 CMD:supentrer(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supentrer [entrance id]");
@@ -2935,7 +2935,7 @@ CMD:sdfghjklloikjiujytr(playerid, params[])
 CMD:creerpump(playerid, params[])
 {
 	static id,bizid = -1;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", bizid))
 	    return SendSyntaxMessage(playerid, "/creerpump [biz id]");
@@ -2956,7 +2956,7 @@ CMD:creerpump(playerid, params[])
 CMD:editpump(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/editpump [pump id]");
@@ -2971,7 +2971,7 @@ CMD:editpump(playerid, params[])
 CMD:suppump(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supump [pump id]");
@@ -2984,7 +2984,7 @@ CMD:suppump(playerid, params[])
 CMD:setpump(playerid, params[])
 {
 	static id = 0,amount;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "dd", id, amount))
 	    return SendSyntaxMessage(playerid, "/setpump [pump id] [fuel amount]");
@@ -3195,7 +3195,7 @@ CMD:fourniture(playerid, params[])
 CMD:creerjob(playerid, params[])
 {
 	static type,id = -1;
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", type))
 	    return SendSyntaxMessage(playerid, "/creerjob [type]");
@@ -3210,7 +3210,7 @@ CMD:creerjob(playerid, params[])
 CMD:supjob(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supjob [job id]");
@@ -3223,7 +3223,7 @@ CMD:supjob(playerid, params[])
 CMD:editjob(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -3440,6 +3440,7 @@ CMD:reparermoteur(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
 	if (!Inventory_HasItem(playerid, "Boite a outils"))
 	    return SendErrorMessage(playerid, "Vous n'avez pas de Boite a outils sur vous.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
 	if (PlayerData[playerid][pRepairTime] > gettime())
 	    return SendErrorMessage(playerid, "Vous devez attendre %d secondes avant de refaire cela.", PlayerData[playerid][pRepairTime] - gettime());
 	for (new i = 1; i != MAX_VEHICLES; i ++) if (IsValidVehicle(i) && IsPlayerNearHood(playerid, i))
@@ -3468,14 +3469,14 @@ CMD:reparercaro(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
 	if (!Inventory_HasItem(playerid, "Boite a outils"))
 	    return SendErrorMessage(playerid, "Vous n'avez pas de Boite a outils sur toi.");
+	if (!Inventory_HasItem(playerid, "carrosserie"))
+		return SendErrorMessage(playerid, "Vous n'avez pas de carrosseries dans votre inventaire.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
 	if (PlayerData[playerid][pRepairTime] > gettime())
 	    return SendErrorMessage(playerid, "Vous devez attendre %d secondes avant de refaire cela.", PlayerData[playerid][pRepairTime] - gettime());
 	for (new i = 1; i != MAX_VEHICLES; i ++) if (IsValidVehicle(i) && IsPlayerNearHood(playerid, i))
 	{
-		new stockjobinfoid;
-		if(info_stockjobinfo[stockjobinfoid][stocktunningcaro] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-		if( info_stockjobinfo[stockjobinfoid][stocktunningcaro] > 0) {info_stockjobinfo[stockjobinfoid][stocktunningcaro] -= 1;}
-		if( info_stockjobinfo[stockjobinfoid][stocktunningcaro] < 0) {info_stockjobinfo[stockjobinfoid][stocktunningcaro] = 0;}
+		Inventory_Remove(playerid,"carrosserie",1);
 		ApplyAnimation(playerid, "BD_FIRE", "wash_up", 4.1, 0, 0, 0, 0, 0, 1);
         CoreVehicles[i][vehRepairing] = true;
         SetTimerEx("RepairCarCaro", 5000, false, "dd", playerid, i);
@@ -3495,6 +3496,7 @@ CMD:nitros(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
 	if (!Inventory_HasItem(playerid, "Bonbonne de NOS"))
 	    return SendErrorMessage(playerid, "Vous n'avez pas de NOS canister sur toi.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
 	for (new i = 1; i != MAX_VEHICLES; i ++) if (IsValidVehicle(i) && IsPlayerNearHood(playerid, i))
 	{
 	    if (!IsEngineVehicle(i) || IsABike(i) || IsABoat(i) || IsAPlane(i) || IsAHelicopter(i))
@@ -3524,12 +3526,151 @@ CMD:peindre(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'avez pas de bombe de peinture.");
 	if (IsPlayerInAnyVehicle(playerid))
 	    return SendErrorMessage(playerid, "Vous devez êtres hors du véhicule.");
-	static
- 		colors[256];
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
+	static colors[256];
 	for (new i = 0; i < sizeof(colors); i ++) {
 		colors[i] = i;
    	}
    	ShowColorSelectionMenu(playerid, MODEL_SELECTION_COLOR, colors);
+	return 1;
+}
+CMD:tunning(playerid, params[])
+{
+	new facass = PlayerData[playerid][pFaction];
+	if (FactionData[facass][factionacces][9] == 0)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
+	if (!IsPlayerInAnyVehicle(playerid))
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un véhicule.");
+	if (!IsDoorVehicle(GetPlayerVehicleID(playerid)))
+	    return SendErrorMessage(playerid, "Tu ne peut tuné ce véhicule.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
+	AddComponent(GetPlayerVehicleID(playerid), 1087);
+	SendVehiculeMessage(playerid, "Tu a ajouté hydraulics a ce vehicule.");
+	return 1;
+}
+CMD:colorcar(playerid, params[])
+{
+	static color1,color2;
+	new facass = PlayerData[playerid][pFaction];
+	if (FactionData[facass][factionacces][9] == 0)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
+	if (!IsPlayerInAnyVehicle(playerid))
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un vehicule.");
+	if (!Inventory_HasItem(playerid, "Bombe de peinture"))
+	    return SendErrorMessage(playerid, "Vous n'avez pas de bombe de peinture.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
+	if (sscanf(params, "dd", color1, color2))
+	    return SendSyntaxMessage(playerid, "/colorcar [color 1] [color 2]");
+	if (color1 < 0 || color1 > 255)
+	    return SendErrorMessage(playerid, "Premiere couleur entre 0 et max 255.");
+    if (color2 < 0 || color2 > 255)
+	    return SendErrorMessage(playerid, "Seconde couleur entre 0 et max 255.");
+	SetVehicleColor(GetPlayerVehicleID(playerid), color1, color2);
+	Inventory_Remove(playerid, "Bomb de peinture",1);
+	SendVehiculeMessage(playerid, "Vous avez changé la couleurs de ce vehicule a %d, %d.", color1, color2);
+	return 1;
+}
+CMD:paintjob(playerid, params[])
+{
+	static paintjobid;
+	new facass = PlayerData[playerid][pFaction];
+	if (FactionData[facass][factionacces][9] == 0)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
+	if (!IsPlayerInAnyVehicle(playerid))
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un vehicule.");
+	if (!Inventory_HasItem(playerid, "Bombe de peinture"))
+	    return SendErrorMessage(playerid, "Vous n'avez pas de bombe de peinture.");
+	if (sscanf(params, "d", paintjobid))
+	    return SendSyntaxMessage(playerid, "/paintjob [paintjob ID] (-1 a disable)");
+	if (paintjobid < -1 || paintjobid > 5)
+	    return SendErrorMessage(playerid, "Le numéro du paintjob ne peut être -1 et max 5.");
+	if (paintjobid == -1)
+		paintjobid = 6;
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
+	SetVehiclePaintjob(GetPlayerVehicleID(playerid), paintjobid);
+	Inventory_Remove(playerid, "Bomb de peinture",1);
+	SendVehiculeMessage(playerid, "Vous avez changé le paintjob de ce vehicule a %d.", paintjobid);
+	return 1;
+}
+CMD:poserboite(playerid, params[])
+{
+	new facass = PlayerData[playerid][pFaction];
+	if (FactionData[facass][factionacces][9] == 0)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
+	if (PlayerData[playerid][pCarryCrate] == -1)
+	    return SendErrorMessage(playerid, "Tu n'as pas de boite dans les mains.");
+	if (PlayerData[playerid][pCrafting])
+	    return SendErrorMessage(playerid, "Tu à déja une boite.");
+	if (CrateData[PlayerData[playerid][pCarryCrate]][crateType] < 9 || CrateData[PlayerData[playerid][pCarryCrate]][crateType] > 19)
+	    return SendErrorMessage(playerid, "Il n'y a pas de pièce dans la boite.");
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction3Pos][0],FactionData[facass][factionaction3Pos][1],FactionData[facass][factionaction3Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
+    PlayerData[playerid][pCrafting] = 1;
+	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s pose une boite et ouvre des %s.", ReturnName(playerid, 0), Crate_GetType(CrateData[PlayerData[playerid][pCarryCrate]][crateType]));
+	TogglePlayerControllable(playerid, 0);
+	SetTimerEx("CraftParts", 12000, false, "dd", playerid, PlayerData[playerid][pCarryCrate]);
+	return 1;
+}
+CMD:remorquer(playerid, params[])
+{
+	new facass = PlayerData[playerid][pFaction];
+    if (FactionData[facass][factionacces][9] == 0)
+		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
+	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 525)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans une dépanneuse.");
+	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas le chauffeur.");
+	new vehicleid = GetVehicleFromBehind(GetPlayerVehicleID(playerid));
+	if (vehicleid == INVALID_VEHICLE_ID)
+	    return SendErrorMessage(playerid, "Ce vehicle n'est pas proche.");
+	if (/*!IsDoorVehicle(vehicleid) ||*/ IsAPlane(vehicleid) || IsABoat(vehicleid) || IsAHelicopter(vehicleid))
+	    return SendErrorMessage(playerid, "Vous ne pouvez remorquer ce véhicule.");
+	AttachTrailerToVehicle(vehicleid, GetPlayerVehicleID(playerid));
+	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s à remorquer le véhicule %s.", ReturnName(playerid, 0), ReturnVehicleName(vehicleid));
+	return 1;
+}
+CMD:untow(playerid, params[])
+{
+	new facass = PlayerData[playerid][pFaction];
+    if (FactionData[facass][factionacces][9] == 0)
+		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
+	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 525)
+	    return SendErrorMessage(playerid, "Tu ne conduit pas un towtruck.");
+	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+	    return SendErrorMessage(playerid, "Tu ne conduit pas.");
+	new trailerid = GetVehicleTrailer(GetPlayerVehicleID(playerid));
+    if (!trailerid)
+	    return SendErrorMessage(playerid, "Il n'a aucun vehicule de prit.");
+	DetachTrailerFromVehicle(GetPlayerVehicleID(playerid));
+	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a déattaché le véhicule %s.", ReturnName(playerid, 0), ReturnVehicleName(trailerid));
+	return 1;
+}
+CMD:fourriere(playerid, params[])
+{
+	new price,id = Impound_Nearest(playerid),vehicleid = GetPlayerVehicleID(playerid),facass = PlayerData[playerid][pFaction];
+    if (FactionData[facass][factionacces][9] == 0)
+		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
+    if (sscanf(params, "d", price))
+        return SendSyntaxMessage(playerid, "/fourriere [prix]");
+	if (price < 1 || price > 1000)
+	    return SendErrorMessage(playerid, "Le prix ne peut pas être au-dessus 1$ et au dessus de 1000$.");
+	if (GetVehicleModel(vehicleid) != 525)
+	    return SendErrorMessage(playerid, "Vous ne conduisez pas une dépanneuse.");
+	if (id == -1)
+	    return SendErrorMessage(playerid, "Vous n'êtes proche de rien.");
+	if (!GetVehicleTrailer(vehicleid))
+	    return SendErrorMessage(playerid, "Il n'y à aucun véhicule accroché.");
+ 	vehicleid = Car_GetID(GetVehicleTrailer(vehicleid));
+	if (vehicleid == -1)
+	    return SendErrorMessage(playerid, "Vous ne pouvez remorquer ce véhicule.");
+	if (CarData[vehicleid][carImpounded] != -1)
+	    return SendErrorMessage(playerid, "ce véhicule est déja en fourriére.");
+	CarData[vehicleid][carImpounded] = ImpoundData[id][impoundID];
+	CarData[vehicleid][carImpoundPrice] = price;
+	Tax_AddMoney(price);
+	GetVehiclePos(CarData[vehicleid][carVehicle], CarData[vehicleid][carPos][0], CarData[vehicleid][carPos][1], CarData[vehicleid][carPos][2]);
+	Car_Save(vehicleid);
+	SendFactionMessage(PlayerData[playerid][pFaction], COLOR_RADIO, "RADIO: %s a mit en fourriere %s pour %s$.", ReturnName(playerid, 0), ReturnVehicleModelName(CarData[vehicleid][carModel]), FormatNumber(price));
+ 	DetachTrailerFromVehicle(GetPlayerVehicleID(playerid));
 	return 1;
 }
 CMD:acceptertaxi(playerid, params[])
@@ -3574,7 +3715,7 @@ CMD:trousse(playerid, params[])
 	    return SendErrorMessage(playerid, "Tu utilise déja une trousse de soin.");
 	if (!Inventory_HasItem(playerid, "Trousse de soin"))
 	    return SendErrorMessage(playerid, "Vous n'avez pas de trousse de soin.");
-	if (ReturnHealth(playerid) > 50)
+	if (ReturnHealth(playerid) > 75)
 	    return SendErrorMessage(playerid, "Pas besoin maintenant.");
 	if (!IsPlayerInAnyVehicle(playerid))
 	    ApplyAnimation(playerid, "SWAT", "gnstwall_injurd", 4.0, 1, 0, 0, 0, 0);
@@ -3583,6 +3724,45 @@ CMD:trousse(playerid, params[])
     SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s utilise une trousse de soin.", ReturnName(playerid, 0));
     Inventory_Remove(playerid, "Trousse de soin");
     ShowPlayerFooter(playerid, "Vous avez utiliser votre ~g~trousse de soin!");
+    return 1;
+}
+CMD:bandage(playerid, params[])
+{
+	if (PlayerData[playerid][pHospital] != -1 || PlayerData[playerid][pCuffed] || PlayerData[playerid][pInjured] || !IsPlayerSpawned(playerid))
+	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
+	if (PlayerData[playerid][pFirstAid])
+	    return SendErrorMessage(playerid, "Tu utilise déja une trousse de bandage.");
+	if (!Inventory_HasItem(playerid, "paquet de bandage"))
+	    return SendErrorMessage(playerid, "Vous n'avez pas de paquet de bandage.");
+	if (ReturnHealth(playerid) > 50)
+	    return SendErrorMessage(playerid, "Pas besoin maintenant.");
+	if (!IsPlayerInAnyVehicle(playerid))
+	    ApplyAnimation(playerid, "SWAT", "gnstwall_injurd", 4.0, 1, 0, 0, 0, 0);
+    PlayerData[playerid][pFirstAid] = true;
+    PlayerData[playerid][pAidTimer] = SetTimerEx("FirstAidUpdate1", 1000, true, "d", playerid);
+    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s utilise un paquet de bandage.", ReturnName(playerid, 0));
+    Inventory_Remove(playerid, "paquet de bandage");
+	Inventory_Add(playerid,"bandage",9);
+    ShowPlayerFooter(playerid, "Vous avez utiliser votre ~g~paquet de bandage!");
+    return 1;
+}
+CMD:bandages(playerid, params[])
+{
+	if (PlayerData[playerid][pHospital] != -1 || PlayerData[playerid][pCuffed] || PlayerData[playerid][pInjured] || !IsPlayerSpawned(playerid))
+	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
+	if (PlayerData[playerid][pFirstAid])
+	    return SendErrorMessage(playerid, "Tu utilise déja un bandage.");
+	if (!Inventory_HasItem(playerid, "bandage"))
+	    return SendErrorMessage(playerid, "Vous n'avez pas de bandage.");
+	if (ReturnHealth(playerid) > 50)
+	    return SendErrorMessage(playerid, "Pas besoin maintenant.");
+	if (!IsPlayerInAnyVehicle(playerid))
+	    ApplyAnimation(playerid, "SWAT", "gnstwall_injurd", 4.0, 1, 0, 0, 0, 0);
+    PlayerData[playerid][pFirstAid] = true;
+    PlayerData[playerid][pAidTimer] = SetTimerEx("FirstAidUpdate2", 1000, true, "d", playerid);
+    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s utilise un bandage.", ReturnName(playerid, 0));
+    Inventory_Remove(playerid, "bandage",1);
+    ShowPlayerFooter(playerid, "Vous avez utiliser un ~g~bandage!");
     return 1;
 }
 CMD:tel(playerid, params[])
@@ -3859,16 +4039,16 @@ CMD:vendrefood(playerid, params[])
 CMD:creercrate(playerid, params[])
 {
 	static id = -1,type;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", type))
 	{
 	    SendSyntaxMessage(playerid, "/creercrate [type]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece d'extra | 15: Piece d'hydraulics | 16: Piece de roue | 17: Piece de carrosserie");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece d'extra | 15: Piece de muffler | 16: Piece de roue | 17: Piece de carrosserie");
 		return 1;
 	}
-	if (type < 1 || type > 20)
-	    return SendErrorMessage(playerid, "Type invalide. Essayer entre 1 a 20.");
+	if (type < 1 || type > 17)
+	    return SendErrorMessage(playerid, "Type invalide. Essayer entre 1 a 17.");
 	id = Crate_Create(playerid, type);
 	if (id == -1)
 	    return SendErrorMessage(playerid, "MAX LIMITES");
@@ -3879,7 +4059,7 @@ CMD:creercrate(playerid, params[])
 CMD:supcrate(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supcrate [crate id]");
@@ -4032,7 +4212,7 @@ CMD:recolter(playerid, params[])
 CMD:creerfaction(playerid, params[])
 {
 	static id = -1,name[32];
-    if (PlayerData[playerid][pAdmin] < 4 || !PlayerData[playerid][pFactionMod])
+    if (PlayerData[playerid][pAdmin] < 3 || !PlayerData[playerid][pFactionMod])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "s[32]", name))
 	{
@@ -4186,7 +4366,7 @@ CMD:jeter(playerid, params[])
 }
 CMD:editfaction(playerid, params[])
 {
-	static id,type[24],string[128];
+	static id,type[24],string[128],acces,discordid[20];
 	if (PlayerData[playerid][pAdmin] < 4 || !PlayerData[playerid][pFactionMod])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
@@ -4219,16 +4399,22 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "discordchat", true))
 	{
-	    new discordid[20];
 	    if (sscanf(string, "s[20]", discordid))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] [discordchat] [discord id]");
 		format(FactionData[id][factiondiscord],20,discordid);
 	    Faction_Save(id);
 		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté le discord chat a %s pour la faction %d.", ReturnName(playerid, 0),discordid,id);
 	}
+	else if (!strcmp(type, "role", true))
+	{
+	    if (sscanf(string, "s[20]", discordid))
+	        return SendSyntaxMessage(playerid, "/editfaction [id] [role] [role id]");
+		format(FactionData[id][factionrole],20,discordid);
+	    Faction_Save(id);
+		SendFactionAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté le role a %d pour la faction %d.", ReturnName(playerid, 0),discordid,id);
+	}
 	else if (!strcmp(type, "acces1", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces1 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4239,7 +4425,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces2", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces2 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4250,7 +4435,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces3", true))
 	{
-		new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces3 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4261,7 +4445,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces4", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces4 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4272,7 +4455,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces5", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces5 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4283,7 +4465,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces6", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces6 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4294,7 +4475,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces7", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces7 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4305,7 +4485,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces8", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces8 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4316,7 +4495,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces9", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces9 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4327,7 +4505,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces10", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces10 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4338,7 +4515,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces11", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces11 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4349,7 +4525,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces12", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces12 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4360,7 +4535,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces13", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces13 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4371,7 +4545,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces14", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces14 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4382,7 +4555,6 @@ CMD:editfaction(playerid, params[])
 	}
 	else if (!strcmp(type, "acces15", true))
 	{
-	    new acces;
 	    if (sscanf(string, "d", acces))
 	        return SendSyntaxMessage(playerid, "/editfaction [id] acces15 [o/n]");
 		if (acces < 0 || acces > 1)
@@ -4768,7 +4940,7 @@ CMD:creerarrest(playerid, params[])
 {
 	static id = -1,Float:x,Float:y,Float:z;
 	GetPlayerPos(playerid, x, y, z);
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = Arrest_Create(x, y, z, GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid));
 	if (id == -1)
@@ -4779,7 +4951,7 @@ CMD:creerarrest(playerid, params[])
 CMD:suparrest(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suparrest [point id]");
@@ -4927,27 +5099,6 @@ CMD:m(playerid, params[])
 	}
 	else {SendNearbyMessage(playerid, 50.0, COLOR_YELLOW, "[POLICE]: %s",params);}
 	return 1;
-}
-CMD:bandage(playerid, params[])
-{
-    static userid;
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][5] == 0)
-	    return SendErrorMessage(playerid, "Tu doit faire partie de la faction des médecin.");
-	if (sscanf(params, "u", userid))
-	    return SendSyntaxMessage(playerid, "/bandage [playerid/nom]");
-	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 6.0))
-	    return SendErrorMessage(playerid, "Ce joueur n'est point la.");
-	if (userid == playerid)
-	    return SendErrorMessage(playerid, "Tu ne faire sa sur toi méme.");
-	if (PlayerData[userid][pFirstAid])
-	    return SendErrorMessage(playerid, "Ce joueur est déja entraine d'utiliser un bandage.");
-    if (ReturnHealth(userid) > 99)
-	    return SendErrorMessage(playerid, "Ce joueur n'est pas blessé.");
-    PlayerData[userid][pFirstAid] = true;
-    PlayerData[userid][pAidTimer] = SetTimerEx("FirstAidUpdate", 1000, true, "d", userid);
-    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s ouvre son kit de soins et soigne %s.", ReturnName(playerid, 0), ReturnName(userid, 0));
-    return 1;
 }
 CMD:diffuser(playerid, params[])
 {
@@ -5446,7 +5597,7 @@ CMD:declinename(playerid, params[])
 CMD:supaccount(playerid, params[])
 {
 	static query[64];
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (isnull(params) || strlen(params) > 24)
 	    return SendSyntaxMessage(playerid, "/supaccount [nom de l'utilisateur]");
@@ -5475,7 +5626,7 @@ CMD:sonner(playerid, params[])
 CMD:creergate(playerid, params[])
 {
 	static id = -1;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = Gate_Create(playerid);
 	if (id == -1)
@@ -5486,7 +5637,7 @@ CMD:creergate(playerid, params[])
 CMD:supgate(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supgate [gate id]");
@@ -5499,7 +5650,7 @@ CMD:supgate(playerid, params[])
 CMD:editgate(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -5822,7 +5973,7 @@ CMD:analyser(playerid, params[])
 CMD:creercar(playerid, params[])
 {
 	static model[32],color1,color2,id = -1,type = 0,loca = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "s[32]I(-1)I(-1)I(0)I(0)", model, color1, color2, type, loca))
  	{
@@ -5877,7 +6028,7 @@ CMD:setfuel(playerid, params[])
 CMD:supcar(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
     /*if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
 	    return SendErrorMessage(playerid, "Vous devez êtres le conducteur.");*/
@@ -5969,7 +6120,7 @@ CMD:itemlist(playerid, params[])
 CMD:creerimpound(playerid, params[])
 {
 	static id = -1,Float:x,Float:y,Float:z;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (GetPlayerInterior(playerid) > 0 || GetPlayerVirtualWorld(playerid) > 0)
  		return SendErrorMessage(playerid, "Vous pouvez créer seulement a l'extérieur.");
@@ -5983,7 +6134,7 @@ CMD:creerimpound(playerid, params[])
 CMD:supimpound(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supimpound [impound id]");
@@ -5996,7 +6147,7 @@ CMD:supimpound(playerid, params[])
 CMD:editimpound(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -6044,69 +6195,6 @@ CMD:vfourriere(playerid, params[])
 	if (!count)
 	    SendErrorMessage(playerid, "Vous n'avez pas de vehicules a la fourrièrre.");
 	else Dialog_Show(playerid, ReleaseCar, DIALOG_STYLE_LIST, "Véhicule en fourrière", string, "Valider", "Annuler");
-	return 1;
-}
-CMD:remorquer(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][9] == 0)
-		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
-	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 525)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans une dépanneuse.");
-	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas le chauffeur.");
-	new vehicleid = GetVehicleFromBehind(GetPlayerVehicleID(playerid));
-	if (vehicleid == INVALID_VEHICLE_ID)
-	    return SendErrorMessage(playerid, "Ce vehicle n'est pas proche.");
-	if (/*!IsDoorVehicle(vehicleid) ||*/ IsAPlane(vehicleid) || IsABoat(vehicleid) || IsAHelicopter(vehicleid))
-	    return SendErrorMessage(playerid, "Vous ne pouvez remorquer ce véhicule.");
-	AttachTrailerToVehicle(vehicleid, GetPlayerVehicleID(playerid));
-	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s à remorquer le véhicule %s.", ReturnName(playerid, 0), ReturnVehicleName(vehicleid));
-	return 1;
-}
-CMD:untow(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][9] == 0)
-		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
-	if (GetVehicleModel(GetPlayerVehicleID(playerid)) != 525)
-	    return SendErrorMessage(playerid, "Tu ne conduit pas un towtruck.");
-	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-	    return SendErrorMessage(playerid, "Tu ne conduit pas.");
-	new trailerid = GetVehicleTrailer(GetPlayerVehicleID(playerid));
-    if (!trailerid)
-	    return SendErrorMessage(playerid, "Il n'a aucun vehicule de prit.");
-	DetachTrailerFromVehicle(GetPlayerVehicleID(playerid));
-	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a déattaché le véhicule %s.", ReturnName(playerid, 0), ReturnVehicleName(trailerid));
-	return 1;
-}
-CMD:fourriere(playerid, params[])
-{
-	new price,id = Impound_Nearest(playerid),vehicleid = GetPlayerVehicleID(playerid),facass = PlayerData[playerid][pFaction];
-    if (FactionData[facass][factionacces][9] == 0)
-		return SendErrorMessage(playerid, "Vous n'êtes pas des mécano");
-    if (sscanf(params, "d", price))
-        return SendSyntaxMessage(playerid, "/fourriere [prix]");
-	if (price < 1 || price > 1000)
-	    return SendErrorMessage(playerid, "Le prix ne peut pas être au-dessus 1$ et au dessus de 1000$.");
-	if (GetVehicleModel(vehicleid) != 525)
-	    return SendErrorMessage(playerid, "Vous ne conduisez pas une dépanneuse.");
-	if (id == -1)
-	    return SendErrorMessage(playerid, "Vous n'êtes proche de rien.");
-	if (!GetVehicleTrailer(vehicleid))
-	    return SendErrorMessage(playerid, "Il n'y à aucun véhicule accroché.");
- 	vehicleid = Car_GetID(GetVehicleTrailer(vehicleid));
-	if (vehicleid == -1)
-	    return SendErrorMessage(playerid, "Vous ne pouvez remorquer ce véhicule.");
-	if (CarData[vehicleid][carImpounded] != -1)
-	    return SendErrorMessage(playerid, "ce véhicule est déja en fourriére.");
-	CarData[vehicleid][carImpounded] = ImpoundData[id][impoundID];
-	CarData[vehicleid][carImpoundPrice] = price;
-	Tax_AddMoney(price);
-	GetVehiclePos(CarData[vehicleid][carVehicle], CarData[vehicleid][carPos][0], CarData[vehicleid][carPos][1], CarData[vehicleid][carPos][2]);
-	Car_Save(vehicleid);
-	SendFactionMessage(PlayerData[playerid][pFaction], COLOR_RADIO, "RADIO: %s a mit en fourriere %s pour %s$.", ReturnName(playerid, 0), ReturnVehicleModelName(CarData[vehicleid][carModel]), FormatNumber(price));
- 	DetachTrailerFromVehicle(GetPlayerVehicleID(playerid));
 	return 1;
 }
 CMD:channel(playerid, params[])
@@ -6179,7 +6267,7 @@ CMD:jobcmds(playerid, params[])
 CMD:creeratm(playerid, params[])
 {
 	static id = -1;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = ATM_Create(playerid);
 	if (id == -1)
@@ -6190,7 +6278,7 @@ CMD:creeratm(playerid, params[])
 CMD:supatm(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supatm [atm id]");
@@ -6404,7 +6492,7 @@ CMD:setweather(playerid, params[])
 CMD:setcarhp(playerid, params[])
 {
 	static id = 0,Float:amount;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "df", id, amount))
  	{
@@ -6439,7 +6527,7 @@ CMD:setcarhp(playerid, params[])
 CMD:editcar(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -6539,7 +6627,7 @@ CMD:editcar(playerid, params[])
 CMD:creergarbage(playerid, params[])
 {
 	static id = -1,type;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", type))
 	{
@@ -6558,7 +6646,7 @@ CMD:creergarbage(playerid, params[])
 CMD:supgarbage(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supgarbage [garbage id]");
@@ -6614,7 +6702,7 @@ CMD:creervendor(playerid, params[])
 	static
 	    id = -1,
 		type;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", type))
 	{
@@ -6633,7 +6721,7 @@ CMD:creervendor(playerid, params[])
 CMD:supvendor(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supvendor [vendor id]");
@@ -7345,60 +7433,6 @@ CMD:walk(playerid, params[])
 	}
 	return 1;
 }
-CMD:tunning(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	if (!IsPlayerInAnyVehicle(playerid))
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un véhicule.");
-	if (!IsDoorVehicle(GetPlayerVehicleID(playerid)))
-	    return SendErrorMessage(playerid, "Tu ne peut tuné ce véhicule.");
-	Dialog_Show(playerid, TuneVehicle, DIALOG_STYLE_LIST, "Tune Vehicule", "Changer roues\nAjouter hydrolique", "Valider", "Annuler");
-	return 1;
-}
-CMD:colorcar(playerid, params[])
-{
-	static color1,color2;
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	if (!IsPlayerInAnyVehicle(playerid))
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un vehicule.");
-	if (!Inventory_HasItem(playerid, "Bombe de peinture"))
-	    return SendErrorMessage(playerid, "Vous n'avez pas de bombe de peinture.");
-	if (sscanf(params, "dd", color1, color2))
-	    return SendSyntaxMessage(playerid, "/colorcar [color 1] [color 2]");
-	if (color1 < 0 || color1 > 255)
-	    return SendErrorMessage(playerid, "Premiere couleur entre 0 et max 255.");
-    if (color2 < 0 || color2 > 255)
-	    return SendErrorMessage(playerid, "Seconde couleur entre 0 et max 255.");
-	SetVehicleColor(GetPlayerVehicleID(playerid), color1, color2);
-	Inventory_Remove(playerid, "Bomb de peinture",1);
-	SendVehiculeMessage(playerid, "Vous avez changé la couleurs de ce vehicule a %d, %d.", color1, color2);
-	return 1;
-}
-CMD:paintjob(playerid, params[])
-{
-	static paintjobid;
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	if (!IsPlayerInAnyVehicle(playerid))
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans un vehicule.");
-	if (!Inventory_HasItem(playerid, "Bombe de peinture"))
-	    return SendErrorMessage(playerid, "Vous n'avez pas de bombe de peinture.");
-	if (sscanf(params, "d", paintjobid))
-	    return SendSyntaxMessage(playerid, "/paintjob [paintjob ID] (-1 a disable)");
-	if (paintjobid < -1 || paintjobid > 5)
-	    return SendErrorMessage(playerid, "Le numéro du paintjob ne peut être -1 et max 5.");
-	if (paintjobid == -1)
-		paintjobid = 6;
-	SetVehiclePaintjob(GetPlayerVehicleID(playerid), paintjobid);
-	Inventory_Remove(playerid, "Bomb de peinture",1);
-	SendVehiculeMessage(playerid, "Vous avez changé le paintjob de ce vehicule a %d.", paintjobid);
-	return 1;
-}
 CMD:panel(playerid, params[])
 {
     if (PlayerData[playerid][pAdmin] < 4 || !IsPlayerAdmin(playerid))
@@ -7691,7 +7725,7 @@ CMD:supetagere(playerid, params[])
 CMD:creerrack(playerid, params[])
 {
 	static id = -1;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = Rack_Create(playerid, -1);
 	if (id == -1)
@@ -7706,7 +7740,7 @@ CMD:creerrack(playerid, params[])
 CMD:editrack(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/editrack [rack id]");
@@ -7721,7 +7755,7 @@ CMD:editrack(playerid, params[])
 CMD:suprack(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suprack [rack id]");
@@ -7786,7 +7820,7 @@ CMD:creerspeed(playerid, params[])
 CMD:supspeed(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supspeed [speed id]");
@@ -8391,7 +8425,7 @@ CMD:setradio(playerid, params[])
 CMD:creergraffiti(playerid, params[])
 {
 	static id = -1,Float:x,Float:y,Float:z,Float:angle;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (GetPlayerInterior(playerid) > 0 || GetPlayerVirtualWorld(playerid) > 0)
  		return SendErrorMessage(playerid, "Tu ne peut créer de graffiti points a l'extérieur seulement.");
@@ -8409,7 +8443,7 @@ CMD:creergraffiti(playerid, params[])
 CMD:supgraffiti(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supgraffiti [graffiti id]");
@@ -8496,7 +8530,7 @@ CMD:ah2(playerid, params[])
 }
 CMD:creerdetector(playerid, params[])
 {
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	static query[255];
 	for (new i = 0; i < MAX_METAL_DETECTORS; i ++) if (!MetalDetectors[i][detectorExists])
@@ -8518,7 +8552,7 @@ CMD:creerdetector(playerid, params[])
 CMD:supdetector(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supdetector [detector id]");
@@ -8549,7 +8583,7 @@ CMD:crocheterporte(playerid, params[])
 CMD:supplant(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/suppplant [plant id]");
@@ -8583,7 +8617,7 @@ CMD:stopanim(playerid, params[])
 CMD:editbillboard(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -8676,7 +8710,7 @@ CMD:editbillboard(playerid, params[])
 CMD:supbillboard(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supbillboard [bb id]");
@@ -8796,7 +8830,7 @@ CMD:appeler(playerid, params[])
 			return SendTelephoneMessage(playerid, "Téléphone : Vous êtes qui vous?");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des pièces.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
-		Dialog_Show(playerid, commande, DIALOG_STYLE_LIST,"Vous-vouler commander quoi?","Commander pièce de tunning avant\nCommander pièce de tunning arrière\nCommander pièce de tunning toit\nCommander pièce de tunning capot\nCommander pièce de tunning aileron\nCommander pièce de tunning d'extra\nCommander pièce de tunning sideskirt2\nCommander pièce de tunning wheel\nCommander pièce de tunning hydraulics\nCommander pièce de tunning roue\nCommander pièce de tunning carrosserie\nCommander bombe de peinture\nCommander des boites a outils\nCommander des bonbonne de NOS\nSavoir le stock", "Fermer", "");
+		Dialog_Show(playerid, commande, DIALOG_STYLE_LIST,"Vous-vouler commander quoi?","Commander pièce de tunning avant\nCommander pièce de tunning arrière\nCommander pièce de tunning toit\nCommander pièce de tunning capot\nCommander pièce de tunning aileron\nCommander pièce de tunning d'extra\nCommander pièce de tunning muffler\nCommander pièce de tunning roue\nCommander pièce de tunning carrosserie\nCommander bombe de peinture\nCommander des boites a outils\nCommander des bonbonne de NOS", "Fermer", "");
 
 	}
 	else if ((targetid = GetNumberOwner(number)) != INVALID_PLAYER_ID)
@@ -8854,7 +8888,7 @@ CMD:infob(playerid, params[])
 CMD:creerbillboard(playerid, params[])
 {
 	static id = -1;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = Billboard_Create(playerid, -1);
 	if (id == -1)
@@ -10045,7 +10079,7 @@ CMD:creermatos(playerid,params[])
 	new facass = PlayerData[playerid][pFaction];
 	if (FactionData[facass][factionacces][13] == 0)
 		return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	if(!IsPlayerInRangeOfPoint(playerid, 8.0,2580.9214,-1219.2292,1022.0316)) return SendErrorMessage(playerid,"Vous n'est pas dans l'entrepòt.");
+	if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
 	Dialog_Show(playerid,creermatos,DIALOG_STYLE_TABLIST,"Création d'arme la liste","{ffffff}AK-47: \t{ff3300}Matos : 200{ffffff}\n{ffffff}M4: \t{ff3300}Matos : 250{ffffff}\n{ffffff}MP5: \t{ff3300}Matos : 150{ffffff}\n{ffffff}Sniper: \t{ff3300}Matos : 550{ffffff}\n{ffffff}Rifle: \t{ff3300}Matos : 450{ffffff}\n{ffffff}Chargeur x 10: \t{ff3300}Matos : 100{ffffff}\n{ffffff}Boite de munitions x 10: \t{ff3300}Matos : 150{ffffff}\n{ffffff}Shot-Gun: \t{ff3300}Matos : 150{ffffff}\n{ffffff}Tec-9: \t{ff3300}Matos : 100{ffffff}\n{ffffff}UZI: \t{ff3300}Matos : 100{ffffff}\n{ffffff}Colt .45: \t{ff3300}Matos : 50{ffffff}\n{ffffff}Dynamite: \t{ff3300}Matos : 1000{ffffff}\n{ffffff}Decodeur: \t{ff3300}Matos : 1000{ffffff}","Créer","Fermer");	
 	return 1;
 }
@@ -10521,7 +10555,7 @@ CMD:locamax(playerid, params[])
 }
 CMD:resetlocamax(playerid, params[])
 {
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	return SendErrorMessage(playerid, "Vous n'avez pas la permission d'utiliser cette commande.");
 	for (new i = 0; i < MAX_HOUSES; i ++)
 	{
@@ -10616,23 +10650,6 @@ CMD:recharger(playerid, params[])
 		SendServerMessage(playerid, "Votre Batterie a été recharger dans votre vehicule.");
 	}
 	else {SendErrorMessage(playerid, "Tu doit être dans une maison ou dans un vehicule.");}
-	return 1;
-}
-CMD:poserboite(playerid, params[])
-{
-	new facass = PlayerData[playerid][pFaction];
-	if (FactionData[facass][factionacces][9] == 0)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	if (PlayerData[playerid][pCarryCrate] == -1)
-	    return SendErrorMessage(playerid, "Tu n'as pas de boite dans les mains.");
-	if (PlayerData[playerid][pCrafting])
-	    return SendErrorMessage(playerid, "Tu à déja une boite.");
-	if (CrateData[PlayerData[playerid][pCarryCrate]][crateType] < 9 || CrateData[PlayerData[playerid][pCarryCrate]][crateType] > 19)
-	    return SendErrorMessage(playerid, "Il n'y a pas de pièce dans la boite.");
-    PlayerData[playerid][pCrafting] = 1;
-	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s pose une boite et ouvre des %s.", ReturnName(playerid, 0), Crate_GetType(CrateData[PlayerData[playerid][pCarryCrate]][crateType]));
-	TogglePlayerControllable(playerid, 0);
-	SetTimerEx("CraftParts", 12000, false, "dd", playerid, PlayerData[playerid][pCarryCrate]);
 	return 1;
 }
 CMD:position(playerid, params[])
@@ -10749,7 +10766,7 @@ CMD:bowlingstats(playerid,params[])
 CMD:creercaisse(playerid, params[])
 {
 	static id = -1;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	id = caisse_Create(playerid);
 	if (id == -1)
@@ -10760,7 +10777,7 @@ CMD:creercaisse(playerid, params[])
 CMD:supcaisse(playerid, params[])
 {
 	static id = 0;
-    if (PlayerData[playerid][pAdmin] < 4)
+    if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "d", id))
 	    return SendSyntaxMessage(playerid, "/supcaisse [caisse id]");
@@ -10773,7 +10790,7 @@ CMD:supcaisse(playerid, params[])
 CMD:editcaisse(playerid, params[])
 {
 	static id,type[24],string[128];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
@@ -11456,7 +11473,7 @@ CMD:soins(playerid,params[])
 CMD:resetveh(playerid,params[])
 {
 	new string[80];
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	foreach(new i: Player)
 	{
@@ -11475,7 +11492,7 @@ CMD:resetveh(playerid,params[])
 }
 CMD:event(playerid,params[])
 {
-	if (PlayerData[playerid][pAdmin] < 4)
+	if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if(event == 0)
 	{
@@ -12772,7 +12789,7 @@ CMD:tun(playerid,params[])
 			Inventory_Remove(playerid, "front slamin",1);
 		}
 	}
-	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	if(Inventory_HasItem(playerid,"sideskirts transfender"))
 	{
 		if(pmodelid[playerid] == 534) // Remington
 		{
@@ -12780,10 +12797,10 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1101);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
 	}
-	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	if(Inventory_HasItem(playerid,"sideskirts transfender"))
 	{
 		if(pmodelid[playerid] == 534) // Remington
 		{
@@ -12791,10 +12808,10 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1124);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
     }
-	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	if(Inventory_HasItem(playerid,"sideskirts transfender"))
 	{
 		if(pmodelid[playerid] == 535) // Slamvan
 		{
@@ -12802,10 +12819,10 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1120);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
     }
-	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	if(Inventory_HasItem(playerid,"sideskirts transfender"))
 	{
 
 		if(pmodelid[playerid] == 535) // Slamvan
@@ -12813,10 +12830,10 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1119);
 			AddVehicleComponent(car,1121);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
 	}
-	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	if(Inventory_HasItem(playerid,"sideskirts transfender"))
 	{
 		if(pmodelid[playerid] == 401||pmodelid[playerid] == 518||pmodelid[playerid] == 527||pmodelid[playerid] == 415||pmodelid[playerid] == 589||pmodelid[playerid] == 546||pmodelid[playerid] == 517||pmodelid[playerid] == 603||pmodelid[playerid] == 436||pmodelid[playerid] == 439||pmodelid[playerid] == 580||pmodelid[playerid] == 549||pmodelid[playerid] == 477)
 		{
@@ -12824,10 +12841,10 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1017);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
 	}
-	if(Inventory_HasItem(playerid,"sidekirts transfender"))
+	if(Inventory_HasItem(playerid,"sideskirts transfender"))
 	{
 		if(pmodelid[playerid] == 575) // Brodway
 		{
@@ -12835,7 +12852,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1099);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
 	   	else if(pmodelid[playerid] == 567) // Savanna
 		{
@@ -12843,7 +12860,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1133);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-	    	Inventory_Remove(playerid, "sidekirts transfender",1);
+	    	Inventory_Remove(playerid, "sideskirts transfender",1);
 		}
 		else if(pmodelid[playerid] == 576) // Tornado
 		{
@@ -12851,7 +12868,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1137);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts transfender",1);
+			Inventory_Remove(playerid, "sideskirts transfender",1);
 	    }
 	    else if(pmodelid[playerid] == 536) // Blade
 		{
@@ -12859,11 +12876,11 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1107);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-	        Inventory_Remove(playerid, "sidekirts transfender",1);
+	        Inventory_Remove(playerid, "sideskirts transfender",1);
 
 		}
 	}
-	if(Inventory_HasItem(playerid,"sidekirts wheebtovers"))
+	if(Inventory_HasItem(playerid,"sideskirts wheebtovers"))
 	{
 		if(pmodelid[playerid] == 562) // Elegy
 		{
@@ -12871,7 +12888,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1041);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+			Inventory_Remove(playerid, "sideskirts wheebtovers",1);
 		}
 		else if(pmodelid[playerid] == 565) // Flash
 		{
@@ -12879,7 +12896,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1052);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+			Inventory_Remove(playerid, "sideskirts wheebtovers",1);
 		}
 		else if(pmodelid[playerid] == 559) // Jetser
 		{
@@ -12887,7 +12904,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1072);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+			Inventory_Remove(playerid, "sideskirts wheebtovers",1);
 		}
 		else if(pmodelid[playerid] == 561) // Stratum
 		{
@@ -12895,7 +12912,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1063);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+			Inventory_Remove(playerid, "sideskirts wheebtovers",1);
 		}
 		else if(pmodelid[playerid] == 560) // Sultan
 		{
@@ -12903,7 +12920,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1030);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+			Inventory_Remove(playerid, "sideskirts wheebtovers",1);
 		}
 		else if(pmodelid[playerid] == 558)  // Uranus
 		{
@@ -12911,10 +12928,10 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1095);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts wheebtovers",1);
+			Inventory_Remove(playerid, "sideskirts wheebtovers",1);
 		}
     }
-	if(Inventory_HasItem(playerid,"sidekirts chrome"))
+	if(Inventory_HasItem(playerid,"sideskirts chrome"))
 	{
 		if(pmodelid[playerid] == 562) // Elegy
 		{
@@ -12922,7 +12939,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1040);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts chrome",1);
+			Inventory_Remove(playerid, "sideskirts chrome",1);
 		}
 		else if(pmodelid[playerid] == 565) // Flash
 		{
@@ -12930,7 +12947,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1051);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts chrome",1);
+			Inventory_Remove(playerid, "sideskirts chrome",1);
 		}
 		else if(pmodelid[playerid] == 559) // Jester
 		{
@@ -12938,7 +12955,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1071);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendClientMessage(playerid,COLOR_WHITE,"[INFO] YComponent successfully added.");
-			Inventory_Remove(playerid, "sidekirts chrome",1);
+			Inventory_Remove(playerid, "sideskirts chrome",1);
 		}
 		else if(pmodelid[playerid] == 561) // Stratum
 		{
@@ -12946,7 +12963,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1062);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts chrome",1);
+			Inventory_Remove(playerid, "sideskirts chrome",1);
 		}
 		else if(pmodelid[playerid] == 560) // Sultan
 		{
@@ -12954,7 +12971,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1027);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts chrome",1);
+			Inventory_Remove(playerid, "sideskirts chrome",1);
 		}
 		else if(pmodelid[playerid] == 558) // Uranus
 		{
@@ -12962,7 +12979,7 @@ CMD:tun(playerid,params[])
 			AddVehicleComponent(car,1094);
 			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
 			SendServerMessage(playerid,"Pièce de tuning ajouter au vehicule.");
-			Inventory_Remove(playerid, "sidekirts chrome",1);
+			Inventory_Remove(playerid, "sideskirts chrome",1);
 		}
 	}
 	if(Inventory_HasItem(playerid,"rear slamin"))
@@ -13264,5 +13281,10 @@ CMD:tun(playerid,params[])
 		SendServerMessage(playerid,"Pièce de roues ajouter au vehicule.");
 		Inventory_Remove(playerid, "roue dollar",1);
 	}
+	return 1;
+}
+CMD:lol(playerid,params[])
+{
+	Dialog_Show(playerid, discordid1, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici", "Voila", "Non");
 	return 1;
 }

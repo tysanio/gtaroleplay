@@ -1,5 +1,5 @@
 SQL_Connect() {
-    mysql_log(LOG_ERROR | LOG_WARNING); //
+    mysql_log(LOG_ALL); //
 	g_iHandle = mysql_connect(SQL_HOSTNAME, SQL_USERNAME, SQL_DATABASE, SQL_PASSWORD);
 	if (mysql_errno(g_iHandle) != 0) { printf("[SQL] Connection to \"%s\" failed! Please check the connection settings... fla\a", SQL_HOSTNAME);}
 	else {printf("[SQL] Connection to \"%s\" passed!", SQL_HOSTNAME);}
@@ -10,6 +10,14 @@ SQL_CreateAccount(const username[],password[])
 	mysql_real_escape_string(password, sqlpassword);
 	md5(sqlpassword, pass);
 	format(query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `RegisterDate`, `LoginDate`) VALUES('%s', '%s', '%s', '%s')", username, pass, ReturnDate(), ReturnDate());
+	mysql_tquery(g_iHandle, query);
+}
+SQL_CreateAccountWL(const username[],password[])
+{
+	new query[512],sqlpassword[32],pass[129];
+	mysql_real_escape_string(password, sqlpassword);
+	md5(sqlpassword, pass);
+	format(query, sizeof(query), "INSERT INTO `accounts` (`Username`, `Password`, `RegisterDate`, `LoginDate`, `WL`) VALUES('%s', '%s', '%s', '%s', '1')", username, pass, ReturnDate(), ReturnDate());
 	mysql_tquery(g_iHandle, query);
 }
 SQL_CheckAccount(playerid)
@@ -129,7 +137,7 @@ SQL_SaveCharacter(playerid)
 		PlayerData[playerid][pSpawnPoint],
 		PlayerData[playerid][pLogged]
 	);
-	format(query, sizeof(query), "%s, `Warnings` = '%d', `Warn1` = '%s', `Warn2` = '%s', `MaskID` = '%d', `FactionMod` = '%d', `Capacity` = '%d', `bracelet` = '%d', `braceletdist` = '%d', `LocaID` = '%d', `CarD` = '%d',`LocaMaisonID` = '%d', `baterietel` = '%d',`BestScore` = '%d',`Strike` = '%d',`Repetition` = '%d',`Parcouru` = '%d', `Noob` = '%d', `ZombieKill` = '%d'",
+	format(query, sizeof(query), "%s, `Warnings` = '%d', `Warn1` = '%s', `Warn2` = '%s', `MaskID` = '%d', `FactionMod` = '%d', `Capacity` = '%d', `bracelet` = '%d', `braceletdist` = '%d', `LocaID` = '%d', `CarD` = '%d',`LocaMaisonID` = '%d', `baterietel` = '%d',`BestScore` = '%d',`Strike` = '%d',`Repetition` = '%d',`Parcouru` = '%d', `Noob` = '%d', `ZombieKill` = '%d', `Death` = '%d', `Role` = '%d'",
 	    query,
 	    PlayerData[playerid][pWarnings],
 	    SQL_ReturnEscaped(PlayerData[playerid][pWarn1]),
@@ -148,7 +156,9 @@ SQL_SaveCharacter(playerid)
 		PlayerData[playerid][prepetitions],
 		PlayerData[playerid][pparcouru],
 		PlayerData[playerid][pNoob],
-		PlayerData[playerid][pZombieKill]
+		PlayerData[playerid][pZombieKill],
+		PlayerData[playerid][pDeath],
+		PlayerData[playerid][pRole]
 	);
 	for (new i = 0; i < 10; i ++) {
 		format(query, sizeof(query), "%s, `skill%d` = '%d'",query,i,PlayerData[playerid][pSkill][i],i);
@@ -877,7 +887,7 @@ stock Vendor_Save(vendorid)
 }
 stock Garbage_Create(playerid, type)
 {
-	for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!GarbageData[i][garbageExists])
+	for (new i = 0; i != MAX_DYNAMIC_TRASH; i ++) if (!GarbageData[i][garbageExists])
 	{
 	    switch (type) {
 	        case 1: GarbageData[i][garbageModel] = 1236;
@@ -929,7 +939,7 @@ stock Garbage_Delete(garbageid)
 }
 Garbage_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (GarbageData[i][garbageExists] && IsPlayerInRangeOfPoint(playerid, 3.0, GarbageData[i][garbagePos][0], GarbageData[i][garbagePos][1], GarbageData[i][garbagePos][2]))
+    for (new i = 0; i != MAX_DYNAMIC_TRASH; i ++) if (GarbageData[i][garbageExists] && IsPlayerInRangeOfPoint(playerid, 3.0, GarbageData[i][garbagePos][0], GarbageData[i][garbagePos][1], GarbageData[i][garbagePos][2]))
 	{
 		if (GetPlayerInterior(playerid) == GarbageData[i][garbageInterior] && GetPlayerVirtualWorld(playerid) == GarbageData[i][garbageWorld])
 			return i;
@@ -1419,26 +1429,26 @@ stock StartTutorial(playerid)
 	TogglePlayerControllable(playerid, 0);
     PlayerData[playerid][pTutorial] = 1;
     PlayerData[playerid][pTutorialTime] = 10;
-	new serveursettinginfoid;
-	if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
+	new serveurinfo;
+	if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 	{
 	    SetPlayerPos(playerid, 1806.737, -2043.505, 44.733);
 	    SetPlayerCameraPos(playerid, 1806.737, -2043.505, 24.733);
 		SetPlayerCameraLookAt(playerid, 1802.511, -2040.684, 22.996);
 	}
-	else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 2)
+	else if(info_serveursetting[serveurinfo][settingvilleactive] == 2)
 	{
 		SetPlayerPos(playerid, -2399.519287, 321.964355, 17.035743);
 		SetPlayerCameraPos(playerid, -2399.519287, 321.964355, 37.035743);
 		SetPlayerCameraLookAt(playerid, -2399.951416, 322.215942, 37.015625);
 	}
-	else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 3)
+	else if(info_serveursetting[serveurinfo][settingvilleactive] == 3)
 	{
 	    SetPlayerPos(playerid, 1694.187622, 1448.494506, -7.181461);
 		SetPlayerCameraPos(playerid, 1694.187622, 1448.494506, 12.818538);
 		SetPlayerCameraLookAt(playerid, 1693.687744, 1448.484497, 12.763537);
 	}
-	else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 4)
+	else if(info_serveursetting[serveurinfo][settingvilleactive] == 4)
 	{
 	    SetPlayerPos(playerid, -208.6753, 929.7777, 18.1895);
 		SetPlayerCameraPos(playerid, -208.6753, 929.7777, 34.1895);
@@ -2125,7 +2135,7 @@ stock GetLocation(Float:fX, Float:fY, Float:fZ)
 	};
 	new const g_arrZoneData[][e_ZoneData] =
 	{
-		{!"The Big Ear", 	              {-410.00, 1403.30, -3.00, -137.90, 1681.20, 200.00}},
+		/*{!"The Big Ear", 	              {-410.00, 1403.30, -3.00, -137.90, 1681.20, 200.00}},
 		{!"Aldea Malvada",                {-1372.10, 2498.50, 0.00, -1277.50, 2615.30, 200.00}},
 		{!"Angel Pine",                   {-2324.90, -2584.20, -6.10, -1964.20, -2212.10, 200.00}},
 		{!"Arco del Oeste",               {-901.10, 2221.80, 0.00, -592.00, 2571.90, 200.00}},
@@ -2489,8 +2499,8 @@ stock GetLocation(Float:fX, Float:fY, Float:fZ)
 		{!"San Fierro",                   {-2997.40, -1115.50, -242.90, -1213.90, 1659.60, 900.00}},
 		{!"Red County",                   {-1213.90, -768.00, -242.90, 2997.00, 596.30, 900.00}},
 		{!"Flint County",                 {-1213.90, -2892.90, -242.90, 44.60, -768.00, 900.00}},
-		{!"Whetstone",                    {-2997.40, -2892.90, -242.90, -1213.90, -1115.50, 900.00}}
-        /*{!"Leaf Links",                   {1786.27, -1191.43, 0.0, 2163.66, -152.395, 300.0}}, //vc seulement
+		{!"Whetstone",                    {-2997.40, -2892.90, -242.90, -1213.90, -1115.50, 900.00}}*/
+        {!"Leaf Links",                   {1786.27, -1191.43, 0.0, 2163.66, -152.395, 300.0}}, //vc seulement
 		{!"Escobar International",        {92.1001, -1895.2, 0.0, 792.1, -1265.2, 300.0}},
 		{!"Escobar International",        {77.7263, -2752.63, 0.0, 792.246, -1895.2, 300.0}},
 		{!"Base Army",                    {112.466, -1265.46, 0.0, 792.466, -905.464, 300.0}},
@@ -2508,7 +2518,7 @@ stock GetLocation(Float:fX, Float:fY, Float:fZ)
 		{!"Downtown",                     {386.97, -536.872, 0.0, 1786.27, 727.32, 300.0}},
 		{!"Hyman Memorial Stadium",       {413.973, 189.007, 0.0, 1062.48, 643.753, 290.0}},
 		{!"North Point Mall",             {2324.31, 27.1423, 0.0, 2484.31, 327.142, 250.0}},
-		{!"VC Bridge",                    {1421.38, -1191.47, 0.0, 1783.81, -537.34, 300.0}}*/
+		{!"VC Bridge",                    {1421.38, -1191.47, 0.0, 1783.81, -537.34, 300.0}}
 	};
 	new name[32] = "San Andreas";
 	for (new i = 0; i != sizeof(g_arrZoneData); i ++) if ((fX >= g_arrZoneData[i][e_ZoneArea][0] && fX <= g_arrZoneData[i][e_ZoneArea][3]) && (fY >= g_arrZoneData[i][e_ZoneArea][1] && fY <= g_arrZoneData[i][e_ZoneArea][4]) && (fZ >= g_arrZoneData[i][e_ZoneArea][2] && fZ <= g_arrZoneData[i][e_ZoneArea][5])) {
@@ -2686,7 +2696,7 @@ stock IsNOSCompatible(modelid)
 	}
     return 1;
 }
-stock IsLegalComponent(modelid, componentid)
+stock IsLegaBTomponent(modelid, componentid)
 {
     if (IsWheelModel(componentid) || (1086 <= componentid <= 1087) || (componentid >= 1008 && componentid <= 1010))
 	{
@@ -2821,10 +2831,10 @@ ShowCharacterMenu(playerid)
 	}
 	for (new i = 0; i < 8; i ++)
 	{
-	    if (i < 2) {
-	        format(str, sizeof(str), "%s", (!PlayerCharacters[playerid][i][0]) ? ("Espace Vide") : (PlayerCharacters[playerid][i]));
+		if (i < 2) {
+			format(str, sizeof(str), "%s", (!PlayerCharacters[playerid][i][0]) ? ("Espace Vide") : (PlayerCharacters[playerid][i]));
 			PlayerTextDrawSetString(playerid,PlayerData[playerid][pTextdraws][i + 5], str);
-	    }
+		}
 	    PlayerTextDrawHide(playerid,PlayerData[playerid][pTextdraws][i]);
 		PlayerTextDrawShow(playerid,PlayerData[playerid][pTextdraws][i]);
 	}
@@ -2833,7 +2843,7 @@ ShowCharacterMenu(playerid)
 GetClosestGarbage(playerid)
 {
 	new Float:fDistance[2] = {99999.0, 0.0},iIndex = -1;
-	for (new i = 0; i < MAX_DYNAMIC_OBJ; i ++) if (GarbageData[i][garbageExists] && GarbageData[i][garbageCapacity] > 0 && GetPlayerInterior(playerid) == GarbageData[i][garbageInterior] && GetPlayerVirtualWorld(playerid) == GarbageData[i][garbageWorld])
+	for (new i = 0; i < MAX_DYNAMIC_TRASH; i ++) if (GarbageData[i][garbageExists] && GarbageData[i][garbageCapacity] > 0 && GetPlayerInterior(playerid) == GarbageData[i][garbageInterior] && GetPlayerVirtualWorld(playerid) == GarbageData[i][garbageWorld])
 	{
 		fDistance[1] = GetPlayerDistanceFromPoint(playerid, GarbageData[i][garbagePos][0], GarbageData[i][garbagePos][1], GarbageData[i][garbagePos][2]);
 		if (fDistance[1] < fDistance[0])
@@ -3070,7 +3080,7 @@ PickupItem(playerid, itemid)
 	}
 	return 1;
 }
-SetFactionMarker(playerid,setrucmedonnedelurticaire,color)
+SetFactionMarker(playerid,color)
 {
     foreach (new i : Player) 
 	{
@@ -3761,7 +3771,7 @@ Faction_Refresh(factionid)
 Faction_Save(factionid)
 {
 	static query[2048];
-	format(query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s',`factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d', `factioncoffre` = '%d', `factiondiscord` = '%s'",
+	format(query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s',`factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d', `factioncoffre` = '%d', `factiondiscord` = '%s', `factionrole` = '%s',`factionaction1X` = '%.4f', `factionaction1Y` = '%.4f', `factionaction1Z` = '%.4f', `factionaction1R` = '%.2f', `factionaction2X` = '%.4f', `factionaction2Y` = '%.4f', `factionaction2Z` = '%.4f', `factionaction2R` = '%.2f', `factionaction3X` = '%.4f', `factionaction3Y` = '%.4f', `factionaction3Z` = '%.4f', `factionaction3R` = '%.2f'",
 		SQL_ReturnEscaped(FactionData[factionid][factionName]),
 		FactionData[factionid][factionRanks],
 		FactionData[factionid][factionLockerPos][0],
@@ -3770,7 +3780,20 @@ Faction_Save(factionid)
 		FactionData[factionid][factionLockerInt],
 		FactionData[factionid][factionLockerWorld],
 		FactionData[factionid][factioncoffre],
-		SQL_ReturnEscaped(FactionData[factionid][factiondiscord])
+		SQL_ReturnEscaped(FactionData[factionid][factiondiscord]),
+		SQL_ReturnEscaped(FactionData[factionid][factionrole]),
+		FactionData[factionid][factionaction1Pos][0],
+		FactionData[factionid][factionaction1Pos][1],
+		FactionData[factionid][factionaction1Pos][2],		
+		FactionData[factionid][factionaction1Pos][3],
+		FactionData[factionid][factionaction2Pos][0],
+		FactionData[factionid][factionaction2Pos][1],
+		FactionData[factionid][factionaction2Pos][2],		
+		FactionData[factionid][factionaction2Pos][3],		
+		FactionData[factionid][factionaction3Pos][0],
+		FactionData[factionid][factionaction3Pos][1],
+		FactionData[factionid][factionaction3Pos][2],		
+		FactionData[factionid][factionaction3Pos][3]
 	);
 	for (new i = 0; i < 10; i ++)
 	{
@@ -3876,6 +3899,18 @@ Faction_Create(name[])
         FactionData[i][factionLockerPos][2] = 0.0;
         FactionData[i][factionLockerInt] = 0;
         FactionData[i][factionLockerWorld] = 0;
+        FactionData[i][factionaction1Pos][0] = 0.0;
+        FactionData[i][factionaction1Pos][1] = 0.0;
+        FactionData[i][factionaction1Pos][2] = 0.0;
+        FactionData[i][factionaction1Pos][3] = 0.0;
+        FactionData[i][factionaction2Pos][0] = 0.0;
+        FactionData[i][factionaction2Pos][1] = 0.0;
+        FactionData[i][factionaction2Pos][2] = 0.0;
+        FactionData[i][factionaction2Pos][3] = 0.0;
+        FactionData[i][factionaction3Pos][0] = 0.0;
+        FactionData[i][factionaction3Pos][1] = 0.0;
+        FactionData[i][factionaction3Pos][2] = 0.0;
+        FactionData[i][factionaction3Pos][3] = 0.0;
         for (new j = 0; j < 8; j ++) {
             FactionData[i][factionSkins][j] = 0;
         }
@@ -4091,11 +4126,9 @@ Crate_GetType(type)
 	    case 11: str = "Piece de roof";
 	    case 12: str = "Piece de hood";
 	    case 13: str = "Piece de spoiler";
-	    case 14: str = "Piece de sideskirt1";
-	    case 15: str = "Piece d'hydraulics";
+	    case 14: str = "Piece d'extra";
+	    case 15: str = "Piece de muffler";
 	    case 16: str = "Piece de roue";
-	    case 17: str = "Piece de carrosserie";
-	    case 18: str = "Object electronique";
 	    default: str = "Rien";
 	}
 	return str;
@@ -4258,21 +4291,23 @@ Job_Refresh(jobid)
 			JobData[jobid][jobText3D][2] = CreateDynamic3DTextLabel(string2, COLOR_DARKBLUE, JobData[jobid][jobDeliver][0], JobData[jobid][jobDeliver][1], JobData[jobid][jobDeliver][2], 15.0);
 			JobData[jobid][jobPickups][2] = CreateDynamicPickup(1239, 23, JobData[jobid][jobDeliver][0], JobData[jobid][jobDeliver][1], JobData[jobid][jobDeliver][2]);
 		}
-        else if (JobData[jobid][jobType] == 5) {
-		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel("[Création d'arme]\n{FFFFFF}Tapez /creerarme pour créer des armes.", COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
-			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1239, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
-		}
-        else if (JobData[jobid][jobType] == 8) {
+        else if (JobData[jobid][jobType] == 7) {
 			format(string2,sizeof(string2),"[Bucheron]\n{FFFFFF}Tapez /bucheron pour commencer.\n Stock de bois %d",info_stockjobinfo[stockjobinfoid][stockjobinfobois]);
 		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel(string2, COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1239, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 		}
-        else if (JobData[jobid][jobType] == 10) {
+        else if (JobData[jobid][jobType] == 9) {
 			format(string2,sizeof(string2),"[Générateur]\n{FFFFFF}Tapez /gaz pour commencer.\n En stock: {ff3300}%d litre d'essence{ffffff}",info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator]);
 		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel(string2, COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1239, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 		}
-		else if (JobData[jobid][jobType] == 15) {
+		else if (JobData[jobid][jobType] == 10) {
+		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel("[Petrolier]\n{FFFFFF}Tapez /petrolier pour commencer à travailler.", COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
+			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1239, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
+			JobData[jobid][jobText3D][2] = CreateDynamic3DTextLabel("[Pétrolier]\n{FFFFFF}Déchargez votre pétrol ici.", COLOR_DARKBLUE, JobData[jobid][jobDeliver][0], JobData[jobid][jobDeliver][1], JobData[jobid][jobDeliver][2], 15.0);
+			JobData[jobid][jobPickups][2] = CreateDynamicPickup(1239, 23, JobData[jobid][jobDeliver][0], JobData[jobid][jobDeliver][1], JobData[jobid][jobDeliver][2]);
+		}
+		else if (JobData[jobid][jobType] == 14) {
 		
 		    JobData[jobid][jobText3D][1] = CreateDynamic3DTextLabel("[Décharge]\n{FFFFFF}Tapez /viderpoubelle pour vider votre camion poubelle.", COLOR_DARKBLUE, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
 			JobData[jobid][jobPickups][1] = CreateDynamicPickup(1264, 23, JobData[jobid][jobPoint][0], JobData[jobid][jobPoint][1], JobData[jobid][jobPoint][2], JobData[jobid][jobPointWorld], JobData[jobid][jobPointInt]);
@@ -4524,14 +4559,21 @@ Entrance_Save(entranceid)
 IsPlayerNearMine(playerid)
 {
 	new id = -1;
-	if ((id = Job_NearestPoint(playerid, 10.0)) != -1 && JobData[id][jobType] == 5)
+	if ((id = Job_NearestPoint(playerid, 10.0)) != -1 && JobData[id][jobType] == 3)
+		return 1;
+	return 0;
+}
+IsPlayerNearPetrol(playerid)
+{
+	new id = -1;
+	if ((id = Job_NearestPoint(playerid, 10.0)) != -1 && JobData[id][jobType] == 11)
 		return 1;
 	return 0;
 }
 IsPlayerNearWoodcut(playerid)
 {
 	new id = -1;
-	if ((id = Job_NearestPoint(playerid, 10.0)) != -1 && JobData[id][jobType] == 12)
+	if ((id = Job_NearestPoint(playerid, 10.0)) != -1 && JobData[id][jobType] == 8)
 		return 1;
 	return 0;
 }
@@ -4655,11 +4697,7 @@ CreateForklifts(entranceid)
 }
 Entrance_Create(playerid, name[])
 {
-	static
-	    Float:x,
-	    Float:y,
-	    Float:z,
-	    Float:angle;
+	static Float:x,Float:y,Float:z,Float:angle;
     if (GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle))
 	{
 		for (new i = 0; i != MAX_HOUSES; i ++)
@@ -5051,6 +5089,7 @@ Dialog:Inventory(playerid, response, listitem, inputtext[])
 	            if (!strcmp(string, "Demo Soda") && PlayerData[playerid][pTutorialStage] == 3)
 			    {
         			PlayerData[playerid][pThirst] = 100;
+					SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
         			Dialog_Show(playerid, Tutorial, DIALOG_STYLE_MSGBOX, "Tutoriel", "Vous avez appris le fonctionnement du ramassage d'objet.\nVous venez de ramasser une cannette de soda afin de recharger votre soif..\n\nLes icônes de la faim et la soif sont affichés sur le côté droit de votre écran.\nSi votre soif ou la faim atteint les zéro pour cent, la vie de votre personnage diminuras.", "Continuer", "");
 			    }
 			    else
@@ -6557,7 +6596,6 @@ Dialog:DeleteChar(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 	    new query[128];
-
 	    format(query, sizeof(query), "DELETE FROM `characters` WHERE `Username` = '%s' AND `Character` = '%s'",PlayerData[playerid][pUsername], PlayerCharacters[playerid][PlayerData[playerid][pCharacter] - 1]);
 		mysql_tquery(g_iHandle, query);
 
@@ -6574,7 +6612,6 @@ Dialog:DeleteCharacter(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 	    new query[128];
-
 	    format(query, sizeof(query), "DELETE FROM `characters` WHERE `Username` = '%s' AND `Character` = '%s'",PlayerData[playerid][pUsername], PlayerCharacters[playerid][PlayerData[playerid][pCharacterMenu] - 1]);
 		mysql_tquery(g_iHandle, query);
 
@@ -6603,11 +6640,10 @@ Dialog:CreateChar(playerid, response, listitem, inputtext[])
 
 	else
 	{
-	    static
-	        query[128];
+	    static query[128];
 
-		format(query, sizeof(query), "SELECT `ID` FROM `characters` WHERE `Character` = '%s'", inputtext);
-		mysql_tquery(g_iHandle, query, "OnCharacterCheck", "ds", playerid, inputtext);
+		format(query, sizeof(query), "SELECT `dID` FROM `death` WHERE `dName` = '%s'", inputtext);
+		mysql_tquery(g_iHandle, query, "OnCharacterCheck1", "ds", playerid, inputtext);
 	}
 	return 1;
 }
@@ -6650,8 +6686,8 @@ Dialog:DateBirth(playerid, response, listitem, inputtext[])
 	    if (sscanf(inputtext, "p</>ddd", iDay, iMonth, iYear)) {
 	        Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
-		else if (iYear < 1945 || iYear > 2000) {
-		    Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
+		else if (iYear < 1900 || iYear > 1950) { // a changer pour les année qu'on veux
+			return Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!n\nVeuiller entré dans le formant (Jour/Mois/Année) entre 1900 et 1950:", "Envoyer", "Annuler");
 		}
 		else if (iMonth < 1 || iMonth > 12) {
 		    Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
@@ -6735,10 +6771,7 @@ Dialog:ChangePassword(playerid, response, listitem, inputtext[])
 	    if (isnull(inputtext))
 	        return cmd_changermdp(playerid, "\1");
 
-		static
-		    buffer[129],
-			query[256];
-
+		static buffer[129],query[256];
 		md5(inputtext, buffer);
 		inputtext[0] = '\0';
 
@@ -8118,35 +8151,6 @@ Dialog:ExecuteQuery(playerid, response, listitem, inputtext[])
 	return 1;
 }
 
-Dialog:TuneVehicle(playerid, response, listitem, inputtext[])
-{
-	new vehicleid = GetPlayerVehicleID(playerid);
-
-	if (!IsPlayerInAnyVehicle(playerid) || !IsDoorVehicle(vehicleid))
-	    return 0;
-
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0:
-	            ShowModelSelectionMenu(playerid, "Ajouter roues", MODEL_SELECTION_WHEELS, {1025, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1096, 1097, 1098}, 17, 0.0, 0.0, 90.0);
-
-			case 1:
-			{
-				new stockjobinfoid;
-				if(info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] == 0) return SendErrorMessage(playerid,"Il n'y a plus de pièce de ce type dans la réserve.");
-				if( info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] > 0) {info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] -= 1;}
-				if( info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] < 0) {info_stockjobinfo[stockjobinfoid][stocktunninghydrolic] = 0;}
-				stockjobinfosave(stockjobinfoid);
-			    AddComponent(vehicleid, 1087);
-			    SendVehiculeMessage(playerid, "Tu a ajouté hydraulics a ce vehicule.");
-			}
-	    }
-	}
-	return 1;
-}
-
 Dialog:AddNOS(playerid, response, listitem, inputtext[])
 {
 	new vehicleid = GetPlayerVehicleID(playerid);
@@ -8501,45 +8505,13 @@ Dialog:Tutorial(playerid, response, listitem, inputtext[])
 	if (PlayerData[playerid][pTutorialStage] == 3)
 	{
 		PlayerData[playerid][pTutorialStage] = 4;
-		SendClientMessage(playerid, COLOR_SERVER, "Appyuer sur 'Y' pour jeté le soda démo");
+		SendTutorialMessage(playerid,"Appyuer sur 'Y' pour jeté le soda démo");
 	}
 	else if (PlayerData[playerid][pTutorialStage] == 4)
 	{
 		PlayerData[playerid][pTutorialStage] = 5;
-		//SendClientMessage(playerid, COLOR_SERVER, "Aller au checkpoint et appuyer sur 'F'.");
-		SendClientMessage(playerid, COLOR_SERVER, "Aller au checkpoint pour finir se petit tutoriel.");
-		if (IsPlayerInRangeOfPoint(playerid,50,-58.8225,-1591.3322,2.6210))
-		{		
-			SetPlayerCheckpoint(playerid,-58.8225,-1591.3322,2.6210, 1.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,3,2510.9451,-1728.6887,778.6384))
-		{
-			SetPlayerCheckpoint(playerid,2513.4539,-1729.1583,778.6384,1.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,3,1697.2042,-1943.1552,13.5455))
-		{
-			SetPlayerCheckpoint(playerid,1696.5157,-1930.6681,13.5612,1.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,20,1643.2032,-2287.8020,-1.1961))
-		{
-			SetPlayerCheckpoint(playerid,1664.5045,-2303.7617,-1.1967,5.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,3,-1437.2219,-297.3453,14.6334))
-		{
-			SetPlayerCheckpoint(playerid,-1435.2323,-283.7571,14.148,5.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,3,-1967.6317,146.4278,28.2107))
-		{
-			SetPlayerCheckpoint(playerid,-1979.8461,138.0898,27.6875,5.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,20,1742.5693,-1948.0618,13.1172))//
-		{
-			SetPlayerCheckpoint(playerid,1762.6160,-1943.3751,13.5637,5.0);
-		}
-		else if(IsPlayerInRangeOfPoint(playerid,3,529.8129,-1817.5156,15.3615))//
-		{
-			SetPlayerCheckpoint(playerid,538.0953,-1779.1281,9.3347,5.0);
-		}		
+		SendTutorialMessage(playerid,"Aller au checkpoint pour finir se petit tutoriel.");
+		SetPlayerCheckpoint(playerid, -228.8403, 1401.1831, 27.7656, 1.0);		
 	}
 	return 1;
 }
@@ -8645,7 +8617,7 @@ Dialog:Findtravailler(playerid, response, listitem, inputtext[])
 		if(listitem == 8) //Petrolier
 		{
  			Waypoint_Set(playerid,"Petrolier",646.3190,1248.1642,11.5893);
-	        SendServerMessage(playerid, "Un point a été marquer pour Travail Petrolier (marquer sur le radar).");
+	        SendServerMessage(playerid, "Un point a été marquer pour Travail Pétrolier (marquer sur le radar).");
 		}
 		if(listitem == 9) //Electricien
 		{
@@ -9000,7 +8972,7 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 						}
 	                    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a pointé son entrée.", ReturnName(playerid, 0));
 						if (Inventory_Items(playerid) >= MAX_INVENTORY - 1)
-							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de palce dans l'inventaire)");
+							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de paBTe dans l'inventaire)");
 						if (FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)Inventory_Add(playerid, "Menottes",19418, 1);
 	                }
 	                else
@@ -10247,29 +10219,22 @@ House_Create(playerid, address[], price)
         	    HouseData[i][houseOwner] = 0;
             	HouseData[i][housePrice] = price;
             	HouseData[i][houseMoney] = 0;
-
 				format(HouseData[i][houseAddress], 32, address);
-
     	        HouseData[i][housePos][0] = x;
     	        HouseData[i][housePos][1] = y;
     	        HouseData[i][housePos][2] = z;
     	        HouseData[i][housePos][3] = angle;
-
                 HouseData[i][houseInt][0] = 2269.8772;
                 HouseData[i][houseInt][1] = -1210.3240;
                 HouseData[i][houseInt][2] = 1047.5625;
                 HouseData[i][houseInt][3] = 90.0000;
-
 				HouseData[i][houseInterior] = 10;
 				HouseData[i][houseExterior] = GetPlayerInterior(playerid);
 				HouseData[i][houseExteriorVW] = GetPlayerVirtualWorld(playerid);
-
 				HouseData[i][houseLights] = false;
 				HouseData[i][houseLocked] = false;
-				
 				HouseData[i][houseLocation] = 0;
 				HouseData[i][houseMaxLoc] = 0;
-
 				House_Refresh(i);
 				mysql_tquery(g_iHandle, "INSERT INTO `houses` (`houseOwner`) VALUES(0)", "OnHouseCreated", "d", i);
 				return i;
@@ -10283,14 +10248,11 @@ House_RemoveFurniture(houseid)
 {
 	if (HouseData[houseid][houseExists])
 	{
-	    static
-	        string[64];
-
+	    static string[64];
 	    for (new i = 0; i != MAX_FURNITURE; i ++) if (FurnitureData[i][furnitureExists] && FurnitureData[i][furnitureHouse] == houseid) {
 	        FurnitureData[i][furnitureExists] = false;
 	        FurnitureData[i][furnitureModel] = 0;
             FurnitureData[i][furnitureHouse] = -1;
-
 	        DestroyDynamicObject(FurnitureData[i][furnitureObject]);
 		}
 		format(string, sizeof(string), "DELETE FROM `furniture` WHERE `ID` = '%d'", HouseData[houseid][houseID]);
@@ -10418,7 +10380,7 @@ Business_ProductMenu(playerid, bizid)
 		}
 		case 8:
 	    {
-			format(string, sizeof(string), "Alcool\t%s$\nEau en bouteille\t%s$\nCafé\t%s$",
+			format(string, sizeof(string), "alcool\t%s$\nEau en bouteille\t%s$\nCafé\t%s$",
 				FormatNumber(BusinessData[bizid][bizPrices][0]),
 				FormatNumber(BusinessData[bizid][bizPrices][1]),
 				FormatNumber(BusinessData[bizid][bizPrices][2])
@@ -10525,7 +10487,7 @@ Business_PurchaseMenu(playerid, bizid)
 		}
 		case 8:
 	    {
-			format(string, sizeof(string), "Alcool\t%s$\nEau en bouteille\t%s$\nCafé\t%s$",
+			format(string, sizeof(string), "alcool\t%s$\nEau en bouteille\t%s$\nCafé\t%s$",
 				FormatNumber(BusinessData[bizid][bizPrices][0]),
 				FormatNumber(BusinessData[bizid][bizPrices][1]),
 				FormatNumber(BusinessData[bizid][bizPrices][2])
@@ -11697,6 +11659,10 @@ ResetPlayer(playerid)
 	PlayerData[playerid][pPicking] = 0;
 	PlayerData[playerid][pPickCar] = -1;
 	PlayerData[playerid][pPickTime] = 0;
+	//job nouveau pétrol
+	PlayerData[playerid][pPetrolTime] = 0;
+	PlayerData[playerid][pPetrolRock] = 0;
+	PlayerData[playerid][pPetrol] = 0;
 	if (Inventory_HasItem(playerid, "Masque")) {
 	    Inventory_Remove(playerid, "Masque");
 	}
@@ -12726,7 +12692,7 @@ CreateTextDraws(playerid) {
 	PlayerTextDrawSetProportional(playerid,PlayerData[playerid][pTextdraws][68], 1);
 	PlayerTextDrawSetSelectable(playerid,PlayerData[playerid][pTextdraws][68], 0);
 
-	PlayerData[playerid][pTextdraws][69] = CreatePlayerTextDraw(playerid, 13.000000, 431.000000, "~b~Waypoint:~w~ Calculating...");
+	PlayerData[playerid][pTextdraws][69] = CreatePlayerTextDraw(playerid, 13.000000, 431.000000, "~b~Waypoint:~w~ CaBTulating...");
 	PlayerTextDrawBackgroundColor(playerid,PlayerData[playerid][pTextdraws][69], 255);
 	PlayerTextDrawFont(playerid,PlayerData[playerid][pTextdraws][69], 1);
 	PlayerTextDrawLetterSize(playerid,PlayerData[playerid][pTextdraws][69], 0.270000, 1.000000);
@@ -14127,7 +14093,7 @@ ResetStatistics(playerid)
     PlayerData[playerid][pHospitalTime] = 0;
     PlayerData[playerid][pRepairTime] = 0;
     PlayerData[playerid][pMoney] = 250;
-    PlayerData[playerid][pBankMoney] = 2500;
+    PlayerData[playerid][pBankMoney] = 250;
     PlayerData[playerid][pSpawnPoint] = 0;
     PlayerData[playerid][pSavings] = 0;
     PlayerData[playerid][pAdmin] = 0;
@@ -14309,7 +14275,7 @@ ResetStatistics(playerid)
     PlayerData[playerid][pMaskID] = random(90000) + 10000;
     PlayerData[playerid][pMaskOn] = 0;
     PlayerData[playerid][pFactionMod] = 0;
-    PlayerData[playerid][pCapacity] = 24;
+    PlayerData[playerid][pCapacity] = 18;
     PlayerData[playerid][pPlayRadio] = 0;
     PlayerData[playerid][pGraffiti] = -1;
     PlayerData[playerid][pGraffitiTime] = 0;
@@ -14323,10 +14289,18 @@ ResetStatistics(playerid)
     PlayerData[playerid][pNameTag] = Text3D:INVALID_3DTEXT_ID;
 	PlayerData[playerid][prepetitions] = 0;
 	PlayerData[playerid][pparcouru] = 0;
+	PlayerData[playerid][pWL] = 0;
+	PlayerData[playerid][pLanguage] = 0;
+	//PlayerData[playerid][pDA] = 0;
 	PlayerData[playerid][FaimBar] = INVALID_PLAYER_BAR_ID;
 	PlayerData[playerid][BrasBar] = INVALID_PLAYER_BAR_ID;
 	PlayerData[playerid][SoifBar] = INVALID_PLAYER_BAR_ID;
 	PlayerData[playerid][JambesBar] = INVALID_PLAYER_BAR_ID;
+	PlayerData[playerid][pPetrol] = 0;
+	PlayerData[playerid][pPetrolTime] = 0;
+	PlayerData[playerid][pPetrolCount] = 0;
+	PlayerData[playerid][pPetrolRock] = 0;
+	PlayerData[playerid][pDeath] = 0;
 	//DernieVehLoc[playerid] = -1;
 	//DernieVehLocID[playerid] = -1;
     ResetWarnings(playerid);
@@ -14840,30 +14814,36 @@ stock SetCameraData(playerid)
 {
 	if(!IsPlayerNPC(playerid))
 	{
-		new serveursettinginfoid;
-		if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
+		new serveurinfo;
+		if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 		{
 			SetPlayerPos(playerid, 2096.8398,-1879.4764,15.000);
 			SetPlayerCameraPos(playerid, 2096.8398,-1879.4764,30);
 			SetPlayerCameraLookAt(playerid, 2080.5161,-1759.1907,13.5656);
 		}
-		else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 2)
+		else if(info_serveursetting[serveurinfo][settingvilleactive] == 2)
 		{
 			SetPlayerPos(playerid, -1553.776367, 844.732299, 32.268722);
 			SetPlayerCameraPos(playerid, -1553.776367, 844.732299, 52.268722);
 			SetPlayerCameraLookAt(playerid, -1554.276245, 844.740234, 52.250732);
 		}
-		else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 3)
+		else if(info_serveursetting[serveurinfo][settingvilleactive] == 3)
 		{
 			SetPlayerPos(playerid, 2069.442138, 977.235412, 6.572320);
 			SetPlayerCameraPos(playerid, 2069.442138, 977.235412, 26.572320);
 			SetPlayerCameraLookAt(playerid, 2069.452148, 977.702697, 26.557329);
 		}
-		else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 4)
+		else if(info_serveursetting[serveurinfo][settingvilleactive] == 4)
 		{
 			SetPlayerPos(playerid, -208.6753, 929.7777, 18.1895);
 			SetPlayerCameraPos(playerid, -208.6753, 929.7777, 34.1895);
 			SetPlayerCameraLookAt(playerid, -208.3893, 930.7400, 33.8695);	
+		}
+		if(info_serveursetting[serveurinfo][settingvilleactive] == 5)//ugmp
+		{
+			SetPlayerPos(playerid, 2475.8909,-1083.9470,0.4784);
+			SetPlayerCameraPos(playerid, 2499.5811, -1039.3616, 6.0864);
+			SetPlayerCameraLookAt(playerid, 2498.9248, -1038.6100, 6.1465);
 		}
 	}
 	return 1;
@@ -17105,7 +17085,7 @@ stock Updatepetrol()
 {
     new stringi1[200],stockjobinfoid;
     new petrolstokc = info_stockjobinfo[stockjobinfoid][stockjobinfopetrol];
-    format(stringi1, sizeof(stringi1), "{FFD700}Entrepôt de petrol{FFFFFF}\nEn stock: {ff3300}%d barils{ffffff}",petrolstokc);
+    format(stringi1, sizeof(stringi1), "{FFD700}Entrepôt de pétrol{FFFFFF}\nEn stock: {ff3300}%d barils{ffffff}",petrolstokc);
     SetDynamicObjectMaterialText(stockinfopetrol, 0, stringi1, OBJECT_MATERIAL_SIZE_256x128,"Arial", 22, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
     return true;
 }
@@ -17308,41 +17288,6 @@ stock UpdateGeneratori()
 	// GenMoney #5
 	format(stringi, sizeof(stringi), "Bénéfice du générateur [N°5]\n\n\n$%d",gen5m);
 	UpdateDynamic3DTextLabelText(gen5money, 0xFFFFFFAA, stringi);
-}
-//job petrolier
-Dialog:petroljob1(playerid, response, listitem, inputtext[])
-{
-	if(!response)return 1;
-	new stockjobinfoid;
-	if(info_stockjobinfo[stockjobinfoid][stockjobinfopetrol] > 5000) return SendErrorMessage(playerid, "Le stock est plein merci de revenir plustard.");
- 	if(!GetPVarInt(playerid,"pForestJob"))
- 	{
-		if (IsPlayerInAnyVehicle(playerid)) return SendErrorMessage(playerid,"Vous devez être hors d'un vehicule.");
- 		SetPVarInt(playerid,"pForestJob",1);
- 		SetPlayerSkin(playerid,16);
- 		new P = random(sizeof(cForestJob));
- 		SetPlayerCheckpoint(playerid,cForestJob[P][0],cForestJob[P][1],cForestJob[P][2],2.0);
- 		SendClientMessage(playerid,-1,"{33AA33}Vous avez accepter de travailler aller sur le marqueur {FF0000}rouge{33AA33} indiquer sur votre mini carte");
- 		return 1;
- 	}
- 	else
- 	{
-		if (IsPlayerInAnyVehicle(playerid)) return SendErrorMessage(playerid,"Vous devez être hors d'un vehicule.");
- 	    new salairejobinfoid,petrolierpix = info_salairejobinfo[salairejobinfoid][salairejobinfopetrolier];
-		new interettaxejob,moneyentrepriseid,gouvernementinfoid,taxerevenue = info_gouvernementinfo[gouvernementinfoid][gouvernementtaxerevenue],tamere;
-		interettaxejob = floatround((float(GetPVarInt(playerid,"ForestKG")*petrolierpix) / 100) * taxerevenue);
-		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxejob;
-		tamere = (GetPVarInt(playerid,"ForestKG")*petrolierpix) - interettaxejob;
-		GivePlayerCash(playerid,tamere);
-		SendJOBMessage(playerid, "Vous avez gagné %d dollars.", tamere);
- 		DeletePVar(playerid,"ForestKG");
- 		DeletePVar(playerid,"pForestJob");
-		moneyentreprisesave(moneyentrepriseid);
- 		RemovePlayerAttachedObject(playerid,4);
- 		DisablePlayerCheckpoint(playerid);
- 		SetPlayerSkin(playerid,PlayerData[playerid][pSkin]);
-		return 1;
-	}
 }
 //job doc fortcarson
 Dialog:jobdock1(playerid, response, listitem, inputtext[])
@@ -17613,68 +17558,68 @@ IsPlayerInPMU(playerid)
 }
 Dialog:Livraison(playerid, response, listitem, inputtext[])
 {
-	new stockjobinfoid;
+	new stockjobinfoid,facass = PlayerData[playerid][pFaction];
 	if(!response) return SendEntrepriseMessage(playerid,"Vous avez annulé votre livraison.");
 	switch(listitem)
 	{
 	    case 0: //bois fait
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfobois] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,-459.3773,-58.1205,59.958,8.0); 
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 0;
 		}
 	    case 1: //barril
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfopetrol] <= 50) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,646.3190,1248.1642,11.5893,5.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 1;
 		}
 	    case 2: //viande
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfoviande] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,1112.3456,-960.5888,42.5689,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 3;
 		}
 		case 3: //caisse dock
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfostockdock] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,2760.9084,-2541.2163,13.6335,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 4;
 		}
 		case 4: //caised cariste
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfostockcariste] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,989.6754,-1274.8516,15.1797,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 5;
 		}
 		case 5: //caisse manu
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfostocksorter] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,2772.8872,-2416.8850,13.6512,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 6;
 		}
 		case 6: //roche
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfostockminer] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,828.1657,849.2316,11.7477,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 7;
 		}
 		case 7: //electro
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfoelectronic] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,2648.1152,-1593.9846,13.2677,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 8;
 		}
 		case 8: //arme
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfostockarmes] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,1619.2523,-1880.1744,13.3828,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2],15.0);
 			livraisonjob[playerid] = 9;
 		}
 		case 9: //meuble	fait
 		{
 			if(info_stockjobinfo[stockjobinfoid][stockjobinfomeuble] <= 10) return SendEntrepriseMessage(playerid,"Il n'a pas assez de stock pour faire la livraison.");
-			SetPlayerCheckpoint(playerid,621.8337,-1529.5477,15.1812,8.0);
+			SetPlayerCheckpoint(playerid,FactionData[facass][factionaction3Pos][0],FactionData[facass][factionaction3Pos][1],FactionData[facass][factionaction3Pos][2],15.0);
 			livraisonjob[playerid] = 10;
 		}
 	}
@@ -17788,10 +17733,10 @@ Dialog:modifierpetrol(playerid, response, listitem, inputtext[])
 
 		if (amount < 1 || amount > 500)
 			return Dialog_Show(playerid, modifierpetrol, DIALOG_STYLE_INPUT,"Modification du salaire","Erreur dans le montant entre 1 et 500$\nVeuiller entrée un nouveau montant\nAncien montant %d$:", "Valider", "Annuler",petrol);
-		SendANPEMessage(playerid,"Nouveau salaire pour le job petrol %d$",amount);
+		SendANPEMessage(playerid,"Nouveau salaire pour le job pétrolier %d$",amount);
 		info_salairejobinfo[salairejobinfoid][salairejobinfopetrolier] = amount;
 		Updateinfosalairejob();
-		Log_Write("logs/anpe.txt", "[%s] %s a modifier le prix du salaire de petrol a %d.", ReturnDate(), ReturnName(playerid, 0),amount);
+		Log_Write("logs/anpe.txt", "[%s] %s a modifier le prix du salaire de peétrolier a %d.", ReturnDate(), ReturnName(playerid, 0),amount);
 		salairejobinfosave(salairejobinfoid);
 	}
 	return 1;
@@ -18263,55 +18208,55 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 		{
 			case 0:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting OOC","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting OOC","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive]);
 				return 1;
 			}
 			case 1:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting PM","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpmactive]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting PM","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingpmactive]);
 				return 1;
 			}
 			case 2:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting Braquage NPC","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting Braquage NPC","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagenpcactive]);
 				return 1;
 			}
 			case 3:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting Braquage Banque","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting Braquage Banque","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagebankactive]);
 				return 1;
 			}
 			case 4:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting AFK","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafkactive]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting AFK","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafkactive]);
 				return 1;
 			}
 			case 5:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting Temps AFK","Temps AFK : %d\nMettre une valeur supérieur a 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafktime]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting Temps AFK","Temps AFK : %d\nMettre une valeur supérieur a 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafktime]);
 				return 1;
 			}
 			case 6:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur7,DIALOG_STYLE_INPUT,"Serveur setting MOTD","MOTD %s\nMettre un texte intelligent","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur7,DIALOG_STYLE_INPUT,"Serveur setting MOTD","MOTD %s\nMettre un texte intelligent","Valider","Fermer",info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive]);
 				return 1;
 			}
 			case 7:
 			{
-				Dialog_Show(playerid,serveur8,DIALOG_STYLE_LIST,"Serveur setting la ville","Los Santos\nSan fierro\nLas Venturas\nFort Carson\nVice City (Samp 0.3DL + Requit)","Valider","Fermer");
+				Dialog_Show(playerid,serveur8,DIALOG_STYLE_LIST,"Serveur setting la ville","Los Santos\nSan fierro\nLas Venturas\nFort Carson\nVice City (UGMP STYLE)","Valider","Fermer");
 				return 1;
 			}
 			case 8:
 			{
-				new serveursettinginfoid;
-				Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+				new serveurinfo;
+				Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingnouveau]);
 				return 1;
 			}
 			case 9:
@@ -18324,6 +18269,42 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 				Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer");
 				return 1;
 			}
+			case 11:
+			{
+				new serveurinfo;
+				Dialog_Show(playerid,serveur12,DIALOG_STYLE_INPUT,"Serveur setting whitelist","Whitelist : %d\nPour activer 1 pour désactiver 0","Valider","Fermer",info_serveursetting[serveurinfo][settingwl]);
+				return 1;
+			}
+			case 12:
+			{
+				Dialog_Show(playerid,serveur13,DIALOG_STYLE_INPUT,"Serveur setting discord","Entrée le id discord","Valider","Fermer");
+				return 1;
+			}
+			case 13:
+			{
+				Dialog_Show(playerid,serveur14,DIALOG_STYLE_INPUT,"Serveur setting verifier","Entrée le id du role vérifier","Valider","Fermer");
+				return 1;
+			}
+			case 14:
+			{
+				Dialog_Show(playerid,serveur15,DIALOG_STYLE_INPUT,"Serveur setting admin 1","Entrée le id du role admin 1","Valider","Fermer");
+				return 1;
+			}
+			case 15:
+			{
+				Dialog_Show(playerid,serveur16,DIALOG_STYLE_INPUT,"Serveur setting admin 2","Entrée le id du role admin 2","Valider","Fermer");
+				return 1;
+			}
+			case 16:
+			{
+				Dialog_Show(playerid,serveur17,DIALOG_STYLE_INPUT,"Serveur setting admin 3","Entrée le id du role admin 3","Valider","Fermer");
+				return 1;
+			}
+			case 17:
+			{
+				Dialog_Show(playerid,serveur18,DIALOG_STYLE_INPUT,"Serveur setting admin 4","Entrée le id du role admin 4","Valider","Fermer");
+				return 1;
+			}
 		}
 	}
 	return 1;
@@ -18332,18 +18313,18 @@ Dialog:serveur1(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive]);
+			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive]);
 		if (amount < 0 || amount > 1)
-			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive]);
-		info_serveursettinginfo[serveursettinginfoid][settingoocactive] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive]);
+		info_serveursetting[serveurinfo][settingoocactive] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18351,18 +18332,18 @@ Dialog:serveur2(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpmactive]);
+			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingpmactive]);
 		if (amount < 0 || amount > 1)
-			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpmactive]);
-		info_serveursettinginfo[serveursettinginfoid][settingpmactive] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingpmactive]);
+		info_serveursetting[serveurinfo][settingpmactive] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18370,18 +18351,18 @@ Dialog:serveur3(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive]);
+			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagenpcactive]);
 		if (amount < 0 || amount > 1)
-			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive]);
-		info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagenpcactive]);
+		info_serveursetting[serveurinfo][settingbraquagenpcactive] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18389,18 +18370,18 @@ Dialog:serveur4(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive]);
+			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagebankactive]);
 		if (amount < 0 || amount > 1)
-			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive]);
-		info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagebankactive]);
+		info_serveursetting[serveurinfo][settingbraquagebankactive] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18408,18 +18389,18 @@ Dialog:serveur5(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafkactive]);
+			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafkactive]);
 		if (amount < 0 || amount > 1)
-			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafkactive]);
-		info_serveursettinginfo[serveursettinginfoid][settingafkactive] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafkactive]);
+		info_serveursetting[serveurinfo][settingafkactive] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18427,24 +18408,24 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 en minute","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafktime]);
+			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 en minute","Valider","Fermer",info_serveursetting[serveurinfo][settingafktime]);
 		if (amount < 1 || amount > 20)
-			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 inférieur a 20","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingafktime]);
-		info_serveursettinginfo[serveursettinginfoid][settingafktime] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 inférieur a 20","Valider","Fermer",info_serveursetting[serveurinfo][settingafktime]);
+		info_serveursetting[serveurinfo][settingafktime] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 		KillTimer(AFKTimer);
-		AFKActiver = info_serveursettinginfo[serveursettinginfoid][settingafkactive];
+		AFKActiver = info_serveursetting[serveurinfo][settingafkactive];
 		if(AFKActiver == 0)
 		{
 			AFKTimer = SetTimer("AFK",60000,1);
 		}
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18456,16 +18437,15 @@ Dialog:serveur7(playerid, response, listitem, inputtext[])
 			return Dialog_Show(playerid, serveur7, DIALOG_STYLE_INPUT, "MOTD", "Mettre un texte intelligent\n128 caractère max", "Envoyer", " <-- ");
 	    if (strlen(inputtext) > 128)
 	        return Dialog_Show(playerid, serveur7, DIALOG_STYLE_INPUT, "MOTD", "Erreur: 128 caractère maxc.\n\nEntrée le motd:", "Envoyer", " <-- ");
-		new serveursettinginfoid;
-		strpack(info_serveursettinginfo[serveursettinginfoid][settingmotd], inputtext, 128);
-		new query[900];
-		format(query, sizeof(query), "UPDATE `serveursetting` SET `motd`='%s' WHERE `id`='1'", SQL_ReturnEscaped(info_serveursettinginfo[serveursettinginfoid][settingmotd]));
+		new serveurinfo,query[900];
+		strpack(info_serveursetting[serveurinfo][settingmotd], inputtext, 128);
+		format(query, sizeof(query), "UPDATE `serveursetting` SET `motd`='%s' WHERE `id`='1'", SQL_ReturnEscaped(info_serveursetting[serveurinfo][settingmotd]));
         mysql_tquery(g_iHandle, query);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18478,45 +18458,45 @@ Dialog:serveur8(playerid,response,listitem,inputtext[])
 		{
 			case 0:
 			{
-				new serveursettinginfoid,query[900];
-				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='1' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
+				new serveurinfo,query[900];
+				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='1' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 1:
 			{
-				new serveursettinginfoid,query[900];
-				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='2' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
+				new serveurinfo,query[900];
+				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='2' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 2:
 			{
-				new serveursettinginfoid,query[900];
-				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='3' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
+				new serveurinfo,query[900];
+				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='3' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 3:
 			{
-				new serveursettinginfoid,query[900];
-				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='4' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
+				new serveurinfo,query[900];
+				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='4' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 4:
 			{
-				new serveursettinginfoid,query[900];
-				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='5' WHERE `id`='1'", info_serveursettinginfo[serveursettinginfoid][settingvilleactive]);
+				new serveurinfo,query[900];
+				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='5' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
-				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 		}
 	}
 	else
 	{
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18524,18 +18504,18 @@ Dialog:serveur9(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
+			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingnouveau]);
 		if (amount < 0 || amount > 1)
-			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingnouveau]);
-		info_serveursettinginfo[serveursettinginfoid][settingnouveau] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingnouveau]);
+		info_serveursetting[serveurinfo][settingnouveau] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18543,18 +18523,18 @@ Dialog:serveur10(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpolice]);
+			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire ","Valider","Fermer",info_serveursetting[serveurinfo][settingpolice]);
 		if (amount < 0 || amount > 10)
-			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire entre 0 et 10 ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingpolice]);
-		info_serveursettinginfo[serveursettinginfoid][settingpolice] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire entre 0 et 10 ","Valider","Fermer",info_serveursetting[serveurinfo][settingpolice]);
+		info_serveursetting[serveurinfo][settingpolice] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur10,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur10,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18562,18 +18542,133 @@ Dialog:serveur11(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveursettinginfoid;
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
-			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer",info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 		if (amount < 0 || amount > 10)
-			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire entre 0 et 10 ","Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingswat]);
-		info_serveursettinginfo[serveursettinginfoid][settingswat] = amount;
-		serveursettinginfosave(serveursettinginfoid);
-		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire entre 0 et 10 ","Valider","Fermer",info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+		info_serveursetting[serveurinfo][settingswat] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveursettinginfoid;
-		Dialog_Show(playerid,serveur11,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursettinginfo[serveursettinginfoid][settingoocactive],info_serveursettinginfo[serveursettinginfoid][settingpmactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagenpcactive],info_serveursettinginfo[serveursettinginfoid][settingbraquagebankactive],info_serveursettinginfo[serveursettinginfoid][settingafkactive],info_serveursettinginfo[serveursettinginfoid][settingafktime],info_serveursettinginfo[serveursettinginfoid][settingmotd],info_serveursettinginfo[serveursettinginfoid][settingvilleactive],info_serveursettinginfo[serveursettinginfoid][settingnouveau],info_serveursettinginfo[serveursettinginfoid][settingpolice],info_serveursettinginfo[serveursettinginfoid][settingswat]);
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur11,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur12(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    new amount = strval(inputtext),serveurinfo;
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur12,DIALOG_STYLE_INPUT,"Serveur setting whitelist","Whiteliste : %d\nPour activer 1 pour désactiver 0","Valider","Fermer",info_serveursetting[serveurinfo][settingwl]);
+		if (amount < 0 || amount > 1)
+			return Dialog_Show(playerid,serveur12,DIALOG_STYLE_INPUT,"Serveur setting whitelist","Whiteliste : %d\nPour activer 1 pour désactiver 0","Valider","Fermer",info_serveursetting[serveurinfo][settingwl]);
+		info_serveursetting[serveurinfo][settingwl] = amount;
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+	    new serveurinfo;
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur13(playerid, response, listitem, inputtext[])
+{
+	new serveurinfo;
+	if (response)
+	{
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur13,DIALOG_STYLE_INPUT,"Serveur setting discord","Entrée le id du discord","Valider","Fermer");
+		format(info_serveursetting[serveurinfo][settingdiscord],20,inputtext);
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+		Dialog_Show(playerid,serveur13,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur14(playerid, response, listitem, inputtext[])
+{
+	new serveurinfo;
+	if (response)
+	{
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur14,DIALOG_STYLE_INPUT,"Serveur setting vérifier","Entrée le id du role vérifier","Valider","Fermer");
+		format(info_serveursetting[serveurinfo][settingverifier],20,inputtext);
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+		Dialog_Show(playerid,serveur14,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur15(playerid, response, listitem, inputtext[])
+{
+	new serveurinfo;
+	if (response)
+	{
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur15,DIALOG_STYLE_INPUT,"Serveur setting admin 1","Entrée le id role admin 1","Valider","Fermer");
+		format(info_serveursetting[serveurinfo][settingadmin1],20,inputtext);
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+		Dialog_Show(playerid,serveur15,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur16(playerid, response, listitem, inputtext[])
+{
+	new serveurinfo;
+	if (response)
+	{
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur16,DIALOG_STYLE_INPUT,"Serveur setting admin 2","Entrée le id role admin 2","Valider","Fermer");
+		format(info_serveursetting[serveurinfo][settingadmin2],20,inputtext);
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+		Dialog_Show(playerid,serveur16,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur17(playerid, response, listitem, inputtext[])
+{
+	new serveurinfo;
+	if (response)
+	{
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur17,DIALOG_STYLE_INPUT,"Serveur setting admin 3","Entrée le id role admin 3","Valider","Fermer");
+		format(info_serveursetting[serveurinfo][settingadmin3],20,inputtext);
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+		Dialog_Show(playerid,serveur17,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	return 1;
+}
+Dialog:serveur18(playerid, response, listitem, inputtext[])
+{
+	new serveurinfo;
+	if (response)
+	{
+	    if (isnull(inputtext))
+			return Dialog_Show(playerid,serveur18,DIALOG_STYLE_INPUT,"Serveur setting admin 4","Entrée le id role admin 4","Valider","Fermer");
+		format(info_serveursetting[serveurinfo][settingadmin4],20,inputtext);
+		serveursettinginfosave(serveurinfo);
+		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
+	}
+	else {
+		Dialog_Show(playerid,serveur18,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingmotd],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
@@ -18869,7 +18964,7 @@ stock SetVehicleSpeed(vehicleid,mph)
 Dialog:commande(playerid, response, listitem, inputtext[])
 {
 	static Float:x,Float:y,Float:z,Float:a;
-	new rand = random(3),facass = PlayerData[playerid][pFaction],string[512], stockjobinfoid,count;
+	new rand = random(3),facass = PlayerData[playerid][pFaction],count;
 	if (response)
 	{
 		for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
@@ -18991,7 +19086,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					CrateData[i][crateType] = 16;
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
-				case 8:
+				case 8://piece de carrosserie
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
@@ -19010,39 +19105,11 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
 						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
-					if(rand == 0)
-					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
-					else if(rand == 1)
-					{ x=1385.0806; y=-2319.1265; z=10.7593; a = 63.0591;}
-					else if(rand == 2)
-					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
-					CrateData[i][crateType] = 18;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
-				}
-				case 10:
-				{
-					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
-					if(rand == 0)
-					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
-					else if(rand == 1)
-					{ x=1385.0806; y=-2319.1265; z=10.7593; a = 63.0591;}
-					else if(rand == 2)
-					{ x= 2794.62; y= -2485.31; z=12.7419; a=1.3999;}
-					CrateData[i][crateType] = 19;
-					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
-				}
-				case 11:
-				{
-					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
-					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchpaint",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
-				case 12:
+				case 10:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
@@ -19051,7 +19118,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					SetTimer("commandlunchoutils",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
 				}
-				case 13:
+				case 11:
 				{
 					if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
@@ -19059,12 +19126,6 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchnos",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
-				}
-				case 14:
-				{
-					format(string, sizeof(string), "{FFFFFF}FrontBumper : %s\nRearBumper : %s\nRoof : %s\nHood : %s\nSpoiler : %s\nSideskirt : %s\nhydrolic  : %s\nRoue: %s\nPièce de carrosserie : %s\n,",FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningfrontbumper]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningrearbumper]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningroof]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunninghood]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningspoiler]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningsideskirt]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunninghydrolic]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningroue]),FormatNumber(info_stockjobinfo[stockjobinfoid][stocktunningcaro]));
-					format(string, sizeof(string),"%s",string);
-					Dialog_Show(playerid, Caissedetat, DIALOG_STYLE_MSGBOX, "Les stock de pièce de tunning", string, " X ", "");
 				}
 			}
 			CrateData[i][crateExists] = true;
@@ -19375,43 +19436,43 @@ stock PickupBowlingHelp(playerid,pickupid)
 stock IsAtBowlingRoad(playerid)
 {
 	if(PlayersBowlingRoad[playerid]==0)
-	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,416.9655,2.5090)){return 1;}}
+	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,416.9655,802.5090)){return 1;}}
  	else if(PlayersBowlingRoad[playerid]==1)
-	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,415.4035,2.5090)){return 1;}}
+	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,415.4035,802.5090)){return 1;}}
  	else if(PlayersBowlingRoad[playerid]==2)
-	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,413.8728,2.5090)){return 1;}}
+	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,413.8728,802.5090)){return 1;}}
  	else if(PlayersBowlingRoad[playerid]==3)
-	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,412.2807,2.5090)){return 1;}}
+	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,412.2807,802.5090)){return 1;}}
  	else if(PlayersBowlingRoad[playerid]==4)
-	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,410.7207,2.5090)){return 1;}}
+	{if(IsPlayerInRangeOfPoint(playerid,0.5,-1975.0587,410.7207,802.5090)){return 1;}}
 	return 0;
 }
 stock MoveBall(playerid)
 {
     if(PlayersBowlingRoad[playerid] == 0)
-	{MoveDynamicObject(BowlingBall[0],-1962.90368652,416.9655,1.64401352,BALL_SPEED);}
+	{MoveDynamicObject(BowlingBall[0],-1962.90368652,416.9655,801.64401352,BALL_SPEED);}
 	else if(PlayersBowlingRoad[playerid] == 1)
-	{MoveDynamicObject(BowlingBall[1],-1962.90368652,415.4035,1.64401352,BALL_SPEED);}
+	{MoveDynamicObject(BowlingBall[1],-1962.90368652,415.4035,801.64401352,BALL_SPEED);}
 	else if(PlayersBowlingRoad[playerid] == 2)
-	{MoveDynamicObject(BowlingBall[2],-1962.90368652,413.8728,1.64401352,BALL_SPEED);}
+	{MoveDynamicObject(BowlingBall[2],-1962.90368652,413.8728,801.64401352,BALL_SPEED);}
 	else if(PlayersBowlingRoad[playerid] == 3)
-	{MoveDynamicObject(BowlingBall[3],-1962.90368652,412.2807,1.64401352,BALL_SPEED);}
+	{MoveDynamicObject(BowlingBall[3],-1962.90368652,412.2807,801.64401352,BALL_SPEED);}
 	else if(PlayersBowlingRoad[playerid] == 4)
-	{MoveDynamicObject(BowlingBall[4],-1962.90368652,410.7207,1.64401352,BALL_SPEED);}
+	{MoveDynamicObject(BowlingBall[4],-1962.90368652,410.7207,801.64401352,BALL_SPEED);}
 	return 1;
 }
 stock CreateBall(playerid)
 {
     if(PlayersBowlingRoad[playerid]==0)
-	{BowlingBall[0] = CreateDynamicObject(2114,-1975.0587+1,416.9655,1.64401352,0.0,0.0,0.0);}
+	{BowlingBall[0] = CreateDynamicObject(2114,-1975.0587+1,416.9655,801.64401352,0.0,0.0,0.0);}
 	else if(PlayersBowlingRoad[playerid]==1)
-	{BowlingBall[1] = CreateDynamicObject(2114,-1975.0587+1,415.4035,1.64401352,0.0,0.0,0.0);}
+	{BowlingBall[1] = CreateDynamicObject(2114,-1975.0587+1,415.4035,801.64401352,0.0,0.0,0.0);}
 	else if(PlayersBowlingRoad[playerid]==2)
-	{BowlingBall[2] = CreateDynamicObject(2114,-1975.0587+1,413.8728,1.64401352,0.0,0.0,0.0);}
+	{BowlingBall[2] = CreateDynamicObject(2114,-1975.0587+1,413.8728,801.64401352,0.0,0.0,0.0);}
 	else if(PlayersBowlingRoad[playerid]==3)
-	{BowlingBall[3] = CreateDynamicObject(2114,-1975.0587+1,412.2807,1.64401352,0.0,0.0,0.0);}
+	{BowlingBall[3] = CreateDynamicObject(2114,-1975.0587+1,412.2807,801.64401352,0.0,0.0,0.0);}
 	else if(PlayersBowlingRoad[playerid]==4)
-	{BowlingBall[4] = CreateDynamicObject(2114,-1975.0587+1,410.7207,1.64401352,0.0,0.0,0.0);}
+	{BowlingBall[4] = CreateDynamicObject(2114,-1975.0587+1,410.7207,801.64401352,0.0,0.0,0.0);}
 	return 1;
 }
 stock DestroyBall(playerid)
@@ -19438,68 +19499,68 @@ stock CreatePins(playerid)
 {
 	if(PlayersBowlingRoad[playerid]==0)
 	{
-		BowlingPins[0][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516, 1.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
-		BowlingPins[0][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[0][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516, 801.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
+		BowlingPins[0][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[0][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
 	}
 	else if(PlayersBowlingRoad[playerid]==1)
 	{
-	    BowlingPins[1][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_2, 1.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
-		BowlingPins[1][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[1][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_2, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+	    BowlingPins[1][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_2, 801.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
+		BowlingPins[1][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[1][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_2, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
 	}
 	else if(PlayersBowlingRoad[playerid]==2)
 	{
-	    BowlingPins[2][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_3, 1.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
-		BowlingPins[2][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[2][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_3, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+	    BowlingPins[2][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_3, 801.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
+		BowlingPins[2][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[2][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_3, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
 	}
 	else if(PlayersBowlingRoad[playerid]==3)
 	{
-	    BowlingPins[3][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_4, 1.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
-		BowlingPins[3][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[3][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_4, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+	    BowlingPins[3][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_4, 801.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
+		BowlingPins[3][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[3][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_4, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
 	}
 	else if(PlayersBowlingRoad[playerid]==4)
 	{
-	    BowlingPins[4][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_5, 1.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
-		BowlingPins[4][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
-		BowlingPins[4][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_5, 1.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+	    BowlingPins[4][9] = CreateDynamicObject(1484, -1963.1579589844, 417.12506103516-Y_ROAD_5, 801.7151190042496, 349.04943847656, 24.473388671875, 6.1903991699219);
+		BowlingPins[4][8] = CreateDynamicObject(1484, -1963.1511230469, 416.96856689453-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][7] = CreateDynamicObject(1484, -1963.1798095703, 416.78656005859-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][6] = CreateDynamicObject(1484, -1963.1925048828, 416.59609985352-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][5] = CreateDynamicObject(1484, -1963.3796386719, 416.69662475586-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][4] = CreateDynamicObject(1484, -1963.3446044922, 416.86737060547-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][3] = CreateDynamicObject(1484, -1963.3403320313, 417.02703857422-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][2] = CreateDynamicObject(1484, -1963.5046386719, 416.95327758789-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][1] = CreateDynamicObject(1484, -1963.5002441406, 416.77334594727-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
+		BowlingPins[4][0] = CreateDynamicObject(1484, -1963.6495361328, 416.86196899414-Y_ROAD_5, 801.7151190042496, 349.04663085938, 24.472045898438, 6.185302734375);
 	}
     return 1;
 }
@@ -20781,7 +20842,7 @@ stock BeginContestForPlayer(playerid) {
     return 1;
 }
 //tuto
-Dialog:TutorialConfirm(playerid, response, listitem, inputtext[])
+Dialog:TutoriaBTonfirm(playerid, response, listitem, inputtext[])
 {
     PlayerData[playerid][pTutorialStage] = 0;
 	if (!response)
@@ -20790,7 +20851,7 @@ Dialog:TutorialConfirm(playerid, response, listitem, inputtext[])
 	    PlayerData[playerid][pTask] = 1;
   		PlayerData[playerid][pTutorial] = 0;
 		PlayerData[playerid][pTutorialTime] = 0;
-		SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");//\nImmigrant
+		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");//\nImmigrant
 		Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
 	}
 	else
@@ -20799,205 +20860,6 @@ Dialog:TutorialConfirm(playerid, response, listitem, inputtext[])
 	    PlayerData[playerid][pTask] = 1;
 		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");
 		StartTutorial(playerid);
-	}
-	return 1;
-}
-//spawn type
-Dialog:Spawntype(playerid, response, listitem, inputtext[])
-{
-	if(!response) //\nImmigrant
-	{Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");}
-	new serveursettinginfoid;
-	if (response)
-	{
-	    switch (listitem)
-	    {
-	        case 0:
-	        {
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,1643.2032,-2287.8020,-1.1961);
-					SetPlayerFacingAngle(playerid,270.5917);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous sortez enfin de l'aéroport.");
-					SendServerMessage(playerid,"Aller chercher votre soda sur le banc.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,1646.6123,-2299.5503,-0.3559, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,1646.6123,-2299.5503,-0.8559, 0.5);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 2)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,-1424.0990,-288.8158,14.1484);
-					SetPlayerFacingAngle(playerid,270.5917);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid,"Vous sortez enfin de l'aéroport.");
-					SendServerMessage(playerid,"Aller chercher votre soda sur le banc.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,-1437.2219,-297.3453,14.6334,61.1826, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,-1437.2219,-297.3453,14.6334, 0.5);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 3)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,1683.4635,1445.7914,10.7714);
-					SetPlayerFacingAngle(playerid,268.4155);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					SetPlayerVirtualWorld(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid, "Tapez /etape pour voir votre liste de truc a faire.");
-					SQL_SaveCharacter(playerid);
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 5)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,517.6495,-1832.8634,15.3549);
-					SetPlayerFacingAngle(playerid,268.4155);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					SetPlayerVirtualWorld(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,529.8129,-1817.5156,15.3615, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,529.8129,-1817.5156,15.3615, 0.5);
-					ShowHungerTextdraw(playerid, 1);
-					SendServerMessage(playerid, "Tapez /etape pour voir votre liste de truc a faire.");
-					SQL_SaveCharacter(playerid);
-				}
-			}
-	        case 1:
-	        {
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 1)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,2512.2488,-1721.1636,778.6384);
-					SetPlayerFacingAngle(playerid,127.8249);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SetPlayerDrunkLevel(playerid, 5000);
-					SetPlayerInterior(playerid,28);
-					SendServerMessage(playerid,"Vous vous réveillez, vous avez un mal de tête horrible");
-					SendServerMessage(playerid,"Aller chercher votre bouteille de soda pour avaler vos cachets.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,2510.9900,-1728.5364,777.7184, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,2510.9900,-1728.5364,778.3384, 1);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 2)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,2512.2488,-1721.1636,778.6384);
-					SetPlayerFacingAngle(playerid,127.8249);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SetPlayerDrunkLevel(playerid, 5000);
-					SetPlayerInterior(playerid,28);
-					SendServerMessage(playerid,"Vous vous réveillez, vous avez un mal de tête horrible");
-					SendServerMessage(playerid,"Aller chercher votre bouteille de soda pour avaler vos cachets.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,2510.9900,-1728.5364,777.7184, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,2510.9900,-1728.5364,778.3384, 1);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 3)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,2476.6553,1881.8040,9.7135);
-					SetPlayerFacingAngle(playerid,358.4156);
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					SendServerMessage(playerid, "Tapez /etape pour voir votre liste de truc a faire.");
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-				else if(info_serveursettinginfo[serveursettinginfoid][settingvilleactive] == 5)
-				{
-					SetCameraBehindPlayer(playerid);
-					TogglePlayerSpectating(playerid, false);
-					SetPlayerPosEx(playerid,2512.2488,-1721.1636,778.6384);
-					SetPlayerFacingAngle(playerid,127.8249);
-					PlayerData[playerid][pTutorialStage] = 0; PlayerData[playerid][pTutorial] = 0; PlayerData[playerid][pTutorialTime] = 0;
-					SetPlayerInterior(playerid, 0);
-					PlayerData[playerid][pCreated] = 1;
-					PlayerData[playerid][pTask] = 1;
-					SetPlayerVirtualWorld(playerid, 0);
-					ShowHungerTextdraw(playerid, 1);
-					SetPlayerDrunkLevel(playerid, 5000);
-					SetPlayerInterior(playerid,28);
-					SendServerMessage(playerid,"Vous vous réveillez, vous avez un mal de tête horrible");
-					SendServerMessage(playerid,"Aller chercher votre bouteille de soda pour avaler vos cachets.");
-					PlayerData[playerid][pTutorialStage] = 1;
-					PlayerData[playerid][pTutorialObject] = CreatePlayerObject(playerid,1543,2510.9900,-1728.5364,777.7184, 0.0, 0.0, 0.0);
-					SetPlayerCheckpoint(playerid,2510.9900,-1728.5364,778.3384, 1);
-					SendClientMessage(playerid, COLOR_SERVER, "Assurez-vous d'être proche de l'objet et que vous soyez accroupie (presser 'C').");
-					SetPlayerVirtualWorld(playerid, (playerid + 2000));
-					SetCameraBehindPlayer(playerid);
-					ShowHungerTextdraw(playerid, 1);
-					PlayerData[playerid][pThirst] = 80;
-					SQL_SaveCharacter(playerid);
-					return 1;
-				}
-			}
-		}
 	}
 	return 1;
 }
@@ -21255,3402 +21117,6 @@ script TimerNotDeadYet(playerid)
 	TextDrawHideForPlayer(playerid, gServerTextdraws[2]);
 	return 1;
 }
-//tuning
-script ModCar(playerid) {
-	switch(pmodelid[playerid]) {
-        case 562,565,559,561,560,575,534,567,536,535,576,411,579,602,496,518,527,589,597,419,
-		533,526,474,545,517,410,600,436,580,439,549,491,445,604,507,585,587,466,492,546,551,516,
-		426, 547, 405, 409, 550, 566, 540, 421,	529,431,438,437,420,525,552,416,433,427,490,528,
-		407,544,470,598,596,599,601,428,499,609,524,578,486,406,573,455,588,403,514,423,
-		414,443,515,456,422,482,530,418,572,413,440,543,583,478,554,402,542,603,475,568,504,457,
-        483,508,429,541,415,480,434,506,451,555,477,400,404,489,479,442,458,467,558,444: {
-		    TogglePlayerControllable(playerid,0);
- 			return SendClientMessage(playerid, COLOR_WHITE, "[INFO] Select an item and push the SPACEBAR to approve.");
-		}
-		default: return SendClientMessage(playerid,COLOR_RED,"[WARNING] You are not allowed to modify/tune this vehicle");
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_MAIN(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-      	{
-      	    case 0:// Paintjobs
-       	    {
-               Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-        	}
-        	case 1: {Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");}
-        	case 2: {Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");}
-        	case 3: {Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");}
-        	case 4: // Exhausts
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-        	}
-			case 5: // Front Bumpers
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-        	}
-			case 6: // Rear Bumpers
-        	{
-                Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-        	}
-			case 7: // Roofs
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-        	}
-			case 8: // Spoilers
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-        	}
-			case 9: // Side Skirts
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-        	}
-			case 10: // Bullbars
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-        	}
-			case 11: // Wheels
-        	{
-     			Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-        	}
-			case 12: {Dialog_Show(playerid, DIALOG_TYPE_CSTEREO, DIALOG_STYLE_LIST, "Car Stereo", "Bass Boost\n \nBack", "Apply", "Close");}
-			case 13: {Dialog_Show(playerid, DIALOG_TYPE_HYDRAULICS, DIALOG_STYLE_LIST, "Hydaulics", "Hydaulics\n \nBack", "Apply", "Close");}
-			case 14: {Dialog_Show(playerid, DIALOG_TYPE_NITRO, DIALOG_STYLE_LIST, "Nitrous Oxide", "2x Nitrous\n5x Nitrous\n10x Nitrous\n \nBack", "Apply", "Close");}
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_PAINTJOBS(playerid, response, listitem, inputtext[])
-{
-	if(!response) {SetCameraBehindPlayer(playerid);}
-	if(response)
-	{
-		switch(listitem)// Checking which list item was selected
-		{
-            case 0:
-      	    {
-       	        if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560 || pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 536 || pmodelid[playerid] == 535 || pmodelid[playerid] == 576 || pmodelid[playerid] == 558)
-		        {
-					new car = GetPlayerVehicleID(playerid);
-					ChangeVehiclePaintjob(car,0);
-					SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added paintjob to car");
-					Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-					PlayerPlaySound(playerid, 1134, 0.0, 0.0, 0.0);
-				}
-				else
-				{
-				   SendClientMessage(playerid,COLOR_WHITE,"[INFO] Paintjob is only for Wheel Arch Angrls and Loco Low Co types of cars");
-			       Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 1:
-        	{
-       	        if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560 || pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 536 || pmodelid[playerid] == 535 || pmodelid[playerid] == 576 || pmodelid[playerid] == 558)
-				{
-	                new car = GetPlayerVehicleID(playerid);
-					ChangeVehiclePaintjob(car,1);
-					SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added paintjob to car");
-					Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-					PlayerPlaySound(playerid, 1134, 0.0, 0.0, 0.0);
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Paintjob is only for Wheel Arch Angrls and Loco Low Co types of cars");
-				    Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 2:
-        	{
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560 || pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 536 || pmodelid[playerid] == 535 || pmodelid[playerid] == 576 || pmodelid[playerid] == 558)
-				{
-	                new car = GetPlayerVehicleID(playerid);
-					ChangeVehiclePaintjob(car,2);
-					SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added paintjob to car");
-					Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-					PlayerPlaySound(playerid, 1134, 0.0, 0.0, 0.0);
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Paintjob is only for Wheel Arch Angrls and Loco Low Co types of cars");
-				    Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-				}
-			}
-			case 3:
-        	{
-       	        if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560 || pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 536 || pmodelid[playerid] == 535 || pmodelid[playerid] == 576 || pmodelid[playerid] == 558)
-			    {
-	                new car = GetPlayerVehicleID(playerid);
-					ChangeVehiclePaintjob(car,3);
-					SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added paintjob to car");
-					Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-					PlayerPlaySound(playerid, 1134, 0.0, 0.0, 0.0);
-				}
-				else
-				{
-	       			SendClientMessage(playerid,COLOR_WHITE,"[INFO] Paintjob is only for Wheel Arch Angrls and Loco Low Co types of cars");
-				    Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4:
-        	{
-       	        if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560 || pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 536 || pmodelid[playerid] == 535 || pmodelid[playerid] == 576 || pmodelid[playerid] == 558)
-			    {
-	                new car = GetPlayerVehicleID(playerid);
-					ChangeVehiclePaintjob(car,4);
-					SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added paintjob to car");
-					Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-					PlayerPlaySound(playerid, 1134, 0.0, 0.0, 0.0);
-				}
-				else
-				{
-	            	SendClientMessage(playerid,COLOR_WHITE,"[INFO] Paintjob is only for Wheel Arch Angrls and Loco Low Co types of cars");
-				    Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 5:
-        	{
-        	    Dialog_Show(playerid, DIALOG_TYPE_PAINTJOBS, DIALOG_STYLE_LIST, "Paintjobs", "Paint Job 1\nPaint Job 2\nPaint Job 3\nPaint Job 4\nPaint Job 5\n \nBack", "Apply", "Close");
-        	}
-			case 6:
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-        	}
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_EXHAUSTS(playerid, response, listitem, inputtext[])
-{
-	if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)
-       	{
-       	    case 0:
-       	    {
-                if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 558 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560)
-		        {
-		            new car = GetPlayerVehicleID(playerid);
-		            if(pmodelid[playerid] == 562)
-		            {
-		            	AddVehicleComponent(car,1034);
-		            	PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		            	SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-		            	Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565)
-					{
-					    AddVehicleComponent(car,1046);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559)
-					{
-					    AddVehicleComponent(car,1065);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561)
-					{
-					    AddVehicleComponent(car,1064);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560)
-					{
-					    AddVehicleComponent(car,1028);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)
-					{
-					    AddVehicleComponent(car,1089);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-				 	    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-	    			}
-				}
-	  			else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 1:
-        	{
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 558 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 562)
-			        {
-			            AddVehicleComponent(car,1037);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565)
-					{
-					    AddVehicleComponent(car,1045);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559)
-					{
-					    AddVehicleComponent(car,1066);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561)
-					{
-					    AddVehicleComponent(car,1059);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560)
-					{
-					    AddVehicleComponent(car,1029);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)
-					{
-					    AddVehicleComponent(car,1092);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 2:
-        	{
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 558 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-			            AddVehicleComponent(car,1044);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		             	SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 534)// Remington
-					{
-					    AddVehicleComponent(car,1126);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 567)// Savanna
-					{
-					    AddVehicleComponent(car,1129);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	                    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1104);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 535) // Slamvan
-					{
- 						AddVehicleComponent(car,1113);
- 						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1136);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					   	SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-			}
-			case 3:
-			{
-                if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 558 || pmodelid[playerid] == 561 || pmodelid[playerid] == 560)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-			            AddVehicleComponent(car,1043);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 534)// Remington
-					{
-					    AddVehicleComponent(car,1127);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 567)// Savanna
-					{
-					    AddVehicleComponent(car,1132);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1105);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-
-					else if(pmodelid[playerid] == 535) // Slamvan
-					{
-					    AddVehicleComponent(car,1114);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-
-					else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1135);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 4:// Large
-        	{
-				if( pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 527 || pmodelid[playerid] == 542 ||pmodelid[playerid] == 589 || pmodelid[playerid] == 400 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 426 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477)
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-						AddVehicleComponent(car,1020);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-						Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-						AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 527) // cadrona
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 542) // clover
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 589) // club
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 400) // landstalker
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 603) // phoenix
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 436) // previon
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 547) // primo
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 405) // sentinel
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 580) // stafford
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 550) // sunrise
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 549) // tampa
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 477) // zr-350
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 517) // majestic
-			        {
-			            AddVehicleComponent(car,1020);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-				}
-        	case 5: // Medium
-        	{
-                if( pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 527 || pmodelid[playerid] == 542 ||pmodelid[playerid] == 589 || pmodelid[playerid] == 400 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 426 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477)
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 527) // cadrona
-			       	{
-						AddVehicleComponent(car,1021);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 542) // clover
-			        {
-			            AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 400) // landstalker
-			        {
-			            AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 426) // premier
-			        {
-						AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 436) // previon
-			        {
-			            AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 547) // primo
-			        {
-			            AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 405) // sentinel
-			        {
-			            AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 477) // zr350
-			        {
-			            AddVehicleComponent(car,1021);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 6: // Small
-        	{
-                if(pmodelid[playerid] == 436)//previon
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 436) // previon
-			       	{
-			            AddVehicleComponent(car,1022);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 7: // Twin
-        	{
-                if(pmodelid[playerid] == 518 || pmodelid[playerid] == 415 || pmodelid[playerid] == 542 || pmodelid[playerid] == 546 || pmodelid[playerid] == 400 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 426 || pmodelid[playerid] == 436 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477)
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 415) // cheetah
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 542) // clover
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 400) // landstalker
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 426) // premier
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 436) // previon
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 547) // primo
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 405 ) // sentinel
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 477) // zr-350
-			       	{
-			            AddVehicleComponent(car,1019);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 8: // Upswept
-        	{
-                if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 415 || pmodelid[playerid] == 542 || pmodelid[playerid] == 546 || pmodelid[playerid] == 400 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 426 || pmodelid[playerid] == 415 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477)//zr-350
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 415) // cheetah
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 527) // cadrona
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 542) // clover
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 589) // club
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 400) // landstalker
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 547) // primo
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 405) // sentinel
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 580) // stafford
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1018);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 477) // zr-350
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1018);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-				}
-			}
-			case 9: // _
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_EXHAUSTS, DIALOG_STYLE_LIST, "Exhausts", "Wheel Arc. Alien exhaust\nWheel Arc. X-Flow exhaust\nLow Co. Chromer exhaust\nLow Co. Slamin exhaust\nTransfender Large exhaust\nTransfender Medium exhaust\nTransfender Small exhaust\nTransfender Twin exhaust\nTransfender Upswept exhaust\n \nBack", "Apply", "Close");
-        	}
-        	case 10: // Back
-        	{
-                Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-       	    }
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_NITRO(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-				if(GetPlayerMoney(playerid) >= 0)
-		        {
-		            new car = GetPlayerVehicleID(playerid);
-		            AddVehicleComponent(car,1008);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added. ");
-           			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-				}
-				else
-				{
-	                SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-        			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-				}
-			}
-			case 1:
-			{
-				if(GetPlayerMoney(playerid) >= 0)
-				{
-					new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1009);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-           			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-           			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-				}
-			}
-        	case 2:
-			{
-        	    if(GetPlayerMoney(playerid) >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-	                AddVehicleComponent(car,1010);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			        Dialog_Show(playerid, DIALOG_TYPE_NITRO, DIALOG_STYLE_LIST, "Nitrous Oxide", "2x Nitrous\n5x Nitrous\n10x Nitrous\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_NITRO, DIALOG_STYLE_LIST, "Nitrous Oxide", "2x Nitrous\n5x Nitrous\n10x Nitrous\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 3: {Dialog_Show(playerid, DIALOG_TYPE_NITRO, DIALOG_STYLE_LIST, "Nitrous Oxide", "2x Nitrous\n5x Nitrous\n10x Nitrous\n \nBack", "Apply", "Close");}
-        	case 4: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_LIGHTS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:// round
-       	    {
-   				if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 589 || pmodelid[playerid] == 400 || pmodelid[playerid] == 436 || pmodelid[playerid] == 439)//stallion
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-               			AddVehicleComponent(car,1013);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-               			Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1013);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-               			Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 589) // club
-			       	{
-			            AddVehicleComponent(car,1013);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 400) // landstalker
-			       	{
-			            AddVehicleComponent(car,1013);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 436) // previon
-			       	{
-						AddVehicleComponent(car,1013);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 439) // stallion
-			       	{
-			            AddVehicleComponent(car,1013);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-        	    }
-                else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-					}
-			}
-        	case 1: // Square
-        	{
-				if(pmodelid[playerid] == 589 || pmodelid[playerid] == 603 || pmodelid[playerid] == 400)
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 589) // club
-			       	{
-			            AddVehicleComponent(car,1024);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1024);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 400) // landstalker
-			       	{
-			            AddVehicleComponent(car,1024);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 2: {Dialog_Show(playerid, DIALOG_TYPE_LIGHTS, DIALOG_STYLE_LIST, "Lights", "Round\nSquare\n \nBack", "Apply", "Close");}
-        	case 3: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close"); }
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_VENTS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:// Oval
-			{
-     			if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 546 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 547 || pmodelid[playerid] == 439 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549)
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 547) // primo
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 439) // stallion
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1142);
-			            AddVehicleComponent(car,1143);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-        	   	}
-        	   	else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 1: // Square
-        	{
-				if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 589 || pmodelid[playerid] == 546 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 439 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549)//tampa
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 589) // club
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 439) // stallion
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1144);
-			            AddVehicleComponent(car,1145);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-					}
-        	   	}
-            	else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 2: {Dialog_Show(playerid, DIALOG_TYPE_VENTS, DIALOG_STYLE_LIST, "Vents", "Oval\nSquare\n \nBack", "Apply", "Close");}
-        	case 3: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_FBUMPS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-                if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-				{
-		            new car = GetPlayerVehicleID(playerid);
-		            if(pmodelid[playerid] == 562) // Elegy
-		            {
-		            	AddVehicleComponent(car,1171);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	              		SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-		            	Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1153);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jester
-					{
-					    AddVehicleComponent(car,1160);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1155);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1169);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558) // Uranus
-					{
-					    AddVehicleComponent(car,1166);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-				 	    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-        	}
-       	    case 1:
-        	{
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 ||pmodelid[playerid] == 561 ||pmodelid[playerid] == 558 ||pmodelid[playerid] == 560)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 562) // Elegy
-			        {
-			            AddVehicleComponent(car,1172);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1152);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jetser
-					{
-					    AddVehicleComponent(car,1173);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1157);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1170);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)  // Uranus
-					{
-					    AddVehicleComponent(car,1165);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 2:
-        	{
-                if(pmodelid[playerid] == 575 || pmodelid[playerid] == 534 ||pmodelid[playerid] == 567 ||pmodelid[playerid] == 536 ||pmodelid[playerid] == 576 || pmodelid[playerid] == 535)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-			            AddVehicleComponent(car,1174);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 534)// Remington
-					{
-					    AddVehicleComponent(car,1179);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 567)// Savanna
-					{
-					    AddVehicleComponent(car,1189);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1182);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 535) // Slamvan
-					{
-					    AddVehicleComponent(car,1115);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1191);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-			}
-			case 3:
-        	{
-				if(pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 567 || pmodelid[playerid] == 535 || pmodelid[playerid] == 536 || pmodelid[playerid] == 576 || pmodelid[playerid] == 576)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-			            AddVehicleComponent(car,1175);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 534)// Remington
-					{
-					    AddVehicleComponent(car,1185);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 567)// Savanna
-					{
-					    AddVehicleComponent(car,1188);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1181);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				    else if(pmodelid[playerid] == 535) // Slamvan
-					{
-					    AddVehicleComponent(car,1116);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1190);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4:
-        	{
-             	Dialog_Show(playerid, DIALOG_TYPE_FBUMPS, DIALOG_STYLE_LIST,"Front Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow co. Chromer Bumper\nLow co. Slamin Bumper\n \nBack", "Apply", "Close");
-        	}
-			case 5:
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-       	    }
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_HOODS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:// fury
-       	    {
-               	if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 589 || pmodelid[playerid] == 492 || pmodelid[playerid] == 426 || pmodelid[playerid] == 550)
-			    {
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-			            AddVehicleComponent(car,1005);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1005);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 589) // club
-			       	{
-			            AddVehicleComponent(car,1005);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 492) // greenwood
-			       	{
-			            AddVehicleComponent(car,1005);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 426) // premier
-			       	{
-			            AddVehicleComponent(car,1005);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1005);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-				Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-				}
-	    	}
-        	case 1: // Champ
-        	{
-                if(pmodelid[playerid] == 401 ||pmodelid[playerid] == 492 ||pmodelid[playerid] == 546 ||pmodelid[playerid] == 426 ||pmodelid[playerid] == 550)
-			   	{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-			            AddVehicleComponent(car,1004);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1004);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 492) // greenwood
-			       	{
-			            AddVehicleComponent(car,1004);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 426) // premier
-			       	{
-			            AddVehicleComponent(car,1004);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1004);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 2: // Race
-        	{
-				if(pmodelid[playerid] == 549)
-			    {
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1011);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 3: // Worx
-        	{
-				if(pmodelid[playerid] == 549)
-			    {
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1012);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-						}
-					}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4: {Dialog_Show(playerid, DIALOG_TYPE_HOODS, DIALOG_STYLE_LIST, "Hoods", "Fury\nChamp\nRace\nWorx\n \nBack", "Apply", "Close");}
-			case 5: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_HYDRAULICS(playerid, response, listitem, inputtext[])
-{
-	new stockinfo;
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-                if(info_stockjobinfo[stockinfo][stocktunninghydrolic] >= 0)
-		        {
-		            new car = GetPlayerVehicleID(playerid);
-		            AddVehicleComponent(car,1087);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added. ");
-		            Dialog_Show(playerid, DIALOG_TYPE_HYDRAULICS, DIALOG_STYLE_LIST, "Hydaulics", "Hydaulics\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	                SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_HYDRAULICS, DIALOG_STYLE_LIST, "Hydaulics", "Hydaulics\n \nBack", "Apply", "Close");
-			    }
-       	    }
-       	    case 1: {Dialog_Show(playerid, DIALOG_TYPE_HYDRAULICS, DIALOG_STYLE_LIST, "Hydaulics", "Hydaulics\n \nBack", "Apply", "Close");}
-        	case 2:{Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
- 		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_CSTEREO(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-                if(GetPlayerMoney(playerid) >= 0)
-		        {
-		            new car = GetPlayerVehicleID(playerid);
-		            AddVehicleComponent(car,1086);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added. ");
-		            Dialog_Show(playerid, DIALOG_TYPE_CSTEREO, DIALOG_STYLE_LIST, "Car Stereo", "Bass Boost\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	                SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_CSTEREO, DIALOG_STYLE_LIST, "Car Stereo", "Bass Boost\n \nBack", "Apply", "Close");
-			    }
-       	    }
-       	    case 1: {Dialog_Show(playerid, DIALOG_TYPE_CSTEREO, DIALOG_STYLE_LIST, "Car Stereo", "Bass Boost\n \nBack", "Apply", "Close");}
-        	case 2: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
- 		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_WHEELS(playerid, response, listitem, inputtext[])
-{
-	new stockjobinfoid;
-    if(!response) {SetCameraBehindPlayer(playerid);}
-	if(response)
-    {
-		switch(listitem)// Checking which list item was selected
-        {
-        	case 0:
-        	{
-                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-		        {
-		            new car = GetPlayerVehicleID(playerid);
-		            AddVehicleComponent(car,1025);
-		            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		            SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Offroad Wheels ");
-		            Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 1:
-        	{
-                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1074);
-           			PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Mega Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 2:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-	                AddVehicleComponent(car,1076);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Wires Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 3:
-        	{
-                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1078);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Twist Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	      		 	SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4:
-        	{
-                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1081);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Grove Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 5:
-        	{
-                if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-	                AddVehicleComponent(car,1082);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Import Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 6:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1085);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Atomic Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 7:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1096);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	          		SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Ahab Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 8:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1097);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	          		SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Virtual Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 9:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1098);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	          		SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Access Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 10:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-		        {
-		            new car = GetPlayerVehicleID(playerid);
-		            AddVehicleComponent(car,1084);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-		            SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Trance Wheels ");
-		            Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 11:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1073);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Shadow Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 12:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-	                AddVehicleComponent(car,1075);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Rimshine Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	      	 		SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 13:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1077);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Classic Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 14:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1079);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Cutter Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-	       			SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 15:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-	                AddVehicleComponent(car,1080);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Switch Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 16:
-        	{
-				if(info_stockjobinfo[stockjobinfoid][stocktunningroue] >= 0)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        AddVehicleComponent(car,1083);
-					PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			        SendClientMessage(playerid,COLOR_WHITE,"[INFO] You have succesfully added Dollar Wheels");
-			        Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-				else
-				{
-				    SendErrorMessage(playerid,"Il n'y a plus de cette pièce dans le stock");
-				    Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 17:
-        	{
-					Dialog_Show(playerid, DIALOG_TYPE_WHEELS, DIALOG_STYLE_LIST, "Wheels", "Offroad\nMega\nWires\nTwist\nGrove\nImport\nAtomic\nAhab\nVirtual\nAccess\nTrance\nShadow\nRimshine\nClassic\nCutter\nSwitch\nDollar\n \nBack", "Apply", "Close");
-        	}
-			case 18:
-        	{
-				Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-       	    }
-		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_BULLBARS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-                if(pmodelid[playerid] == 534)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 534) // Remington
-			        {
-			            AddVehicleComponent(car,1100);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-			        }
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 1: 
-        	{
-                if(pmodelid[playerid] == 534)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 534) // Remington
-			        {
-			            AddVehicleComponent(car,1123);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-				}
-       	    }
-       	    case 2:
-       	    {
-                if(pmodelid[playerid] == 534)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 534) // Remington
-			        {
-			            AddVehicleComponent(car,1125);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 3:
-        	{
-                if(pmodelid[playerid] == 535)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 535) // Slamvan
-			        {
-			            AddVehicleComponent(car,1117);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] ou cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4:
-        	{
-                Dialog_Show(playerid, DIALOG_TYPE_BULLBARS, DIALOG_STYLE_LIST, "Bullbars", "Locos Chrome Grill\nLocos Chrome Bars\nLocos Chrome Lights \nLocos Chrome Bullbar\n \nBack", "Apply", "Close");
-        	}
-			case 5: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
- 		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_RBUMPS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-        switch(listitem)// Checking which list item was selected
-		{
-        	case 0:
-        	{
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-		        {
-
-		            new car = GetPlayerVehicleID(playerid);
-		            if(pmodelid[playerid] == 562) // Elegy
-		            {
-		            	AddVehicleComponent(car,1149);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	              		SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-		            	Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1150);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jester
-					{
-					    AddVehicleComponent(car,1159);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1154);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1141);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558) // Uranus
-					{
-					    AddVehicleComponent(car,1168);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-				 	    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 1:
-        	{
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-		        {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 562) // Elegy
-			        {
-			            AddVehicleComponent(car,1148);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] YComponent successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1151);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jetser
-					{
-					    AddVehicleComponent(car,1161);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1156);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1140);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)  // Uranus
-					{
-					    AddVehicleComponent(car,1167);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 2:
-        	{
-				if(pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 567 || pmodelid[playerid] == 536 || pmodelid[playerid] == 576 || pmodelid[playerid] == 535)
-		        {
-              		new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-			            AddVehicleComponent(car,1176);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 534)// Remington
-					{
-					    AddVehicleComponent(car,1180);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 567)// Savanna
-					{
-					    AddVehicleComponent(car,1187);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1184);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 535) // Slamvan
-					{
-					    AddVehicleComponent(car,1109);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1192);
-					    PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-       	    }
-			case 3:
-       	    {
-                if(pmodelid[playerid] == 575 || pmodelid[playerid] == 534 || pmodelid[playerid] == 567 || pmodelid[playerid] == 536 || pmodelid[playerid] == 576 || pmodelid[playerid] == 535)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-			            AddVehicleComponent(car,1177);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 534)// Remington
-					{
-					    AddVehicleComponent(car,1178);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 567)// Savanna
-					{
-					    AddVehicleComponent(car,1186);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1183);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 535) // Slamvan
-					{
-					    AddVehicleComponent(car,1110);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1193);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4: {Dialog_Show(playerid, DIALOG_TYPE_RBUMPS, DIALOG_STYLE_LIST, "Rear Bumpers", "Wheel Arc. Alien Bumper\nWheel Arc. X-Flow Bumper\nLow Co. Chromer Bumper\nLow Co. Slamin Bumper\n \nBack", "Apply", "Close");}
-			case 5: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
- 		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_SIDESKIRTS(playerid, response, listitem, inputtext[])
-{
-    if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-        switch(listitem)// Checking which list item was selected
-        {
-        	case 0:
-        	{
-                if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-		        {
-
-		            new car = GetPlayerVehicleID(playerid);
-		            if(pmodelid[playerid] == 562) // Elegy
-		            {
-		            	AddVehicleComponent(car,1036);
-		            	AddVehicleComponent(car,1040);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	              		SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-		            	Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1047);
-					    AddVehicleComponent(car,1051);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jester
-					{
-					    AddVehicleComponent(car,1069);
-					    AddVehicleComponent(car,1071);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] YComponent successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1056);
-					    AddVehicleComponent(car,1062);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1026);
-					    AddVehicleComponent(car,1027);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558) // Uranus
-					{
-					    AddVehicleComponent(car,1090);
-					    AddVehicleComponent(car,1094);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-				 	    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 1:
-        	{
-                if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-		        {
-
-
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 562) // Elegy
-			        {
-			            AddVehicleComponent(car,1039);
-			            AddVehicleComponent(car,1041);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1048);
-					    AddVehicleComponent(car,1052);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jetser
-					{
-					    AddVehicleComponent(car,1070);
-					    AddVehicleComponent(car,1072);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1057);
-					    AddVehicleComponent(car,1063);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1031);
-					    AddVehicleComponent(car,1030);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)  // Uranus
-					{
-					    AddVehicleComponent(car,1093);
-					    AddVehicleComponent(car,1095);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 2:
-        	{
-                if(pmodelid[playerid] == 575 || pmodelid[playerid] == 536 || pmodelid[playerid] == 576 || pmodelid[playerid] == 567)
-	            {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 575) // Brodway
-			        {
-	       		        AddVehicleComponent(car,1042);
-	       		        AddVehicleComponent(car,1099);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-	   				else if(pmodelid[playerid] == 567) // Savanna
-					{
-					    AddVehicleComponent(car,1102);
-					    AddVehicleComponent(car,1133);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-	    		        Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-	                }
-	                else if(pmodelid[playerid] == 576) // Tornado
-					{
-					    AddVehicleComponent(car,1134);
-					    AddVehicleComponent(car,1137);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-	    		        Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-	                }
-	                else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1108);
-					    AddVehicleComponent(car,1107);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-	                    Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 3:
-        	{
-                if(pmodelid[playerid] == 534 || pmodelid[playerid] == 534)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 534) // Remington
-			        {
-			            AddVehicleComponent(car,1122);
-			            AddVehicleComponent(car,1101);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4:
-        	{
-                if(pmodelid[playerid] == 534 || pmodelid[playerid] == 534)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 534) // Remington
-			        {
-			            AddVehicleComponent(car,1106);
-			            AddVehicleComponent(car,1124);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-       	    }
-			case 5:
-       	    {
-                if(pmodelid[playerid] == 535)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 535) // Slamvan
-			        {
-			            AddVehicleComponent(car,1118);
-			            AddVehicleComponent(car,1120);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-       	    }
-			case 6:
-       	    {
-				if(pmodelid[playerid] == 535)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 535) // Slamvan
-			        {
-			            AddVehicleComponent(car,1119);
-			            AddVehicleComponent(car,1121);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car. ");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-            }
-			case 7:
-            {
-				if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 527 || pmodelid[playerid] == 415 || pmodelid[playerid] == 589 || pmodelid[playerid] == 546 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 436 || pmodelid[playerid] == 439 || pmodelid[playerid] == 580 || pmodelid[playerid] == 549 || pmodelid[playerid] == 477)
-				{
-		        	new car = GetPlayerVehicleID(playerid);
-		        	if(pmodelid[playerid] == 401)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 518)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 527)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-						Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 415)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 589)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 546)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 517)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 603)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 436)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 439)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 580)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 549)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-		        	if(pmodelid[playerid] == 477)
-		        	{
-			            AddVehicleComponent(car,1007);
-			            AddVehicleComponent(car,1017);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-					}
-       	    	}
-        		else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-				}
-       	    }
-			case 8:
-       	    {
-				Dialog_Show(playerid, DIALOG_TYPE_SIDESKIRTS, DIALOG_STYLE_LIST, "Side Skirts", "Wheel Arc. Alien Side Skirt\nWheel Arc. X-Flow Side Skirt\nLocos Chrome Strip\nLocos Chrome Flames\nLocos Chrome Arches \nLocos Chrome Trim\nLocos Wheelcovers\nTransfender Side Skirt\n \nBack", "Apply", "Close");
-       	    }
-			case 9:
-       	    {
-    			Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-       	    }
- 		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_ROOFS(playerid, response, listitem, inputtext[])
-{
-	if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-				if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-				{
-					new car = GetPlayerVehicleID(playerid);
-					if(pmodelid[playerid] == 562) // Elegy
-					{
-						AddVehicleComponent(car,1038);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-						AddVehicleComponent(car,1054);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jester
-					{
-						AddVehicleComponent(car,1067);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-						AddVehicleComponent(car,1055);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-						AddVehicleComponent(car,1032);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558) // Uranus
-					{
-						AddVehicleComponent(car,1088);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 1:
-        	{
-                if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 562) // Elegy
-			        {
-			            AddVehicleComponent(car,1035);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1053);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jetser
-					{
-					    AddVehicleComponent(car,1068);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1061);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1033);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)  // Uranus
-					{
-					    AddVehicleComponent(car,1091);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-				}
-        	}
-        	case 2:
-        	{
-                if(pmodelid[playerid] == 567 || pmodelid[playerid] == 536)
-			    {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 567) // Savanna
-			        {
-			            AddVehicleComponent(car,1130);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-	   				else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1128);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 3:
-        	{
-				if(pmodelid[playerid] == 567 || pmodelid[playerid] == 536)
-				{
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 567) // Savanna
-			        {
-			            AddVehicleComponent(car,1131);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-	   				else if(pmodelid[playerid] == 536) // Blade
-					{
-					    AddVehicleComponent(car,1103);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 4:
-        	{
-				if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 589 || pmodelid[playerid] == 492 || pmodelid[playerid] == 546 || pmodelid[playerid] == 603 || pmodelid[playerid] == 426 || pmodelid[playerid] == 436 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550|| pmodelid[playerid] == 477)
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401)
-			       	{
-						AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 518)
-			        {
-			            AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 589)
-			        {
-			            AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 492)
-			        {
-			            AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 546)
-			        {
-			            AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 603)
-			        {
-			            AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 426)
-			        {
-			            AddVehicleComponent(car,1006);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					if(pmodelid[playerid] == 436)
-					{
-						AddVehicleComponent(car,1006);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co.	Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					if(pmodelid[playerid] == 580)
-					{
-						AddVehicleComponent(car,1006);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. 	Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					if(pmodelid[playerid] == 550)
-					{
-						AddVehicleComponent(car,1006);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-					if(pmodelid[playerid] == 477)
-					{
-						AddVehicleComponent(car,1006);
-						PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-						SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-						Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 5: {Dialog_Show(playerid, DIALOG_TYPE_ROOFS, DIALOG_STYLE_LIST, "Roofs", "Wheel Arc. Alien\nWheel Arc. X-Flow\nLow Co. Hardtop Roof\nLow Co. Softtop Roof\nTransfender Roof Scoop\n \nBack", "Apply", "Close");}
-			case 6: {Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");}
- 		}
-	}
-	return 1;
-}
-Dialog:DIALOG_TYPE_SPOILERS(playerid, response, listitem, inputtext[])
-{
-	if(!response) {SetCameraBehindPlayer(playerid);}
-    if(response)
-    {
-       	switch(listitem)// Checking which list item was selected
-       	{
-       	    case 0:
-       	    {
-     	       if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-		       {
-		            new car = GetPlayerVehicleID(playerid);
-		            if(pmodelid[playerid] == 562) // Elegy
-		            {
-		            	AddVehicleComponent(car,1147);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-	              		SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-		            	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1049);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jester
-					{
-					    AddVehicleComponent(car,1162);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1158);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1138);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558) // Uranus
-					{
-					    AddVehicleComponent(car,1164);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-				 	    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 1:
-        	{
-            	if(pmodelid[playerid] == 562 || pmodelid[playerid] == 565 || pmodelid[playerid] == 559 || pmodelid[playerid] == 561 || pmodelid[playerid] == 558 || pmodelid[playerid] == 560)
-		        {
-			        new car = GetPlayerVehicleID(playerid);
-			        if(pmodelid[playerid] == 562) // Elegy
-			        {
-			            AddVehicleComponent(car,1146);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 565) // Flash
-					{
-					    AddVehicleComponent(car,1150);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 559) // Jetser
-					{
-					    AddVehicleComponent(car,1158);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 561) // Stratum
-					{
-					    AddVehicleComponent(car,1060);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 560) // Sultan
-					{
-					    AddVehicleComponent(car,1139);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-					else if(pmodelid[playerid] == 558)  // Uranus
-					{
-					    AddVehicleComponent(car,1163);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-					    SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added.");
-					    Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-				}
-				else
-				{
-				    SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component to your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 2:// Win
-        	{
-            	if(pmodelid[playerid] == 401 || pmodelid[playerid] == 518 || pmodelid[playerid] == 527 || pmodelid[playerid] == 415 || pmodelid[playerid] == 546 || pmodelid[playerid] == 603 || pmodelid[playerid] == 426 || pmodelid[playerid] == 436 || pmodelid[playerid] == 405 || pmodelid[playerid] == 477 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549)//tampa
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO]Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 527) // cadrona
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 415) // cheetah
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 426) // premier
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 436) // previon
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 405) // sentinel
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 477) // stallion
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 580) // stafford
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1001);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-        	   	}
-        	   	else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 3: // Fury
-        	{
-				if(pmodelid[playerid] == 518 || pmodelid[playerid] == 415 || pmodelid[playerid] == 546 || pmodelid[playerid] == 517 || pmodelid[playerid] == 603 || pmodelid[playerid] == 405 || pmodelid[playerid] == 477 || pmodelid[playerid] == 580 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549)//tampa
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 415) // cheetah
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 603) // phoenix
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 405) // sentinel
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 477) // stallion
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 580) // stafford
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1023);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-        	    }
-       	    	else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 4: // Alpha
-        	{
-            	if(pmodelid[playerid] == 518 || pmodelid[playerid] == 415 || pmodelid[playerid] == 401 || pmodelid[playerid] == 517 || pmodelid[playerid] == 426 || pmodelid[playerid] == 436 || pmodelid[playerid] == 477 || pmodelid[playerid] == 547 || pmodelid[playerid] == 550 || pmodelid[playerid] == 549)//tampa
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 518) // buccaneer
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 415) // cheetah
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 401) // bravura
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 426) // premier
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 436) // previon
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 477) // stallion
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 547) // primo
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 550) // sunrise
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 549) // tampa
-			       	{
-			            AddVehicleComponent(car,1003);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-                        Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 5: // Pro
-        	{
-            	if(pmodelid[playerid] == 589 || pmodelid[playerid] == 492 || pmodelid[playerid] == 547 || pmodelid[playerid] == 405)//sentinel
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 518) // club
-			       	{
-			            AddVehicleComponent(car,1000);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 492) // greenwood
-			       	{
-			            AddVehicleComponent(car,1000);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 547) // primo
-			       	{
-			            AddVehicleComponent(car,1000);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 405) // sentinel
-			       	{
-        				AddVehicleComponent(car,1000);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-						}
-        	    	}
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-			}
-			case 6: // Champ
-        	{
-            	if(pmodelid[playerid] == 527 || pmodelid[playerid] == 542 || pmodelid[playerid] == 405)//sentinel
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 527) // cadrona
-			       	{
-			            AddVehicleComponent(car,1014);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			    		Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			    	if(pmodelid[playerid] == 542) // clover
-			    	{
-			            AddVehicleComponent(car,1014);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			        if(pmodelid[playerid] == 405) // sentinel
-			        {
-        				AddVehicleComponent(car,1014);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-        	    }
-	    		else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-            }
-	    	case 7: // Race
-        	{
-            	if(pmodelid[playerid] == 527 ||pmodelid[playerid] == 542)//clover
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 527) // cadrona
-			       	{
-			            AddVehicleComponent(car,1014);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 542) // clover
-			       	{
-			            AddVehicleComponent(car,1014);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-        	   	}
-        		else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-        	}
-			case 8: // Drag
-        	{
-            	if(pmodelid[playerid] == 546 || pmodelid[playerid] == 517)//majestic
-				{
-			       	new car = GetPlayerVehicleID(playerid);
-			       	if(pmodelid[playerid] == 546) // intruder
-			       	{
-			            AddVehicleComponent(car,1002);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-			            Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-			       	if(pmodelid[playerid] == 517) // majestic
-			       	{
-			            AddVehicleComponent(car,1002);
-			            PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
-			            SendClientMessage(playerid,COLOR_WHITE,"[INFO] Component successfully added");
-           			 	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-					}
-        	    }
-        	    else
-				{
-					SendClientMessage(playerid,COLOR_YELLOW,"[WARNING] You cannot install this component on your car.");
-					Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-				}
-			}
-        	case 9:
-        	{
-            	Dialog_Show(playerid, DIALOG_TYPE_SPOILERS, DIALOG_STYLE_LIST, "Spoilers", "Wheel Arc. Alien Spoiler\nWheel Arc. X-Flow Spoiler\nTransfender Win Spoiler\nTransfender Fury Spoiler\nTransfender Alpha Spoiler\nTransfender Pro Spoiler\nTransfender Champ Spoiler\nTransfender Race Spoiler\nTransfender Drag Spoiler\n \nBack", "Apply", "Close");
-        	}
-			case 10:
-        	{
-            	Dialog_Show(playerid, DIALOG_TYPE_MAIN, DIALOG_STYLE_LIST, "Car Tuning Menu", "Paint Jobs\nHoods\nVents\nLights\nExhausts\nFront Bumpers\nRear Bumpers\nRoofs\nSpoilers\nSide Skirts\nBullbars\nWheels\nCar Stereo\nHydraulics\nNitrous Oxide", "Enter", "Close");
-    	    }
-		}
-	}
-	return 1;
-}
 Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 {
 	if(!response) {SetCameraBehindPlayer(playerid);}
@@ -24681,13 +21147,15 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
        	    {
 				TogglePlayerControllable(AdminTarget[playerid], 0);
 				SendAdminAction(playerid, "Vous venez de freeze %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");
 			}
 			case 2:
 			{
 				TogglePlayerControllable(AdminTarget[playerid], 1);
 				SendAdminAction(playerid, "Vous venez d'unfreeze %s", ReturnName(AdminTarget[playerid], 0));	
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");
 			}
 			case 3:
 			{
@@ -24721,7 +21189,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				TextDrawHideForPlayer(AdminTarget[playerid], gServerTextdraws[2]);
 				SendAdminAction(playerid, "Vous avez 1up %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s vous a réanimé.", ReturnName(playerid, 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");			
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");		
 			}
 			case 7:
 			{
@@ -24741,7 +21210,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					SendAdminAction(AdminTarget[playerid], "Vous avez été démute par %s", ReturnName(playerid, 0));
 					SendAdminAction(playerid, "Vous avez démute %s.", ReturnName(AdminTarget[playerid], 0));	
 				} 
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");				
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");				
 			}
 			case 8:
 			{
@@ -24751,7 +21221,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				PlayerPlaySound(AdminTarget[playerid], 1130, 0.0, 0.0, 0.0);
 				SendServerMessage(AdminTarget[playerid],"Vous avez été slap par %s.",ReturnName(playerid,0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s à slappé %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");		
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");	
 			}
 			case 9:
 			{
@@ -24772,7 +21243,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 						SendServerMessage(playerid, "Vous avez enlever le saignement à %s.", ReturnName(AdminTarget[playerid], 0));
 					}
 				}
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");
 			}
 			case 10:
 			{
@@ -24790,7 +21262,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					SendAdminAction(playerid, "Vous avez invité %s dans les helpeurs.", ReturnName(AdminTarget[playerid], 0));
 					SendAdminAction(AdminTarget[playerid], "%s vous a invité dans les helpeurs.", ReturnName(playerid, 0));
 				}
-				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");
 			}
 			case 11:
 			{
@@ -24811,7 +21284,8 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 			}
 			case 12:
 			{
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
 			}
 		}
 	}
@@ -24819,7 +21293,11 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 }
 Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action to do on this player",menuclick3eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");
+	}
     if(response)
     {
        	switch(listitem)
@@ -24836,7 +21314,8 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SetPlayerVirtualWorld(AdminTarget[playerid],0);
 				SetPlayerInterior(AdminTarget[playerid],0);
 				SendServerMessage(playerid, "Vous avez mit l'interieur et le virtualworld a 0 pour le joueur %s.",ReturnName(AdminTarget[playerid],0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
 			case 2:
 			{
@@ -24850,20 +21329,23 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 					SendClientMessageEx(playerid, COLOR_WHITE, "* %s (%d ammo)", ReturnWeaponName(weaponid), ammo);
 				}
 				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
 			case 3:
 			{
 				ResetWeapons(AdminTarget[playerid]);
 				SendAdminAction(playerid, "Vous avez reset %s weapons.", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
 			case 4:
 			{
 				if (PlayerData[playerid][pAdmin] < 2)
 					return SendErrorMessage(playerid, "Tu n'as pas acces a cette commande.");
 				SendServerMessage(playerid, "%s IP est %s.", ReturnName(AdminTarget[playerid], 0), PlayerData[AdminTarget[playerid]][pIP]);
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
 			case 5:
 			{
@@ -24874,7 +21356,8 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				if (PlayerData[AdminTarget[playerid]][pWarnings] >= 2 && strlen(PlayerData[AdminTarget[playerid]][pWarn2]))
 					SendClientMessageEx(playerid, COLOR_WHITE, "* 2e Warning: \"%s\"", PlayerData[AdminTarget[playerid]][pWarn2]);
 				SendClientMessage(playerid, COLOR_GREY, "-----------------------------------------------------------");
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
 			}
 			case 6:
 			{
@@ -24884,7 +21367,8 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SendAdminAction(playerid, "Vous avez supprimer a %s ces warn(s).", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s a supprimer vos warning.", ReturnName(playerid, 0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer les warn de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
 			}
 			case 7:
 			{
@@ -24892,7 +21376,8 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				SendAdminAction(playerid, "Vous avez supprimer a %s son inventaire.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s a supprimer tout votre inventaire.", ReturnName(playerid, 0));
 				SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a supprimer l'invtaire de %s.", ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
 			case 8:
 			{
@@ -24900,13 +21385,15 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 				PlayerData[AdminTarget[playerid]][pThirst] = 100;
 				SendAdminAction(playerid, "Vous avez restauré la faim et la soif de %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "Faim et soif restauré par %s.", ReturnName(playerid, 0));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");			
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");			
 			}
 			case 9:
 			{
 				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur na pas été tirer dessus depuis sa connection au serveur.");}
 				SendServerMessage(playerid, "%s a tirer sur %s (%s).", ReturnName(AdminTarget[playerid], 0), ReturnName(PlayerData[AdminTarget[playerid]][pLastShot]), GetDuration(gettime() - PlayerData[AdminTarget[playerid]][pShotTime]));
-				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
 			case 10:
 			{
@@ -24963,7 +21450,8 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			}
 			case 20:
 			{
-				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 			}
 		}
 	}
@@ -24971,56 +21459,100 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 }
 Dialog:ModifierInformation1(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		SetPlayerHealth(AdminTarget[playerid],strval(inputtext));
 		SendServerMessage(playerid, "Vous avez mis la vie de %s a %d.", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation2(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		SetPlayerArmour(AdminTarget[playerid],strval(inputtext));
 		SendServerMessage(playerid, "Vous avez mis l'armure de %s a %d.", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation3(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		SetPlayerInterior(AdminTarget[playerid],strval(inputtext));
 		PlayerData[AdminTarget[playerid]][pInterior] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s dans l'intérieur (ID %d.)", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation4(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		SetPlayerVirtualWorld(AdminTarget[playerid], strval(inputtext));
 		PlayerData[AdminTarget[playerid]][pWorld] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s dans le virtual world (ID %d.)", ReturnName(AdminTarget[playerid], 0),strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation5(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}	
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 1)
@@ -25051,14 +21583,25 @@ Dialog:ModifierInformation5(playerid, response, listitem, inputtext[])
 			}
 		}
 		Log_Write("logs/warn_log.txt", "[%s] %s a warned %s pour %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0),inputtext);
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation6(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		static query[128];
@@ -25075,14 +21618,25 @@ Dialog:ModifierInformation6(playerid, response, listitem, inputtext[])
 		}
 		format(query, sizeof(query), "SELECT `ID` FROM `characters` WHERE `Character` = '%s'", SQL_ReturnEscaped(inputtext));
 		mysql_tquery(g_iHandle, query, "OnNameChange", "dds", playerid, AdminTarget[playerid], inputtext);
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifierInformation7(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 3)
@@ -25103,14 +21657,25 @@ Dialog:ModifierInformation7(playerid, response, listitem, inputtext[])
 			SendServerMessage(playerid, "Vous avez mis %s faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
 			SendServerMessage(AdminTarget[playerid], "%s vous a mis dans la faction \"%s\".", ReturnName(playerid, 0), FactionData[strval(inputtext)][factionName]);
 		}
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");			
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");			
 	}
 	return 1;
 }
 Dialog:ModifierInformation8(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		static factionid;
@@ -25123,14 +21688,25 @@ Dialog:ModifierInformation8(playerid, response, listitem, inputtext[])
 		PlayerData[AdminTarget[playerid]][pFactionRank] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis %s le rang a %d.", ReturnName(AdminTarget[playerid], 0), strval(inputtext));
 		SendServerMessage(AdminTarget[playerid], "%s vous a mis le rang a %d.", ReturnName(playerid, 0), strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");		
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");			
 	}
 	return 1;
 }
 Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");	
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 3)
@@ -25152,14 +21728,25 @@ Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 			SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
 			SendServerMessage(AdminTarget[playerid], "%s ta mis leader de \"%s\".", ReturnName(playerid, 0), FactionData[strval(inputtext)][factionName]);
 		}
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");		
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");		
 	}
 	return 1;
 }
 Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 {	
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
-	if (isnull(inputtext)) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
+	if (isnull(inputtext))
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
     if(response)
     {
 		if (PlayerData[playerid][pAdmin] < 4)
@@ -25178,13 +21765,19 @@ Dialog:ModifierInformation10(playerid, response, listitem, inputtext[])
 		}
 		PlayerData[AdminTarget[playerid]][pAdmin] = strval(inputtext);
 		Log_Write("logs/admin_log.txt", "[%s] %s à mis admin %s au niveau %d.", ReturnDate(), ReturnName(playerid, 0), ReturnName(AdminTarget[playerid], 0), strval(inputtext));
-		Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");		
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modify player stats",menuclick2eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");
+		return 1;
+	}
 	if (response)
 	{
 		switch (listitem)
@@ -25196,165 +21789,187 @@ Dialog:ModifcationInfoPlus(playerid, response, listitem, inputtext[])
 					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
 					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
 				}
-				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 			}	
-			case 1:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus0,DIALOG_STYLE_INPUT,"Modification date d'anniversaire","Veuiller entrée un nombre pour la la date d'anniversaire","Valider","Retour");
-			}			
-			case 2:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée un nombre pour la faim","Valider","Retour");
-			}
-			case 3:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée un nombre pour la soif","Valider","Retour");
-			}
-			case 4:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus2,DIALOG_STYLE_INPUT,"Modification Bras","Veuiller entrée un nombre pour les bras","Valider","Retour");
-			}
-			case 5:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée un nombre pour les jambes","Valider","Retour");
-			}			
+			case 1:	Dialog_Show(playerid,ModifcationInfoPlus0,DIALOG_STYLE_INPUT,"Modification date d'anniversaire","Veuiller entrée un nombre pour la la date d'anniversaire","Valider","Retour");		
+			case 2: Dialog_Show(playerid,ModifcationInfoPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée un nombre pour la faim","Valider","Retour");
+			case 3: Dialog_Show(playerid,ModifcationInfoPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée un nombre pour la soif","Valider","Retour");
+			case 4: Dialog_Show(playerid,ModifcationInfoPlus2,DIALOG_STYLE_INPUT,"Modification Bras","Veuiller entrée un nombre pour les bras","Valider","Retour");
+			case 5: Dialog_Show(playerid,ModifcationInfoPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée un nombre pour les jambes","Valider","Retour");			
 			case 6:
 			{
 				PlayerData[AdminTarget[playerid]][pLocaID] = 0;
 				SendServerMessage(playerid, "Vous avez mis a 0 le louage de vehicule à %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 			}
 			case 7:
 			{
 				PlayerData[AdminTarget[playerid]][pLocaMaisonID] = 0;
 				SendServerMessage(AdminTarget[playerid], "Vous avez mis a 0 le louage de maison à %s", ReturnName(AdminTarget[playerid], 0));
-				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+				if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 			}
-			case 8:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus8,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une Job","Valider","Retour");
-			}
-			case 9:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une heure de jeux","Valider","Retour");
-			}
-			case 10:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus7,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée des minutes de jeux","Valider","Retour");
-			}
-			case 11:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
-			}
-			case 12:
-			{
-				Dialog_Show(playerid,ModifcationInfoPlus9,DIALOG_STYLE_MSGBOX,"Modification du Sexe","Homme ou Femme?","Homme","Femme");
-			}
+			case 8: Dialog_Show(playerid,ModifcationInfoPlus8,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une Job","Valider","Retour");
+			case 9: Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une heure de jeux","Valider","Retour");
+			case 10: Dialog_Show(playerid,ModifcationInfoPlus7,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée des minutes de jeux","Valider","Retour");
+			case 11: Dialog_Show(playerid,ModifcationInfoPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
+			case 12: Dialog_Show(playerid,ModifcationInfoPlus9,DIALOG_STYLE_MSGBOX,"Modification du Sexe","Homme ou Femme?","Homme","Femme");
+			case 13: Dialog_Show(playerid,ModifcationInfoPlus10,DIALOG_STYLE_INPUT,"Modification de nombre de mort","Veuiller entrée le nombres de mort pour le joueur.","Valider","Retour");
 		}
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus1(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
 		if (isnull(inputtext) || strlen(inputtext) > 32)
 			return Dialog_Show(playerid,ModifcationInfoPlus1,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle Origine","Valider","Retour");
 		format(PlayerData[AdminTarget[playerid]][pOrigin], 32, inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s l'origine a \"%s\".", ReturnName(AdminTarget[playerid], 0), inputtext);
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus2(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
-		if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 31300))
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 5000))
 			return Dialog_Show(playerid,ModifcationInfoPlus2,DIALOG_STYLE_INPUT,"Modification Origine","Veuiller entrée une nouvelle données pour les bras","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][prepetitions] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s son niveau de bras a %s.", ReturnName(AdminTarget[playerid], 0),FormatNumber(strval(inputtext), ""));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus3(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
-		if (isnull(inputtext) || (strval(inputtext) < -5000 || strval(inputtext) > 5000))
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 5000))
 			return Dialog_Show(playerid,ModifcationInfoPlus3,DIALOG_STYLE_INPUT,"Modification Jambes","Veuiller entrée une nouvelle donnée pur les jambes","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][pparcouru] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s son niveau de jambes a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus4(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
 		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
 			return Dialog_Show(playerid,ModifcationInfoPlus4,DIALOG_STYLE_INPUT,"Modification Faim","Veuiller entrée une donnée de Faim","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][pHunger] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s son niveau de faim a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus5(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
 		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
 			return Dialog_Show(playerid,ModifcationInfoPlus5,DIALOG_STYLE_INPUT,"Modification Soif","Veuiller entrée une donnée de Soif","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][pThirst] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s son niveau de soif a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus6(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
 		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 100))
 			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Heure de jeux","Veuiller entrée une donnée d'heure de jeux","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][pPlayingHours] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s son niveau d'heure de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus7(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
 		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 60))
 			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Minutes de jeux","Veuiller entrée une donnée de minutes de jeux","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][pMinutes] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s son niveau de minutes de jeux a %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus8(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
 	if(response)
 	{
 		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 16))
 			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification Job","Veuiller entrée une donnée job","Valider","Retour");
 		PlayerData[AdminTarget[playerid]][pJob] = strval(inputtext);
 		SendServerMessage(playerid, "Vous avez mis a %s le job %s.", ReturnName(AdminTarget[playerid], 0), inputtext);
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
@@ -25364,19 +21979,27 @@ Dialog:ModifcationInfoPlus9(playerid, response, listitem, inputtext[])
     {
 		PlayerData[AdminTarget[playerid]][pGender] = 2;
 		SendServerMessage(playerid, "Vous avez mis a %s le sexe féminin.", ReturnName(AdminTarget[playerid], 0));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
     }	
 	if(response)
 	{
 		PlayerData[AdminTarget[playerid]][pGender] = 1;
 		SendServerMessage(playerid, "Vous avez mis a %s le sexe masculin.", ReturnName(AdminTarget[playerid], 0));
-		Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
 Dialog:ModifcationInfoPlus0(playerid, response, listitem, inputtext[])
 {
-	if(!response) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1,"Valider","Annuler");
+	if(!response)
+    {
+		PlayerData[AdminTarget[playerid]][pGender] = 2;
+		SendServerMessage(playerid, "Vous avez mis a %s le sexe féminin.", ReturnName(AdminTarget[playerid], 0));
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+    }
 	if (response)
 	{
 	    new iDay,iMonth,iYear;
@@ -25397,6 +22020,25 @@ Dialog:ModifcationInfoPlus0(playerid, response, listitem, inputtext[])
 		    format(PlayerData[AdminTarget[playerid]][pBirthdate], 32, inputtext);
 			SendServerMessage(playerid, "Vous avez mis a %s la date %s", ReturnName(AdminTarget[playerid], 0),inputtext);
 		}
+	}
+	return 1;
+}
+Dialog:ModifcationInfoPlus10(playerid, response, listitem, inputtext[])
+{
+	if(!response)
+	{
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
+		return 1;
+	}
+	if(response)
+	{
+		if (isnull(inputtext) || (strval(inputtext) < 0 || strval(inputtext) > 1000))
+			return Dialog_Show(playerid,ModifcationInfoPlus6,DIALOG_STYLE_INPUT,"Modification de nombre de mort","Veuiller entrée une donnée de  nombre de mort.","Valider","Retour");
+		PlayerData[AdminTarget[playerid]][pDeath] = strval(inputtext);
+		SendServerMessage(playerid, "Vous avez mis a %s son nombre de mort à %s.", ReturnName(AdminTarget[playerid], 0), FormatNumber(strval(inputtext), ""));
+		if(PlayerData[playerid][pLanguage] == 1) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1eng,"Valider","Annuler");
+		if(PlayerData[playerid][pLanguage] == 2) return Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 	}
 	return 1;
 }
@@ -25495,7 +22137,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 						- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 						- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
 						- /radio pour parlé en IC radio,\n - /bbalise pour activer la balise,\n- /dept  pour parlé avec le gouvernement,\n\
-						- /bandage pour faire un bandage a un patient,\n /chargermalade pour le mettre dans l'ambulance,\n /dechargermalade pour l'amener a l'hopital,\
+						- /chargermalade pour le mettre dans l'ambulance,\n /dechargermalade pour l'amener a l'hopital,\
 						","Quitter","");
 					}
 					//camionneur
@@ -25505,7 +22147,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 						- /fequipement Pour l'équipement faction,\n- /finviter invité une personne,\n\
 						- /fexclure exclure une personne,\n- /frang mettre un rang,\n\
 						- /chargermarchandise pour charger les marchandise,\n- /stopchargement pour stoppé le chargement en cours,\n- /rem pour enlever la remorque,\n\
-						- /livrermarchandise pour livrée,\n- /fairelivraison pour commencer une livraison,\n- /quitterlivraison pour quitter une livraison,\n- /salairefaction pour gérer le salaire, \
+						- /livrermarchandise pour livrée,\n- /fairelivraison pour commencer une livraison,\n- /quitterlivraison pour quitter une livraison,\n- /salairefaction pour gérer le salaire,\n\
 						- /appeler 1001 pour commencer une livraison dans votre vehicule,\n- /infob info sur les produits du biz\n \n- Vous aller recevoir des appelles pour des livraisons \
 						","Quitter","");
 					}
@@ -25580,8 +22222,8 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 			case 5:
 			{
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide divers", \
-				"-/proprieter pour voir se que vous êtes le propriétaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot	de passe\n- /dernierefois Pour connaître la dernière connection d'un joueur, ,\n- /acc pour enlever ou mettre vos accessoire,\n\
-				- /rapport pour rapporté un méfait,\n- /bjstart pour commencer le blackjack,\n-/bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /factionliste savoir la liste des factions,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n\
+				"-/proprieter pour voir se que vous êtes le propriétaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernierefois Pour connaître la dernière connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n\
+				- /rapport pour rapporté un méfait,\n- /bjstart pour commencer le blackjack,\n-/bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n\
 				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /id savoir l'id d'un joueur,\n- /resetvw Remet à 0 votre virtualWorld,\n - /distancec pour voir la distance du commissariat,\n - /bowlingstats pour avoir votre résultat du bowling,\n - /jeter pour jeter une arme\
 				","Quitter","");
 			}
@@ -25603,6 +22245,7 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
+		static query[100];
 		switch (listitem)
 		{	
 			case 0:
@@ -25645,7 +22288,118 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 				if (Inventory_Count(playerid, "gold bar") < 10)
 					return SendErrorMessage(playerid, "Tu a besoin de 10 gold bars pour l'échanger");
 			}
+			case 8:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 100)
+					return SendErrorMessage(playerid, "Tu a besoin de 100 gold bars pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",100);
+				format(query, sizeof(query), "UPDATE `characters` SET `DA` = '1' WHERE `ID` = '%d'",PlayerData[playerid][pID]);
+				mysql_tquery(g_iHandle, query);
+				SendServerMessage(playerid,"Voila vous pouvez créer un nouveau personnage.");
+			}
+			case 9:
+			{
+				if (Inventory_Count(playerid, "gold bar") < 25)
+					return SendErrorMessage(playerid, "Tu a besoin de 25 gold bars pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",25);
+				PlayerData[playerid][pCapacity] = 35;
+				SendServerMessage(playerid, "Vous avez maintenant 35 en place dans votre inventaire.", ReturnName(playerid, 0));
+			}
 		}
+	}
+	return 1;
+}
+Dialog:Language(playerid, response, listitem, inputtext[])
+{
+	new query[128];
+	if(!response) return Dialog_Show(playerid,Language,DIALOG_STYLE_LIST,"Choose Language","You understand? Click me!\nTu me comprend? Clic ici!","OK","");
+	if (response)
+	{
+		switch (listitem)
+		{	
+			case 0:
+			{
+				PlayerData[playerid][pLanguage] = 1;
+				SendServerMessage(playerid,"Now the language is set to english! Can change any moment with /lang !");
+			}
+			case 1:
+			{
+				PlayerData[playerid][pLanguage] = 2;
+				SendServerMessage(playerid,"Maintenant la langue est en français! Tu peut la changer a tout moment avec /lang !");
+			}
+		}
+		format(query, sizeof(query), "UPDATE `accounts` SET `Language` = '%d' WHERE `Username` = '%s'", PlayerData[playerid][pLanguage], PlayerData[playerid][pUsername]);
+		mysql_tquery(g_iHandle, query);
+		format(query, sizeof(query), "SELECT * FROM `characters` WHERE `Username` = '%s' LIMIT 2", PlayerData[playerid][pUsername]);
+		mysql_tquery(g_iHandle, query, "OnQueryFinished", "dd", playerid, THREAD_CHARACTERS);
+	}
+	return 1;
+}
+Dialog:Language1(playerid, response, listitem, inputtext[])
+{
+	new query[128];
+	if(!response) return Dialog_Show(playerid,Language,DIALOG_STYLE_LIST,"Choose Language","You understand? Click me!\nTu me comprend? Clic ici!","OK","");
+	if (response)
+	{
+		switch (listitem)
+		{	
+			case 0:
+			{
+				PlayerData[playerid][pLanguage] = 1;
+				SendServerMessage(playerid,"Now the language is set to english! Can change any moment with /lang !");
+			}
+			case 1:
+			{
+				PlayerData[playerid][pLanguage] = 2;
+				SendServerMessage(playerid,"Maintenant la langue est en français! Tu peut la changer a tout moment avec /lang !");
+			}
+		}
+		format(query, sizeof(query), "UPDATE `accounts` SET `Language` = '%d' WHERE `Username` = '%s'", PlayerData[playerid][pLanguage], PlayerData[playerid][pUsername]);
+		mysql_tquery(g_iHandle, query);
+	}
+	return 1;
+}
+Dialog:discordid(playerid, response, listitem, inputtext[])
+{
+	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
+	if (response)
+	{
+		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol;//role a faire
+		if (role == DCC_INVALID_ROLE)
+			return SendErrorMessage(playerid,"Erreur sur le role"); // invalid role id
+		new DCC_Guild:guild = DCC_FindGuildById(info_serveursetting[lol][settingdiscord]);
+		if (guild == DCC_INVALID_GUILD)
+			return SendErrorMessage(playerid,"Erreur sur le id discord"); // invalid guild id
+		new DCC_User:user = DCC_FindUserById(inputtext);//id joueur
+		if (user == DCC_INVALID_USER)
+			return SendErrorMessage(playerid,"Erreur sur le id user"); // invalid user id
+		if (!DCC_AddGuildMemberRole(guild, user, role))
+			return SendErrorMessage(playerid,"Erreur sur l'ajout du tout"); // invalid guild, user and/or role passed
+		PlayerData[playerid][pTutorialStage] = 6;
+		PlayerData[playerid][pRole] = user;
+		SetPlayerCheckpoint(playerid, -228.8403, 1401.1831, 27.7656, 2.0);
+		return 1;
+	}
+	return 1;
+}
+Dialog:discordid1(playerid, response, listitem, inputtext[])
+{
+	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
+	if (response)
+	{
+		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol;//role a faire
+		if (role == DCC_INVALID_ROLE)
+			return SendErrorMessage(playerid,"Erreur sur le role"); // invalid role id
+		new DCC_Guild:guild = DCC_FindGuildById(info_serveursetting[lol][settingdiscord]);
+		if (guild == DCC_INVALID_GUILD)
+			return SendErrorMessage(playerid,"Erreur sur le id discord"); // invalid guild id
+		new DCC_User:user = DCC_FindUserById(inputtext);//id joueur
+		if (user == DCC_INVALID_USER)
+			return SendErrorMessage(playerid,"Erreur sur le id user"); // invalid user id
+		if (!DCC_AddGuildMemberRole(guild, user, role))
+			return SendErrorMessage(playerid,"Erreur sur l'ajout du tout"); // invalid guild, user and/or role passed
+		PlayerData[playerid][pRole] = user;
+		return 1;
 	}
 	return 1;
 }

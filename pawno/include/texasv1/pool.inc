@@ -1,11 +1,52 @@
 #define OBJ_SLOT_POOL (9)
+#define COLOR_LIGHTRED    														(0xFF6347BB)
 enum poolBall
 {
 	bObject,
 	bExisting
 }
-new PlayingPool[MAX_PLAYERS],PoolCamera[MAX_PLAYERS],UsingChalk[MAX_PLAYERS],PoolScore[MAX_PLAYERS],Float:AimAngle[MAX_PLAYERS][2],
-	AimObject,PoolStarted,PoolAimer = -1,PoolLastShooter = -1,PoolLastScore,PoolBall[16][poolBall],Text:PoolTD[4],Float:PoolPower,PoolDir;
+enum pool2Ball
+{
+	bObject,
+	bExisting
+}
+new PlayingPool[MAX_PLAYERS],PoolCamera[MAX_PLAYERS],UsingChalk[MAX_PLAYERS],PoolScore[MAX_PLAYERS],Float:AimAngle[MAX_PLAYERS][2],AimObject,
+	PoolStarted,PoolAimer = -1,PoolLastShooter = -1,PoolLastScore,PoolBall[16][poolBall],Text:PoolTD[4],Float:PoolPower,PoolDir,PlayingPool2[MAX_PLAYERS],Pool2Camera[MAX_PLAYERS],Pool2Score[MAX_PLAYERS],Float:AimAngle2[MAX_PLAYERS][2],AimObject2,Pool2Started,Pool2Aimer = -1,Pool2LastShooter = -1,Pool2LastScore,Text:Pool2TD[4],Float:Pool2Power,Pool2Dir,Pool2Ball[16][pool2Ball];
+CMD:pool(playerid, params[])
+{
+	if(GetPlayerWeapon(playerid) != 7)
+	{
+	    SendClientMessage(playerid, COLOR_LIGHTRED,"[ERREUR]:{FFFFFF} Vous n'avez pas de queue de billard");
+	    return 1;
+	}
+	if(!PlayingPool[playerid])
+	{
+	    PlayingPool[playerid] = 1;
+		PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+        GivePlayerWeapon(playerid, 7, 1);
+		PoolScore[playerid] = 0;
+        if(!PoolStarted)
+        {
+			PoolStarted = 1;
+			RespawnPoolBalls(1);
+        }
+	}
+	else
+	{
+	    if(PoolAimer != playerid)
+	    {
+		    PlayingPool[playerid] = 0;
+		    new
+		        count = GetPoolPlayersCount();
+		    if(count <= 0)
+		    {
+		    	PoolStarted = 0;
+		    	RespawnPoolBalls();
+		    }
+	    }
+	}
+	return 1;
+}
 public PHY_OnObjectUpdate(objectid)
 {
 	if(PoolStarted)
@@ -69,7 +110,7 @@ public PHY_OnObjectUpdate(objectid)
 							{
 								new string[128];
 								GetPlayerName(p, name, sizeof name);
-								format(string, 128, "{FFFF45}The winner is: {EBEBEB}%s {FFFF45}with {EBEBEB}%d {FFFF45}points.", name, winscore);
+								format(string, 128, "{FFFF45}Le gagnant est: {EBEBEB}%s {FFFF45}avec {EBEBEB}%d {FFFF45}points.", name, winscore);
 								SendPoolPlayersMessage(string);
 							}
 						}
@@ -91,6 +132,90 @@ public PHY_OnObjectUpdate(objectid)
 		    }
 		}
 	}
+	//pool2
+	if(Pool2Started)
+	{
+		for(new i; i < sizeof Pool2Ball; i++)
+		{
+		    if(objectid == Pool2Ball[i][bObject] && PHY_IsObjectMoving(Pool2Ball[i][bObject]))
+		    {
+		        new hole = IsBallInHole2(i);
+				if(hole)
+				{
+				    new Float:speed,Float:vx, Float:vy, Float:vz;
+				    PHY_GetObjectVelocity(Pool2Ball[i][bObject], vx, vy, vz);
+				    speed = floatsqroot(vx * vx + vy * vy) + 0.2;
+
+		            Pool2Ball[i][bExisting] = 0;
+					PHY_DeleteObject(Pool2Ball[i][bObject]);
+
+					PlayPool2Sound(31803 + random(3));
+
+		            switch(hole)
+					{
+						case 1: MoveObject(Pool2Ball[i][bObject], 505.0000,-85.79737091,998.86785889-0.25, speed);
+						case 2: MoveObject(Pool2Ball[i][bObject], 506.0000,-84.84423065,998.86785889-0.25, speed);
+						case 3: MoveObject(Pool2Ball[i][bObject], 506.0000,-83.88769531,998.86785889-0.25, speed);
+						case 4: MoveObject(Pool2Ball[i][bObject], 504,0000,-83.89227295,998.86785889-0.25, speed);
+						case 5: MoveObject(Pool2Ball[i][bObject], 506.0000,-85.80107880,998.86785889-0.25, speed);
+						case 6: MoveObject(Pool2Ball[i][bObject], 504.0000,-84.84602356,998.86785889-0.25, speed);
+					}
+					if(i)
+					{
+					    Pool2Score[Pool2LastShooter] ++;
+						Pool2LastScore ++;
+					    new string[128];
+						if(Pool2LastScore > 0) format(string, 128, "~g~~h~+%d", Pool2LastScore);
+						else format(string, 128, "~r~~h~%d", Pool2LastScore);
+						GameTextForPlayer(Pool2LastShooter, string, 100000, 4);
+						PlayerPlaySound(Pool2LastShooter, 1250, 0.0, 0.0, 0.0);
+					}
+					else
+					{
+		                Pool2Score[Pool2LastShooter] --;
+		                Pool2LastScore --;
+						new string[128];
+						if(Pool2LastScore > 0) format(string, 128, "~g~~h~+~r~~h~%d", Pool2LastScore);
+						else format(string, 128, "~r~~h~%d", Pool2LastScore);
+						GameTextForPlayer(Pool2LastShooter, string, 100000, 4);
+						PlayerPlaySound(Pool2LastShooter, 1250, 0.0, 0.0, 0.0);
+					}
+					if(GetPool2BallsCount() <= 1)
+					{
+						Pool2Started = 0;
+						Pool2Aimer = -1;
+						new winscore = GetMaxPool2Score(),name[MAX_PLAYER_NAME];
+						RespawnPool2Balls();
+						RestoreCamera(Pool2LastShooter);
+						Pool2LastShooter = -1;
+						foreach (new p : Player)
+						{
+							if(PlayingPool2[p] && Pool2Score[p] == winscore)
+							{
+								new string[128];
+								GetPlayerName(p, name, sizeof name);
+								format(string, 128, "{FFFF45}Le gagnant est: {EBEBEB}%s {FFFF45}avec {EBEBEB}%d {FFFF45}points.", name, winscore);
+								SendPool2PlayersMessage(string);
+							}
+						}
+						foreach (new p : Player)
+						{
+							if(PlayingPool2[p])
+							{
+								PlayingPool2[p] = 0;
+							}
+						}
+					}
+					else if(AreAllBallsStopped2())
+					{
+						SetTimerEx("RestoreCamera", 800, 0, "d", Pool2LastShooter);
+						Pool2LastShooter = -1;
+					}
+		        }
+		        return 1;
+		    }
+		}
+	}
 	return 1;
 }
 public PHY_OnObjectCollideWithObject(object1, object2)
@@ -102,6 +227,17 @@ public PHY_OnObjectCollideWithObject(object1, object2)
 		    if(object1 == PoolBall[i][bObject])
 		    {
 		        PlayPoolSound(31800 + random(3));
+		        return 1;
+		    }
+		}
+	}
+	if(Pool2Started)
+	{
+		for(new i; i < sizeof Pool2Ball; i++)
+		{
+		    if(object1 == Pool2Ball[i][bObject])
+		    {
+		        PlayPool2Sound(31800 + random(3));
 		        return 1;
 		    }
 		}
@@ -121,22 +257,19 @@ public PHY_OnObjectCollideWithWall(objectid, wallid)
 		    }
 		}
 	}
+	//pool2
+	if(Pool2Started)
+	{
+		for(new i; i < sizeof Pool2Ball; i++)
+		{
+		    if(objectid == Pool2Ball[i][bObject])
+		    {
+		        PlayPool2Sound(31808);
+		        return 1;
+		    }
+		}
+	}
 	return 1;
-}
-public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
-{
-    if(PlayingPool[playerid])
-    {
-        PlayingPool[playerid] = 0;
-        new
-		    count = GetPoolPlayersCount();
-        if(count <= 0)
-        {
-			PoolStarted = 0;
-			RespawnPoolBalls();
-        }
-    }
-    return 1;
 }
 Float:GetPointDistanceToPoint(Float:x1,Float:y1,Float:x2,Float:y2)
 {
@@ -244,8 +377,7 @@ stock SendPoolPlayersMessage(string[])
 }
 stock AreAllBallsStopped()
 {
-	new
-	    Float:x, Float:y, Float:z;
+	new Float:x, Float:y, Float:z;
 	for(new i; i < 16; i++)
 	{
 		if(PoolBall[i][bExisting])
@@ -261,9 +393,6 @@ stock RespawnPoolBalls(init = 0)
 {
     for(new i; i < 16; i++)
 	{
-        /*PoolBall[i][bMoving] = 0;
-        PoolBall[i][bSpeed] = 0;*/
-        //StopObject(PoolBall[i][bObject]);
         DestroyObject(PoolBall[i][bObject]);
 		if(PoolBall[i][bExisting])
 		{
@@ -271,7 +400,6 @@ stock RespawnPoolBalls(init = 0)
         	PoolBall[i][bExisting] = 0;
 		}
     }
-
     if(PoolAimer != -1)
     {
         TogglePlayerControllable(PoolAimer, 1);
@@ -285,7 +413,6 @@ stock RespawnPoolBalls(init = 0)
         TextDrawHideForPlayer(PoolAimer, PoolTD[2]);
         TextDrawHideForPlayer(PoolAimer, PoolTD[3]);
     }
-
     CreateBalls();
     if(init)
     {
@@ -295,22 +422,22 @@ stock RespawnPoolBalls(init = 0)
 }
 stock CreateBalls()
 {
-	PoolBall[0][bObject] = CreateDynamicObject(3003, 510.11218261719, -84.40771484375, 998.86785888672, 0, 0, 0);
-    PoolBall[1][bObject] = CreateDynamicObject(3002, 510.10882568359, -85.166389465332, 998.86749267578, 0, 0, 0);
-    PoolBall[2][bObject] = CreateDynamicObject(3101, 510.14270019531, -85.232612609863, 998.86749267578, 0, 0, 0);
-    PoolBall[3][bObject] = CreateDynamicObject(2995, 510.0676574707, -85.232200622559, 998.86749267578, 0, 0, 0);
-    PoolBall[4][bObject] = CreateDynamicObject(2996, 510.18600463867, -85.295257568359, 998.86749267578, 0, 0, 0);
-    PoolBall[5][bObject] = CreateDynamicObject(3106, 510.11242675781, -85.297294616699, 998.86749267578, 0, 0, 0);
-    PoolBall[6][bObject] = CreateDynamicObject(3105, 510.03665161133, -85.299163818359, 998.86749267578, 0, 0, 0);
-    PoolBall[7][bObject] = CreateDynamicObject(3103, 510.22308349609, -85.362342834473, 998.86749267578, 0, 0, 0);
-    PoolBall[8][bObject] = CreateDynamicObject(3001, 510.14828491211, -85.365989685059, 998.86749267578, 0, 0, 0);
-    PoolBall[9][bObject] = CreateDynamicObject(3100, 510.07455444336, -85.365234375, 998.86749267578, 0, 0, 0);
-    PoolBall[10][bObject] = CreateDynamicObject(2997, 510.00054931641, -85.363563537598, 998.86749267578, 0, 0, 0);
-    PoolBall[11][bObject] = CreateDynamicObject(3000, 510.25915527344, -85.431137084961, 998.86749267578, 0, 0, 0);
-    PoolBall[12][bObject] = CreateDynamicObject(3102, 510.18399047852, -85.430549621582, 998.86749267578, 0, 0, 0);
-    PoolBall[13][bObject] = CreateDynamicObject(2999, 510.10900878906, -85.43196105957, 998.86749267578, 0, 0, 0);
-    PoolBall[14][bObject] = CreateDynamicObject(2998, 510.03570556641, -85.432624816895, 998.86749267578, 0, 0, 0);
-    PoolBall[15][bObject] = CreateDynamicObject(3104, 509.96197509766, -85.427406311035, 998.86749267578, 0, 0, 0);
+	PoolBall[0][bObject] = CreateObject(3003, 510.11218261719, -84.40771484375, 998.86785888672, 0, 0, 0);
+    PoolBall[1][bObject] = CreateObject(3002, 510.10882568359, -85.166389465332, 998.86749267578, 0, 0, 0);
+    PoolBall[2][bObject] = CreateObject(3101, 510.14270019531, -85.232612609863, 998.86749267578, 0, 0, 0);
+    PoolBall[3][bObject] = CreateObject(2995, 510.0676574707, -85.232200622559, 998.86749267578, 0, 0, 0);
+    PoolBall[4][bObject] = CreateObject(2996, 510.18600463867, -85.295257568359, 998.86749267578, 0, 0, 0);
+    PoolBall[5][bObject] = CreateObject(3106, 510.11242675781, -85.297294616699, 998.86749267578, 0, 0, 0);
+    PoolBall[6][bObject] = CreateObject(3105, 510.03665161133, -85.299163818359, 998.86749267578, 0, 0, 0);
+    PoolBall[7][bObject] = CreateObject(3103, 510.22308349609, -85.362342834473, 998.86749267578, 0, 0, 0);
+    PoolBall[8][bObject] = CreateObject(3001, 510.14828491211, -85.365989685059, 998.86749267578, 0, 0, 0);
+    PoolBall[9][bObject] = CreateObject(3100, 510.07455444336, -85.365234375, 998.86749267578, 0, 0, 0);
+    PoolBall[10][bObject] = CreateObject(2997, 510.00054931641, -85.363563537598, 998.86749267578, 0, 0, 0);
+    PoolBall[11][bObject] = CreateObject(3000, 510.25915527344, -85.431137084961, 998.86749267578, 0, 0, 0);
+    PoolBall[12][bObject] = CreateObject(3102, 510.18399047852, -85.430549621582, 998.86749267578, 0, 0, 0);
+    PoolBall[13][bObject] = CreateObject(2999, 510.10900878906, -85.43196105957, 998.86749267578, 0, 0, 0);
+    PoolBall[14][bObject] = CreateObject(2998, 510.03570556641, -85.432624816895, 998.86749267578, 0, 0, 0);
+    PoolBall[15][bObject] = CreateObject(3104, 509.96197509766, -85.427406311035, 998.86749267578, 0, 0, 0);
 }
 stock InitBall(i)
 {
@@ -328,6 +455,7 @@ stock LoadPool()
 	PHY_SetWallWorld(PHY_CreateWall(510.598 + 0.038, -85.780 - 0.038, 510.598 + 0.038, -83.907 + 0.038), 3);
 	PHY_SetWallWorld(PHY_CreateWall(510.598 + 0.038, -83.907 + 0.038, 509.627 - 0.038, -83.907 + 0.038), 3);
 	PHY_SetWallWorld(PHY_CreateWall(509.627 - 0.038, -83.907 + 0.038, 509.627 - 0.038, -85.780 - 0.038), 3);
+
     PoolTD[0] = TextDrawCreate(505.000000, 260.000000, "~n~~n~");
 	TextDrawBackgroundColor(PoolTD[0], 255);
 	TextDrawFont(PoolTD[0], 1);
@@ -387,8 +515,7 @@ stock GetPoolPlayersCount()
 	}
 	return count;
 }
-forward PoolTimer();
-public PoolTimer()
+script PoolTimer()
 {
 	if(!PoolStarted) return 0;
     if(PoolAimer != -1)
@@ -462,25 +589,31 @@ public PoolTimer()
 	}
     return 1;
 }
-forward RestoreCamera(playerid);
-public RestoreCamera(playerid)
+script RestoreCamera(playerid)
 {
 	if(!PoolBall[0][bExisting])
 	{
         DestroyObject(PoolBall[0][bObject]);
-        PoolBall[0][bObject] = CreateDynamicObject(GetBallModel(0) ,510.11218261719, -84.40771484375, 998.86785888672, 0, 0, 0);
+        PoolBall[0][bObject] = CreateObject(GetBallModel(0) ,510.11218261719, -84.40771484375, 998.86785888672, 0, 0, 0);
         InitBall(0);
 	}
+	if(!Pool2Ball[0][bExisting])
+	{
+        DestroyObject(Pool2Ball[0][bObject]);
+        Pool2Ball[0][bObject] = CreateObject(GetBallModel2(0) ,506.50620, -84.40770, 998.86792, 0, 0, 0);
+        InitBall2(0);
+	}
+	if(Pool2Aimer == playerid) return 0;
     GameTextForPlayer(playerid, " ", 100000, 4);
 	if(PoolAimer == playerid) return 0;
 	TogglePlayerControllable(playerid, 1);
 	return SetCameraBehindPlayer(playerid);
 }
-forward RestoreWeapon(playerid);
-public RestoreWeapon(playerid)
+script RestoreWeapon(playerid)
 {
     RemovePlayerAttachedObject(playerid, OBJ_SLOT_POOL);
 	UsingChalk[playerid] = 0;
+	GivePlayerWeapon(playerid, 7, 1);
 	ApplyAnimation(playerid, "CARRY", "crry_prtial", 1.0, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -502,8 +635,7 @@ stock GetXYBehindObjectInAngle(objectid, Float:a, &Float:x2, &Float:y2, Float:di
     x2 += (distance * floatsin(-a+180, degrees));
     y2 += (distance * floatcos(-a+180, degrees));
 }
-forward PlayPoolSound(soundid);
-public PlayPoolSound(soundid)
+script PlayPoolSound(soundid)
 {
 	foreach(new i : Player)
 	{
@@ -528,6 +660,5 @@ stock AngleInRangeOfAngle(Float:a1, Float:a2, Float:range)
 {
 	a1 -= a2;
 	if((a1 < range) && (a1 > -range)) return true;
-
 	return false;
 }

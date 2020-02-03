@@ -7,7 +7,6 @@ enum playerData {
 	pLogged,
 	pIP[16],
 	pLoginDate[36],
-	pDoublePerso,
 	PlayerText:pTextdraws[97],
 	pUsername[MAX_PLAYER_NAME + 1],
 	pLoginAttempts,
@@ -74,6 +73,7 @@ enum playerData {
 	pEditGate,
 	pEditbatiement,
 	pEditRack,
+	pEditow,
 	pSelectFurniture,
 	pRefill,
 	pRefillPrice,
@@ -299,7 +299,16 @@ enum playerData {
 	PlayerBar:FaimBar,
 	PlayerBar:SoifBar,
 	PlayerBar:BrasBar,
-	PlayerBar:JambesBar
+	PlayerBar:JambesBar,
+	pWL,
+	pLanguage,
+	pPetrol,
+	pPetrolCount,
+	pPetrolTime,
+	pPetrolRock,
+	pDA,
+	pDeath,
+	pRole
 };
 enum prisonData {
 	prisonDoors[3],
@@ -550,7 +559,11 @@ enum factionData {
 	factionacces[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
 	factioncoffre,
 	factionsalaire[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
-	factiondiscord[20]
+	factiondiscord[20],
+	factionrole[20],
+	Float:factionaction1Pos[4],
+	Float:factionaction2Pos[4],
+	Float:factionaction3Pos[4]
 };
 enum arrestPoints {
 	arrestID,
@@ -706,6 +719,11 @@ enum detectorData {
 	detectorWorld,
 	detectorObject[2]
 };
+enum DeathD {
+	dID,
+	dName[32],
+	ddate[36]
+};
 new g_iHandle;
 new g_ServerLocked;
 new Text:gServerTextdraws[4];
@@ -729,7 +747,7 @@ new BoomboxData[MAX_PLAYERS][boomboxData];
 new RackData[MAX_WEAPON_RACKS][rackData];
 
 new ATMData[MAX_DYNAMIC_OBJ][atmData];
-new GarbageData[MAX_DYNAMIC_OBJ][garbageData];
+new GarbageData[MAX_DYNAMIC_TRASH][garbageData];
 
 new BackpackData[MAX_BACKPACKS][backpackData];
 new BackpackItems[MAX_BACKPACKS][backpackItems];
@@ -777,6 +795,7 @@ new GateData[MAX_DYNAMIC_OBJ][gateData];
 new PrisonData[prisonData];
 new Float:PrisonCells[24][3];
 new batiementData[MAX_batiementS][BatiementData];
+new DeathData[MAX_PLAYERS][DeathD];
 /*
 	0 to 10: Character textdraws
 	11 to 22: ID card
@@ -793,7 +812,7 @@ new batiementData[MAX_batiementS][BatiementData];
 	69: GPS
 	84 to 94: speedo
 */
-new PlayerCharacters[MAX_PLAYERS][3][MAX_PLAYER_NAME + 1];
+new PlayerCharacters[MAX_PLAYERS][3][MAX_PLAYER_NAME + 1];//ne touche plus jamais a sa
 
 enum coreVehicles {
 	vehFuel,
@@ -917,9 +936,74 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"steak cuit",19882},
 	{"sandwich a la viande",2880},
 	{"sandwich au jambon",2880},
-	{"object contaminer",1576}
+	{"object contaminer",1576},
+	{"dual muffler",1019},
+	{"improved muffler",1020},
+	{"medium muffler",1021},
+	{"small muffler",1022},
+	{"exhaust pipe",1018},
+	{"double small pipe",1034},
+	{"double large pipe",1037},
+	{"up pipe",1113,},
+	{"double long pipe",1043},
+	{"round light",1043},
+	{"square light",1024},
+	{"oval vents",1142},
+	{"bar square",1100},
+	{"bar solid",1117},
+	{"bar grill",1123},
+	{"bar lights",1125},
+	{"hood fury",1005},
+	{"hood champ",1004},
+	{"hood race",1011},
+	{"hood worx",1012},
+	{"spoiler win",1001},
+	{"spoiler fury",1023},
+	{"spoiler alpha",1003},
+	{"spoiler drag",1002},
+	{"spoiler race",1014},
+	{"spoiler pro",1000},
+	{"spoiler alien",1147},
+	{"spoiler xflow",1146},
+	{"roof scoop",1006},
+	{"roof soft",1131},
+	{"roof hard",1128},
+	{"roof xflow",1033},
+	{"roof alien",1038},
+	{"front alien",1171},
+	{"front xflow",1172},
+	{"front chrome",1174},
+	{"front slamin",1175},
+	{"sideskirts transfender",1007},
+	{"sideskirts wheebtovers",1070},
+	{"sideskirts chrome",1090},
+	{"rear slamin",1193},
+	{"rear chrome",1176},
+	{"rear xflow",1167},
+	{"rear alien",1168},
+	{"roue offroad",1025},
+	{"roue mega",1074},
+	{"roue wires",1076},
+	{"roue twist",1078},
+	{"roue grove",1081},
+	{"roue import",1082},
+	{"roue atomic",1085},
+	{"roue ahab",1096},
+	{"roue virtual",1097},
+	{"roue access",1098},
+	{"roue trance",1084},
+	{"roue shadow",1073},
+	{"roue rimshine",1075},
+	{"roue classic",1077},
+	{"roue cutter",1079},
+	{"roue switch",1080},
+	{"roue dollar",1083},
+	{"carrosserie",3117},
+	{"jeton poker",1924},
+	{"paquet de bandage",11748},
+	{"bandage",11747}
 };
-/*new const Float:arrHospitalDeliver[2][3] = { //vc
+/*new const Float:arrHospitalDeliver[2][3] = { //vc 1
     {1866.9421,-1930.9034,4.9235},
     {1129.1644,-1415.9628,5.5596}
 };
@@ -927,6 +1011,15 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 new const Float:arrHospitalSpawns[2][4] = {
 	{1860.8811,-1931.9686,4.9228,103.7289},
 	{1112.8402,-1420.6786,7.5683,81.7151}
+};
+new const Float:arrHospitalDeliver[2][3] = { //vc 2
+    {1866.9421,-1930.9034,400.9235},
+    {1129.1644,-1415.9628,500.5596}
+};
+
+new const Float:arrHospitalSpawns[2][4] = {
+	{1860.8811,-1931.9686,504.9228,103.7289},
+	{1112.8402,-1420.6786,507.5683,81.7151}
 };*/
 new const Float:arrHospitalDeliver[6][3] = { //autre
     {-2692.6580, 635.4608, 14.4531},
@@ -1004,17 +1097,16 @@ Job_GetName(type)
 		case 2: str = "Cariste";
 		case 3: str = "Mineur";
 		case 4: str = "Manutentionnaire";
-		case 5: str = "Weapon Smuggler";
-		case 6: str = "Menuisier";
-		case 7: str = "Fabrication d'arme";
-		case 8: str = "Bucheron";
-		case 9: str = "Boucher";
-		case 10: str = "Technicien generateur";
-		case 11: str = "Petrolier";
-		case 12: str = "Electricien";
-		case 13: str = "Doc port";
-		case 14: str = "Usine electronique";
-		case 15: str = "Garbage Man";
+		case 5: str = "Menuisier";
+		case 6: str = "Fabrication d'arme";
+		case 7: str = "Bucheron";
+		case 8: str = "Boucher";
+		case 9: str = "Technicien generateur";
+		case 10: str = "Pétrolier";
+		case 11: str = "Electricien";
+		case 12: str = "Doc port";
+		case 13: str = "Usine electronique";
+		case 14: str = "Garbage Man";
 	    default: str = "Aucun Job";
 	}
 	return str;
@@ -1122,7 +1214,7 @@ new const g_arrInteriorData[][e_InteriorData] = {
     {"Gant Bridge Diner", 5, 454.973937, -110.104995, 1000.077209},
     {"Secret Valley Diner", 6, 435.271331, -80.958938, 999.554687},
     {"World of Coq", 1, 452.489990, -18.179698, 1001.132812},
-    {"Welcome Pump", 1, 681.557861, -455.680053, -25.609874},
+    {"WeBTome Pump", 1, 681.557861, -455.680053, -25.609874},
     {"Burger Shot", 10, 375.962463, -65.816848, 1001.507812},
     {"Cluckin' Bell", 9, 369.579528, -4.487294, 1001.858886},
     {"Well Stacked Pizza", 5, 373.825653, -117.270904, 1001.499511},
@@ -1681,7 +1773,6 @@ new const g_aFurnitureData[][e_FurnitureData] = {
 	{9, "Vitre",19466},
 	{9, "Table de poker",19474}
 };
-new zone1,zone2,zone3,zone4;
 //job meuble
 new Mueble[MAX_PLAYERS];
 new MueblesCreados[MAX_PLAYERS];
@@ -1988,8 +2079,6 @@ enum ainfo
     aID,
     aSkinModel,
     Float:aFloat[4],
-    Text3D:aLabel,
-    aLabelText,
     actorint,
     actorvw,
 	actorsetting
@@ -2038,27 +2127,6 @@ new OnBenz[MAX_PLAYERS]; // Max litres de carburant dans le lecteur de cartouche
 new genpickup[5]; // Pick-up générateurs.
 //new dambapickup[2]; // Entrée / Sortie (DAM).
 new threesecondtimer;
-//job petrolier
-new forestJobPickUP;
-new Float:cForestJob[][3] = {
-    {566.6660,1302.2390,11.2688},
-    {623.7001,1347.3214,13.1828},
-    {589.8292,1337.8979,11.1876},
-    {437.6178,1265.3094,9.7191},
-    {359.7181,1289.8901,12.5948},
-    {377.4219,1330.1702,11.1634},
-    {413.4158,1400.4098,8.4903},
-    {398.1038,1450.2870,8.4903},
-    {497.4951,1385.3673,4.5352},
-    {572.7404,1414.1298,11.3772},
-    {539.3063,1458.6689,4.9281},
-    {594.8780,1488.6691,8.2965},
-    {646.0396,1474.8594,9.1250},
-    {488.9308,1523.2081,0.9138},
-    {438.9430,1553.5026,11.3975},
-    {421.0933,1508.3016,11.5126},
-    {494.6349,1300.1104,10.0656}
-};
 //job electicien
 new Elektrik[4];
 //job doc fortcarson
@@ -2095,16 +2163,7 @@ enum stockjobinfo
 	stockjobinfostocksorter,
 	stockjobinfostockcariste,
 	stockjobinfostockminer,
-	stockjobinfostockarmes,
-	stocktunningfrontbumper,
-	stocktunningrearbumper,
-	stocktunningroof,
-	stocktunninghood,
-	stocktunningspoiler,
-	stocktunningsideskirt,
-	stocktunninghydrolic,
-	stocktunningroue,
-	stocktunningcaro
+	stockjobinfostockarmes
 }
 new info_stockjobinfo[MAX_PLAYERS][stockjobinfo];
 //slot machine
@@ -2185,7 +2244,7 @@ new portevol;
 //serveur setting
 enum serveursettinginfo
 {
-	serveursettinginfoidd,
+	serveurinfod,
 	settingafkactive,
 	settingafktime,
 	settingbraquagenpcactive,
@@ -2196,9 +2255,16 @@ enum serveursettinginfo
 	settingvilleactive,
 	settingnouveau,
 	settingpolice,
-	settingswat
+	settingswat,
+	settingwl,
+	settingdiscord[20],
+	settingverifier[20],
+	settingadmin1[20],
+	settingadmin2[20],
+	settingadmin3[20],
+	settingadmin4[20]
 }
-new info_serveursettinginfo[MAX_PLAYERS][serveursettinginfo];
+new info_serveursetting[MAX_PLAYERS][serveursettinginfo];
 //location du vehicule
 //new DernieVehLoc[MAX_PLAYERS];
 new DernieVehLocID[MAX_PLAYERS];

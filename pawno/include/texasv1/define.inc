@@ -1,19 +1,16 @@
 #pragma dynamic 																400000
 
 //Information MYSQL
-#define SQL_HOSTNAME 															"127.0.0.1"
-//#define SQL_USERNAME 															"root"
-#define SQL_USERNAME 															"root"
-#define SQL_DATABASE 															"samp2"
-//#define SQL_DATABASE 															"test"
-#define SQL_PASSWORD															""
-//#define SQL_PASSWORD															""
+#define SQL_HOSTNAME 															"localhost"
+#define SQL_USERNAME 															" "
+#define SQL_DATABASE 															" "
+#define SQL_PASSWORD															" "
 
 //Information serveur
-#define SERVER_NAME 	 														"[0.3.dl] Serveur Roleplay [RP]" //pour le nom du serveur
-#define SERVER_URL 		 														"----"
-#define SERVER_REVISION  														"Build 76"
-#define LANGUAGE																"Français"
+#define SERVER_NAME 	 														"[0.3.dl] Serveur Pre-Build [RP]" //pour le nom du serveur
+#define SERVER_URL 		 														" "
+#define SERVER_REVISION  														" "
+#define LANGUAGE																" "
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
 //Couleur
@@ -79,25 +76,24 @@
 
 //Job
 #define JOB_CHOMEUR																(0)
-#define JOB_COURIER 															(1)//itawiwi
-#define JOB_UNLOADER 															(2)//fait livreur
-#define JOB_MINER 																(3)//fait livreur
-#define JOB_SORTER 																(4)//fait livreur
-#define JOB_WEAPON_SMUGGLER 													(5)//mafia4
-#define JOB_MEUBLE 																(6)//fait livreur
-#define JOB_FRABRIEARME                                                         (7)//fait livreur
-#define JOB_BUCHERON                                                         	(8)//fait livreur
-#define JOB_BOUCHER                                                         	(9)//fait livreur
-#define JOB_GENERATEUR                                                        	(10)//fait livreur
-#define JOB_PETROLIER                                                        	(11)
-#define JOB_ELECTRICIEN                                                        	(12)//fait
-#define JOB_DOC                                                        			(13)
-#define JOB_USINE                                                               (14)
-#define JOB_GARBAGE																(15)
+#define JOB_COURIER 															(1)
+#define JOB_UNLOADER 															(2)
+#define JOB_MINER 																(3)
+#define JOB_SORTER 																(4)
+#define JOB_MEUBLE 																(5)
+#define JOB_FRABRIEARME                                                         (6)
+#define JOB_BUCHERON                                                         	(7)
+#define JOB_BOUCHER                                                         	(8)
+#define JOB_GENERATEUR                                                        	(9)
+#define JOB_PETROLIER                                                        	(10)
+#define JOB_ELECTRICIEN                                                        	(11)
+#define JOB_DOC                                                        			(12)
+#define JOB_USINE                                                               (13)
+#define JOB_GARBAGE																(14)
 
 //Maximum par joueur/serveur
 #define MAX_REPORTS 															(20)
-#define MAX_INVENTORY 															(24)
+#define MAX_INVENTORY 															(35)
 #define MAX_HOUSES 																(750)
 #define MAX_HOUSE_STORAGE 														(10)
 #define MAX_BUSINESSES 															(150)
@@ -124,13 +120,14 @@
 #define MAX_BACKPACKS 															(2000)
 #define MAX_BACKPACK_CAPACITY 													(5)
 #undef MAX_PLAYERS
-#define MAX_PLAYERS 															(551)
+#define MAX_PLAYERS 															(251)
 #define MAX_MACHINES 															(10)
 #define MAX_caisseS 															(250)
 #define MAX_PHONE																(100)
 
 #define MAX_OWNABLE_SOMETHING													(4)
 #define MAX_DYNAMIC_OBJ															(125)
+#define MAX_DYNAMIC_TRASH														(225)
 //Prison
 #define PRISON_WORLD 															(10000)
 //Diver
@@ -160,7 +157,8 @@
 	SendClientMessageEx(%0,COLOR_YELLOW,"[Téléphone]:{FFFFFF}" %1)
 #define SendBlackJackMessage(%0,%1) \
 	SendClientMessageEx(%0,COLOR_LIME,"[Croupier]: {FFFFFF}" %1)
-	
+#define SendTutorialMessage(%0,%1) \
+	SendClientMessageEx(%0,COLOR_PINK,"[TUTORIEL]: {FFFFFF}" %1)
 #define PRESSED(%0) (((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
 //limitation de vitesse sur un véhicule abimer
 #define BE_MIN_HLS 																500.00 // Santé en dessous de laquelle la machine est considéré comme cassé
@@ -203,15 +201,12 @@
 #define CameraAngles
 //define forward fuck you
 #define script%0(%1) forward%0(%1); public%0(%1)
-//discord chat
-#define channelstaff "0"
-#define channelaide "0"
-#define channelnormal "0"
-//phrase long test
-#define menuclick1 "Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur"
-#define menuclick2 "Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification"
-#define menuclick3 "Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur"
-#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d"
+//discord chat A CHANGER POUR LES BONNE VALEUR
+#define channelstaff " "
+#define channelaide " "
+#define channelnormal  " "
+//phrase long
+#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nMOTD \t%s$\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d\nWhiteListe \t%d\nID discord\nID Vérifier\nID admin 1\nID admin 2\nID admin 4"
 //truc pour stats et bar de progression
 #define PRESSED123(%0) (newkeys & (%0) && !(oldkeys & (%0)))
 #define RELEASED123(%0) (!(newkeys & (%0)) && oldkeys & (%0))
