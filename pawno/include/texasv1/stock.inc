@@ -1,5 +1,5 @@
 SQL_Connect() {
-    mysql_log(LOG_ALL); //
+    mysql_log(LOG_WARNING | LOG_ERROR); //
 	g_iHandle = mysql_connect(SQL_HOSTNAME, SQL_USERNAME, SQL_DATABASE, SQL_PASSWORD);
 	if (mysql_errno(g_iHandle) != 0) { printf("[SQL] Connection to \"%s\" failed! Please check the connection settings... fla\a", SQL_HOSTNAME);}
 	else {printf("[SQL] Connection to \"%s\" passed!", SQL_HOSTNAME);}

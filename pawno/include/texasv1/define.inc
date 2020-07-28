@@ -2,16 +2,16 @@
 
 //Information MYSQL
 #define SQL_HOSTNAME 															"localhost"
-#define SQL_USERNAME 															" "
-#define SQL_DATABASE 															" "
-#define SQL_PASSWORD															" "
+#define SQL_USERNAME 															"Hayden"
+#define SQL_DATABASE 															"samp"
+#define SQL_PASSWORD															"iNzp1g0A5!"
 
 //Information serveur
-#define SERVER_NAME 	 														"[0.3.dl] Serveur Pre-Build [RP]" //pour le nom du serveur
-#define SERVER_URL 		 														" "
-#define SERVER_REVISION  														" "
-#define LANGUAGE																" "
-#define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
+#define SERVER_NAME 	 														"[0.3.dl] Roleplay Life [RP]" //pour le nom du serveur
+#define SERVER_URL 		 														"roleplay-life.fr"
+#define SERVER_REVISION  														"Version 1"
+#define LANGUAGE																"Français"
+#define PASSWORD																"12345" // a mettre 0 pour pas de mot de passe
 
 //Couleur
 #define COLOR_CLIENT      														(0xAAC4E5BB)

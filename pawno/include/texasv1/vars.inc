@@ -308,7 +308,7 @@ enum playerData {
 	pPetrolRock,
 	pDA,
 	pDeath,
-	pRole
+	pRole[20]
 };
 enum prisonData {
 	prisonDoors[3],

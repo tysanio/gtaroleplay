@@ -31,7 +31,7 @@
 //#include <fcnpc>
 //#include <ColAndreas>
 #include <discord-connector>
-#include <crashdetect>
+//#include <crashdetect>
 #include <physics>
 native IsValidVehicle(vehicleid);
 //Include texas
@@ -1852,7 +1852,7 @@ script OnQueryFinished(extraid, threadid)
 					PlayerData[extraid][pNoob] = cache_get_field_int(0, "Noob");
 					PlayerData[extraid][pZombieKill] = cache_get_field_int(0, "ZombieKill");
 					PlayerData[extraid][pDeath] = cache_get_field_int(0, "Death");
-					PlayerData[extraid][pRole] = cache_get_field_int(0, "Role");
+					cache_get_field_content(0, "Role", PlayerData[extraid][pRole], g_iHandle, 21);
 					cache_get_field_content(0, "Warn1", PlayerData[extraid][pWarn1], g_iHandle, 32);
 					cache_get_field_content(0, "Warn2", PlayerData[extraid][pWarn2], g_iHandle, 32);
 
@@ -8194,6 +8194,7 @@ script OnGameModeInit()
 	SendRconCommand("loadfs skins");*/
     SendRconCommand("unloadfs soccer");
     SendRconCommand("loadfs soccer");
+    ConnectNPC("Albert_Folker","Albert");
     LoadPool();
     LoadPool2();
     //fin des fs oubliger

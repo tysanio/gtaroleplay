@@ -1,5 +1,5 @@
 //zombie include
-#define MAX_ZOMBIES 500 // change this to whatever number you want
+/*#define MAX_ZOMBIES 500 // change this to whatever number you want
 new SpawnedZombies=0, ZombiesTimer,ZombieIsAttack[MAX_PLAYERS];
 new z_zombieskin[] = {20012, 20013, 20014, 20015, 20016, 20017, 20018};
 script CreateZombies()
@@ -165,7 +165,7 @@ public FCNPC_OnRespawn(npcid)
 	FCNPC_SetPosition(npcid,1796.9733+random(1000)-random(1000),1452.6584+random(1000)-random(1000),10.9719+FCNPC_GetMinHeightPosCall(npcid));
 	//FCNPC_SetPosition(npcid,2485.1643+random(10),-1668.8185+random(10),13.3438);//groove
 	return 1;
-}
+}*/
 //code de radiation a LV
 script PlayerToPoint(Float:radi, playerid, Float:x, Float:y, Float:z)
 {
