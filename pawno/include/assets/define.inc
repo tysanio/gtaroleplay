@@ -1,14 +1,14 @@
 #pragma dynamic 																400000
 
 #define SQL_HOSTNAME 															"localhost"
-#define SQL_USERNAME 															"Vlad"
-#define SQL_DATABASE 															"v2vrai"
-#define SQL_PASSWORD															"AdXboBOz12Wsifa8"
+#define SQL_USERNAME 															" "
+#define SQL_DATABASE 															" "
+#define SQL_PASSWORD															" "
 
 //Information serveur
-#define SERVER_NAME 	 														"(FR) Los Santos Review v2" //pour le nom du serveur
-#define SERVER_URL 		 														"www.lsreview.fr"
-#define SERVER_REVISION  														"LSR V2.0-DL"
+#define SERVER_NAME 	 														" " //pour le nom du serveur
+#define SERVER_URL 		 														" "
+#define SERVER_REVISION  														" "
 #define LANGUAGE																"Français"
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
