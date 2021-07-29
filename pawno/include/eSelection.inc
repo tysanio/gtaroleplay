@@ -2,7 +2,7 @@
 // Created for Interactive Roleplay - 17/03/2013 @ 10:20 PM.
 
 #if !defined MAX_MENU_ITEMS
-	#define MAX_MENU_ITEMS (315)
+	#define MAX_MENU_ITEMS (1000)
 #endif
 
 #if !defined MAX_CUSTOM_ROTATIONS

@@ -45,8 +45,136 @@ Ajoute des systemes pour le bot discord et sont arrangement de gens vérifier
 -------modification du systeme discord et le joueur doit etre vérifier pour continuer sinon il restera bloquer dans le tuto - peut etre désactivé dans le systeme de whiteliste PS peut causé des probleme si on utilise le systeme complet d'ajout automatique
 -------on poura définir les options de auto-role de faction/vérifier/admin dans le /serveur
 
-02/01
+02/01/2019
 Correction prépatch de la v80 avec tout les tables mysql corrigé
 Correction de tout se qui est role discord id et role vérifier
 Ajoute des ID role admin 1 a 4 qui servira plutard (v81)
 Modification dans le /editfaction ID role qui servira a ajouter automatiquement le role au joueur sur discord qui servira plutard (v81)
+
+06/07/2021
+Reprise du gamemode
+Rajout du systeme banquais 5 compte et atm
+Modification du systeme de discord pour la 3.5
+Ajout de commande dans discordchat.inc qui fonctione #1
+
+06/21/2021
+correction des endroit sur le GPS
+correction du spawn premiere connexion
+modification des degat des armes total de ugmp
+modification de la date de naissance pour etnre 1950 et 2000
+ajoute des armes UG pour quand on a plus de balle sa va dans l'inventaire en temps qu'object 
+modification des spawn pour un spawn commun
+réduction du chargement de compte passé de 1 minute a 10 seconde max
+ajoute des armes UG en object et dans le /jeter
+ajoute des mapping important (oublie des ajouter oups les intérieurs)
+modification de certaine commande pour les passé de stcrmp en CMD:
+modification des commande salaire gouvernemental et du /taxe
+retirer tout se qui a rapport a mecanozone3 qui ne servais plus
+
+06/23/2021
+modification du blackjack
+modification du permis de conduire
+modifier object argent sale
+ajoute du questionnaire RP
+modification du bot drogue pour la caisse
+modification des emplacement du bot drogue
+modification du body shot
+enlever les stéroides qui servais a rien
+ajoute en dev d'un type blinder pour les vehciules(pas tester)
+modification /itemlist qui affiche tout les items
+
+06/25/2021
+ajoute d'une commande pour voler les maisons besoin d'items pour voler dedans
+ajoute d'une commande pour voler les fourniture d'Une maison
+ajout d'anti proxy-vpn (a tester)
+
+06/26/2021
+modification de divers temps de jeux pour avoir un vehicule/armes/étagere d'armes
+ajoute de vende te meuble a des PNJ qui sont a l'extérieur des magasin
+ajoute du !abus en commande discord
+
+06/27/2021
+test des saison de bully
+ajout de restriction pour le masque si tu est en service police pas de masque
+
+06/28/2021
+apres live pour la v2
+check billard fait
+
+06/29/2021
+correction du DeerJOB en test
+correction du questionnaire pour les gens
+---J'ai donner cette version a Winlost
+
+06/30/2021
+ajout de mapping pour LS
+retirer la langue fr/eng
+retirer l'include language
+
+02/07/2021
+ajout mapping pour entrainement police
+regler le bowling
+
+05/07/2021
+modification du systeme SMS
+modification du donner/jetter telephone qui enleve le numero de la personne
+
+07/07/2021
+modification de l,achat de la bat de baseball pour la quincarie
+systeme de spec mis de la v1.4 a la v2
+
+08/07/2021
+recheck le systeme de zombie
+enlever les débris de admin1-2-3-4 discord et le MOTD
+
+09/07/2021
+recheck le !players qui spammais les zombies --envoyer a winlost mais pas apres
+chagement de compteur
+/spec fonctionne #1
+ajoute de la fonction /fairemdp [nom du compte] pour faire un reset de mdp a un joueur
+
+ajoute pas terminer du /leader et options------------- tjrs en dev
+
+11/07/2021
+ajout sur un vps pour teste premiere fois avec Jane se soir
+apporter les modification que Winlost a fait de son coté
+modification du discord chat de passé les commandes en ? au lieux de ! pour pas faire confusion avec mee6
+révisier le truc de CK avec vlad et winlost apres discussion
+rajout de mappings qui était sur d'ancienne version
+
+12/07/2021
+modification mapping lspd
+modification du code pour le discord ID
+
+13/07/2021
+modification du setstats heure de jeux
+ajoute de mapping caserne
+modifier les commandes pour creer des atm/banker
+enlever le ?faction inviter/exclure des commandes discord
+
+19/07/2021
+regler pas mal de truc
+modification Discord ID
+enlever pas mal de commande qui est transformer en click object only
+modification de mapping cacher
+modification du mapping banque
+modification des acces factions
+modification des compte de banque
+modification des bots amendes et armes pour la LSPD
+
+
+29/07/2021
+correction des atm braquage
+correction du serveursetting qui chargais pas
+correction des atm en probleme
+correction des point gps job
+correction de certain job
+correction de mapping
+correction des zombies qui bougais pas
+
+ajoute du shoot vendor type 2 pour une boisson gratuite
+ajout de mapping XYZ
+ajout du job chasseur de base
+
+modification de certainne commande passé en objec utilisation 
+modification du /cheque pour visé le bot de la mairie a la place
