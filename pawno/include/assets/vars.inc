@@ -2997,7 +2997,7 @@ new const g_aLegalMods[][] = {
     {600, 1022, 1020, 1018, 1017, 1013, 1007, 1006, 1005, 1004, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000},
     {603, 1145, 1144, 1143, 1142, 1024, 1023, 1020, 1019, 1018, 1017, 1007, 1006, 1001, 0000, 0000, 0000, 0000, 0000}
 };
-new g_aMaleSkins[188] = {
+new g_aMaleSkins[188] = { //a ajouter skin lc/vc
 	1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
 	30, 32, 33, 34, 35, 36, 37, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 57, 58, 59, 60,
 	61, 62, 66, 68, 72, 73, 78, 79, 80, 81, 82, 83, 84, 94, 95, 96, 97, 98, 99, 100, 101, 102,
@@ -3009,7 +3009,7 @@ new g_aMaleSkins[188] = {
 	241, 242, 247, 248, 249, 250, 253, 254, 255, 258, 259, 260, 261, 262, 268, 272, 273, 289,
 	290, 291, 292, 293, 294, 295, 296, 297, 299, 303, 304, 305//10
 };
-new g_aFemaleSkins[77] = {
+new g_aFemaleSkins[77] = { //a ajouter skin lc/vc
     9, 10, 11, 12, 13, 31, 38, 39, 40, 41, 53, 54, 55, 56, 63, 64, 65, 69,
     75, 76, 77, 85, 88, 89, 90, 91, 92, 93, 129, 130, 131, 138, 140, 141,
     145, 148, 150, 151, 152, 157, 169, 178, 190, 191, 192, 193, 194, 195,
@@ -3449,7 +3449,7 @@ new gelblicht1[MAX_VEHICLES];
 new gelblicht2[MAX_VEHICLES];
 //limitation de vitesse sur un véhicule abimer
 new const BE_Bad_Vehs[] = {
-460, 464, 476, 511, 512, 513, 519, 520, 539, 553, 577, 592, 593, // planes
+460, 464, 476, 511, 512, 513, 519, 520, 539, 553, 577, 592, 593, // planes a faire vc/lc
 417, 425, 447, 465, 469, 487, 488, 497, 501, 548, 563 // heli
 };
 new bool: BE_Play_Check[MAX_PLAYERS];
@@ -3492,26 +3492,14 @@ new gen1m = 0; // Générateur de l'argent Max N1 au démarrage.
 new OnGen1 = 0; // 0 - ne sont pas desservis, 1 - est servi.
 new Text3D: gen1text; // 3d générateur de texte
 new Text3D: gen1money; // 3d argent texte obtenu.
-new gen2 = 300;
-new gen2m = 0;
-new OnGen2 = 0;
-new Text3D: gen2text;
-new Text3D: gen2money;
-new gen3 = 300;
-new gen3m = 0;
-new OnGen3 = 0;
-new Text3D: gen3text;
-new Text3D: gen3money;
-new gen4 = 300;
-new gen4m = 0;
-new OnGen4 = 0;
-new Text3D: gen4text;
-new Text3D: gen4money;
-new gen5 = 300;
-new gen5m = 0;
-new OnGen5 = 0;
-new Text3D: gen5text;
-new Text3D: gen5money;
+new gen2 = 300,gen2m = 0,OnGen2 = 0;
+new Text3D: gen2text,Text3D: gen2money;
+new gen3 = 300,gen3m = 0,OnGen3 = 0;
+new Text3D: gen3text,Text3D: gen3money;
+new gen4 = 300,gen4m = 0,OnGen4 = 0;
+new Text3D: gen4text,Text3D: gen4money;
+new gen5 = 300,gen5m = 0,OnGen5 = 0;
+new Text3D: gen5text,Text3D: gen5money;
 new OnBenz[MAX_PLAYERS]; // Max litres de carburant dans le lecteur de cartouche.
 new genpickup[5]; // Pick-up générateurs.
 //new dambapickup[2]; // Entrée / Sortie (DAM).
@@ -3648,7 +3636,8 @@ enum serveursettinginfo
 	settingswat,
 	settingwl,
 	settingdiscord[30],
-	settingverifier[30]
+	settingverifier[30],
+	Float:settingpos[3] //spawn joueur premiere connexion
 }
 new info_serveursetting[MAX_PLAYERS][serveursettinginfo];
 //location du vehicule

@@ -361,6 +361,7 @@ DISCORD:ostats( DCC_Channel: channel, DCC_User: author, params[ ] )
 	else DCC_SendChannelMessage( discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 	return 1;
 }
+
 DISCORD:aide( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
 	static type[24],string[2048],string1[2048];

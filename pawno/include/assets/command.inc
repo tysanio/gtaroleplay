@@ -8305,9 +8305,7 @@ CMD:dice(playerid, params[])
 }
 CMD:serrermain(playerid, params[])
 {
-	static
-	    userid,
-	    type;
+	static userid,type;
 	if (sscanf(params, "ud", userid, type))
 	    return SendSyntaxMessage(playerid, "/serrermain [playerid/name] [type]");
     if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 6.0))
