@@ -35,7 +35,7 @@ native IsValidVehicle(vehicleid);
 #include <assets/pool>
 #include <assets/pool2>
 #include <assets/map>
-#include <assets/mapls>
+//#include <assets/mapls>
 #include <assets/maison>
 main()
 {
@@ -8864,6 +8864,7 @@ script OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
     	SendServerMessage(playerid,"Votre véhicule est équiper d'un boitier manuel veuiller appuyer sur les touche ~k~~VEHICLE_TURRETUP~ et ~k~~VEHICLE_TURRETUP~ pour changer d'embreyage");
     	KillSpeed = SetTimerEx("SpeedCheck", 500, 1, "i", playerid);
     }
+    else DisablePlayerSpeedCap(playerid);
 	return 1;
 }
 script OnPlayerEnterCheckpoint(playerid)
@@ -8874,7 +8875,7 @@ script OnPlayerEnterCheckpoint(playerid)
 		if (PlayerData[playerid][pTutorialStage] == 5)
 		{
 		    //Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!", "Voila", "Non");
-			Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "QCM LSR","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+			Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 			TogglePlayerControllable(playerid, 0);
 		}
 		if (PlayerData[playerid][pTutorialStage] == 6 && IsPlayerInRangeOfPoint(playerid, 1.5, -228.8403, 1401.1831, 27.7656))
@@ -8902,7 +8903,7 @@ script OnPlayerEnterCheckpoint(playerid)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerInterior(playerid, 0);
 			PlayerData[playerid][pFreeze] = 0;
-            SetPlayerPos(playerid,2096.7385, -1687.4127, 13.4706);
+            SetPlayerPos(playerid,7481.6865,7705.7090,11.2992);
             SetPlayerFacingAngle(playerid,342.7732);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
@@ -11061,7 +11062,7 @@ script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 script OnGameModeInit()
 {
     DCC_SetBotPresenceStatus(DO_NOT_DISTURB);
-    DCC_SetBotActivity("Cette version est pour Winlost seulement :)");
+    DCC_SetBotActivity("Version UGMP");
     GUILD_ID1 = DCC_FindGuildById(Ddiscord);
     discordlog = DCC_FindChannelById(Dchat); //chat general
     discordaaa = DCC_FindChannelById(Achat); //chat general
@@ -11071,7 +11072,7 @@ script OnGameModeInit()
 	RoleStaff2 = DCC_Role:DCC_FindRoleById(Dadmin2);    //role
 	RoleStaff3 = DCC_Role:DCC_FindRoleById(Dadmin3);    //role
 	RoleStaff4 = DCC_Role:DCC_FindRoleById(Dadmin4);    //role
-	CreateServerObjectsLosSantos();
+	//CreateServerObjectsLosSantos();
 	MaisonIntEXT();
 	//partie fs oubliger
 	/*SendRconCommand("unloadfs skins");
@@ -11082,9 +11083,8 @@ script OnGameModeInit()
     LoadPool();
     LoadPool2();
     //fin des fs oubliger
-    //CA_Init();
     //zombie + radiation
-	ZombiesTimer = SetTimer("CreateZombies", 50, true);
+	//ZombiesTimer = SetTimer("CreateZombies", 50, true);
 	SetTimer("UpdateRadiation",5000, 1);
 	//fin zombie
     AntiDeAMX();
@@ -13282,7 +13282,7 @@ script OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				new string[128];
 				CancelSelectTextDraw(playerid);
 				format(string, sizeof(string), "%s\n%s", (!PlayerCharacters[playerid][0][0]) ? ("Vide") : (PlayerCharacters[playerid][0]), (!PlayerCharacters[playerid][1][0]) ? ("Vide") : (PlayerCharacters[playerid][1]));
-				Dialog_Show(playerid, CharList, DIALOG_STYLE_LIST, "Mon personnage", string, "Valider", "Quitter");
+				Dialog_Show(playerid, CharList, DIALOG_STYLE_LIST, "Mes personnage", string, "Valider", "Quitter");
 			}
 			else if (playertextid == PlayerData[playerid][pTextdraws][48])
 			{

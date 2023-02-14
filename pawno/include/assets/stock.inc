@@ -22591,7 +22591,7 @@ Dialog:discordid(playerid, response, listitem, inputtext[])
 		if(RoleJoueur == DCC_INVALID_ROLE) return Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!\n Erreur 3 ID role", "Voila", " X ");
 		DCC_AddGuildMemberRole(GUILD_ID1,user,RoleJoueur);
 		PlayerData[playerid][pRole] = amount;
-		Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "QCM LSR","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		TogglePlayerControllable(playerid, 0);
 		return 1;
 	}
@@ -23349,9 +23349,9 @@ Dialog:tutoconnaitre1(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 		format(tuto1, sizeof(tuto1), "%s",inputtext);
-		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "QCM LSR","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 96)
-			return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "QCM LSR","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+			return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 	}
 	return 1;
 }
@@ -23361,9 +23361,9 @@ Dialog:tutoconnaitre2(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 		format(tuto2, sizeof(tuto2), "%s",inputtext);
-		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "QCM LSR","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 96)
-			return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "QCM LSR","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+			return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 	}
 	return 1;
 }
@@ -23373,9 +23373,9 @@ Dialog:tutoconnaitre3(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 		format(tuto3, sizeof(tuto3), "%s",inputtext);
-		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "QCM LSR","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 96)
-			return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "QCM LSR","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+			return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 	}
 	return 1;
 }
@@ -23385,11 +23385,15 @@ Dialog:tutoconnaitre4(playerid, response, listitem, inputtext[])
 	if (response)
 	{
 		format(tuto4, sizeof(tuto4), "%s",inputtext);
-		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "QCM LSR","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		new msg1[100],msg2[100];
+		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		SendServerMessage(playerid,"Merci un admin va vous prendre en charge");
 		SendServerMessage(playerid,"Si un admin n'est pas présent il vous sera recommander de quitter et de refaire un personnage.");
-		SendAdminAlert(COLOR_ADMINCHAT, "Un joueur dénommer %s a fini son tutoriel et attent une réponse",ReturnName(playerid, 0));
+		SendAdminAlert(COLOR_ADMINCHAT, "Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d",ReturnName(playerid, 0),playerid);
 		SendAdminAlert(COLOR_ADMINCHAT, "/apps [playerid] pour accepter ou refuser un joueur");
+		format(msg1, sizeof(msg1),"Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d",ReturnName(playerid, 0),playerid);
+		utf8encode(msg2,msg1,sizeof(msg2));
+		DCC_SendChannelMessage(discordaaa,msg2);
 		TogglePlayerControllable(playerid, 0);
 		PlayerData[playerid][pTutorialStage] = 5;
 	}

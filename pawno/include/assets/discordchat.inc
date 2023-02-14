@@ -105,7 +105,7 @@ DISCORD:ban( DCC_Channel: channel, DCC_User: author, params[ ] )
             GetPlayerName(pID1, name, MAX_PLAYER_NAME);
 			DCC_TriggerBotTypingIndicator(discordaaa);
 			DCC_SendChannelMessage(discordaaa, "> **[BAN]** **%s** a ban **%s(%d)**.", ReturnDiscordName( author ),name, pID1);
-			Dialog_Show(pID1, ShowOnly, DIALOG_STYLE_MSGBOX, "Ban", "Tu as été bannie.\nJoueur: %s\nVia le tabckick\nL'admin qui ta ban: %s\n\nAppuyer F8 si c'est une erreur.", "Fermer", "", ReturnName(pID1,0),ReturnDiscordName( author ));
+			Dialog_Show(pID1, ShowOnly, DIALOG_STYLE_MSGBOX, "Ban", "Tu as été bannie.\nJoueur: %s\nVia le discord\nL'admin qui ta ban: %s\n\nAppuyer F8 si c'est une erreur.", "Fermer", "", ReturnName(pID1,0),ReturnDiscordName( author ));
 			SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a ete banni par %s via discord.", PlayerData[pID1][pUsername],ReturnDiscordName( author ));
 			Log_Write("logs/ban_log.txt", "[%s] %s a ete banni par %s via discord.",ReturnDate(),PlayerData[pID1][pUsername],ReturnDiscordName( author ));
 			Blacklist_Add(PlayerData[pID1][pIP], PlayerData[pID1][pUsername],ReturnDiscordName( author ),"Via Discord");
@@ -254,6 +254,81 @@ DISCORD:debug( DCC_Channel: channel, DCC_User: author, params[ ] )
 	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 	return 1;
 }
+DISCORD:apps( DCC_Channel: channel, DCC_User: author, params[ ] )
+{
+	static userid,string1[128],string2[128],string3[128],string4[128],string5[128],string22[128],string33[128],string44[128],string55[128];
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
+	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+	{
+		if (sscanf(params, "u", userid))
+			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?apps [playerid/name]");
+		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
+		DCC_TriggerBotTypingIndicator(discordaaa);
+		format(string1, sizeof(string1), "**Joueur IG %s (ID: %d)**", ReturnName(userid), userid);
+		format(string2, sizeof(string2), "Réponse 1 : %s",tuto1);
+		format(string3, sizeof(string3), "Réponse 2 : %s",tuto2);
+		format(string4, sizeof(string4), "Réponse 3 : %s",tuto3);
+		format(string5, sizeof(string5), "Réponse 4 : %s",tuto4);
+		utf8encode(string22,string2,sizeof(string22));
+		utf8encode(string33,string3,sizeof(string33));
+		utf8encode(string44,string4,sizeof(string44));
+		utf8encode(string55,string5,sizeof(string55));
+		Embed = DCC_CreateEmbed(string1,"----------------------Reponse de la personne------------------");
+		DCC_AddEmbedField(Embed ,string22,string33);
+		DCC_AddEmbedField(Embed ,string44,string55);
+		DCC_SetEmbedColor(Embed,0x00FF00);
+		DCC_SendChannelEmbedMessage(discordaaa, Embed);
+		DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?apps[a/r] accepter ou refuser");
+	}
+	return 1;	
+}
+DISCORD:appsa( DCC_Channel: channel, DCC_User: author, params[ ] )
+{
+	static userid;
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
+	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+	{
+		if (sscanf(params, "u", userid))
+			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsa [playerid/name]");
+		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");	
+		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");
+		TogglePlayerControllable(userid, 1);
+		PlayerData[userid][pTutorialStage] = 6;
+		SetPlayerCheckpoint(userid, -228.8403, 1401.1831, 27.7656, 2.0);
+		tuto1 = "\0";
+		tuto2 = "\0";
+		tuto3 = "\0";
+		tuto4 = "\0";
+	}
+	return 1;
+}
+DISCORD:appsr( DCC_Channel: channel, DCC_User: author, params[ ] )
+{
+	static userid;
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
+	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+	{
+		if (sscanf(params, "u", userid))
+			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsr [playerid/name]");
+		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
+		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");		
+		tuto1 = "\0";
+		tuto2 = "\0";
+		tuto3 = "\0";
+		tuto4 = "\0";
+		KickEx(userid);
+	}
+	return 1;
+}	
 DISCORD:stats( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
 	static userid;
