@@ -13282,7 +13282,7 @@ script OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				new string[128];
 				CancelSelectTextDraw(playerid);
 				format(string, sizeof(string), "%s\n%s", (!PlayerCharacters[playerid][0][0]) ? ("Vide") : (PlayerCharacters[playerid][0]), (!PlayerCharacters[playerid][1][0]) ? ("Vide") : (PlayerCharacters[playerid][1]));
-				Dialog_Show(playerid, CharList, DIALOG_STYLE_LIST, "Mes personnage", string, "Valider", "Quitter");
+				Dialog_Show(playerid, CharList, DIALOG_STYLE_LIST, "Mes personnages", string, "Valider", "Quitter");
 			}
 			else if (playertextid == PlayerData[playerid][pTextdraws][48])
 			{
@@ -16525,13 +16525,16 @@ script serveursettinginfoload()
 		info_serveursetting[serveurinfo][settingpolice] = cache_get_field_content_int(serveurinfo,"police");
 		info_serveursetting[serveurinfo][settingswat] = cache_get_field_content_int(serveurinfo,"swat");
 		info_serveursetting[serveurinfo][settingwl] = cache_get_field_content_int(serveurinfo,"whiteliste");
+		info_serveursetting[serveurinfo][settingpos][0] = cache_get_field_content_int(serveurinfo,"spawnpos1");
+		info_serveursetting[serveurinfo][settingpos][1] = cache_get_field_content_int(serveurinfo,"spawnpos2");
+		info_serveursetting[serveurinfo][settingpos][2] = cache_get_field_content_int(serveurinfo,"spawnpos3");
 	}
 	cache_delete(result);
 }
 script serveursettinginfosave(serveurinfo)
 {
 	new query[800];
-	mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d, whiteliste=%d WHERE id='1'",
+	mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d, whiteliste=%d, spawnpos1=%.4f,spawnpos2=%.4f,spawnpos3=%.4f, WHERE id='1'",
 	info_serveursetting[serveurinfo][settingafkactive],
 	info_serveursetting[serveurinfo][settingafktime],
 	info_serveursetting[serveurinfo][settingbraquagenpcactive],
@@ -16542,7 +16545,11 @@ script serveursettinginfosave(serveurinfo)
     info_serveursetting[serveurinfo][settingnouveau],
     info_serveursetting[serveurinfo][settingpolice],
     info_serveursetting[serveurinfo][settingswat],
-	info_serveursetting[serveurinfo][settingwl]);
+	info_serveursetting[serveurinfo][settingwl],
+	info_serveursetting[serveurinfo][settingpos][0],
+	info_serveursetting[serveurinfo][settingpos][1],
+	info_serveursetting[serveurinfo][settingpos][2]
+	);
     mysql_tquery(g_iHandle, query);
 }
 //caisse
