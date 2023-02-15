@@ -18661,6 +18661,7 @@ Dialog:decodeur(playerid, response, listitem, inputtext[])
 //serveur setting
 Dialog:serveur(playerid,response,listitem,inputtext[])
 {
+	new serveurinfo;
 	if(!response) return 0;
 	if (response)
 	{
@@ -18668,37 +18669,31 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 		{
 			case 0:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting OOC","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive]);
 				return 1;
 			}
 			case 1:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting PM","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingpmactive]);
 				return 1;
 			}
 			case 2:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting Braquage NPC","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagenpcactive]);
 				return 1;
 			}
 			case 3:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting Braquage Banque","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagebankactive]);
 				return 1;
 			}
 			case 4:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting AFK","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafkactive]);
 				return 1;
 			}
 			case 5:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting Temps AFK","Temps AFK : %d\nMettre une valeur supérieur a 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafktime]);
 				return 1;
 			}
@@ -18709,7 +18704,6 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 			}
 			case 7:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingnouveau]);
 				return 1;
 			}
@@ -18725,16 +18719,25 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 			}
 			case 10:
 			{
-				new serveurinfo;
 				Dialog_Show(playerid,serveur12,DIALOG_STYLE_INPUT,"Serveur setting whitelist","Whitelist : %d\nPour activer 1 pour désactiver 0","Valider","Fermer",info_serveursetting[serveurinfo][settingwl]);
 				return 1;
 			}
 			case 11:
+			{			
+				Dialog_Show(playerid,serveur13,DIALOG_STYLE_MSGBOX,"Serveur setting","Votre position sera défini pour spawn le snouveau joueur","Okay","");
+			}			
+			case 12:
 			{
-				Dialog_Show(playerid,serveur13,DIALOG_STYLE_INPUT,"Serveur setting discord","Entrée le id discord","Valider","Fermer");
+				Dialog_Show(playerid,ShowO,DIALOG_STYLE_INPUT,"Serveur setting discord","Entrée le id discord","Valider","Fermer");
+				static Float:x,Float:y,Float:z;
+				GetPlayerPos(playerid, x, y, z);
+				info_serveursetting[serveurinfo][settingpos][0] = x;
+				info_serveursetting[serveurinfo][settingpos][1] = y;
+				info_serveursetting[serveurinfo][settingpos][2] = z;
+				serveursettinginfosave(serveurinfo);
 				return 1;
 			}
-			case 12:
+			case 13:
 			{
 				Dialog_Show(playerid,serveur14,DIALOG_STYLE_INPUT,"Serveur setting verifier","Entrée le id du role vérifier","Valider","Fermer");
 				return 1;

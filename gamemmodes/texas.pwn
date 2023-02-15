@@ -8903,7 +8903,7 @@ script OnPlayerEnterCheckpoint(playerid)
 			SetPlayerVirtualWorld(playerid, 0);
 			SetPlayerInterior(playerid, 0);
 			PlayerData[playerid][pFreeze] = 0;
-            SetPlayerPos(playerid,7481.6865,7705.7090,11.2992);
+            SetPlayerPos(playerid,info_serveursetting[serveurinfo][settingpos][0],info_serveursetting[serveurinfo][settingpos][1],info_serveursetting[serveurinfo][settingpos][2]);
             SetPlayerFacingAngle(playerid,342.7732);
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);

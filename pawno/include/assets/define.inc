@@ -200,7 +200,7 @@
 //define forward fuck you
 #define script%0(%1) forward%0(%1); public%0(%1)
 //phrase long
-#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d\nWhiteListe \t%d"
+#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d\nWhiteListe \t%d\Spawn Pos"
 #define menuclick1fr "Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur\nNombre de mort du joueur"
 #define menuclick2fr "Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification"
 #define menuclick3fr "Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur"
