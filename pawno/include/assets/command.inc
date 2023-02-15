@@ -238,10 +238,10 @@ CMD:ahelp(playerid, params[])
  	}
 	if (PlayerData[playerid][pAdmin] >= 2) {
 	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber, /blacklist.");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /unban.");
+	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /unban, /jetpack.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 3) {
-        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /asellmaison, /asellbiz, /jetpack, /setweather, /setfuel, /setcarhp, /itemlist.");
+        SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /asellmaison, /asellbiz, /setweather, /setfuel, /setcarhp, /itemlist.");
         SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /setquantity, /supitem, /setinventory, /arepair, /givewep, /baninfo, /setitem.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 4) {
@@ -6389,7 +6389,7 @@ CMD:enleverlicense(playerid, params[])
 CMD:jetpack(playerid, params[])
 {
 	new userid;
-	if (PlayerData[playerid][pAdmin] < 3)
+	if (PlayerData[playerid][pAdmin] < 2)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "u", userid))
  	{

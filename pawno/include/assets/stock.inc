@@ -18724,11 +18724,7 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 			}
 			case 11:
 			{			
-				Dialog_Show(playerid,serveur13,DIALOG_STYLE_MSGBOX,"Serveur setting","Votre position sera défini pour spawn le snouveau joueur","Okay","");
-			}			
-			case 12:
-			{
-				Dialog_Show(playerid,ShowO,DIALOG_STYLE_INPUT,"Serveur setting discord","Entrée le id discord","Valider","Fermer");
+				Dialog_Show(playerid,ShowO,DIALOG_STYLE_MSGBOX,"Serveur setting","Votre position sera défini pour spawn les nouveau joueur","Okay","");
 				static Float:x,Float:y,Float:z;
 				GetPlayerPos(playerid, x, y, z);
 				info_serveursetting[serveurinfo][settingpos][0] = x;
@@ -18736,6 +18732,10 @@ Dialog:serveur(playerid,response,listitem,inputtext[])
 				info_serveursetting[serveurinfo][settingpos][2] = z;
 				serveursettinginfosave(serveurinfo);
 				return 1;
+			}			
+			case 12:
+			{
+				Dialog_Show(playerid,ShowO,DIALOG_STYLE_INPUT,"Serveur setting discord","Entrée le id discord","Valider","Fermer");
 			}
 			case 13:
 			{
