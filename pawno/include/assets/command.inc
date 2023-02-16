@@ -4021,40 +4021,62 @@ CMD:ouvrircargaison(playerid, params[])
 	GameTextForPlayer(playerid, "~n~~n~~n~~n~~n~~n~~n~~n~~n~~n~~r~Ouverture de boite...", 3000, 3);
  	TogglePlayerControllable(playerid, 0);
   	ApplyAnimation(playerid, "BASEBALL", "Bat_4", 4.0, 1, 1, 1, 1, 0, 1);
-	DestroyActor(missionactor);
-	mission[playerid] = 0;
-	switch (random(30))
+	DestroyActor(missionactor[0]);
+	DestroyActor(missionactor[3]);
+	mission[0][playerid] = 0;
+	mission[3][playerid] = 0;
+	switch (random(30))//ls
 	{
-	   	case 0: missionactor = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
-	   	case 1: missionactor = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
-	   	case 2: missionactor = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
-	   	case 3: missionactor = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
-	   	case 4: missionactor = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
-	   	case 5: missionactor = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
-		case 6: missionactor = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
-		case 7: missionactor = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
-		case 8: missionactor = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
-		case 9: missionactor = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
-		case 10: missionactor = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
-		case 11: missionactor = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
-		case 12: missionactor = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
-		case 13: missionactor = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
-		case 14: missionactor = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
-		case 15: missionactor = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
-		case 16: missionactor = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
-		case 17: missionactor = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
-		case 18: missionactor = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
-		case 19: missionactor = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
-		case 20: missionactor = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
-		case 21: missionactor = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
-		case 22: missionactor = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
-		case 23: missionactor = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
-		case 24: missionactor = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
-		case 25: missionactor = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
-		case 26: missionactor = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
-		case 27: missionactor = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
-		case 28: missionactor = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
-		case 29: missionactor = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
+	   	case 0: missionactor[0] = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
+	   	case 1: missionactor[0] = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
+	   	case 2: missionactor[0] = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
+	   	case 3: missionactor[0] = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
+	   	case 4: missionactor[0] = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
+	   	case 5: missionactor[0] = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
+		case 6: missionactor[0] = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
+		case 7: missionactor[0] = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
+		case 8: missionactor[0] = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
+		case 9: missionactor[0] = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
+		case 10: missionactor[0] = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
+		case 11: missionactor[0] = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
+		case 12: missionactor[0] = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
+		case 13: missionactor[0] = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
+		case 14: missionactor[0] = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
+		case 15: missionactor[0] = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
+		case 16: missionactor[0] = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
+		case 17: missionactor[0] = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
+		case 18: missionactor[0] = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
+		case 19: missionactor[0] = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
+		case 20: missionactor[0] = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
+		case 21: missionactor[0] = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
+		case 22: missionactor[0] = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
+		case 23: missionactor[0] = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
+		case 24: missionactor[0] = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
+		case 25: missionactor[0] = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
+		case 26: missionactor[0] = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
+		case 27: missionactor[0] = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
+		case 28: missionactor[0] = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
+		case 29: missionactor[0] = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
+	}
+	switch (random(17))//lc
+	{
+	   	case 0: missionactor[3] = CreateActor(26179,7689.1865,8170.7085,3.8213,3.3570); // actor
+	   	case 1: missionactor[3] = CreateActor(26179,7653.4771,8337.4893,18.8196,73.5444); // actor
+	   	case 2: missionactor[3] = CreateActor(26179,7460.9697,8415.9951,29.3884,314.9583); // actor
+	   	case 3: missionactor[3] = CreateActor(26179,7164.0684,8723.7158,23.5813,226.3073); // actor
+	   	case 4: missionactor[3] = CreateActor(26179,7066.6182,8619.4219,23.5643,349.6168); // actor
+	   	case 5: missionactor[3] = CreateActor(26179,7095.4170,8512.4834,3.3916,62.6477); // actor
+		case 6: missionactor[3] = CreateActor(26179,7171.4253,8365.6650,58.7805,23.1674); // actor
+		case 7: missionactor[3] = CreateActor(26179,7096.4014,8359.9766,68.7529,98.9946); // actor
+		case 8: missionactor[3] = CreateActor(26179,6999.3833,8311.4443,68.6574,184.1986); // actor
+		case 9: missionactor[3] = CreateActor(26179,7086.4365,8160.0620,43.8164,77.6878); // actor
+		case 10: missionactor[3] = CreateActor(26179,7051.6499,8080.6113,44.1244,343.0835); // actor
+		case 11: missionactor[3] = CreateActor(26179,7155.2700,8038.7686,43.8433,34.1576); // actor
+		case 12: missionactor[3] = CreateActor(26179,7171.8784,8111.0044,33.7985,210.4210); // actor
+		case 13: missionactor[3] = CreateActor(26179,7383.2930,8033.7798,33.8102,358.7740); // actor
+		case 14: missionactor[3] = CreateActor(26179,7428.3208,8111.6035,33.8193,114.0818); // actor
+		case 15: missionactor[3] = CreateActor(26179,7286.2593,8110.4683,33.8053,195.8626); // actor
+		case 16: missionactor[3] = CreateActor(26179,7333.1997,8065.5410,33.7944,223.7729); // actor
 	}
 	SetTimerEx("OpenCrate", 3000, false, "dd", playerid, id);
     return 1;
@@ -9641,7 +9663,7 @@ CMD:mettrelefeu(playerid, params[])
 	static Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
 	//mettre les position de feu + la mission + enlever le jerrican apres chaque truc de feux + envoie de message pour retour au bot
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1271.6312,295.0221,19.5547) && mission1[playerid] == 1)//feu 1
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1271.6312,295.0221,19.5547) && mission[1][playerid] == 1)//feu 1
 	{
 		g_aFireObjects[0] = CreateDynamicObject(18691, 1275.4296,297.2122,17.2547, 0.0, 0.0, 0.0);//17.2547
 		g_aFireObjects[1] = CreateDynamicObject(18691, 1270.1641,299.4117,17.2547, 0.0, 0.0, 0.0);
@@ -9652,7 +9674,7 @@ CMD:mettrelefeu(playerid, params[])
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s met le feu a l'endroit", ReturnName(playerid, 0));
 		Inventory_Remove(playerid, "Jerrican");
 		SendServerMessage(playerid, "Aller revoir le bot pour récuperer votre argent.");
-		mission1[playerid] = 2;
+		mission[1][playerid] = 2;
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
@@ -9662,14 +9684,14 @@ CMD:mettrelefeu(playerid, params[])
 		if(FactionData[facass][factionacces][5] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 	}
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1393.7836,462.0495,20.3864)&& mission1[playerid] == 1)//feu 2
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, 1393.7836,462.0495,20.3864)&& mission[1][playerid] == 1)//feu 2
 	{
 		g_aFireObjects[0] = CreateDynamicObject(18691, 1395.1378,464.5277,17.8457, 0.0, 0.0, 0.0);
 		g_aFireObjects[1] = CreateDynamicObject(18691, 1394.2600,460.4635,17.8930, 0.0, 0.0, 0.0);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s met le feu a l'endroit", ReturnName(playerid, 0));
 		Inventory_Remove(playerid, "Jerrican");
 		SendServerMessage(playerid, "Aller revoir le bot pour récuperer votre argent.");
-		mission1[playerid] = 2;
+		mission[1][playerid] = 2;
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
@@ -9679,14 +9701,14 @@ CMD:mettrelefeu(playerid, params[])
 		if(FactionData[facass][factionacces][5] == 1)
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 	}
-	if(IsPlayerInRangeOfPoint(playerid, 5.0, 245.1169,-43.5079,1.5853)&& mission1[playerid] == 1)//feu 3
+	if(IsPlayerInRangeOfPoint(playerid, 5.0, 245.1169,-43.5079,1.5853)&& mission[1][playerid] == 1)//feu 3
 	{
 		g_aFireObjects[0] = CreateDynamicObject(18691, 243.9383,-45.6670,-0.8853, 0.0, 0.0, 0.0);
 		g_aFireObjects[1] = CreateDynamicObject(18691, 246.8790,-43.1316,-0.8853, 0.0, 0.0, 0.0);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s met le feu a l'endroit", ReturnName(playerid, 0));
 		Inventory_Remove(playerid, "Jerrican");
 		SendServerMessage(playerid, "Aller revoir le bot pour récuperer votre argent.");
-		mission1[playerid] = 2;
+		mission[1][playerid] = 2;
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{
@@ -9697,7 +9719,7 @@ CMD:mettrelefeu(playerid, params[])
 		{ SendServerMessage(playerid, "RADIO: Un incendie a été repéré au %s (marquée sur la carte).", GetLocation(x,y,z));}
 
 	}
-	if(IsPlayerInRangeOfPoint(playerid, 5.0,246.7708,-288.1205,1.5836)&& mission1[playerid] == 1)//feu 4
+	if(IsPlayerInRangeOfPoint(playerid, 5.0,246.7708,-288.1205,1.5836)&& mission[1][playerid] == 1)//feu 4
 	{
 		g_aFireObjects[0] = CreateDynamicObject(18691, 248.6673,-287.1047,-0.8836, 0.0, 0.0, 0.0);
 		g_aFireObjects[1] = CreateDynamicObject(18691, 248.0654,-290.4258,-0.8781, 0.0, 0.0, 0.0);
@@ -9707,7 +9729,7 @@ CMD:mettrelefeu(playerid, params[])
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s met le feu a l'endroit", ReturnName(playerid, 0));
 		Inventory_Remove(playerid, "Jerrican");
 		SendServerMessage(playerid, "Aller revoir le bot pour récuperer votre argent.");
-		mission1[playerid] = 2;
+		mission[1][playerid] = 2;
 		GetDynamicObjectPos(g_aFireObjects[0], x, y, z);
 		foreach (new i : Player)
 		{

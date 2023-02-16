@@ -1657,10 +1657,6 @@ script OnQueryFinished(extraid, threadid)
 		    	cache_get_data(rows, fields, g_iHandle);
 		    	if (rows)
 				{
-				    /*Show_LoginTD(extraid);
-					PlayerTextDrawHide(extraid, PlayerData[extraid][pTextdraws][3]);
-					PlayerTextDrawHide(extraid, PlayerData[extraid][pTextdraws][2]);
-					SelectTextDraw(extraid, -1);*/
 			    	static loginDate[36];
 					cache_get_row(0, 0, loginDate, g_iHandle);
 					format(PlayerData[extraid][pLoginDate], 36, loginDate);
@@ -1703,7 +1699,6 @@ script OnQueryFinished(extraid, threadid)
 		}
 		case THREAD_CHARACTERS:
 		{
-		    Destroy_LoginTD(extraid);
 		    CancelSelectTextDraw(extraid);
 			cache_get_data(rows, fields, g_iHandle);
 			for (new i = 0; i < rows; i ++) {
@@ -11340,150 +11335,170 @@ script OnGameModeInit()
 	//mission le pickup de la mission apres l,actor
 	switch (random(70))
 	{
-	   	case 0: missionactor = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
-	   	case 1: missionactor = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
-	   	case 2: missionactor = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
-	   	case 3: missionactor = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
-	   	case 4: missionactor = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
-	   	case 5: missionactor = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
-		case 6: missionactor = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
-		case 7: missionactor = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
-		case 8: missionactor = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
-		case 9: missionactor = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
-		case 10: missionactor = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
-		case 11: missionactor = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
-		case 12: missionactor = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
-		case 13: missionactor = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
-		case 14: missionactor = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
-		case 15: missionactor = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
-		case 16: missionactor = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
-		case 17: missionactor = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
-		case 18: missionactor = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
-		case 19: missionactor = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
-		case 20: missionactor = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
-		case 21: missionactor = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
-		case 22: missionactor = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
-		case 23: missionactor = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
-		case 24: missionactor = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
-		case 25: missionactor = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
-		case 26: missionactor = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
-		case 27: missionactor = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
-		case 28: missionactor = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
-		case 29: missionactor = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
-		case 30: missionactor = CreateActor(179,1273.8726,-1209.6628,13.6797,220.2624); //
-		case 31: missionactor = CreateActor(179,2349.6882,-646.7117,128.0547,227.2257); //
-		case 32: missionactor = CreateActor(179,1546.9674,-1470.5757,13.5493,222.5185); //
-		case 33: missionactor = CreateActor(179,2081.5508,-1011.0471,47.9766,105.7575); //
-		case 34: missionactor = CreateActor(179,1985.4198,-980.1873,31.1609,333.8430); //
-		case 35: missionactor = CreateActor(179,1415.5403,-807.0994,85.0488,1.4456); //
-		case 36: missionactor = CreateActor(179,826.2905,-924.5969,52.5996,4.1322); //
-		case 37: missionactor = CreateActor(179,588.1912,-1555.8497,15.6528,31.0138); //
-		case 38: missionactor = CreateActor(179,1227.8607,-1890.5493,15.7031,58.3340); //
-		case 39: missionactor = CreateActor(179,1112.4701,-2036.8950,74.4297,102.8584); //
-		case 40: missionactor = CreateActor(179,1018.5037,-2196.1841,37.6609,285.3763); //
-		case 41: missionactor = CreateActor(179,1748.4838,-2691.9424,13.5469,176.0485); //
-		case 42: missionactor = CreateActor(179,2685.8225,-2329.9402,3.0000,55.9746); //
-		case 43: missionactor = CreateActor(179,2787.4006,-1425.7360,16.2500,56.0020); //
-		case 44: missionactor = CreateActor(179,2772.0115,-1350.1686,50.0000,270.2273); //
-		case 45: missionactor = CreateActor(179,1654.8992,-1622.1246,22.5156,2.8360); //
-		case 46: missionactor = CreateActor(179,1407.8107,-1476.5941,20.4362,93.4739); //
-		case 47: missionactor = CreateActor(179,1527.6512,-1457.6436,9.5000,146.7676); //
-		case 48: missionactor = CreateActor(179,1009.3832,-1245.6913,23.0637,186.6729); //
-		case 49: missionactor = CreateActor(179,992.3521,-1249.7333,15.0313,175.7060); //
-		case 50: missionactor = CreateActor(179,810.5253,-1091.7935,25.7839,196.3460); //
-		case 51: missionactor = CreateActor(179,701.8380,-1205.9988,15.1323,5.7903); //
-		case 52: missionactor = CreateActor(179,154.2128,-1957.6531,3.7734,185.5805); //
-		case 53: missionactor = CreateActor(179,360.1298,-2071.7043,10.6953,182.8539); //
-		case 54: missionactor = CreateActor(179,854.5313,-1631.6125,13.5547,190.1246); //
-		case 55: missionactor = CreateActor(179,1338.9860,-1798.2374,13.5547,291.4071); //
-		case 56: missionactor = CreateActor(179,857.4675,-1386.9231,-0.5015,90.3730); //
-		case 57: missionactor = CreateActor(179,1688.4558,-1974.8192,8.8203,324.3620); //
-		case 58: missionactor = CreateActor(179,1682.1724,-2016.2054,21.9542,272.4961); //
-		case 59: missionactor = CreateActor(179,836.3838,-1853.9093,8.3972,186.0761); //
-		case 60: missionactor = CreateActor(179,1341.4945,-1623.1893,17.7340,202.5318); //
-		case 61: missionactor = CreateActor(179,2350.7471,-1248.5737,22.5000,87.6833); //
-		case 62: missionactor = CreateActor(179,2409.1960,-1205.4865,29.5086,87.4851); //
-		case 63: missionactor = CreateActor(179,2400.5764,-1559.7468,28.0000,126.0532); //
-		case 64: missionactor = CreateActor(179,2613.0591,-2122.7659,0.6947,146.0491); //
-		case 65: missionactor = CreateActor(179,1414.3044,-1323.1129,9.0277,6.1153); //
-		case 66: missionactor = CreateActor(179,289.9101,-1502.0486,24.9219,242.0225); //
-		case 67: missionactor = CreateActor(179,2109.1501,-1993.1691,13.5567,151.9153); //
-		case 68: missionactor = CreateActor(179,1689.9331,-2009.1837,14.1215,183.3461); //
-		case 69: missionactor = CreateActor(179,2040.6052,-1830.0254,13.5937,55.5965); //
+	   	case 0: missionactor[0] = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
+	   	case 1: missionactor[0] = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
+	   	case 2: missionactor[0] = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
+	   	case 3: missionactor[0] = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
+	   	case 4: missionactor[0] = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
+	   	case 5: missionactor[0] = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
+		case 6: missionactor[0] = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
+		case 7: missionactor[0] = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
+		case 8: missionactor[0] = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
+		case 9: missionactor[0] = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
+		case 10: missionactor[0] = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
+		case 11: missionactor[0] = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
+		case 12: missionactor[0] = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
+		case 13: missionactor[0] = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
+		case 14: missionactor[0] = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
+		case 15: missionactor[0] = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
+		case 16: missionactor[0] = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
+		case 17: missionactor[0] = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
+		case 18: missionactor[0] = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
+		case 19: missionactor[0] = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
+		case 20: missionactor[0] = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
+		case 21: missionactor[0] = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
+		case 22: missionactor[0] = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
+		case 23: missionactor[0] = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
+		case 24: missionactor[0] = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
+		case 25: missionactor[0] = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
+		case 26: missionactor[0] = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
+		case 27: missionactor[0] = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
+		case 28: missionactor[0] = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
+		case 29: missionactor[0] = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
+		case 30: missionactor[0] = CreateActor(179,1273.8726,-1209.6628,13.6797,220.2624); //
+		case 31: missionactor[0] = CreateActor(179,2349.6882,-646.7117,128.0547,227.2257); //
+		case 32: missionactor[0] = CreateActor(179,1546.9674,-1470.5757,13.5493,222.5185); //
+		case 33: missionactor[0] = CreateActor(179,2081.5508,-1011.0471,47.9766,105.7575); //
+		case 34: missionactor[0] = CreateActor(179,1985.4198,-980.1873,31.1609,333.8430); //
+		case 35: missionactor[0] = CreateActor(179,1415.5403,-807.0994,85.0488,1.4456); //
+		case 36: missionactor[0] = CreateActor(179,826.2905,-924.5969,52.5996,4.1322); //
+		case 37: missionactor[0] = CreateActor(179,588.1912,-1555.8497,15.6528,31.0138); //
+		case 38: missionactor[0] = CreateActor(179,1227.8607,-1890.5493,15.7031,58.3340); //
+		case 39: missionactor[0] = CreateActor(179,1112.4701,-2036.8950,74.4297,102.8584); //
+		case 40: missionactor[0] = CreateActor(179,1018.5037,-2196.1841,37.6609,285.3763); //
+		case 41: missionactor[0] = CreateActor(179,1748.4838,-2691.9424,13.5469,176.0485); //
+		case 42: missionactor[0] = CreateActor(179,2685.8225,-2329.9402,3.0000,55.9746); //
+		case 43: missionactor[0] = CreateActor(179,2787.4006,-1425.7360,16.2500,56.0020); //
+		case 44: missionactor[0] = CreateActor(179,2772.0115,-1350.1686,50.0000,270.2273); //
+		case 45: missionactor[0] = CreateActor(179,1654.8992,-1622.1246,22.5156,2.8360); //
+		case 46: missionactor[0] = CreateActor(179,1407.8107,-1476.5941,20.4362,93.4739); //
+		case 47: missionactor[0] = CreateActor(179,1527.6512,-1457.6436,9.5000,146.7676); //
+		case 48: missionactor[0] = CreateActor(179,1009.3832,-1245.6913,23.0637,186.6729); //
+		case 49: missionactor[0] = CreateActor(179,992.3521,-1249.7333,15.0313,175.7060); //
+		case 50: missionactor[0] = CreateActor(179,810.5253,-1091.7935,25.7839,196.3460); //
+		case 51: missionactor[0] = CreateActor(179,701.8380,-1205.9988,15.1323,5.7903); //
+		case 52: missionactor[0] = CreateActor(179,154.2128,-1957.6531,3.7734,185.5805); //
+		case 53: missionactor[0] = CreateActor(179,360.1298,-2071.7043,10.6953,182.8539); //
+		case 54: missionactor[0] = CreateActor(179,854.5313,-1631.6125,13.5547,190.1246); //
+		case 55: missionactor[0] = CreateActor(179,1338.9860,-1798.2374,13.5547,291.4071); //
+		case 56: missionactor[0] = CreateActor(179,857.4675,-1386.9231,-0.5015,90.3730); //
+		case 57: missionactor[0] = CreateActor(179,1688.4558,-1974.8192,8.8203,324.3620); //
+		case 58: missionactor[0] = CreateActor(179,1682.1724,-2016.2054,21.9542,272.4961); //
+		case 59: missionactor[0] = CreateActor(179,836.3838,-1853.9093,8.3972,186.0761); //
+		case 60: missionactor[0] = CreateActor(179,1341.4945,-1623.1893,17.7340,202.5318); //
+		case 61: missionactor[0] = CreateActor(179,2350.7471,-1248.5737,22.5000,87.6833); //
+		case 62: missionactor[0] = CreateActor(179,2409.1960,-1205.4865,29.5086,87.4851); //
+		case 63: missionactor[0] = CreateActor(179,2400.5764,-1559.7468,28.0000,126.0532); //
+		case 64: missionactor[0] = CreateActor(179,2613.0591,-2122.7659,0.6947,146.0491); //
+		case 65: missionactor[0] = CreateActor(179,1414.3044,-1323.1129,9.0277,6.1153); //
+		case 66: missionactor[0] = CreateActor(179,289.9101,-1502.0486,24.9219,242.0225); //
+		case 67: missionactor[0] = CreateActor(179,2109.1501,-1993.1691,13.5567,151.9153); //
+		case 68: missionactor[0] = CreateActor(179,1689.9331,-2009.1837,14.1215,183.3461); //
+		case 69: missionactor[0] = CreateActor(179,2040.6052,-1830.0254,13.5937,55.5965); //
 	}
-	missionactor1 = CreateActor(1, 350.6988,142.3713,5.5175,94.9310);
+	missionactor[1] = CreateActor(1, 350.6988,142.3713,5.5175,94.9310);
 	switch (random(70))
 	{
-	   	case 0: missionactor2 = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
-	   	case 1: missionactor2 = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
-	   	case 2: missionactor2 = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
-	   	case 3: missionactor2 = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
-	   	case 4: missionactor2 = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
-	   	case 5: missionactor2 = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
-		case 6: missionactor2 = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
-		case 7: missionactor2 = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
-		case 8: missionactor2 = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
-		case 9: missionactor2 = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
-		case 10: missionactor2 = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
-		case 11: missionactor2 = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
-		case 12: missionactor2 = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
-		case 13: missionactor2 = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
-		case 14: missionactor2 = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
-		case 15: missionactor2 = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
-		case 16: missionactor2 = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
-		case 17: missionactor2 = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
-		case 18: missionactor2 = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
-		case 19: missionactor2 = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
-		case 20: missionactor2 = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
-		case 21: missionactor2 = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
-		case 22: missionactor2 = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
-		case 23: missionactor2 = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
-		case 24: missionactor2 = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
-		case 25: missionactor2 = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
-		case 26: missionactor2 = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
-		case 27: missionactor2 = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
-		case 28: missionactor2 = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
-		case 29: missionactor2 = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
-		case 30: missionactor2 = CreateActor(179,1273.8726,-1209.6628,13.6797,220.2624); //
-		case 31: missionactor2 = CreateActor(179,2349.6882,-646.7117,128.0547,227.2257); //
-		case 32: missionactor2 = CreateActor(179,1546.9674,-1470.5757,13.5493,222.5185); //
-		case 33: missionactor2 = CreateActor(179,2081.5508,-1011.0471,47.9766,105.7575); //
-		case 34: missionactor2 = CreateActor(179,1985.4198,-980.1873,31.1609,333.8430); //
-		case 35: missionactor2 = CreateActor(179,1415.5403,-807.0994,85.0488,1.4456); //
-		case 36: missionactor2 = CreateActor(179,826.2905,-924.5969,52.5996,4.1322); //
-		case 37: missionactor2 = CreateActor(179,588.1912,-1555.8497,15.6528,31.0138); //
-		case 38: missionactor2 = CreateActor(179,1227.8607,-1890.5493,15.7031,58.3340); //
-		case 39: missionactor2 = CreateActor(179,1112.4701,-2036.8950,74.4297,102.8584); //
-		case 40: missionactor2 = CreateActor(179,1018.5037,-2196.1841,37.6609,285.3763); //
-		case 41: missionactor2 = CreateActor(179,1748.4838,-2691.9424,13.5469,176.0485); //
-		case 42: missionactor2 = CreateActor(179,2685.8225,-2329.9402,3.0000,55.9746); //
-		case 43: missionactor2 = CreateActor(179,2787.4006,-1425.7360,16.2500,56.0020); //
-		case 44: missionactor2 = CreateActor(179,2772.0115,-1350.1686,50.0000,270.2273); //
-		case 45: missionactor2 = CreateActor(179,1654.8992,-1622.1246,22.5156,2.8360); //
-		case 46: missionactor2 = CreateActor(179,1407.8107,-1476.5941,20.4362,93.4739); //
-		case 47: missionactor2 = CreateActor(179,1527.6512,-1457.6436,9.5000,146.7676); //
-		case 48: missionactor2 = CreateActor(179,1009.3832,-1245.6913,23.0637,186.6729); //
-		case 49: missionactor2 = CreateActor(179,992.3521,-1249.7333,15.0313,175.7060); //
-		case 50: missionactor2 = CreateActor(179,810.5253,-1091.7935,25.7839,196.3460); //
-		case 51: missionactor2 = CreateActor(179,701.8380,-1205.9988,15.1323,5.7903); //
-		case 52: missionactor2 = CreateActor(179,154.2128,-1957.6531,3.7734,185.5805); //
-		case 53: missionactor2 = CreateActor(179,360.1298,-2071.7043,10.6953,182.8539); //
-		case 54: missionactor2 = CreateActor(179,854.5313,-1631.6125,13.5547,190.1246); //
-		case 55: missionactor2 = CreateActor(179,1338.9860,-1798.2374,13.5547,291.4071); //
-		case 56: missionactor2 = CreateActor(179,857.4675,-1386.9231,-0.5015,90.3730); //
-		case 57: missionactor2 = CreateActor(179,1688.4558,-1974.8192,8.8203,324.3620); //
-		case 58: missionactor2 = CreateActor(179,1682.1724,-2016.2054,21.9542,272.4961); //
-		case 59: missionactor2 = CreateActor(179,836.3838,-1853.9093,8.3972,186.0761); //
-		case 60: missionactor2 = CreateActor(179,1341.4945,-1623.1893,17.7340,202.5318); //
-		case 61: missionactor2 = CreateActor(179,2350.7471,-1248.5737,22.5000,87.6833); //
-		case 62: missionactor2 = CreateActor(179,2409.1960,-1205.4865,29.5086,87.4851); //
-		case 63: missionactor2 = CreateActor(179,2400.5764,-1559.7468,28.0000,126.0532); //
-		case 64: missionactor2 = CreateActor(179,2613.0591,-2122.7659,0.6947,146.0491); //
-		case 65: missionactor2 = CreateActor(179,1414.3044,-1323.1129,9.0277,6.1153); //
-		case 66: missionactor2 = CreateActor(179,289.9101,-1502.0486,24.9219,242.0225); //
-		case 67: missionactor2 = CreateActor(179,2109.1501,-1993.1691,13.5567,151.9153); //
-		case 68: missionactor2 = CreateActor(179,1689.9331,-2009.1837,14.1215,183.3461); //
-		case 69: missionactor2 = CreateActor(179,2040.6052,-1830.0254,13.5937,55.5965); //
+	   	case 0: missionactor[2] = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
+	   	case 1: missionactor[2] = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
+	   	case 2: missionactor[2] = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
+	   	case 3: missionactor[2] = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
+	   	case 4: missionactor[2] = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
+	   	case 5: missionactor[2] = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
+		case 6: missionactor[2] = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
+		case 7: missionactor[2] = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
+		case 8: missionactor[2] = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
+		case 9: missionactor[2] = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
+		case 10: missionactor[2] = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
+		case 11: missionactor[2] = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
+		case 12: missionactor[2] = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
+		case 13: missionactor[2] = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
+		case 14: missionactor[2] = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
+		case 15: missionactor[2] = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
+		case 16: missionactor[2] = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
+		case 17: missionactor[2] = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
+		case 18: missionactor[2] = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
+		case 19: missionactor[2] = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
+		case 20: missionactor[2] = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
+		case 21: missionactor[2] = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
+		case 22: missionactor[2] = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
+		case 23: missionactor[2] = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
+		case 24: missionactor[2] = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
+		case 25: missionactor[2] = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
+		case 26: missionactor[2] = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
+		case 27: missionactor[2] = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
+		case 28: missionactor[2] = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
+		case 29: missionactor[2] = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
+		case 30: missionactor[2] = CreateActor(179,1273.8726,-1209.6628,13.6797,220.2624); //
+		case 31: missionactor[2] = CreateActor(179,2349.6882,-646.7117,128.0547,227.2257); //
+		case 32: missionactor[2] = CreateActor(179,1546.9674,-1470.5757,13.5493,222.5185); //
+		case 33: missionactor[2] = CreateActor(179,2081.5508,-1011.0471,47.9766,105.7575); //
+		case 34: missionactor[2] = CreateActor(179,1985.4198,-980.1873,31.1609,333.8430); //
+		case 35: missionactor[2] = CreateActor(179,1415.5403,-807.0994,85.0488,1.4456); //
+		case 36: missionactor[2] = CreateActor(179,826.2905,-924.5969,52.5996,4.1322); //
+		case 37: missionactor[2] = CreateActor(179,588.1912,-1555.8497,15.6528,31.0138); //
+		case 38: missionactor[2] = CreateActor(179,1227.8607,-1890.5493,15.7031,58.3340); //
+		case 39: missionactor[2] = CreateActor(179,1112.4701,-2036.8950,74.4297,102.8584); //
+		case 40: missionactor[2] = CreateActor(179,1018.5037,-2196.1841,37.6609,285.3763); //
+		case 41: missionactor[2] = CreateActor(179,1748.4838,-2691.9424,13.5469,176.0485); //
+		case 42: missionactor[2] = CreateActor(179,2685.8225,-2329.9402,3.0000,55.9746); //
+		case 43: missionactor[2] = CreateActor(179,2787.4006,-1425.7360,16.2500,56.0020); //
+		case 44: missionactor[2] = CreateActor(179,2772.0115,-1350.1686,50.0000,270.2273); //
+		case 45: missionactor[2] = CreateActor(179,1654.8992,-1622.1246,22.5156,2.8360); //
+		case 46: missionactor[2] = CreateActor(179,1407.8107,-1476.5941,20.4362,93.4739); //
+		case 47: missionactor[2] = CreateActor(179,1527.6512,-1457.6436,9.5000,146.7676); //
+		case 48: missionactor[2] = CreateActor(179,1009.3832,-1245.6913,23.0637,186.6729); //
+		case 49: missionactor[2] = CreateActor(179,992.3521,-1249.7333,15.0313,175.7060); //
+		case 50: missionactor[2] = CreateActor(179,810.5253,-1091.7935,25.7839,196.3460); //
+		case 51: missionactor[2] = CreateActor(179,701.8380,-1205.9988,15.1323,5.7903); //
+		case 52: missionactor[2] = CreateActor(179,154.2128,-1957.6531,3.7734,185.5805); //
+		case 53: missionactor[2] = CreateActor(179,360.1298,-2071.7043,10.6953,182.8539); //
+		case 54: missionactor[2] = CreateActor(179,854.5313,-1631.6125,13.5547,190.1246); //
+		case 55: missionactor[2] = CreateActor(179,1338.9860,-1798.2374,13.5547,291.4071); //
+		case 56: missionactor[2] = CreateActor(179,857.4675,-1386.9231,-0.5015,90.3730); //
+		case 57: missionactor[2] = CreateActor(179,1688.4558,-1974.8192,8.8203,324.3620); //
+		case 58: missionactor[2] = CreateActor(179,1682.1724,-2016.2054,21.9542,272.4961); //
+		case 59: missionactor[2] = CreateActor(179,836.3838,-1853.9093,8.3972,186.0761); //
+		case 60: missionactor[2] = CreateActor(179,1341.4945,-1623.1893,17.7340,202.5318); //
+		case 61: missionactor[2] = CreateActor(179,2350.7471,-1248.5737,22.5000,87.6833); //
+		case 62: missionactor[2] = CreateActor(179,2409.1960,-1205.4865,29.5086,87.4851); //
+		case 63: missionactor[2] = CreateActor(179,2400.5764,-1559.7468,28.0000,126.0532); //
+		case 64: missionactor[2] = CreateActor(179,2613.0591,-2122.7659,0.6947,146.0491); //
+		case 65: missionactor[2] = CreateActor(179,1414.3044,-1323.1129,9.0277,6.1153); //
+		case 66: missionactor[2] = CreateActor(179,289.9101,-1502.0486,24.9219,242.0225); //
+		case 67: missionactor[2] = CreateActor(179,2109.1501,-1993.1691,13.5567,151.9153); //
+		case 68: missionactor[2] = CreateActor(179,1689.9331,-2009.1837,14.1215,183.3461); //
+		case 69: missionactor[2] = CreateActor(179,2040.6052,-1830.0254,13.5937,55.5965); //
+	}
+	switch (random(17))//lc
+	{
+	   	case 0: missionactor[3] = CreateActor(26179,7689.1865,8170.7085,3.8213,3.3570); // actor
+	   	case 1: missionactor[3] = CreateActor(26179,7653.4771,8337.4893,18.8196,73.5444); // actor
+	   	case 2: missionactor[3] = CreateActor(26179,7460.9697,8415.9951,29.3884,314.9583); // actor
+	   	case 3: missionactor[3] = CreateActor(26179,7164.0684,8723.7158,23.5813,226.3073); // actor
+	   	case 4: missionactor[3] = CreateActor(26179,7066.6182,8619.4219,23.5643,349.6168); // actor
+	   	case 5: missionactor[3] = CreateActor(26179,7095.4170,8512.4834,3.3916,62.6477); // actor
+		case 6: missionactor[3] = CreateActor(26179,7171.4253,8365.6650,58.7805,23.1674); // actor
+		case 7: missionactor[3] = CreateActor(26179,7096.4014,8359.9766,68.7529,98.9946); // actor
+		case 8: missionactor[3] = CreateActor(26179,6999.3833,8311.4443,68.6574,184.1986); // actor
+		case 9: missionactor[3] = CreateActor(26179,7086.4365,8160.0620,43.8164,77.6878); // actor
+		case 10: missionactor[3] = CreateActor(26179,7051.6499,8080.6113,44.1244,343.0835); // actor
+		case 11: missionactor[3] = CreateActor(26179,7155.2700,8038.7686,43.8433,34.1576); // actor
+		case 12: missionactor[3] = CreateActor(26179,7171.8784,8111.0044,33.7985,210.4210); // actor
+		case 13: missionactor[3] = CreateActor(26179,7383.2930,8033.7798,33.8102,358.7740); // actor
+		case 14: missionactor[3] = CreateActor(26179,7428.3208,8111.6035,33.8193,114.0818); // actor
+		case 15: missionactor[3] = CreateActor(26179,7286.2593,8110.4683,33.8053,195.8626); // actor
+		case 16: missionactor[3] = CreateActor(26179,7333.1997,8065.5410,33.7944,223.7729); // actor
 	}
 	//amendes
 	actorvendeuramendes[0] = CreateActor(310,1563.0867,-1650.5616,3001.2083,181.9357);
@@ -15836,14 +15851,14 @@ script TrafiqueFils(playerid)
 script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 {
     new facass = PlayerData[playerid][pFaction],moneyentrepriseid,id = Crate_Nearest(playerid);
-    if (newtarget == missionactor)
+    if (newtarget == missionactor[0])
     {
 	    if (FactionData[facass][factionacces][8] == 0)
 	    	return SendClientMessage(playerid, COLOR_WHITE,"Albert : Tu veux quoi toi?");
-		if (FactionData[facass][factionacces][8] == 1 && mission[playerid] == 0)
+		if (FactionData[facass][factionacces][8] == 1 && mission[0][playerid] == 0)
 			return Dialog_Show(playerid, Mission, DIALOG_STYLE_MSGBOX, "Mission", "Salut toi, Tu veux avoir un peut d'argent?\nRapporte moi une caise de type Six\nSi tu veux tu peut gardé la marchandise ou\nme la rapporté pour avoir de l'argent", "Valider", "Quitter");
 		else SendClientMessage(playerid,COLOR_WHITE,"Albert : Tu veux quoi?");
-		if (mission[playerid] == 1 && Inventory_Count(playerid, "Graine marijuana") < 20 && Inventory_Count(playerid, "Graine cocaine") < 20 && Inventory_Count(playerid, "Graine Heroin Opium") < 10)
+		if (mission[0][playerid] == 1 && Inventory_Count(playerid, "Graine marijuana") < 20 && Inventory_Count(playerid, "Graine cocaine") < 20 && Inventory_Count(playerid, "Graine Heroin Opium") < 10)
 		{
 		    SendClientMessage(playerid, COLOR_WHITE,"Albert : Tu a besoin de 20 graine de marijuana.");
 	        SendClientMessage(playerid, COLOR_WHITE,"Albert : Tu a besoin de 20 graine de cocaine.");
@@ -15860,50 +15875,97 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 		GiveMoney(playerid, money);
 		SendClientMessage(playerid, COLOR_WHITE,"Albert : Merci le kid à la prochaine.");
 		SendClientMessage(playerid, COLOR_WHITE,"Albert : aller je me barre salut!");
-	    DestroyActor(missionactor);
+	    DestroyActor(missionactor[0]);
 		switch (random(30))
 		{
-	   		case 0: missionactor = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
-	   		case 1: missionactor = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
-	   		case 2: missionactor = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
-	   		case 3: missionactor = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
-	   		case 4: missionactor = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
-		   	case 5: missionactor = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
-			case 6: missionactor = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
-			case 7: missionactor = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
-			case 8: missionactor = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
-			case 9: missionactor = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
-			case 10: missionactor = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
-			case 11: missionactor = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
-			case 12: missionactor = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
-			case 13: missionactor = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
-			case 14: missionactor = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
-			case 15: missionactor = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
-			case 16: missionactor = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
-			case 17: missionactor = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
-			case 18: missionactor = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
-			case 19: missionactor = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
-			case 20: missionactor = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
-			case 21: missionactor = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
-			case 22: missionactor = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
-			case 23: missionactor = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
-			case 24: missionactor = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
-			case 25: missionactor = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
-			case 26: missionactor = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
-			case 27: missionactor = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
-			case 28: missionactor = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
-			case 29: missionactor = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
+	   		case 0: missionactor[0] = CreateActor(179,2507.4971,-2043.9542,13.5500,172.2477);
+	   		case 1: missionactor[0] = CreateActor(179,2509.2068,-1978.2653,13.4334,105.5648);
+	   		case 2: missionactor[0] = CreateActor(179,1095.3033,-873.7767,43.3906,1.4719);
+	   		case 3: missionactor[0] = CreateActor(179,880.2112,-1381.2468,25.2025,269.2101);
+	   		case 4: missionactor[0] = CreateActor(179,2346.2256,-1239.5133,22.5000,0.5437);
+		   	case 5: missionactor[0] = CreateActor(179,984.6139,-1613.4885,13.4954,93.7949);
+			case 6: missionactor[0] = CreateActor(179,977.0787,-942.4401,41.1425,38.4210); // bot1
+			case 7: missionactor[0] = CreateActor(179,779.0912,-1717.4033,4.9766,72.3261); // bot2
+			case 8: missionactor[0] = CreateActor(179,1431.6185,-1095.8884,17.5793,332.3431); // bot3
+			case 9: missionactor[0] = CreateActor(179,1680.5024,-1238.6655,14.9538,312.8443); // bot4
+			case 10: missionactor[0] = CreateActor(179,2124.2429,-1194.6682,23.9642,87.6751); // bot5
+			case 11: missionactor[0] = CreateActor(179,2083.6416,-1023.6044,33.1627,151.9735); // bot6
+			case 12: missionactor[0] = CreateActor(179,2507.0671,-1471.7194,24.0394,280.6100); // bot7
+			case 13: missionactor[0] = CreateActor(179,1516.8875,-1506.0033,13.5547,324.2364); // bot8
+			case 14: missionactor[0] = CreateActor(179,2621.9009,-2057.9226,13.5500,178.9987); // bot9
+			case 15: missionactor[0] = CreateActor(179,2738.2170,-1829.5782,11.8430,351.1509); // bot10
+			case 16: missionactor[0] = CreateActor(179,2668.5574,-1539.2067,25.1203,195.6187); // bot11
+			case 17: missionactor[0] = CreateActor(179,2762.1509,-1285.7408,41.7197,225.5658); // bot12
+			case 18: missionactor[0] = CreateActor(179,2767.0271,-1192.7881,69.4097,357.0363); // bot13
+			case 19: missionactor[0] = CreateActor(179,2788.7820,-1467.7402,40.0625,321.8119); // bot14
+			case 20: missionactor[0] = CreateActor(179,2791.5862,-1079.5629,30.7188,48.8802); // bot15
+			case 21: missionactor[0] = CreateActor(179,2412.8145,-1208.6603,29.3274,2.2453); // bot16
+			case 22: missionactor[0] = CreateActor(179,2331.0620,-1336.5182,24.0639,203.7363); // bot17
+			case 23: missionactor[0] = CreateActor(179,1972.8481,-1304.1487,20.8297,224.8212); // bot18
+			case 24: missionactor[0] = CreateActor(179,1228.0179,-1889.8441,13.7815,28.0432); // bot19
+			case 25: missionactor[0] = CreateActor(179,1615.5521,-1779.6171,13.5315,111.6386); // bot20
+			case 26: missionactor[0] = CreateActor(179,1668.6542,-1641.1974,22.5251,319.7593); // bot22
+			case 27: missionactor[0] = CreateActor(179,1668.6469,-1632.4844,22.5217,204.6605); // bot23
+			case 28: missionactor[0] = CreateActor(179,1740.5454,-1540.5977,13.5511,311.0774); // bot24
+			case 29: missionactor[0] = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
 		}
-		mission[playerid] = 0;
+		mission[0][playerid] = 0;
     }
-    if(newtarget == missionactor1)
+    if (newtarget == missionactor[3])
+    {
+	    if (FactionData[facass][factionacces][8] == 0)
+	    	return SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu veux quoi toi?");
+		if (FactionData[facass][factionacces][8] == 1 && mission[3][playerid] == 0)
+			return Dialog_Show(playerid, Mission3, DIALOG_STYLE_MSGBOX, "Robert", "Salut toi, Tu veux avoir un peut d'argent?\nRapporte moi une caise de type Six\nSi tu veux tu peut gardé la marchandise ou\nme la rapporté pour avoir de l'argent", "Valider", "Quitter");
+		else SendClientMessage(playerid,COLOR_WHITE,"Robert : Tu veux quoi?");
+		if (mission[3][playerid] == 1 && Inventory_Count(playerid, "Graine marijuana") < 20 && Inventory_Count(playerid, "Graine cocaine") < 20 && Inventory_Count(playerid, "Graine Heroin Opium") < 10)
+		{
+		    SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu a besoin de 20 graine de marijuana.");
+	        SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu a besoin de 20 graine de cocaine.");
+	        SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu a besoin de 10 graine d'héroine.");
+	        return 1;
+		}
+		if (id == -1 || CrateData[id][crateType] != 6) return 0;
+		SetTimerEx("OpenCrate1", 1000, false, "dd", playerid, id);
+		Inventory_Remove(playerid, "Graine cocaine", 20);
+		Inventory_Remove(playerid, "Graine marijuana", 20);
+		Inventory_Remove(playerid, "Graine Heroin Opium", 10);
+		new money = random(2500) + 1500;
+		SendServerMessage(playerid, "Vous avez gagné %d$ pour cette mission.", money);
+		GiveMoney(playerid, money);
+		SendClientMessage(playerid, COLOR_WHITE,"Robert : Merci le kid à la prochaine.");
+		SendClientMessage(playerid, COLOR_WHITE,"Robert : aller je me barre salut!");
+	    DestroyActor(missionactor[3]);
+		switch (random(17))//lc
+		{
+			case 0: missionactor[3] = CreateActor(26179,7689.1865,8170.7085,3.8213,3.3570); // actor
+			case 1: missionactor[3] = CreateActor(26179,7653.4771,8337.4893,18.8196,73.5444); // actor
+			case 2: missionactor[3] = CreateActor(26179,7460.9697,8415.9951,29.3884,314.9583); // actor
+			case 3: missionactor[3] = CreateActor(26179,7164.0684,8723.7158,23.5813,226.3073); // actor
+			case 4: missionactor[3] = CreateActor(26179,7066.6182,8619.4219,23.5643,349.6168); // actor
+			case 5: missionactor[3] = CreateActor(26179,7095.4170,8512.4834,3.3916,62.6477); // actor
+			case 6: missionactor[3] = CreateActor(26179,7171.4253,8365.6650,58.7805,23.1674); // actor
+			case 7: missionactor[3] = CreateActor(26179,7096.4014,8359.9766,68.7529,98.9946); // actor
+			case 8: missionactor[3] = CreateActor(26179,6999.3833,8311.4443,68.6574,184.1986); // actor
+			case 9: missionactor[3] = CreateActor(26179,7086.4365,8160.0620,43.8164,77.6878); // actor
+			case 10: missionactor[3] = CreateActor(26179,7051.6499,8080.6113,44.1244,343.0835); // actor
+			case 11: missionactor[3] = CreateActor(26179,7155.2700,8038.7686,43.8433,34.1576); // actor
+			case 12: missionactor[3] = CreateActor(26179,7171.8784,8111.0044,33.7985,210.4210); // actor
+			case 13: missionactor[3] = CreateActor(26179,7383.2930,8033.7798,33.8102,358.7740); // actor
+			case 14: missionactor[3] = CreateActor(26179,7428.3208,8111.6035,33.8193,114.0818); // actor
+			case 15: missionactor[3] = CreateActor(26179,7286.2593,8110.4683,33.8053,195.8626); // actor
+			case 16: missionactor[3] = CreateActor(26179,7333.1997,8065.5410,33.7944,223.7729); // actor
+		}
+		mission[3][playerid] = 0;
+    }
+    if(newtarget == missionactor[1])
     {
 	    if (FactionData[facass][factionacces][8] == 0)
 	    	return SendClientMessage(playerid, COLOR_WHITE,"James : Tu veux quoi toi?");
-		if (FactionData[facass][factionacces][8] == 1 && mission1[playerid] == 0)
+		if (FactionData[facass][factionacces][8] == 1 && mission[1][playerid] == 0)
 			return Dialog_Show(playerid, Mission1, DIALOG_STYLE_MSGBOX, "Mission", "Salut toi, Tu veux avoir un peut d'argent?\nVa mettre le feu a une place", "Valider", "Quitter");
 		else SendClientMessage(playerid,COLOR_WHITE,"James : Tu veux quoi?");
-		if (mission1[playerid] == 1)
+		if (mission[1][playerid] == 1)
 		{
 		    SendClientMessage(playerid, COLOR_WHITE,"James : Tu n'est pas aller mettre le feu comme convenu.");
 	        return 1;
@@ -15912,9 +15974,9 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 		SendServerMessage(playerid, "Vous avez gagné %d$ pour cette mission.", money);
 		GiveMoney(playerid, money);
 		SendClientMessage(playerid, COLOR_WHITE,"James : Merci le kid à la prochaine.");
-		mission1[playerid] = 0;
+		mission[1][playerid] = 0;
 	}
-    if(newtarget == missionactor2)
+    if(newtarget == missionactor[2])
 	{
 		SendServerMessage(playerid,"Jasmie : Alors on veux blanchir de l'argent?");
 		new short123 = Inventory_Count(playerid, "argent sale");
@@ -15922,39 +15984,39 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 		SendServerMessage(playerid,"Jasmie : Tien voila pour toi %d$",short123/4);
 		Inventory_Remove(playerid, "argent sale",short123);
 		SendServerMessage(playerid,"Jasmie : Aller bye-bye!");
-		DestroyActor(missionactor2);
+		DestroyActor(missionactor[2]);
 		switch (random(30))
 		{
-		   	case 0: missionactor2 = CreateActor(31,-2199.7209,-2338.7644,30.6250,77.9837);
-		   	case 1: missionactor2 = CreateActor(31,-2054.5361,-2438.4902,30.6250,113.4559);
-		   	case 2: missionactor2 = CreateActor(31,-1843.5271,-1627.6521,21.7677,129.3315);
-		   	case 3: missionactor2 = CreateActor(31,-1620.3467,1420.2213,7.1734,132.55611);
-			case 4: missionactor2 = CreateActor(31,-1743.5946,1540.8601,7.1875,4.2422); // pos 5
-			case 5: missionactor2 = CreateActor(31,-1790.0234,1540.7908,7.1875,352.8316); // pos 6
-			case 6: missionactor2 = CreateActor(31,-1835.5865,1540.7933,7.1875,12.6762); // pos 7
-			case 7: missionactor2 = CreateActor(31,-2659.8215,1457.7629,49.5576,299.0931); // pos 8
-			case 8: missionactor2 = CreateActor(31,-2237.3120,2475.0996,4.9844,182.0998); // pos 9
-			case 9: missionactor2 = CreateActor(31,-2492.2644,2356.5688,10.2770,282.3647); // pos 10
-			case 10: missionactor2 = CreateActor(31,-2529.0332,2352.6384,4.9844,0.2550); // pos 11
-			case 11: missionactor2 = CreateActor(31,-2377.3723,2215.7188,4.9844,263.2643); // pos 12
-			case 12: missionactor2 = CreateActor(31,-1723.6774,1243.2432,7.5469,65.8999); // pos 13
-			case 13: missionactor2 = CreateActor(31,1516.8875,-1506.0033,13.5547,324.2364); // bot8
-			case 14: missionactor2 = CreateActor(31,2621.9009,-2057.9226,13.5500,178.9987); // bot9
-			case 15: missionactor2 = CreateActor(31,2738.2170,-1829.5782,11.8430,351.1509); // bot10
-			case 16: missionactor2 = CreateActor(31,2668.5574,-1539.2067,25.1203,195.6187); // bot11
-			case 17: missionactor2 = CreateActor(31,2762.1509,-1285.7408,41.7197,225.5658); // bot12
-			case 18: missionactor2 = CreateActor(31,2767.0271,-1192.7881,69.4097,357.0363); // bot13
-			case 19: missionactor2 = CreateActor(31,2788.7820,-1467.7402,40.0625,321.8119); // bot14
-			case 20: missionactor2 = CreateActor(31,2791.5862,-1079.5629,30.7188,48.8802); // bot15
-			case 21: missionactor2 = CreateActor(31,2412.8145,-1208.6603,29.3274,2.2453); // bot16
-			case 22: missionactor2 = CreateActor(31,2331.0620,-1336.5182,24.0639,203.7363); // bot17
-			case 23: missionactor2 = CreateActor(31,1972.8481,-1304.1487,20.8297,224.8212); // bot18
-			case 24: missionactor2 = CreateActor(31,1228.031,-1889.8441,13.7815,28.0432); // bot19
-			case 25: missionactor2 = CreateActor(31,1615.5521,-1779.6171,13.5315,111.6386); // bot20
-			case 26: missionactor2 = CreateActor(31,1668.6542,-1641.1974,22.5251,319.7593); // bot22
-			case 27: missionactor2 = CreateActor(31,1668.6469,-1632.4844,22.5217,204.6605); // bot23
-			case 28: missionactor2 = CreateActor(31,1740.5454,-1540.5977,13.5511,311.0774); // bot24
-			case 29: missionactor2 = CreateActor(31,1403.7306,-1298.5013,13.5460,236.3440); // bot25
+		   	case 0: missionactor[2] = CreateActor(31,-2199.7209,-2338.7644,30.6250,77.9837);
+		   	case 1: missionactor[2] = CreateActor(31,-2054.5361,-2438.4902,30.6250,113.4559);
+		   	case 2: missionactor[2] = CreateActor(31,-1843.5271,-1627.6521,21.7677,129.3315);
+		   	case 3: missionactor[2] = CreateActor(31,-1620.3467,1420.2213,7.1734,132.55611);
+			case 4: missionactor[2] = CreateActor(31,-1743.5946,1540.8601,7.1875,4.2422); // pos 5
+			case 5: missionactor[2] = CreateActor(31,-1790.0234,1540.7908,7.1875,352.8316); // pos 6
+			case 6: missionactor[2] = CreateActor(31,-1835.5865,1540.7933,7.1875,12.6762); // pos 7
+			case 7: missionactor[2] = CreateActor(31,-2659.8215,1457.7629,49.5576,299.0931); // pos 8
+			case 8: missionactor[2] = CreateActor(31,-2237.3120,2475.0996,4.9844,182.0998); // pos 9
+			case 9: missionactor[2] = CreateActor(31,-2492.2644,2356.5688,10.2770,282.3647); // pos 10
+			case 10: missionactor[2] = CreateActor(31,-2529.0332,2352.6384,4.9844,0.2550); // pos 11
+			case 11: missionactor[2] = CreateActor(31,-2377.3723,2215.7188,4.9844,263.2643); // pos 12
+			case 12: missionactor[2] = CreateActor(31,-1723.6774,1243.2432,7.5469,65.8999); // pos 13
+			case 13: missionactor[2] = CreateActor(31,1516.8875,-1506.0033,13.5547,324.2364); // bot8
+			case 14: missionactor[2] = CreateActor(31,2621.9009,-2057.9226,13.5500,178.9987); // bot9
+			case 15: missionactor[2] = CreateActor(31,2738.2170,-1829.5782,11.8430,351.1509); // bot10
+			case 16: missionactor[2] = CreateActor(31,2668.5574,-1539.2067,25.1203,195.6187); // bot11
+			case 17: missionactor[2] = CreateActor(31,2762.1509,-1285.7408,41.7197,225.5658); // bot12
+			case 18: missionactor[2] = CreateActor(31,2767.0271,-1192.7881,69.4097,357.0363); // bot13
+			case 19: missionactor[2] = CreateActor(31,2788.7820,-1467.7402,40.0625,321.8119); // bot14
+			case 20: missionactor[2] = CreateActor(31,2791.5862,-1079.5629,30.7188,48.8802); // bot15
+			case 21: missionactor[2] = CreateActor(31,2412.8145,-1208.6603,29.3274,2.2453); // bot16
+			case 22: missionactor[2] = CreateActor(31,2331.0620,-1336.5182,24.0639,203.7363); // bot17
+			case 23: missionactor[2] = CreateActor(31,1972.8481,-1304.1487,20.8297,224.8212); // bot18
+			case 24: missionactor[2] = CreateActor(31,1228.031,-1889.8441,13.7815,28.0432); // bot19
+			case 25: missionactor[2] = CreateActor(31,1615.5521,-1779.6171,13.5315,111.6386); // bot20
+			case 26: missionactor[2] = CreateActor(31,1668.6542,-1641.1974,22.5251,319.7593); // bot22
+			case 27: missionactor[2] = CreateActor(31,1668.6469,-1632.4844,22.5217,204.6605); // bot23
+			case 28: missionactor[2] = CreateActor(31,1740.5454,-1540.5977,13.5511,311.0774); // bot24
+			case 29: missionactor[2] = CreateActor(31,1403.7306,-1298.5013,13.5460,236.3440); // bot25
 		}
     }
     //All biz

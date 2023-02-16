@@ -11358,9 +11358,10 @@ ResetPlayer(playerid)
 	GameTextForPlayer(playerid, " ", 1, 3);
 	HidePlayerFooter(playerid);
 	HoldWeapon(playerid, 0);
-	mission[playerid] = 0;
-	mission1[playerid] = 0;
-	mission2[playerid] = 0;
+	mission[0][playerid] = 0;
+	mission[1][playerid] = 0;
+	mission[2][playerid] = 0;
+	mission[3][playerid] = 0;
 	start1[playerid] = 0;
 }
 ResetWeapons(playerid)
@@ -13698,135 +13699,6 @@ stock ShowPlayerFooter(playerid, string[], time = 5000) {
 	PlayerTextDrawShow(playerid,PlayerData[playerid][pTextdraws][39]);
 	PlayerData[playerid][pShowFooter] = true;
 	PlayerData[playerid][pFooterTimer] = SetTimerEx("HidePlayerFooter", time, false, "d", playerid);
-}
-Show_LoginTD(playerid)
-{
-	LoginTD[playerid][0] = CreatePlayerTextDraw(playerid, 319.599884, 184.524429, "box");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][0], 0.000000, 8.800000);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][0], 0.000000, 155.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][0], 2);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][0], -1);
-	PlayerTextDrawUseBox(playerid, LoginTD[playerid][0], 1);
-	PlayerTextDrawBoxColor(playerid, LoginTD[playerid][0], 153);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][0], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][0], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][0], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][0], 1);
-
-	LoginTD[playerid][1] = CreatePlayerTextDraw(playerid, 289.600006, 182.035614, "Connexion_sur_LS_Review");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][1], 0.199999, 1.266488);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][1], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][1], -1);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][1], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][1], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][1], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][1], 1);
-
-	LoginTD[playerid][2] = CreatePlayerTextDraw(playerid, 263.998840, 184.524444, "box");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][2], 0.000000, 8.278985);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][2], 0.000000, 22.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][2], 2);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][2], -1);
-	PlayerTextDrawUseBox(playerid, LoginTD[playerid][2], 1);
-	PlayerTextDrawBoxColor(playerid, LoginTD[playerid][2], 153);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][2], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][2], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][2], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][2], 1);
-
-	LoginTD[playerid][3] = CreatePlayerTextDraw(playerid, 294.100402, 214.870864, "box");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][3], 0.000000, -0.199999);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][3], 343.900421, 0.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][3], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][3], -1);
-	PlayerTextDrawUseBox(playerid, LoginTD[playerid][3], 1);
-	PlayerTextDrawBoxColor(playerid, LoginTD[playerid][3], 153);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][3], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][3], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][3], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][3], 1);
-
-	LoginTD[playerid][4] = CreatePlayerTextDraw(playerid, 297.400329, 200.951126, "Aymane");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][4], 0.216000, 1.062399);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][4], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][4], -1);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][4], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][4], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][4], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][4], 1);
-
-	LoginTD[playerid][5] = CreatePlayerTextDraw(playerid, 294.500427, 230.571823, "box");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][5], 0.000000, -0.199999);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][5], 344.300445, 0.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][5], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][5], -1);
-	PlayerTextDrawUseBox(playerid, LoginTD[playerid][5], 1);
-	PlayerTextDrawBoxColor(playerid, LoginTD[playerid][5], 153);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][5], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][5], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][5], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][5], 1);
-
-	LoginTD[playerid][6] = CreatePlayerTextDraw(playerid, 293.400360, 212.897750, "...................");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][6], 0.223199, 1.714488);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][6], 684.000000, 30.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][6], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][6], -1);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][6], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][6], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][6], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][6], 1);
-	PlayerTextDrawSetSelectable(playerid, LoginTD[playerid][6], 1);
-
-	LoginTD[playerid][7] = CreatePlayerTextDraw(playerid, 358.600463, 254.231338, "box");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][7], 0.000000, 0.680001);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][7], 391.800476, 0.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][7], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][7], -1);
-	PlayerTextDrawUseBox(playerid, LoginTD[playerid][7], 1);
-	PlayerTextDrawBoxColor(playerid, LoginTD[playerid][7], 153);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][7], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][7], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][7], 1);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][7], 1);
-
-	LoginTD[playerid][8] = CreatePlayerTextDraw(playerid, 358.500579, 252.340286, "CONNEXION");
-	PlayerTextDrawLetterSize(playerid, LoginTD[playerid][8], 0.143999, 0.997688);
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][8], 392.000000, 0.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][8], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][8], -1);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][8], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][8], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][8], 2);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][8], 1);
-	PlayerTextDrawSetSelectable(playerid, LoginTD[playerid][8], true);
-
-	LoginTD[playerid][9] = CreatePlayerTextDraw(playerid, 285.400512, 183.173278, "mdl-2001:character_1");
-	PlayerTextDrawTextSize(playerid, LoginTD[playerid][9], -47.000000, 82.000000);
-	PlayerTextDrawAlignment(playerid, LoginTD[playerid][9], 1);
-	PlayerTextDrawColor(playerid, LoginTD[playerid][9], -1);
-	PlayerTextDrawSetShadow(playerid, LoginTD[playerid][9], 0);
-	PlayerTextDrawBackgroundColor(playerid, LoginTD[playerid][9], 255);
-	PlayerTextDrawFont(playerid, LoginTD[playerid][9], 4);
-	PlayerTextDrawSetProportional(playerid, LoginTD[playerid][9], 0);
-
-	for(new td = 0; td <= 9; td++)
-	{
-		PlayerTextDrawShow(playerid, LoginTD[playerid][td]);
-	}
-
-	new
-	string[250];
-	format(string, sizeof(string), "%s", PlayerData[playerid][pUsername]);
-	PlayerTextDrawSetString(playerid, LoginTD[playerid][4], string);
-
-	return SetPVarInt(playerid,"LoginTD",1);
-}
-Destroy_LoginTD(playerid)
-{
-	for(new td = 0; td <= 9; td++)
-	    PlayerTextDrawDestroy(playerid, LoginTD[playerid][td]);
-	return SetPVarInt(playerid,"LoginTD",0);
 }
 ResetStatistics(playerid)
 {
@@ -17837,9 +17709,9 @@ Dialog:Mission(playerid, response, listitem, inputtext[])
 {
 	static Float:x,Float:y,Float:z,Float:a;
 	new rand = random(7),factionid = PlayerData[playerid][pFaction];
-	if (response && mission[playerid] != 1)
+	if (response && mission[0][playerid] != 1)
 	{
-		//if(mission[playerid] != 1)
+		//if(mission[0][playerid] != 1)
 		//{
 			for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
 			{
@@ -17870,7 +17742,7 @@ Dialog:Mission(playerid, response, listitem, inputtext[])
 				CrateData[i][crateInterior] = GetPlayerInterior(playerid);
 				CrateData[i][crateWorld] = GetPlayerVirtualWorld(playerid);
 				Crate_Refresh(i);
-				mission[playerid] = 1;
+				mission[0][playerid] = 1;
 				if(FactionData[factionid][factionacces][8] == 1)
 				{ 
 					SendServerMessage(playerid,  "Albert : Ya une caisse a cherche dans une ville proche d'ici va me la trouver s'il te plait et ramene moi son contenu ou garde le.");
@@ -17883,10 +17755,61 @@ Dialog:Mission(playerid, response, listitem, inputtext[])
  	else return SendClientMessage(playerid, COLOR_WHITE,"Albert : Tu veux quoi encore?? Va travailler!");
 	return -1;
 }
+//mission
+Dialog:Mission3(playerid, response, listitem, inputtext[])
+{
+	static Float:x,Float:y,Float:z,Float:a;
+	new rand = random(7),factionid = PlayerData[playerid][pFaction];
+	if (response && mission[0][playerid] != 1)
+	{
+		//if(mission[0][playerid] != 1)
+		//{
+			for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
+			{
+				if (Crate_Nearest(playerid, 2.5) != -1) {
+					z = floatsub(z, 0.1);
+				}
+				if(rand == 0)
+					{x=1229.8142; y= -1609.3317; z=13.5469; a=357.1955;}
+				else if(rand == 1)
+					{x=1973.2660; y=-1283.8271; z=28.4919; a=253.7853;}
+				else if(rand == 2)
+					{x=430.1803; y=-1293.2228; z=15.1248; a=124.1200;}
+				else if(rand == 3)
+					{x=699.1709; y=-1199.9823; z=15.2588; a=62.0178;}
+				else if(rand == 4)
+					{x=1029.7323; y=-1106.0623; z=23.8281; a=141.3927;}
+				else if(rand == 5)
+					{x=2445.0530; y=-1760.2892; z=13.5888; a=35.1029;}
+				else if(rand == 6)
+					{x=2508.8672; y=-1470.6542; z=24.0320; a=158.0183;}
+				CrateData[i][crateExists] = true;
+				CrateData[i][crateVehicle] = INVALID_VEHICLE_ID;
+				CrateData[i][crateType] = 6;
+				CrateData[i][cratePos][0] = x;
+				CrateData[i][cratePos][1] = y;
+				CrateData[i][cratePos][2] = z - 0.9;
+				CrateData[i][cratePos][3] = a;
+				CrateData[i][crateInterior] = GetPlayerInterior(playerid);
+				CrateData[i][crateWorld] = GetPlayerVirtualWorld(playerid);
+				Crate_Refresh(i);
+				mission[0][playerid] = 1;
+				if(FactionData[factionid][factionacces][8] == 1)
+				{ 
+					SendServerMessage(playerid,  "Robert : Ya une caisse a cherche dans une ville proche d'ici va me la trouver s'il te plait et ramene moi son contenu ou garde le.");
+					Waypoint_Set(playerid, "Caisse", x, y, z);
+				}
+				return i;
+			}
+		//}
+	}
+ 	else return SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu veux quoi encore?? Va travailler!");
+	return -1;
+}
 Dialog:Mission1(playerid, response, listitem, inputtext[])
 {
 	new rand = random(4);
-	if (response && mission1[playerid] != 1)
+	if (response && mission[1][playerid] != 1)
 	{
 		if(rand == 0)//1271.6312,295.0221,20.6563
 			{ Waypoint_Set(playerid,"Mettre le feu", 1271.6312,295.0221,20.6563);}
@@ -17896,7 +17819,7 @@ Dialog:Mission1(playerid, response, listitem, inputtext[])
 			{ Waypoint_Set(playerid,"Mettre le feu", 245.1169,-43.5079,1.5853);}
 		else if(rand == 3)//246.7708,-288.1205,1.5836
 			{ Waypoint_Set(playerid,"Mettre le feu", 246.7708,-288.1205,1.5836);}
-		mission1[playerid] = 1;
+		mission[1][playerid] = 1;
 		SendClientMessage(playerid, COLOR_WHITE,"James : Va mettre le feu a cette place.");
 		SendClientMessage(playerid, COLOR_WHITE,"James : Je te donne les dernières coordonnées de la place a mettre le feu.");
 		return 1;
@@ -17906,7 +17829,7 @@ Dialog:Mission1(playerid, response, listitem, inputtext[])
 Dialog:Mission2(playerid, response, listitem, inputtext[])
 {
 	//new rand = random(4);
-	if (response && mission2[playerid] != 1)
+	if (response && mission[2][playerid] != 1)
 	{
 		/*if(rand == 0)//1271.6312,295.0221,20.6563
 			{ Waypoint_Set(playerid,"Mettre le feu", 1271.6312,295.0221,20.6563);}
@@ -17916,7 +17839,7 @@ Dialog:Mission2(playerid, response, listitem, inputtext[])
 			{ Waypoint_Set(playerid,"Mettre le feu", 245.1169,-43.5079,1.5853);}
 		else if(rand == 3)//246.7708,-288.1205,1.5836
 			{ Waypoint_Set(playerid,"Mettre le feu", 246.7708,-288.1205,1.5836);}*/
-		mission2[playerid] = 1;
+		mission[2][playerid] = 1;
 		/*SendClientMessage(playerid, COLOR_WHITE,"Jasmine : Va mettre le feu a cette place.");
 		SendClientMessage(playerid, COLOR_WHITE,"Jasmine : Je te donne les dernières coordonnées de la place a mettre le feu.");*/
 		return 1;

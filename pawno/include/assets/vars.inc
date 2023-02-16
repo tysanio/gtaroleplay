@@ -3513,12 +3513,8 @@ new doks[][1] = {{0}, {1}, {2}};
 //new portdok = 25;
 new prod,topl,boe;
 //mission
-new mission[MAX_PLAYERS];
-new missionactor;
-new mission1[MAX_PLAYERS];
-new missionactor1;
-new mission2[MAX_PLAYERS];
-new missionactor2;
+new mission[4][MAX_PLAYERS];
+new missionactor[4];
 //stock job
 enum stockjobinfo
 {
@@ -3783,8 +3779,6 @@ enum blackjack {
 }
 new BlackJack[MAX_PLAYERS][blackjack];
 new PlayerText:BlackJackTD[21][MAX_PLAYERS];
-//logintd
-new PlayerText:LoginTD[MAX_PLAYERS][10];
 //event
 new event=0;
 //clickplayer
