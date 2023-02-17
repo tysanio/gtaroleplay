@@ -10859,7 +10859,7 @@ script OnPlayerDisconnect(playerid, reason)
 	        case 1: format(string, sizeof(string), "* %s a quitté le serveur.", nameStr);
 	        case 2: format(string, sizeof(string), "* %s a quitté le serveur (Kick/Ban).",  nameStr);
 	    }
-		SendNearbyMessage(playerid,30.0,COLOR_HOSPITAL,string);
+	    foreach (new i : Player) SendClientMessageEx(i,COLOR_HOSPITAL,string);
 	}
 	//bowling
     BowlingMinutes[playerid] = 0;

@@ -10823,6 +10823,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un systeme gps.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 1:
 					{
@@ -10831,6 +10832,7 @@ CMD:voleritem(playerid,params[])
 						GiveWeaponToPlayer(playerid, 43, 100);
 						SendServerMessage(playerid,"Tu a réussi a voler une caméra.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 2:
 					{
@@ -10841,6 +10843,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un chargeur de téléphone.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 3:
 					{
@@ -10851,6 +10854,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un talkie-walkie.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 4:
 					{
@@ -10861,6 +10865,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un jerrican.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 5:
 					{
@@ -10869,6 +10874,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un des a jouer.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 				}
 				Business_Save(bizid);
@@ -10899,6 +10905,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un briquet");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 1:
 					{
@@ -10909,6 +10916,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler une pizza surgelé.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 2:
 					{
@@ -10919,6 +10927,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un burger surgelé.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 3:
 					{
@@ -10929,6 +10938,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un jus de pomme");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 4:
 					{
@@ -10938,6 +10948,7 @@ CMD:voleritem(playerid,params[])
 						if (id == -1)
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 5:
 					{
@@ -10948,6 +10959,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un jambon");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 6:
 					{
@@ -10958,6 +10970,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler une orange");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 				}
 				Business_Save(bizid);
@@ -10988,6 +11001,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un pied de biche.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 1:
 					{
@@ -10996,6 +11010,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler un tournevis.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 					case 2:
 					{
@@ -11006,6 +11021,7 @@ CMD:voleritem(playerid,params[])
 							return SendErrorMessage(playerid, "Inventaire plein.");
 						SendServerMessage(playerid,"Tu a réussi a voler une bombe de peinture.");
 						BusinessData[bizid][bizProducts]--;
+						return 1;
 					}
 				}
 				Business_Save(bizid);

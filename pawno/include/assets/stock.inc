@@ -9133,8 +9133,8 @@ Dialog:FactionWeaponID(playerid, response, listitem, inputtext[])
 	    if (isnull(inputtext))
 	        return Dialog_Show(playerid, FactionWeaponID, DIALOG_STYLE_INPUT, "Mettre Arme", "Arme présent: %s (%d)\n\nPlease enter the new weapon ID pour slot %d:", "Envoyer", "Annulé", ReturnWeaponName(FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]]), FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]],PlayerData[playerid][pSelectedSlot]);
 
-		if (weaponid < 0 || weaponid > 46)
-		    return Dialog_Show(playerid, FactionWeaponID, DIALOG_STYLE_INPUT, "Mettre Arme", "Erreur: Arme de 0 a 46.\n\nArme présent: %s (%d)\n\nEntrée une arme valide pour le slot %d:", "Envoyer", "Annulé", ReturnWeaponName(FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]]), FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]],PlayerData[playerid][pSelectedSlot]);
+		if (weaponid < 0 || weaponid > 46 && weaponid < 99 || weaponid > 421)
+		    return Dialog_Show(playerid, FactionWeaponID, DIALOG_STYLE_INPUT, "Mettre Arme", "Erreur: Arme de 0 a 46 ou 100 a 421.\n\nArme présent: %s (%d)\n\nEntrée une arme valide pour le slot %d:", "Envoyer", "Annulé", ReturnWeaponName(FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]]), FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]],PlayerData[playerid][pSelectedSlot]);
 
         FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]] = weaponid;
         Faction_Save(PlayerData[playerid][pFactionEdit]);
@@ -17762,7 +17762,7 @@ Dialog:Mission3(playerid, response, listitem, inputtext[])
 	new rand = random(7),factionid = PlayerData[playerid][pFaction];
 	if (response && mission[0][playerid] != 1)
 	{
-		//if(mission[0][playerid] != 1)
+		//if(mission[3][playerid] != 1)
 		//{
 			for (new i = 0; i != MAX_DYNAMIC_OBJ; i ++) if (!CrateData[i][crateExists])
 			{
