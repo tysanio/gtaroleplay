@@ -10261,7 +10261,7 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	        case 22..421: SetPlayerArmedWeapon(playerid, GetPlayerWeapon(playerid));
 			default: SetPlayerArmedWeapon(playerid, 0);
 		}
-	    if (GetVehicleModel(vehicleid) == 431 || GetVehicleModel(vehicleid) == 437)
+	    if (GetVehicleModel(vehicleid) == 431 || GetVehicleModel(vehicleid) == 437 || GetVehicleModel(vehicleid) == 25521|| GetVehicleModel(vehicleid) == 6591|| GetVehicleModel(vehicleid) == 6556|| GetVehicleModel(vehicleid) == 25575|| GetVehicleModel(vehicleid) == 6691 || GetVehicleModel(vehicleid) == 25424|| GetVehicleModel(vehicleid) == 4777)
 	    {
             SetPlayerPos(playerid, 2022.0273, 2235.2402, 2103.9536);
             SetPlayerTime(playerid, 00,00);
