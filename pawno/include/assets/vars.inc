@@ -825,7 +825,6 @@ enum coreVehicles {
 	vehRepairing,
 	vehSirenOn,
 	vehSirenObject,
-	vehRadio,
 	vehURL[128 char],
 	Float:vehLoadHealth,
  	Float:vehLoadPos[3]

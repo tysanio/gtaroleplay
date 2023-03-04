@@ -1,6 +1,6 @@
 #pragma dynamic 																400000
 
-#define SQL_HOSTNAME 															"localhost"
+#define SQL_HOSTNAME 															" "
 #define SQL_USERNAME 															" "
 #define SQL_DATABASE 															" "
 #define SQL_PASSWORD															" "
@@ -200,7 +200,7 @@
 //define forward fuck you
 #define script%0(%1) forward%0(%1); public%0(%1)
 //phrase long
-#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d\nWhiteListe \t%d\Spawn Pos"
+#define serveursetting1 "OOC\t%d\nPM\t%d\nBraquage NPC\t%d\nBraquage Banque\t%d\nAFK\t%d\nTemps AFK\t%d\nVille choisie\t%d\nNouveau chat \t%d\nPolice \t%d\nSwat \t%d\nWhiteListe \t%d\nSpawn Pos"
 #define menuclick1fr "Skin du joueur\nAnniversaire\nFaim\nSoif\nBras\nJambes\nReset Vehicule Location\nReset Location Maison\nJobs\nHeure de jeux\nMinute de jeux\nOrigine\nSex du joueur\nNombre de mort du joueur"
 #define menuclick2fr "Vérifier ses stats\nRemettre intérieur et monde a 0\nListe des armes\nReset les armes\nSon IP\nSes Warn(s)\nNettoyer ses warn(s)\nNettoyer son inventaire\nRestaurer Faim et Soif\nDernier Tireur\nVie du joueur\nArmure du joueur\nInterieur du joueur\nVirtual World du joueur\nWarn ce joueur\nChanger son nom\nMettre dans une faction\nMettre le rang d'une faction\nMettre leader d'une faction\nModifier le niveau admin\nAutre Modification"
 #define menuclick3fr "Bannir se joueur\nFreeze\nUnfreeze\nKick se joueur\nSe téléporter a se joueur\nTéléport ce joueur a toi\nRéanimer se joueur\nMute / Un mute se joueur\nSlap se joueur\nFaire saigner ou pas se joueur\nMettre ou Enlever Helpeur\nMettre ou Enlever FactionModo\nModifier les stats de se joueur"
@@ -216,19 +216,19 @@
 #define     ATM_HEALTH              (350.0)     // health of an atm (Default: 350.0)
 #define     ATM_REGEN               (6000)       // a robbed atm will start working after x seconds (Default: 120)
 //discord chat A CHANGER POUR LES BONNE VALEUR
-#define DISCORD_PREFIX "?"                  // your prefix to use command
-#define Dadmin1 "838563820322422794"
-#define Dadmin2 "838563778823979040"              
-#define Dadmin3 "838563719474446346"                  
-#define Dadmin4 "838563484802875442"                  
-#define Dverifier "866083152509403146"                  
-#define Ddiscord "807289591476387870"                  
-#define Dchat "865310262582968330" //pour joueur
-#define Achat "838570433921941534" //pour admin
-#define ooc "861337612429295669"
+#define DISCORD_PREFIX "!!"                  // your prefix to use command
+#define Dadmin1 ""
+#define Dadmin2 ""              
+#define Dadmin3 ""                  
+#define Dadmin4 ""                  
+#define Dverifier ""                  
+#define Ddiscord ""                  
+#define Dchat "" //pour joueur
+#define Achat "" //pour admin
+#define ooc ""
 //gear
 #define GEAR1_SPEED 20
 #define GEAR2_SPEED 40
 #define GEAR3_SPEED 60
 #define GEAR4_SPEED 75
-#define GEAR5_SPEED 95
+#define GEAR5_SPEED 90

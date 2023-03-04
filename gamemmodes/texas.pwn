@@ -10249,14 +10249,6 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	        PlayerData[playerid][pBoombox] = INVALID_PLAYER_ID;
 			StopAudioStreamForPlayer(playerid);
 	    }
-	    if (IsEngineVehicle(vehicleid) && CoreVehicles[vehicleid][vehRadio])
-	    {
-	        static url[128];
-			strunpack(url, CoreVehicles[vehicleid][vehURL]);
-			StopAudioStreamForPlayer(playerid);
-			PlayAudioStreamForPlayer(playerid, url);
-			PlayerData[playerid][pPlayRadio] = 1;
-		}
 	    foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) {PlayerSpectateVehicle(i, GetPlayerVehicleID(playerid));}
 		if (PlayerData[playerid][pInjured] == 1) {RemoveFromVehicle(playerid);}
 	}

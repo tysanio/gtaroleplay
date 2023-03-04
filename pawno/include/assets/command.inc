@@ -5942,7 +5942,7 @@ CMD:analyser(playerid, params[])
 }
 CMD:creercar(playerid, params[])
 {
-	static model[32],color1,color2,id = -1,type = 0,loca = 0;
+	static model[32],color1,color2,id = -1,type = -1,loca = 0;
     if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "s[32]I(-1)I(-1)I(0)I(0)", model, color1, color2, type, loca))
@@ -8355,16 +8355,6 @@ CMD:fouiller(playerid, params[])///////// wtf cossé sa osti
 	PlayerData[userid][pFriskOffer] = playerid;
 	SendServerMessage(userid, "%s veux vous fouillez. (écriver \"/accepter fouille\").", ReturnName(playerid, 0));
 	SendServerMessage(playerid, "Vous voulez fouiller %s.", ReturnName(userid, 0));
-	return 1;
-}
-CMD:setradio(playerid, params[])
-{
-	new vehicleid = GetPlayerVehicleID(playerid);
-	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-	    return SendErrorMessage(playerid, "Tu n'est pas conducteur.");
-	if (!IsEngineVehicle(vehicleid))
-	    return SendErrorMessage(playerid, "Ce vehicule n'a pas de radio.");
-	Dialog_Show(playerid, Radio, DIALOG_STYLE_LIST, "Station de Radio", "Cultural\nOldies\nOther\nPop\nRhythm & Blues\nRock\nTalk\nUrban\nElectric\nTurn Radio Off", "Valider", "Annuler");
 	return 1;
 }
 CMD:creergraffiti(playerid, params[])
