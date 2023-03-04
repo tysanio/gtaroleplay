@@ -183,7 +183,7 @@ DISCORD:dejail( DCC_Channel: channel, DCC_User: author, params[ ] )
 }
 DISCORD:apps( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
-	static userid,string1[128],string2[128],string3[128],string4[128],string5[128],string22[128],string33[128],string44[128],string55[128];
+	static userid,string1[128],string2[1280],string22[1280];
     DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
     DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
     DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
@@ -195,17 +195,10 @@ DISCORD:apps( DCC_Channel: channel, DCC_User: author, params[ ] )
 		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
 		DCC_TriggerBotTypingIndicator(discordaaa);
 		format(string1, sizeof(string1), "**Joueur IG %s (ID: %d)**", ReturnName(userid), userid);
-		format(string2, sizeof(string2), "Réponse 1 : %s",tuto1);
-		format(string3, sizeof(string3), "Réponse 2 : %s",tuto2);
-		format(string4, sizeof(string4), "Réponse 3 : %s",tuto3);
-		format(string5, sizeof(string5), "Réponse 4 : %s",tuto4);
-		utf8encode(string22,string2,sizeof(string22));
-		utf8encode(string33,string3,sizeof(string33));
-		utf8encode(string44,string4,sizeof(string44));
-		utf8encode(string55,string5,sizeof(string55));
+		format(string2, sizeof(string2), "**Qu elle sont vos projets une fois en ville?**\n Reponse: %s\n**Qu est ce que le metagame?**\n Reponse: %s\n**Qu est ce que le powergame?**\n Reponse: %s\n**Qu est ce que le Roleplay?**\n Reponse: %s",tuto1,tuto2,tuto3,tuto4);
 		Embed = DCC_CreateEmbed(string1,"----------------------Reponse de la personne------------------");
-		DCC_AddEmbedField(Embed ,string22,string33);
-		DCC_AddEmbedField(Embed ,string44,string55);
+		utf8encode(string22,string2,sizeof(string22));
+		DCC_AddEmbedField(Embed ,"",string22);
 		DCC_SetEmbedColor(Embed,0x00FF00);
 		DCC_SendChannelEmbedMessage(discordaaa, Embed);
 		DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?apps[a/r] accepter ou refuser");
@@ -728,7 +721,7 @@ public DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Em
 				{
 					DCC_SetEmbedTitle(embed, "Aide Divers");
 					DCC_SetEmbedColor(Embed,0x00FF00);
-					format(str, sizeof(str), "```- /proprieter pour voir se que vous êtes le proprietaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernièrefois Pour connaitre la dernière connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n- /rapport pour rapporte un mefait,\n- /bjstart pour commencer le blackjack,\n- /bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet a 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme```");
+					format(str, sizeof(str), "```- /proprieter pour voir se que vous êtes le proprietaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernièrefois Pour connaitre la dernière connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n- /rapport pour rapporte un mefait,\n- /bjstart pour commencer le blackjack,\n- /bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet a 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme,\n- /stylecombat choisir votre style de combat,\n- /discordverif pour se faire vérifier discord```");
 					utf8encode(str1,str,sizeof(str1));
 					DCC_SetEmbedDescription(embed, str1);
 					DCC_EditMessage(message, "", embed);
@@ -745,7 +738,7 @@ public DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Em
 				{
 					DCC_SetEmbedTitle(embed, "Aide Véhicule");
 					DCC_SetEmbedColor(Embed,0x00FF00);
-					format(str, sizeof(str), "```- /porte Pour fermer les portes du vehicule\n- /vendre pour vendre un véhicule,\n- /remplir Pour faire le plein de votre véhicule\n- /enlevertunning Pour enlever le tuning du véhicule\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour demarrer le moteur du véhicule\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenetre du véhicule\n- /ceinture pour attacher votre ceinture\n- /setradio pour ecouter la radio dans le véhicule,\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un véhicule,\n- /delouerveh pour delouer un véhicule (attention a etre a la bonne place pour cela,\n- /vpreter voir le véhicule qu'on vous a preté, \n- /vdouble Pour preter les cles de votre véhicule,\n- /vjeter pour jetter le double des clés preter,\n- /payersabot pour payer le sabot du véhicule,\n- /achetergarage pour acheter un garage,\n- /garage pour aller dans votre garage```");
+					format(str, sizeof(str), "```- /porte Pour fermer les portes du vehicule\n- /vendre pour vendre un véhicule,\n- /remplir Pour faire le plein de votre véhicule\n- /enlevertunning Pour enlever le tuning du véhicule\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour demarrer le moteur du véhicule\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenetre du véhicule\n- /ceinture pour attacher votre ceinture,\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un véhicule,\n- /delouerveh pour delouer un véhicule (attention a etre a la bonne place pour cela,\n- /vpreter voir le véhicule qu'on vous a preté, \n- /vdouble Pour preter les cles de votre véhicule,\n- /vjeter pour jetter le double des clés preter,\n- /payersabot pour payer le sabot du véhicule,\n- /achetergarage pour acheter un garage,\n- /garage pour aller dans votre garage```");
 					utf8encode(str1,str,sizeof(str1));
 					DCC_SetEmbedDescription(embed, str1);
 					DCC_EditMessage(message, "", embed);
@@ -927,5 +920,17 @@ script OnPostAide()
 	DCC_CreateReaction(message, DCC_CreateEmoji("🇻"));  	
 	DCC_CreateReaction(message, DCC_CreateEmoji("🇧"));  	
 	DCC_CreateReaction(message, DCC_CreateEmoji("🧩"));  	
+	DCC_SetMessagePersistent(message, true);
+}
+script OnPostJoueurApp()
+{
+	new DCC_Message:message = DCC_GetCreatedMessage();
+    if(StatMessage != DCC_Message:0 )
+    {
+        DCC_DeleteInternalMessage(StatMessage);
+    }
+	StatMessage = message;
+    DCC_CreateReaction(message, DCC_CreateEmoji("✅"));
+    DCC_CreateReaction(message, DCC_CreateEmoji("❎"));
 	DCC_SetMessagePersistent(message, true);
 }

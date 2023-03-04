@@ -11065,6 +11065,7 @@ script OnGameModeInit()
 	RoleStaff2 = DCC_Role:DCC_FindRoleById(Dadmin2);    //role
 	RoleStaff3 = DCC_Role:DCC_FindRoleById(Dadmin3);    //role
 	RoleStaff4 = DCC_Role:DCC_FindRoleById(Dadmin4);    //role
+	DeleteSavedStatMessage();
 	//CreateServerObjectsLosSantos();
 	MaisonIntEXT();
 	//partie fs oubliger
@@ -11650,6 +11651,7 @@ script OnGameModeInit()
 }
 script OnGameModeExit()
 {
+    DeleteSavedStatMessage();
     foreach (new i : Player) {SQL_SaveCharacter(i);}
     //job generator
 	KillTimer(threesecondtimer);

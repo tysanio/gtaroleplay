@@ -22592,6 +22592,7 @@ Dialog:tutoconnaitre4(playerid, response, listitem, inputtext[])
 		new msg1[100],msg2[100];
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		SendServerMessage(playerid,"Merci un admin va vous prendre en charge");
+		SendServerMessage(playerid,"Même s'il n'y a aucun admin IG attentez quelques minutes ou voir discord.");
 		SendServerMessage(playerid,"Si un admin n'est pas présent il vous sera recommander de quitter et de refaire un personnage.");
 		SendAdminAlert(COLOR_ADMINCHAT, "Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d",ReturnName(playerid, 0),playerid);
 		SendAdminAlert(COLOR_ADMINCHAT, "/apps [playerid] pour accepter ou refuser un joueur");
