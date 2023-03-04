@@ -293,7 +293,6 @@ script RemoveAttachedObject(playerid, slot)
 }
 script MineTime(playerid) {PlayerData[playerid][pMineTime] = 0;}
 script WoodTime(playerid) {PlayerData[playerid][pWoodTime] = 0;}
-script DestroyBlood(objectid) {DestroyDynamicObject(objectid);}
 script PetrolTime(playerid) {PlayerData[playerid][pPetrolTime] = 0;}
 script ExpireMarker(playerid)
 {
@@ -3216,7 +3215,7 @@ script PlayerCheck()
 		        SetPlayerHealth(i, ReturnHealth(i) - 3.0);
 			    PlayerData[i][pBleedTime] = 10;
 
-			    CreateBlood(i);
+			    CreateBlood(i,50);
 			    SetTimerEx("HidePlayerBox", 500, false, "dd", i, _:ShowPlayerBox(i, 0xFF000066));
 			}
 		}
@@ -6525,7 +6524,6 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			case 102: Inventory_Add(playerid, "sab_glock",29001);
 			case 105: Inventory_Add(playerid, "sab_psg1",29005);
 			case 111: Inventory_Add(playerid, "lc_ak47",29011);
-			case 112: Inventory_Add(playerid, "lc_bat",29011);
 			case 113: Inventory_Add(playerid, "lc_colt45",29013);
 			case 117: Inventory_Add(playerid, "lc_m16",29017);
 			case 120: Inventory_Add(playerid, "lc_shotgun",29020);
@@ -6535,8 +6533,6 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			case 126: Inventory_Add(playerid, "vc_chromegun",29026);
 			case 128: Inventory_Add(playerid, "vc_colt45",29028);
 			case 133: Inventory_Add(playerid, "vc_ingram",29033);
-			case 134: Inventory_Add(playerid, "vc_katana",29034);
-			case 136: Inventory_Add(playerid, "vc_laser",29036);
 			case 137: Inventory_Add(playerid, "vc_m4",29037);
 			case 138: Inventory_Add(playerid, "vc_m60",29038);
 			case 143: Inventory_Add(playerid, "vc_mp5lng",29043);
@@ -6592,7 +6588,6 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
             case 241: Inventory_Add(playerid, "ug_colt1911",29144);
             case 242: Inventory_Add(playerid, "ug_es57",29145);
             case 243: Inventory_Add(playerid, "ug_famas",29146);
-            case 244: Inventory_Add(playerid, "ug_fasthawk",29147);
             case 246: Inventory_Add(playerid, "ug_g3",29149);
             case 247: Inventory_Add(playerid, "ug_g36c",29150);
             case 248: Inventory_Add(playerid, "ug_galil",29151);
@@ -6620,13 +6615,11 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
             case 279: Inventory_Add(playerid, "ug_spas15",29323);
             case 280: Inventory_Add(playerid, "ug_spcarbine",29181);
             case 283: Inventory_Add(playerid, "ug_tmp",29185);
-            case 284: Inventory_Add(playerid, "ug_tomahawk",29186);
             case 285: Inventory_Add(playerid, "ug_tommygun",29187);
             case 287: Inventory_Add(playerid, "ug_tripleshot",29189);
             case 288: Inventory_Add(playerid, "ug_ump45",29190);
             case 290: Inventory_Add(playerid, "ug_woodshot",29191);
             case 291: Inventory_Add(playerid, "ug_woodspal",29193);
-            case 292: Inventory_Add(playerid, "ug_wrench",29194);
             case 293: Inventory_Add(playerid, "ug_xm8",29195);
             case 294: Inventory_Add(playerid, "ug_xm1014",29196);
             case 297: Inventory_Add(playerid, "bw_bbgun",29199);
@@ -6648,47 +6641,25 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			case 362: Inventory_Add(playerid, "cm_revolver",29261);
 			case 364: Inventory_Add(playerid, "cm_shotgspa",29264);
 			case 365: Inventory_Add(playerid, "cm_shotgun",29265);
-			case 372: Inventory_Add(playerid, "cm_circularsaw",29274);
-			case 373: Inventory_Add(playerid, "cm_clipboard",29275);
 			case 374: Inventory_Add(playerid, "cm_crossbow",29276);
-			case 375: Inventory_Add(playerid, "cm_dildo",29277);
-			case 376: Inventory_Add(playerid, "cm_fireex",29278);
 			case 377: Inventory_Add(playerid, "cm_flaregun",29279);
-			case 378: Inventory_Add(playerid, "cm_flashlight",29280);
-			case 379: Inventory_Add(playerid, "cm_hacksaw",29281);
-			case 380: Inventory_Add(playerid, "cm_hammer",29281);
-			case 381: Inventory_Add(playerid, "cm_katana",29283);
-			case 382: Inventory_Add(playerid, "cm_mace",29284);
-			case 383: Inventory_Add(playerid, "cm_newspaper",29285);
-			case 384: Inventory_Add(playerid, "cm_picket",29286);
-			case 385: Inventory_Add(playerid, "cm_saw",29287);
-			case 386: Inventory_Add(playerid, "cm_scissors",29288);
 			case 387: Inventory_Add(playerid, "cm_sniper",29289);
 			case 388: Inventory_Add(playerid, "cm_stunbaton",29290);
-			case 393: Inventory_Add(playerid, "vc_bat",29295);
-			case 394: Inventory_Add(playerid, "vc_cane",29296);
 			case 395: Inventory_Add(playerid, "ug_2tglock",29299);
 			case 396: Inventory_Add(playerid, "ug_aksopmod",29300);
 			case 397: Inventory_Add(playerid, "ug_ar7",29301);
-			case 398: Inventory_Add(playerid, "ug_bat",29301);
-			case 400: Inventory_Add(playerid, "ug_brassknuckle",29304);
 			case 401: Inventory_Add(playerid, "ug_calico",29306);
 			case 402: Inventory_Add(playerid, "ug_camosniper",29307);
 			case 403: Inventory_Add(playerid, "ug_fmg9",29309);
-			case 404: Inventory_Add(playerid, "ug_karambit",29311);
 			case 406: Inventory_Add(playerid, "ug_m202a1",29313);
 			case 408: Inventory_Add(playerid, "ug_matador",29315);
 			case 409: Inventory_Add(playerid, "ug_paintball",29316);
-			case 410: Inventory_Add(playerid, "ug_plunger",29317);
 			case 412: Inventory_Add(playerid, "ug_rpg26",29319);
 			case 413: Inventory_Add(playerid, "ug_sew500",29320);
 			case 414: Inventory_Add(playerid, "ug_silverrevolver",29321);
 			case 415: Inventory_Add(playerid, "ug_snub",29321);
-			case 416: Inventory_Add(playerid, "ug_spikedknuckle",29324);
 			case 417: Inventory_Add(playerid, "ug_srsa1",29325);
 			case 418: Inventory_Add(playerid, "ug_sturmgewehr",29326);
-			case 419: Inventory_Add(playerid, "ug_sword",29327);
-			case 420: Inventory_Add(playerid, "ug_tennisracket",29328);
 			case 421: Inventory_Add(playerid, "ug_volcanic",29329);
 		}
  	    ResetWeapon(playerid, weaponid);
@@ -6714,6 +6685,47 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			return 0;
 		}
 	}
+    if(hittype == BULLET_HIT_TYPE_PLAYER && IsBleedableWeapon(weaponid)) {
+        new Float:rDist = frandom(-5.0, 6.0);
+        if(rDist > 0.0) {
+            new Float:vX, Float:vY, Float:vZ,
+                Float:pX, Float:pY, Float:pZ;
+            GetPlayerLastShotVectors(playerid, vX, vY, vZ, fX, fY, fZ);
+
+            vX = fX - vX;
+            vY = fY - vY;
+            vZ = fZ - vZ;
+
+            new Float:d = VectorSize(vX, vY, vZ);
+            vX /= d;
+            vY /= d;
+            vZ /= d;
+
+            vX *= rDist;
+            vY *= rDist;
+            vZ *= rDist;
+
+            vX += fX + frandom(-0.5, 0.5);
+            vY += fY + frandom(-0.5, 0.5);
+            vZ += fZ + frandom(-0.5, 0.5);
+
+            if(CA_RayCastLineNormal(fX, fY, fZ, vX, vY, vZ, pX, pY, pZ, pX, pY, pZ)) {
+                rDist = frandom(0.005, 0.020, 4);
+                pX *= rDist;
+                pY *= rDist;
+                pZ *= rDist;
+
+                CA_RayCastLineAngle(fX, fY, fZ, vX, vY, vZ, fX, fY, fZ, vX, vY, vZ);
+
+                new objectid = CreateDynamicObject(19836, fX + pX, fY + pY, fZ + pZ, vX, vY, vZ);
+                if(IsValidDynamicObject(objectid)) {
+                    SetDynamicObjectMaterial(objectid, 0, -1, "none", "none", 0xFFFF0000);
+
+                    SetTimerEx("CreateBlood", 1500, false, "ii", objectid, 255);
+                }
+            }
+        }
+    }
 	//deer
 	if(Deer[playerid] == 1)
 	{
@@ -6953,7 +6965,7 @@ script OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 			    PlayerData[damagedid][pBleeding] = 1;
 			    PlayerData[damagedid][pBleedTime] = 10;
 
-				CreateBlood(damagedid);
+				CreateBlood(damagedid,25);
 			    SetTimerEx("HidePlayerBox", 500, false, "dd", damagedid, _:ShowPlayerBox(damagedid, 0xFF000066));
 			}
 		}

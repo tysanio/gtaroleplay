@@ -15,5 +15,6 @@
 #include <discord-connector>
 #include <discord-command>
 #include <physics>
+#include <colandreas>
 #include <WeaponData>
 #include <YSI\y_iterate>

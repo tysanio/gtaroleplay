@@ -382,12 +382,28 @@ stock IsBleedableWeapon(weaponid)//a refaire avec les bonne valeur biensur
 	}
 	return 0;
 }
-stock CreateBlood(playerid)
+stock Float:frandom(Float:max, Float:m2 = 0.0, dp = 3)
 {
-	new Float:x,Float:y,Float:z;
-	GetPlayerPos(playerid, x, y, z);
-	SetTimerEx("DestroyBlood", 1500, false, "d", CreateDynamicObject(18668, x, y, z - 1.5, 0.0, 0.0, 0.0));
-	return 1;
+    new Float:mn = m2;
+    if(m2 > max) {
+        mn = max,
+        max = m2;
+    }
+    m2 = floatpower(10.0, dp);
+    
+    return floatadd(floatdiv(float(random(floatround(floatmul(floatsub(max, mn), m2)))), m2), mn);
+}
+stock CreateBlood(objectid, alpha)
+{
+    alpha -= 5;
+    
+    if(alpha) {
+        SetDynamicObjectMaterial(objectid, 0, -1, "none", "none", 0xFF0000 | (alpha << 24));
+        SetTimerEx("CreateBlood", 50, false, "ii", objectid, alpha);
+    }
+    else {
+        DestroyDynamicObject(objectid);
+    }
 }
 stock PlayerText:ShowPlayerBox(playerid, color)
 {
@@ -21507,7 +21523,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					{
 						PlayerData[AdminTarget[playerid]][pBleeding] = 1;
 						PlayerData[AdminTarget[playerid]][pBleedTime] = 10;
-						CreateBlood(AdminTarget[playerid]);
+						CreateBlood(AdminTarget[playerid],25);
 						SetTimerEx("HidePlayerBox", 500, false, "dd", AdminTarget[playerid], _:ShowPlayerBox(AdminTarget[playerid], 0xFF000066));
 						SendServerMessage(playerid, "Vous avez saigné %s.", ReturnName(AdminTarget[playerid], 0));
 					}
