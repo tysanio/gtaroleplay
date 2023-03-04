@@ -22433,7 +22433,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide divers", \
 				" -/proprieter pour voir se que vous êtes le propriétaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernierefois Pour connaître la dernière connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n\
 				- /rapport pour rapporté un méfait,\n- /bjstart pour commencer le blackjack,\n- /bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n\
-				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet à 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme,\n- /stylecombat choisir votre style de combat\
+				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet à 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme,\n- /stylecombat choisir votre style de combat,\n- /discordverif pour se faire vérifier discord\
 				","Quitter","");
 			}
 			case 6:
@@ -22526,7 +22526,7 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 }
 Dialog:discordid(playerid, response, listitem, inputtext[])
 {
-	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
+	if(!response) return SendErrorMessage(playerid,"Bon bah pas de vérification pour vous!");
 	if (response)
 	{
 		new DCC_User:user = DCC_FindUserById(inputtext),amount = strlen(inputtext);
@@ -22535,18 +22535,17 @@ Dialog:discordid(playerid, response, listitem, inputtext[])
 		if(RoleJoueur == DCC_INVALID_ROLE) return Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!\n Erreur 3 ID role", "Voila", " X ");
 		DCC_AddGuildMemberRole(GUILD_ID1,user,RoleJoueur);
 		PlayerData[playerid][pRole] = amount;
-		Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
-		TogglePlayerControllable(playerid, 0);
+		SendServerMessage(playerid,"Ajout du role discord fait");
 		return 1;
 	}
 	return 1;
 }
-/*Dialog:discordid1(playerid, response, listitem, inputtext[])
+Dialog:discordid1(playerid, response, listitem, inputtext[])
 {
-	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
+	if(!response) return SendErrorMessage(playerid,"Bon bah pas de vérification pour vous!");
 	if (response)
 	{
-		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol;//role a faire
+		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol,amount = strlen(inputtext);//role a faire
 		if (role == DCC_INVALID_ROLE)
 			return SendErrorMessage(playerid,"Erreur sur le role"); // invalid role id
 		new DCC_Guild:guild = DCC_FindGuildById(info_serveursetting[lol][settingdiscord]);
@@ -22557,11 +22556,12 @@ Dialog:discordid(playerid, response, listitem, inputtext[])
 			return SendErrorMessage(playerid,"Erreur sur le id user"); // invalid user id
 		if (!DCC_AddGuildMemberRole(guild, user, role))
 			return SendErrorMessage(playerid,"Erreur sur l'ajout du tout"); // invalid guild, user and/or role passed
-		PlayerData[playerid][pRole] = user;
+		SendServerMessage(playerid,"Ajout du role discord fait");
+		PlayerData[playerid][pRole] = amount;
 		return 1;
 	}
 	return 1;
-}*/
+}
 IsPlayerNearBanker(playerid)
 {
 	foreach(new i : Bankers)
@@ -23294,7 +23294,7 @@ Dialog:tutoconnaitre1(playerid, response, listitem, inputtext[])
 	{
 		format(tuto1, sizeof(tuto1), "%s",inputtext);
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
-		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 96)
+		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 196)
 			return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 	}
 	return 1;
@@ -23306,7 +23306,7 @@ Dialog:tutoconnaitre2(playerid, response, listitem, inputtext[])
 	{
 		format(tuto2, sizeof(tuto2), "%s",inputtext);
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
-		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 96)
+		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 196)
 			return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 	}
 	return 1;
@@ -23318,7 +23318,7 @@ Dialog:tutoconnaitre3(playerid, response, listitem, inputtext[])
 	{
 		format(tuto3, sizeof(tuto3), "%s",inputtext);
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
-		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 96)
+		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 196)
 			return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 	}
 	return 1;

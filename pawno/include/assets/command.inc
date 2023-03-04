@@ -5960,7 +5960,7 @@ CMD:creercar(playerid, params[])
 	    return SendErrorMessage(playerid, "MAX LIMITES");
 	SetPlayerPosEx(playerid, x, y, z + 2, 1000);
 	SendServerMessage(playerid, "Créer avec succès vehicle (ID: %d.)", CarData[id][carVehicle]);
-	Log_Write("logs/vehicule.txt", "[%s] %s a creer le vehicule a %d.", ReturnDate(), ReturnName(playerid),CarData[id][carVehicle]);
+	Log_Write("logs/vehicule.txt", "[%s] %s a creer le vehicule a %d model %d.", ReturnDate(), ReturnName(playerid),CarData[id][carVehicle],model[0]);
 	return 1;
 }
 CMD:setfuel(playerid, params[])
@@ -9555,7 +9555,7 @@ CMD:commencerboucher(playerid, params[])
 	SendClientMessage(playerid,0xF6808EF6, "Vous obtenez un emploi, allez à la boutique.");
 	OldSkin[playerid] = GetPlayerSkin(playerid);
 	SetPlayerSkin(playerid, 168);
-	SetPlayerAttachedObject( playerid, 0, 335, 6, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
+	SetPlayerAttachedObject( playerid, 0, 29071, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
 	PlayerInJob[playerid] = 1;
 	PlayerCheckPointToMeat(playerid);
     return 1;
@@ -11293,9 +11293,9 @@ CMD:petrolier(playerid, params[])
     }
 	return 1;
 }*/
-CMD:lol(playerid,params[])
+CMD:discordverif(playerid,params[])
 {
-	Dialog_Show(playerid, discordid1, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici", "Voila", "Non");
+	Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici", "Voila", "Non");
 	return 1;
 }
 CMD:acces(playerid,params[]) 

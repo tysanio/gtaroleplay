@@ -9492,21 +9492,17 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(IsPlayerInRangeOfPoint(playerid, 1.0,958.9435,2172.8105,1011.0234))
 	{
-	    new stringer[900];
-	    new salairejobinfoid;
-	    new boucherprix = info_salairejobinfo[salairejobinfoid][salairejobinfoboucher];
+	    new stringer[900],salairejobinfoid,boucherprix = info_salairejobinfo[salairejobinfoid][salairejobinfoboucher],stockjobinfoid;
 		format(stringer, sizeof(stringer), "Vous avez apporté: %d viande | Vous gagnez : %d$",meats[playerid],meats[playerid]*boucherprix);
 		SendClientMessage(playerid, 0xABD08EF6, stringer);
-		new stockjobinfoid;
 		info_stockjobinfo[stockjobinfoid][stockjobinfoviande] += 1;
 		stockjobinfosave(stockjobinfoid);
 		Updatestockviande();
 		meatprocces[playerid]=0;
 		RemovePlayerAttachedObject(playerid, 2);
-		SetPlayerAttachedObject( playerid, 0, 335, 6, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
+		SetPlayerAttachedObject( playerid, 0, 29071, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
 		SetPVarInt(playerid, "meatbhp",0);
 		ApplyAnimation(playerid,"PED","IDLE_tired",4.1,0,1,1,0,1);
-		meats[playerid]++;
 		return PlayerCheckPointToMeat(playerid);
 	}
     //job doc fortcarson
@@ -15407,8 +15403,8 @@ script Gunjobanim(playerid)
 script meattimer(playerid)
 {
 	ApplyAnimation(playerid,"CARRY","crry_prtial",4.1,0,1,1,1,1);
-	SetPlayerAttachedObject(playerid, 6, 2804, 5, 0.01, 0.1, 0.2, 100, 10, 85);
 	RemovePlayerAttachedObject(playerid,6);
+	SetPlayerAttachedObject(playerid, 6, 2804, 5, 0.01, 0.1, 0.2, 100, 10, 85);
 	SetPlayerCheckpoint(playerid,958.9435,2172.8105,1011.0234,1.0);
 	SetPVarInt(playerid, "meatbhp",1);
 	KillTimer(AnimTimer);
@@ -16606,7 +16602,7 @@ script serveursettinginfoload()
 script serveursettinginfosave(serveurinfo)
 {
 	new query[800];
-	mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d, whiteliste=%d, spawnpos1=%.4f,spawnpos2=%.4f,spawnpos3=%.4f, WHERE id='1'",
+	mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d, whiteliste=%d, spawnpos1=%.4f,spawnpos2=%.4f,spawnpos3=%.4f WHERE id='1'",
 	info_serveursetting[serveurinfo][settingafkactive],
 	info_serveursetting[serveurinfo][settingafktime],
 	info_serveursetting[serveurinfo][settingbraquagenpcactive],
