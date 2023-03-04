@@ -3938,6 +3938,7 @@ enum    E_ATM
 new BankerData[MAX_BANKERS][E_BANKER],ATMData[MAX_ATMS][E_ATM];
 new Iterator: Bankers<MAX_BANKERS>,Iterator: ATMs<MAX_ATMS>;
 new CurrentAccountID[MAX_PLAYERS] = {-1, ...},LogListType[MAX_PLAYERS] = {TYPE_NONE, ...},LogListPage[MAX_PLAYERS],EditingATMID[MAX_PLAYERS] = {-1, ...};
+//discord
 new DCC_Guild:GUILD_ID1,DCC_Role:RoleJoueur,DCC_Channel:discordlog,DCC_Channel:discordaaa,bool:simembreroleok;
 new DCC_Role: RoleStaff1,DCC_Role: RoleStaff2,DCC_Role: RoleStaff3,DCC_Role: RoleStaff4;
 new bool:sistaff1ok,bool:sistaff2ok,bool:sistaff3ok,bool:sistaff4ok,DCC_Embed:Embed,DCC_Channel:discordooc;

@@ -393,18 +393,6 @@ stock Float:frandom(Float:max, Float:m2 = 0.0, dp = 3)
     
     return floatadd(floatdiv(float(random(floatround(floatmul(floatsub(max, mn), m2)))), m2), mn);
 }
-stock CreateBlood(objectid, alpha)
-{
-    alpha -= 5;
-    
-    if(alpha) {
-        SetDynamicObjectMaterial(objectid, 0, -1, "none", "none", 0xFF0000 | (alpha << 24));
-        SetTimerEx("CreateBlood", 50, false, "ii", objectid, alpha);
-    }
-    else {
-        DestroyDynamicObject(objectid);
-    }
-}
 stock PlayerText:ShowPlayerBox(playerid, color)
 {
 	new PlayerText:textid;

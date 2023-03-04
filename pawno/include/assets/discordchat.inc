@@ -19,7 +19,7 @@ CMD:discordchat(playerid, params[])
 	if (PlayerData[playerid][pDiscordChat] == 0)
 	{
 		PlayerData[playerid][pDiscordChat] = 1;
-		SendServerMessage(playerid,"Chat discord mis à on /chatdc pour ecrire!");
+		SendServerMessage(playerid,"Chat discord mis Ã  on /chatdc pour ecrire!");
 		SendServerMessage(playerid,"Attention /chatdc [texte] pour voir les messages ooc seulement!");
 		//SendServerMessage(playerid,"Attention le /fac [texte] fera en sorte que vous voyez les messages de votre faction seulement!");
 		return 1;
@@ -27,7 +27,7 @@ CMD:discordchat(playerid, params[])
 	else
 	{
 		PlayerData[playerid][pDiscordChat] = 0;
-		SendServerMessage(playerid,"Chat discord mis à off vous ne recevrez plus les messages discord.");
+		SendServerMessage(playerid,"Chat discord mis Ã  off vous ne recevrez plus les messages discord.");
 		return 1;
 	}
 }
@@ -67,54 +67,6 @@ DISCORD:players( DCC_Channel: channel, DCC_User: author, params[ ] )
 	}
 	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
     return 1;
-}
-DISCORD:kick( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		new pID1,name[24];
-		if (sscanf( params, "u", pID1)) return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?kick [PLAYER_ID]" );
-		if (IsPlayerConnected(pID1))
-		{
-            GetPlayerName(pID1, name, MAX_PLAYER_NAME);
-			DCC_TriggerBotTypingIndicator(discordaaa);
-			DCC_SendChannelMessage(discordaaa, "> **[KICK]** **%s** a kick **%s(%d)**.", ReturnDiscordName( author ),name, pID1);
-			SendErrorMessage(pID1,"Tu as été kick via le discord");
-			KickEx(pID1);
-		}
-		else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Joueur non connecte!" );
-	}
-	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
-	return 1;
-}
-DISCORD:ban( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		new pID1,name[24];
-		if (sscanf( params, "u", pID1)) return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?ban [PLAYER_ID]" );
-		if (IsPlayerConnected(pID1))
-		{
-            GetPlayerName(pID1, name, MAX_PLAYER_NAME);
-			DCC_TriggerBotTypingIndicator(discordaaa);
-			DCC_SendChannelMessage(discordaaa, "> **[BAN]** **%s** a ban **%s(%d)**.", ReturnDiscordName( author ),name, pID1);
-			Dialog_Show(pID1, ShowOnly, DIALOG_STYLE_MSGBOX, "Ban", "Tu as été bannie.\nJoueur: %s\nVia le discord\nL'admin qui ta ban: %s\n\nAppuyer F8 si c'est une erreur.", "Fermer", "", ReturnName(pID1,0),ReturnDiscordName( author ));
-			SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a ete banni par %s via discord.", PlayerData[pID1][pUsername],ReturnDiscordName( author ));
-			Log_Write("logs/ban_log.txt", "[%s] %s a ete banni par %s via discord.",ReturnDate(),PlayerData[pID1][pUsername],ReturnDiscordName( author ));
-			Blacklist_Add(PlayerData[pID1][pIP], PlayerData[pID1][pUsername],ReturnDiscordName( author ),"Via Discord");
-			KickEx(pID1);
-		}
-		else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Joueur non connecte!" );
-	}
-	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
-	return 1;
 }
 DISCORD:rapports( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
@@ -194,8 +146,8 @@ DISCORD:jail( DCC_Channel: channel, DCC_User: author, params[ ] )
 		DCC_TriggerBotTypingIndicator(discordaaa);
 		format(string, sizeof(string), "Vous avez mis en prison admin %s pour %d minutes (%s).", ReturnName(userid, 0), minutes, reason);
 		DCC_SendChannelMessage(discordaaa,string);		
-		SendAdminAction(userid, "Un admin discord vous à  mis en prison admin pour %d minutes (%s).", minutes, reason);
-		SendClientMessageToAllEx(COLOR_LIGHTRED, "[Discord]: un admin discord à  mis en prison admin %s pour %d minutes raison: %s", ReturnName(userid, 0), minutes, reason);
+		SendAdminAction(userid, "Un admin discord vous Ã  mis en prison admin pour %d minutes (%s).", minutes, reason);
+		SendClientMessageToAllEx(COLOR_LIGHTRED, "[Discord]: un admin discord Ã  mis en prison admin %s pour %d minutes raison: %s", ReturnName(userid, 0), minutes, reason);
 		Log_Write("logs/jail_log.txt", "[%s] %s a mis en prison admin %s pour %d minutes, raison: %s.", ReturnDate(), ReturnDiscordName( author ), ReturnName(userid, 0), minutes, reason);
 		return 1;
 	}
@@ -222,33 +174,8 @@ DISCORD:dejail( DCC_Channel: channel, DCC_User: author, params[ ] )
 		TogglePlayerControllable(userid, 1);
 		format(string, sizeof(string), "Vous avez sortie de prison %s.", ReturnName(userid, 0));
 		DCC_SendChannelMessage(discordaaa,string);	
-		SendAdminAction(userid, "Un admin discord vous a libéré.");
+		SendAdminAction(userid, "Un admin discord vous a libÃ©rÃ©.");
 		Log_Write("logs/jail_log.txt", "[%s] %s a libere %s .", ReturnDate(),ReturnDate(), ReturnDiscordName( author ), ReturnName(userid, 0));
-		return 1;
-	}
-	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
-	return 1;
-}
-DISCORD:debug( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-	static userid,string[96],string1[96];
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** ?debug [playerid/nom]");
-		if (userid == INVALID_PLAYER_ID)
-			return DCC_SendChannelMessage(discordaaa,"Vous avez mis un [id/nom] invalide.");
-		SetPlayerVirtualWorld(userid,0);
-		SetPlayerInterior(userid,0);
-		DCC_TriggerBotTypingIndicator(discordaaa);
-		format(string, sizeof(string), "Vous avez débug %s.", ReturnName(userid, 0));
-		utf8encode(string1,string,sizeof(string1));
-		DCC_SendChannelMessage(discordaaa,string1);	
-		SendAdminAction(userid, "Un admin discord vous a debug.");
 		return 1;
 	}
 	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
@@ -268,10 +195,10 @@ DISCORD:apps( DCC_Channel: channel, DCC_User: author, params[ ] )
 		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
 		DCC_TriggerBotTypingIndicator(discordaaa);
 		format(string1, sizeof(string1), "**Joueur IG %s (ID: %d)**", ReturnName(userid), userid);
-		format(string2, sizeof(string2), "Réponse 1 : %s",tuto1);
-		format(string3, sizeof(string3), "Réponse 2 : %s",tuto2);
-		format(string4, sizeof(string4), "Réponse 3 : %s",tuto3);
-		format(string5, sizeof(string5), "Réponse 4 : %s",tuto4);
+		format(string2, sizeof(string2), "RÃ©ponse 1 : %s",tuto1);
+		format(string3, sizeof(string3), "RÃ©ponse 2 : %s",tuto2);
+		format(string4, sizeof(string4), "RÃ©ponse 3 : %s",tuto3);
+		format(string5, sizeof(string5), "RÃ©ponse 4 : %s",tuto4);
 		utf8encode(string22,string2,sizeof(string22));
 		utf8encode(string33,string3,sizeof(string33));
 		utf8encode(string44,string4,sizeof(string44));
@@ -297,7 +224,7 @@ DISCORD:appsa( DCC_Channel: channel, DCC_User: author, params[ ] )
 		if (sscanf(params, "u", userid))
 			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsa [playerid/name]");
 		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");	
-		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");
+		SendServerMessage(userid,"Votre demande viens d'Ãªtre acceptÃ© par un admin sur discord.");
 		TogglePlayerControllable(userid, 1);
 		PlayerData[userid][pTutorialStage] = 6;
 		SetPlayerCheckpoint(userid, -228.8403, 1401.1831, 27.7656, 2.0);
@@ -320,7 +247,7 @@ DISCORD:appsr( DCC_Channel: channel, DCC_User: author, params[ ] )
 		if (sscanf(params, "u", userid))
 			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsr [playerid/name]");
 		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
-		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");		
+		SendServerMessage(userid,"Votre demande viens d'Ãªtre acceptÃ© par un admin sur discord.");		
 		tuto1 = "\0";
 		tuto2 = "\0";
 		tuto3 = "\0";
@@ -378,49 +305,49 @@ DISCORD:aide( DCC_Channel: channel, DCC_User: author, params[ ] )
 		else if (!strcmp(type, "discord", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide discord]___**\n- !ostats [Nom du joueur] affiche les stats du joueur depuis la bdd\n- !stats [id] voir des stats de joueur en ligne\n- !c [texte] pour parler de façons ooc au serveur\n- !jail [id] jail un joueur IG\n- !dejail [id] déjail un joueur IG\n- !debug [ID] si un joueur a un problème d'interieur et de virtualworld\n- !restart restart le serveur\n- !rapports voir les rapports non repondu IG\n- !ban [ID] ban un joueur IG\n- !kick [ID] kick un joueur IG\n- !players pour voir les joueurs connecter\n- !baninfo [nom du personage] pour voir les infos du bannie\n- !stockjob pour voir les stocks des jobs\n- !caissedetat voir l'argent de l'état\n- !respawn [ID] respawn un joueur en difficulté\n- !supprimer pour pouvoir supprimer un compte ou un personnage\n- !ping pour savoir si le serveur est tjrs on\n- !factionlist liste des factions sur le serveur.\n- !listemort la liste des morts sur le serveur\n- !abus pour savoir pourquoi une action a été entreprise par les devs\n !apps pour voir les question au joueur nouvellement isnscrie```");
+			format(string, sizeof(string), "```**___[Aide discord]___**\n- !ostats [Nom du joueur] affiche les stats du joueur depuis la bdd\n- !stats [id] voir des stats de joueur en ligne\n- !c [texte] pour parler de faÃ§ons ooc au serveur\n- !jail [id] jail un joueur IG\n- !dejail [id] dÃ©jail un joueur IG\n- !restart restart le serveur\n- !rapports voir les rapports non rÃ©pondu IG\n- !voir [ID] voir un joueur IG\n- !players pour voir les joueurs connecter\n- !baninfo [nom du personage] pour voir les infos du bannie\n- !stockjob pour voir les stocks des jobs\n- !caissedetat voir l'argent de l'Ã©tat\n- !supprimer pour pouvoir supprimer un compte ou un personnage\n- !ping pour savoir si le serveur est tjrs on\n- !factionlist liste des factions sur le serveur.\n- !listemort la liste des morts sur le serveur\n- !abus pour savoir pourquoi une action a Ã©tÃ© entreprise par les devs\n !apps pour voir les question au joueur nouvellement isnscrie```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
 		else if (!strcmp(type, "chat", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide chat]___**\n- /me Sert a effectuer une action,\n- /do Sert pour confirmer ou décrire une action,\n- /(c)rier Sert a crier\n- /(o)oc Sert a parlez en Out of Character,\n- /decrocher Sert a décrocher son téléphone\n- /racrocher Sert a racrocher son téléphone\n- /dc pour le chat discord\n- /discordchat pour active le chat```");
+			format(string, sizeof(string), "```**___[Aide chat]___**\n- /me Sert a effectuer une action,\n- /do Sert pour confirmer ou dÃ©crire une action,\n- /(c)rier Sert a crier\n- /(o)oc Sert a parlez en Out of Character,\n- /decrocher Sert a dÃ©crocher son tÃ©lÃ©phone\n- /racrocher Sert a racrocher son tÃ©lÃ©phone\n- /dc pour le chat discord\n- /discordchat pour active le chat```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
 		else if (!strcmp(type, "maison", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide maison]___**\n- /vendre pour vendre une maison,\n- /abandonner Pour abandonner votre maison sans gagner d'argent dessus\n- /porte Pour fermer la porte de la maison,\n- /mcoffre Pour voir le coffre de la maison\n- /fourniture Pour pouvoir bouger vos meubles\n- /acheteretagere Pour acheter une étagère\n- /armeetagere Pour poser une arme sur une étagère\n- /supetagere Pour supprimer une étagère\n- /sonner Pour sonner a la porte d'une maison\n- /lumiere Pour allumer la lumiere dans la maison\n- /cuisiner pour cuisiner un repas congelé\n- /locamax pour définir le max de locataire\n- /locaprix pour définir le prix de la locations\n- /(de)louermaison pour louer une maison ou délouer celle-ci```");
+			format(string, sizeof(string), "```**___[Aide maison]___**\n- /vendre pour vendre une maison,\n- /abandonner Pour abandonner votre maison sans gagner d'argent dessus\n- /porte Pour fermer la porte de la maison,\n- /mcoffre Pour voir le coffre de la maison\n- /fourniture Pour pouvoir bouger vos meubles\n- /acheteretagere Pour acheter une Ã©tagÃ¨re\n- /armeetagere Pour poser une arme sur une Ã©tagÃ¨re\n- /supetagere Pour supprimer une Ã©tagÃ¨re\n- /sonner Pour sonner a la porte d'une maison\n- /lumiere Pour allumer la lumiere dans la maison\n- /cuisiner pour cuisiner un repas congelÃ©n- /locamax pour dÃ©finir le max de locataire\n- /locaprix pour dÃ©finir le prix de la locations\n- /(de)louermaison pour louer une maison ou dÃ©louer celle-ci```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
 		else if (!strcmp(type, "biz", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide biz]___**\n- /vendre pour vendre un magasin,\n- /abandonner Pour abandonner votre magasin sans gagner d'argent dessus\n- /porte Pour fermer la porte du magasin,\n- /bcoffre Pour voir le coffre du magasin\n- /produits Pour changer les prix des marchandises\n- /binfo Pour voir l'information du magasin\n- /bnom Pour changer le nom du magasin\n- /bmessage Pour changer le message du magasin\n- /accepterlivraison Faire une livraison de votre biz\n- /bheures définir les heures d'ouverture de votre magasin```");
+			format(string, sizeof(string), "```**___[Aide biz]___**\n- /vendre pour vendre un magasin,\n- /abandonner Pour abandonner votre magasin sans gagner d'argent dessus\n- /porte Pour fermer la porte du magasin,\n- /bcoffre Pour voir le coffre du magasin\n- /produits Pour changer les prix des marchandises\n- /binfo Pour voir l'information du magasin\n- /bnom Pour changer le nom du magasin\n- /bmessage Pour changer le message du magasin\n- /accepterlivraison Faire une livraison de votre biz\n- /bheures dÃ©finir les heures d'ouverture de votre magasin```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
 		else if (!strcmp(type, "vehicule", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide vehicule]___**\n- /porte Pour fermer les portes du vehicule\n- /vendre pour vendre un véhicule,\n- /remplir Pour faire le plein de votre véhicule\n- /enlevertunning Pour enlever le tuning du véhicule\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour demarrer le moteur du véhicule\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenetre du véhicule\n- /ceinture pour attacher votre ceinture\n- /setradio pour ecouter la radio dans le véhicule,\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un véhicule,\n- /delouerveh pour delouer un véhicule (attention a etre a la bonne place pour cela,\n- /vpreter voir le véhicule qu'on vous a preté,\n- /vdouble Pour preter les cles de votre véhicule,\n- /vjeter pour jetter le double des clés preter,\n- /payersabot pour payer le sabot du véhicule,\n- /achetergarage pour acheter un garage,\n- /garage pour aller dans votre garage```");
+			format(string, sizeof(string), "```**___[Aide vehicule]___**\n- /porte Pour fermer les portes du vehicule\n- /vendre pour vendre un vÃ©hicule,\n- /remplir Pour faire le plein de votre vÃ©hicule\n- /enlevertunning Pour enlever le tuning du vÃ©hicule\n- /vcoffre Pour ouvrir le coffre du vÃ©hicule\n- /demarrer ou appuyer sur ctrl Pour demarrer le moteur du vÃ©hicule\n- /phare ou appuyer sur Ã© Pour allumer les phares du vÃ©hicule\n- /crocheterporte Pour forcer la porte d'un vÃ©hicule\n- /capot Pour ouvrir le capot du vÃ©hicule\n- /vitre Pour ouvrir et fermer la fenetre du vÃ©hicule\n- /ceinture pour attacher votre ceinture\n- /setradio pour ecouter la radio dans le vÃ©hicule,\n- /trafiquerfils pour voler un vÃ©hicule,\n- /louerveh pour louer un vÃ©hicule,\n- /delouerveh pour delouer un vÃ©hicule (attention a etre a la bonne place pour cela,\n- /vpreter voir le vÃ©hicule qu'on vous a pretÃ©, \n- /vdouble Pour preter les cles de votre vÃ©hicule,\n- /vjeter pour jetter le double des clÃ©s preter,\n- /payersabot pour payer le sabot du vÃ©hicule,\n- /achetergarage pour acheter un garage,\n- /garage pour aller dans votre garage```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
 		else if (!strcmp(type, "divers", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide divers]___**\n- /proprieter pour voir se que vous êtes le proprietaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernièrefois Pour connaitre la dernière connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n- /rapport pour rapporte un mefait,\n- /bjstart pour commencer le blackjack,\n- /bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet a 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme```");
+			format(string, sizeof(string), "```**___[Aide divers]___**\n- /proprieter pour voir se que vous Ãªtes le proprietaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /derniÃ¨refois Pour connaitre la derniÃ¨re connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n- /rapport pour rapporte un mefait,\n- /bjstart pour commencer le blackjack,\n- /bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet a 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre rÃ©sultat du bowling,\n- /jeter pour jeter une arme```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
 		else if (!strcmp(type, "general", true))
 		{
 			DCC_TriggerBotTypingIndicator(discordlog);
-			format(string, sizeof(string), "```**___[Aide general]___**\n- /banque pour ouvrir le menu de la banque,\n- /payer pour payer un joueur,\n- /donnerarme pour donner une arme a un joueur,\n- /serrermain pour demander un serrage de main,\n- /volerbanque pour voler la banque,\n- /voleritem voler un item dans un magasin,\n- /ouvrircargaison pour ouvrir une boite,\n- /boombox pour mettre une musique,\n- /montrerpermis Pour montrer vos permis à un joueur,\n- /boite savoir le nombre de cargaisons dans un vehicule,\n- /planter pour pouvoir planter de la drogue,\n- /recolter Pour recolter une plante de drogue poussee\n- /trousse pour utiliser un kit de premier soin,\n- /crocheterporte pour forcer une porte d'un vehicule,\n- /fouiller pour fouiller dans l'inventaire d'un joueur,\n- /freq pour choisir le channel de votre talkie-walkie,\n- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n- /zkill pour les skills de vos armes et le nombre de zombie tuée\n- /credits pour voir les credits```");
+			format(string, sizeof(string), "```**___[Aide general]___**\n- /banque pour ouvrir le menu de la banque,\n- /payer pour payer un joueur,\n- /donnerarme pour donner une arme a un joueur,\n- /serrermain pour demander un serrage de main,\n- /volerbanque pour voler la banque,\n- /voleritem voler un item dans un magasin,\n- /ouvrircargaison pour ouvrir une boite,\n- /boombox pour mettre une musique,\n- /montrerpermis Pour montrer vos permis Ã  un joueur,\n- /boite savoir le nombre de cargaisons dans un vehicule,\n- /planter pour pouvoir planter de la drogue,\n- /recolter Pour recolter une plante de drogue poussee\n- /trousse pour utiliser un kit de premier soin,\n- /crocheterporte pour forcer une porte d'un vehicule,\n- /fouiller pour fouiller dans l'inventaire d'un joueur,\n- /freq pour choisir le channel de votre talkie-walkie,\n- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentitÃ©, \n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n- /zkill pour les skills de vos armes et le nombre de zombie tuÃ©e\n- /credits pour voir les credits```");
 			utf8encode(string1,string,sizeof(string1));
 			DCC_SendChannelMessage(discordlog,string1);
 		}
@@ -456,7 +383,7 @@ DISCORD:stockjob( DCC_Channel: channel, DCC_User: author, params[ ] )
 		DCC_SendChannelMessage(discordlog,"**Stock des jobs**");
 		format(string1, sizeof(string1), "Bois : %s\nViande : %s\nMeuble : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfobois]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfoviande]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfomeuble]));
 		format(string2, sizeof(string2), "Central 1 : %s\nCentral 2 : %s\nCentral 3 : %s\nCentral 4 : %s\nCentral 5 : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfocentral1]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfocentral2]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfocentral3]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfocentral4]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfocentral5]));
-		format(string3, sizeof(string3),"Electronique : %s\nPétrol: %s\nL'essence Générateur : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfoelectronic]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfopetrol]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator]));
+		format(string3, sizeof(string3),"Electronique : %s\nPÃ©trol: %s\nL'essence GÃ©nÃ©rateur : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfoelectronic]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfopetrol]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfoessencegenerator]));
 		format(string4, sizeof(string4),"Bois meuble : %s\nMagasin stock: %s\nCaisse des dock : %s\n",FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfoboismeuble]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfostockdock]));
 		format(string5, sizeof(string5),"Caisse manutentionnaire : %s\nCaisse cariste: %s\nPierre miner : %s\nStock d'arme : %s",FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfostocksorter]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfostockcariste]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfostockminer]),FormatNumber(info_stockjobinfo[stockjobinfoid][stockjobinfostockarmes]));
 		format(string, sizeof(string),"```%s%s%s%s%s```",string1,string2,string3,string4,string5);
@@ -484,28 +411,6 @@ DISCORD:caissedetat( DCC_Channel: channel, DCC_User: author, params[ ] )
 		
 	}
 	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
-}
-DISCORD:respawn( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		static userid;
-		DCC_TriggerBotTypingIndicator(discordaaa);
-		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** ?respawn [playerid/nom]");
-		if (userid == INVALID_PLAYER_ID)
-			return DCC_SendChannelMessage(discordaaa,"Vous avez mis un [id/nom] invalide.");
-		if (!IsPlayerSpawned(userid))
-			return DCC_SendChannelMessage(discordaaa,"Ca ne fonctionne pas.");
-		RespawnPlayer(userid);
-		DCC_SendChannelMessage(discordaaa,"Vous avez respawn ce joueur.");
-	}
-	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
-	return 1;
 }
 DISCORD:supprimer( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
@@ -632,7 +537,7 @@ ShowStatsForDiscord(userid)
 	format(string1, sizeof(string1), "**Joueur IG %s (ID: %d)**", ReturnName(userid), userid);
 	format(string2, sizeof(string2), "Admin: %s Testeur+: %s, Faction Manangement: %s", (PlayerData[userid][pAdmin]) ? ("Oui") : ("Non"), (PlayerData[userid][pTester]) ? ("Oui") : ("Non"), (PlayerData[userid][pFactionMod]) ? ("Oui") : ("Non"));
 	format(string3, sizeof(string3), "Sexe: %s Anniv: %s Origine: %s", (PlayerData[userid][pGender] == 2) ? ("Femme") : ("Homme"),PlayerData[userid][pBirthdate], origin);
-	format(string4, sizeof(string4), "Heure de jouée: %d Job: %s Inventaire: %d/%d",PlayerData[userid][pPlayingHours], Job_GetName(PlayerData[userid][pJob]), count,PlayerData[userid][pCapacity]);
+	format(string4, sizeof(string4), "Heure de jouÃ©e: %d Job: %s Inventaire: %d/%d",PlayerData[userid][pPlayingHours], Job_GetName(PlayerData[userid][pJob]), count,PlayerData[userid][pCapacity]);
 	Embed = DCC_CreateEmbed(string1,"----------------------Info du personnage enligne------------------");
 	DCC_AddEmbedField(Embed ,string2,string3);
 	utf8encode(string44,string4,sizeof(string44));
@@ -651,8 +556,8 @@ ShowStatsForDiscord(userid)
 script OnPlayerDiscordStats( playerid, params[ ] )
 {
 	new	rows,fields,string[70],string1[128],string2[128],string4[128],string5[128],string7[128],string8[128],string9[128],string77[128],string99[128];
-	new Admin,tester,PlayingHours,Minutes,FactionMod,ZombieKill,MaskID,Gender,Interior,World,Job,Skin1;
-	new Float:PosX,Float:PosY,Float:PosZ,Float:PosA,Origin[32],Birthdate[32],Role[32];
+	new Admin,tester,PlayingHours,Minutes,FactionMod,MaskID,Gender,Interior,World,Job,Skin1;
+	new Float:PosX,Float:PosY,Float:PosZ,Float:PosA,Origin[32],Birthdate[32];
 	DCC_TriggerBotTypingIndicator(discordlog);
 	cache_get_data( rows, fields );
 	if ( rows )
@@ -662,7 +567,6 @@ script OnPlayerDiscordStats( playerid, params[ ] )
 		PlayingHours	= cache_get_field_content_int( 0, "PlayingHours");
 		Minutes			= cache_get_field_content_int( 0, "Minutes");
 		FactionMod		= cache_get_field_content_int( 0, "FactionMod");
-		ZombieKill		= cache_get_field_content_int( 0, "ZombieKill");
 		MaskID			= cache_get_field_content_int( 0, "MaskID");
 		Gender			= cache_get_field_content_int( 0, "Gender");
 		Interior		= cache_get_field_content_int( 0, "Interior");
@@ -675,16 +579,16 @@ script OnPlayerDiscordStats( playerid, params[ ] )
 		PosA			= cache_get_field_float(0, "PosA");
 		cache_get_field_content(0, "Origin", Origin, g_iHandle,32);
 		cache_get_field_content(0, "Birthdate",Birthdate, g_iHandle,32);
-		cache_get_field_content(0, "Role",Role, g_iHandle,32);
+		
 		
 		DCC_TriggerBotTypingIndicator(discordaaa);
-		format(string9, sizeof(string9), "Crée ya: %s		Dernier Login ya: %s", GetDuration1(gettime() - cache_get_field_int(0, "CreateDate")),GetDuration1(gettime() - cache_get_field_int(0, "LastLogin")));
+		format(string9, sizeof(string9), "CrÃ©e ya: %s		Dernier Login ya: %s", GetDuration1(gettime() - cache_get_field_int(0, "CreateDate")),GetDuration1(gettime() - cache_get_field_int(0, "LastLogin")));
 		format(string1, sizeof(string1), "**Joueur %s**",params);
-		format(string4, sizeof(string4), "Admin: %s		Testeur+: %s	Faction Manangement: %s",(Admin) ? ("Oui") : ("Non"),(tester) ? ("Oui") : ("Non"),(FactionMod) ? ("Oui") : ("Non"));   
-		format(string2, sizeof(string2), "Sexe: %s		Anniv: %s		Origine: %s",(Gender) ? ("Femme") : ("Homme"),Birthdate,Origin);
-		format(string5, sizeof(string5), "Heures Jouer: %d	Minutes: %d	Job: %s		MaskID: %d",PlayingHours,Minutes,Job_GetName(Job),MaskID);
-		format(string7, sizeof(string7), "dernière pos: %.4f, %.4f, %.4f, %.4f",PosX,PosY,PosZ,PosA); 
-		format(string8, sizeof(string8), "Interieur: %d		VirtualWorld: %d	ZombieKill: %d	RoleID : %s",Interior,World,ZombieKill,Role); 
+		format(string4, sizeof(string4), "Admin: %s Testeur+: %s Faction Manangement: %s",(Admin) ? ("Oui") : ("Non"),(tester) ? ("Oui") : ("Non"),(FactionMod) ? ("Oui") : ("Non"));   
+		format(string2, sizeof(string2), "Sexe: %s Anniv: %s Origine: %s",(Gender == 2) ? ("Femme") : ("Homme"),Birthdate,Origin);
+		format(string5, sizeof(string5), "Heures Jouer: %d	Minutes: %d	Job: %s",PlayingHours,Minutes,Job_GetName(Job));
+		format(string7, sizeof(string7), "derniÃ¨re pos: %.4f, %.4f, %.4f, %.4f",PosX,PosY,PosZ,PosA); 
+		format(string8, sizeof(string8), "Interieur: %d	VirtualWorld: %d MaskID: %d",Interior,World,MaskID); 
 		utf8encode(string99,string9,sizeof(string99));
 		utf8encode(string77,string7,sizeof(string77));
 		Embed = DCC_CreateEmbed(string1,string99);
@@ -707,7 +611,7 @@ script OnBanLookupDC(username[])
 	    cache_get_field_content(0, "Reason", reason, g_iHandle);
 	    cache_get_field_content(0, "Date", date, g_iHandle);
 		DCC_TriggerBotTypingIndicator(discordlog);
-		format(string, sizeof(string), "```Ce joueur a été banni le %s, raison: %s```", username, date, reason);
+		format(string, sizeof(string), "```Ce joueur a Ã©tÃ© banni le %s, raison: %s```", username, date, reason);
 		utf8encode(string3,string,sizeof(string3));
 		DCC_SendChannelMessage(discordlog,string3); 
 	}
@@ -717,4 +621,218 @@ script OnBanLookupDC(username[])
 	    DCC_SendChannelMessage(discordlog,string); 
 	}
 	return 1;
+}
+new DCC_Message:StatMessage = DCC_Message:0,StatTarget;
+DeleteSavedStatMessage()
+{
+    DCC_DeleteInternalMessage(StatMessage); // We no longer need the stored message.
+    StatMessage = DCC_Message:0;
+}
+public DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Emoji:emoji, DCC_MessageReactionType:reaction_type)
+{
+    new DCC_Channel:channel, bool:bot;
+    DCC_GetMessageChannel(message, channel);
+
+    if(reaction_type == REACTION_ADD)
+    {
+        if(!DCC_IsUserBot(reaction_user, bot))
+            return 1;
+        if(bot)
+            return 1;
+
+        if(StatMessage == message && _:StatMessage != 0)
+        {
+            new emoji_name[DCC_EMOJI_NAME_SIZE];
+            DCC_GetEmojiName(emoji, emoji_name);
+            new name[MAX_PLAYER_NAME];
+            GetPlayerName(StatTarget, name, MAX_PLAYER_NAME);
+
+            new DCC_Embed:embed = DCC_CreateEmbed();
+            if(!strcmp("ğŸ‘¢", emoji_name))
+            {
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff1,sistaff1ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff2,sistaff2ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff3,sistaff3ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff4,sistaff4ok);
+				if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+				{
+					DCC_SetEmbedTitle(embed, "KICK! ğŸ‘¢");
+					DCC_SetEmbedColor(embed, 0xFF0000);
+					new str[144],str1[144];
+					format(str, sizeof str, "Joueur %s (%d) a Ã©tÃ© kick du serveur!", name, StatTarget);
+					utf8encode(str1,str,sizeof(str1));
+					DCC_SetEmbedDescription(embed, str1);
+					SendErrorMessage(StatTarget,"Tu as Ã©tÃ© kick via le discord");
+					Kick(StatTarget);
+					DCC_EditMessage(message, "", embed);
+					DCC_DeleteMessageReaction(message);
+					DeleteSavedStatMessage();
+				}
+				else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji");
+            }
+            else if(!strcmp("ğŸ”¨", emoji_name))
+            {
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff2,sistaff2ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff3,sistaff3ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff4,sistaff4ok);
+				if (sistaff2ok || sistaff3ok || sistaff4ok)
+				{
+					Dialog_Show(StatTarget, ShowOnly, DIALOG_STYLE_MSGBOX, "Ban", "Tu as Ã©tÃ© bannie.\nJoueur: %s\nVia le discord\nL'admin qui ta ban: %s\n\nAppuyer F8 si c'est une erreur.", "Fermer", "", ReturnName(StatTarget,0),ReturnDiscordName( reaction_user ));
+					SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a ete banni par %s via discord.", PlayerData[StatTarget][pUsername],ReturnDiscordName( reaction_user ));
+					Blacklist_Add(PlayerData[StatTarget][pIP], PlayerData[StatTarget][pUsername],ReturnDiscordName( reaction_user ),"Via Discord");
+					DCC_SetEmbedTitle(embed, "BANNI! ğŸ”¨");
+					DCC_SetEmbedColor(embed, 0xFF0000);
+					new str[144],str1[144];
+					format(str, sizeof str, "Joueur %s (%d) a Ã©tÃ© banni du serveur!", name, StatTarget);
+					utf8encode(str1,str,sizeof(str1));
+					DCC_SetEmbedDescription(embed, str1);
+					DCC_SetEmbedDescription(embed, str);
+					DCC_EditMessage(message, "", embed);
+					DCC_DeleteMessageReaction(message);
+					DeleteSavedStatMessage();
+				}
+				else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji");
+            }
+			else if(!strcmp("â„ï¸", emoji_name)) 
+			{
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff1,sistaff1ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff2,sistaff2ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff3,sistaff3ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff4,sistaff4ok);
+				if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+				{
+					DCC_SetEmbedTitle(embed, "DEBUG! â„ï¸");
+					DCC_SetEmbedColor(embed, 0xFF0000);
+					SendErrorMessage(StatTarget,"Tu as Ã©tÃ© dÃ©bug via le discord");
+					new str[144],str1[144];
+					format(str, sizeof str, "Joueur %s (%d) a Ã©tÃ© dÃ©bug!", name, StatTarget);
+					utf8encode(str1,str,sizeof(str1));
+					SendAdminAction(StatTarget, "Un admin discord vous a debug.");
+					SetPlayerVirtualWorld(StatTarget,0);
+					SetPlayerInterior(StatTarget,0);
+					DCC_SetEmbedDescription(embed, str1);
+					DCC_SetEmbedDescription(embed, str);
+					DCC_EditMessage(message, "", embed);
+					DCC_DeleteMessageReaction(message);
+					DeleteSavedStatMessage();
+				}
+				else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji");
+			}			
+			else if(!strcmp("ğŸŒªï¸", emoji_name))
+			{
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff1,sistaff1ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff2,sistaff2ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff3,sistaff3ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff4,sistaff4ok);
+				if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+				{
+					DCC_SetEmbedTitle(embed, "RESPAWN! ğŸŒªï¸");
+					DCC_SetEmbedColor(embed, 0xFF0000);
+					new str[144],str1[144];
+					format(str, sizeof str, "Joueur %s (%d) a Ã©tÃ© respawn!", name, StatTarget);
+					utf8encode(str1,str,sizeof(str1));
+					SendErrorMessage(StatTarget,"Tu as Ã©tÃ© respawn via le discord");
+					RespawnPlayer(StatTarget);
+					DCC_SetEmbedDescription(embed, str1);
+					DCC_SetEmbedDescription(embed, str);
+					DCC_EditMessage(message, "", embed);
+					DCC_DeleteMessageReaction(message);
+					DeleteSavedStatMessage();
+				}
+				else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji");
+			}
+            else
+            {
+                DCC_DeleteEmbed(embed);
+            }
+        }
+    }
+    printf("reaction type %d", _:reaction_type);
+    return 1;
+}
+SendErrorEmbedMessage(DCC_Channel:channel, const error_message[])
+{
+	new DCC_Embed:embed = DCC_CreateEmbed("ERROR!");
+    DCC_SetEmbedColor(embed, 0xFF0000);
+    DCC_SetEmbedDescription(embed, error_message);
+    DCC_SendChannelEmbedMessage(channel, embed);
+	return 1;
+}
+
+public DCC_OnMessageCreate(DCC_Message:message)
+{
+    new content[DCC_ID_SIZE], DCC_User:author;
+    DCC_GetMessageContent(message, content);
+    DCC_GetMessageChannel(message, discordaaa);
+    DCC_GetMessageAuthor(message, author);
+    
+    new bool:is_bot;
+	if (!DCC_IsUserBot(author, is_bot))
+		return 0; //invalid user
+
+	if(is_bot)
+		return 0;
+
+	new command_name[25], params[150];
+    if(sscanf(content, "s[25]S()[150]", command_name, params))
+    {
+		return 0;
+    }
+    if(!strcmp(command_name, "!voir", true))
+    {
+		new target;
+        if(sscanf(params, "u", target))
+        {
+			SendErrorEmbedMessage(discordaaa, "**[USAGE]** ?voir [PLAYER_ID/NOM]");
+			return 1;
+        }
+        else if(target == INVALID_PLAYER_ID)
+        {
+            SendErrorEmbedMessage(discordaaa, "> **[ERREUR]** Joueur non connecte!");
+			return 1;
+        }
+        
+        new name[MAX_PLAYER_NAME], skin_image[200], Float:health, Float:armour, weapon_name1[30], str[50];
+        GetPlayerName(target, name, MAX_PLAYER_NAME);
+        GetPlayerHealth(target, health);
+        GetPlayerArmour(target, armour);
+        GetWeaponName(GetPlayerWeapon(target), weapon_name1, 30);
+        if(!strlen(weapon_name1))
+        {
+			format(weapon_name1, sizeof weapon_name1, "Poing");
+        }
+        format(skin_image, sizeof skin_image, "https://gtaundergroundmod.com/resources/media/skins/%d.png", GetPlayerSkin(target));
+        
+        new DCC_Embed:embed = DCC_CreateEmbed();
+        format(str, sizeof str, "%s's stats.", name);
+        DCC_SetEmbedTitle(embed, str);
+        DCC_SetEmbedThumbnail(embed, skin_image);
+        
+        format(str, sizeof str, "%0.1f", health);
+        DCC_AddEmbedField(embed, "Vie", str, true);
+        
+        format(str, sizeof str, "%0.1f", armour);
+        DCC_AddEmbedField(embed, "Armure", str, true);
+
+        DCC_AddEmbedField(embed, "Arme", weapon_name1, true);
+		DCC_AddEmbedField(embed, "", "ğŸ‘¢ = kick \nğŸ”¨ = Ban \nâ„ï¸ = debug\nğŸŒª = respawn", true);
+
+		DCC_SendChannelEmbedMessage(discordaaa, embed, "", "OnPostPlayerStat", "i", target);
+	}
+    return 1;
+}
+script OnPostPlayerStat(playerid)
+{
+	new DCC_Message:message = DCC_GetCreatedMessage();
+    if(StatMessage != DCC_Message:0 )
+    {
+        DCC_DeleteInternalMessage(StatMessage);
+    }
+	StatMessage = message;
+    StatTarget = playerid;
+    DCC_CreateReaction(message, DCC_CreateEmoji("ğŸ‘¢"));
+    DCC_CreateReaction(message, DCC_CreateEmoji("ğŸ”¨"));
+	DCC_CreateReaction(message, DCC_CreateEmoji("â„ï¸"));  
+	DCC_CreateReaction(message, DCC_CreateEmoji("ğŸŒªï¸"));  	
+	DCC_SetMessagePersistent(message, true);
 }

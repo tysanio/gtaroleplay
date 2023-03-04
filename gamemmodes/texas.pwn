@@ -3215,8 +3215,7 @@ script PlayerCheck()
 		        SetPlayerHealth(i, ReturnHealth(i) - 3.0);
 			    PlayerData[i][pBleedTime] = 10;
 
-			    CreateBlood(i,50);
-			    SetTimerEx("HidePlayerBox", 500, false, "dd", i, _:ShowPlayerBox(i, 0xFF000066));
+			    CreateBlood(i,25);
 			}
 		}
 		else if (PlayerData[i][pFingerTime] > 0)
@@ -6966,7 +6965,6 @@ script OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 			    PlayerData[damagedid][pBleedTime] = 10;
 
 				CreateBlood(damagedid,25);
-			    SetTimerEx("HidePlayerBox", 500, false, "dd", damagedid, _:ShowPlayerBox(damagedid, 0xFF000066));
 			}
 		}
 		if (PlayerData[playerid][pDrugUsed] == 4 && (weaponid >= 0 && weaponid <= 15))
@@ -18589,6 +18587,18 @@ script SpeedCheck(playerid)
 	    else if(GetPlayerSpeed(playerid) < GEAR5_SPEED ) PlayerTextDrawSetString(playerid,Gear[playerid], "~r~5");
  	}
 	return 1;
+}
+script CreateBlood(objectid, alpha)
+{
+    alpha -= 5;
+
+    if(alpha) {
+        SetDynamicObjectMaterial(objectid, 0, -1, "none", "none", 0xFF0000 | (alpha << 24));
+        SetTimerEx("CreateBlood", 50, false, "ii", objectid, alpha);
+    }
+    else {
+        DestroyDynamicObject(objectid);
+    }
 }
 script SendAdminAlert(color, const str[], {Float,_}:...)
 {
