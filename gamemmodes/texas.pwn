@@ -9539,7 +9539,7 @@ script OnPlayerEnterCheckpoint(playerid)
     }
 	if(livraisonjob[playerid] == 0)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9559,7 +9559,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
     if(livraisonjob[playerid] == 1)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9579,7 +9579,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 3)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9599,7 +9599,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 4)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9619,7 +9619,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 5)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9639,7 +9639,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 6)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9659,7 +9659,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 7)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9679,7 +9679,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 8)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9699,7 +9699,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 9)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -9719,7 +9719,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 10)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;

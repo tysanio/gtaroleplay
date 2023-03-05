@@ -13926,7 +13926,9 @@ stock IsLoadableVehicle(vehicleid) //a faire
 	if (GetVehicleTrailer(vehicleid))
 	    modelid = GetVehicleModel(GetVehicleTrailer(vehicleid));
 	switch (modelid) {
-	    case 609, 414, 498, 403, 456, 499, 514, 515, 435, 591, 422, 478, 489, 505, 543, 552, 554, 440: return 1;
+	    case 609, 414, 498, 403, 456, 499, 514, 515, 435, 591, 422, 478, 489, 505, 543, 552, 554, 440,\
+		25516,6589,25359,25518,6624,6568,6695,6563,6618,25498,25497,6656,6577,6584,6522,6268,6588,4802,6654,6635,6669,6637,25608,25613,25463: return 1;
+
 	}
 	return 0;
 }//a checker le max transport en haut et en bas
@@ -13934,11 +13936,11 @@ stock GetMaxCrates(vehicleid) //a faire
 {
 	new crates;
 	switch (GetVehicleModel(vehicleid)) {
-	    case 498, 609: crates = 10;
-	    case 414: crates = 8;
-	    case 456, 499: crates = 6;
-	    case 435, 591, 514, 515: crates = 15;
-		case 440, 422, 489, 505, 543, 552, 554: crates = 4;
+	    case 498, 609,25516,6589: crates = 10;
+	    case 414,25518,6624,6568,6695: crates = 8;
+	    case 456, 499,6584,25498,25497,6656,6577: crates = 6;
+	    case 435, 591, 514, 515,25608,25613,25463: crates = 15;
+		case 440, 422, 489, 505, 543, 552, 554,6637,6669,6288,6268,6552,6635,2883: crates = 4;
 	}
 	return crates;
 }
@@ -14005,7 +14007,7 @@ stock IsABike(vehicleid)
 stock IsAVelo(vehicleid)
 {
 	switch (GetVehicleModel(vehicleid)) {
-		case 481, 509, 510,6677,6678,25500,25501,25502,25503,25504,255,05,25506,25507,25508,25509,25510: return 1;
+		case 481, 509, 510,6677,6678,25500,25501,25502,25503,25504,25505,25506,25507,25508,25509,25510: return 1;
 	}
 	return 0;
 }
