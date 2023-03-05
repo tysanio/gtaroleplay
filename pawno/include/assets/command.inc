@@ -11735,7 +11735,7 @@ CMD:appsa(playerid, params[])
 	SendServerMessage(userid,"Votre demande viens d'être accepté par %s.", ReturnName(playerid));
 	TogglePlayerControllable(userid, 1);
 	PlayerData[userid][pTutorialStage] = 6;
-	SetPlayerCheckpoint(userid, -228.8403, 1401.1831, 27.7656, 2.0);
+	PlayerData[userid][pNoob] = 2;
 	tuto1 = "\0";
 	tuto2 = "\0";
 	tuto3 = "\0";

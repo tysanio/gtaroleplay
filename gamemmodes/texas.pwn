@@ -8882,8 +8882,9 @@ script OnPlayerEnterCheckpoint(playerid)
 		    //Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!", "Voila", "Non");
 			Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 			TogglePlayerControllable(playerid, 0);
+			PlayerData[playerid][pNoob] = 1;
 		}
-		if (PlayerData[playerid][pTutorialStage] == 6 && IsPlayerInRangeOfPoint(playerid, 1.5, -228.8403, 1401.1831, 27.7656))
+		if (PlayerData[playerid][pTutorialStage] == 6)
 		{
 		    for (new i = 0; i < 5; i ++) {
 		        SendClientMessage(playerid,-1,"");
@@ -8902,6 +8903,7 @@ script OnPlayerEnterCheckpoint(playerid)
 			//ici mettre pour réglé plutat le probleme du tuto :@
 			PlayerData[playerid][pCreated] = 1;
 	    	PlayerData[playerid][pTask] = 1;
+	    	PlayerData[playerid][pNoob] = 2;
   			PlayerData[playerid][pTutorial] = 0;
 			PlayerData[playerid][pTutorialTime] = 0;
 			PlayerData[playerid][pTutorialStage] = 0;
@@ -10780,24 +10782,24 @@ script OnPlayerConnect(playerid)
 		SetDynamicObjectPos(PrisonData[prisonCells][i], PrisonCells[i][0], PrisonCells[i][1] + 1.6, PrisonCells[i][2]);
 	}
 	//remove inverting
-    RemoveBuildingForPlayer(playerid, 1345, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 1294, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 1352, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 2753, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 2369, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 1514, 0.0, 0.0, 0.0, 6000.0);
-	RemoveBuildingForPlayer(playerid, 1676, 0.0, 0.0, 0.0, 6000.00);
-	RemoveBuildingForPlayer(playerid, 3465, 0.0, 0.0, 0.0, 6000.00);
-	RemoveBuildingForPlayer(playerid, 1686, 0.0, 0.0, 0.0, 6000.00);
- 	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 955, 	0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 956, 	0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 6000.0);
-    RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 6000.00);
-	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 1345, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 1294, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 1352, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 2753, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 2369, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 1514, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 1676, 0.0, 0.0, 0.0, 60000.00);
+	RemoveBuildingForPlayer(playerid, 3465, 0.0, 0.0, 0.0, 60000.00);
+	RemoveBuildingForPlayer(playerid, 1686, 0.0, 0.0, 0.0, 60000.00);
+ 	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 955, 	0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 956, 	0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 60000.0);
+    RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 60000.00);
+	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 60000.0);
 	MaisonIntEXTREM(playerid);
 	//fin remove
 	CancelSelectTextDraw(playerid);
@@ -11821,6 +11823,11 @@ script OnPlayerSpawn(playerid)
 
 		SetCameraBehindPlayer(playerid);
 		PlayerData[playerid][pThirst] = 80;
+        if (PlayerData[playerid][pNoob] == 1)
+        {
+			Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+			TogglePlayerControllable(playerid, 0);
+		}
 	}
 	else
 	{

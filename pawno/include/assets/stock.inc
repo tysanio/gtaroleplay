@@ -13054,7 +13054,7 @@ ResetStatistics(playerid)
 	PlayerData[playerid][pSpectator] = INVALID_PLAYER_ID;
 	PlayerData[playerid][pJailTime] = 0;
 	PlayerData[playerid][pKicked] = 0;
-	PlayerData[playerid][pNoob] = 1;
+	PlayerData[playerid][pNoob] = 0;
 	PlayerData[playerid][pMuted] = 0;
 	PlayerData[playerid][pSpamCount] = 0;
 	PlayerData[playerid][pCommandCount] = 0;
@@ -20398,8 +20398,7 @@ Dialog:TutoriaBTonfirm(playerid, response, listitem, inputtext[])
 	    PlayerData[playerid][pTask] = 1;
   		PlayerData[playerid][pTutorial] = 0;
 		PlayerData[playerid][pTutorialTime] = 0;
-		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");//\nImmigrant
-		Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
+		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");
 	}
 	else
 	{
@@ -22558,6 +22557,7 @@ Dialog:tutoconnaitre1(playerid, response, listitem, inputtext[])
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 196)
 			return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		PlayerData[playerid][pNoob] = 1;
 	}
 	return 1;
 }
@@ -22570,6 +22570,7 @@ Dialog:tutoconnaitre2(playerid, response, listitem, inputtext[])
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre2, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le métagame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 196)
 			return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		PlayerData[playerid][pNoob] = 1;
 	}
 	return 1;
 }
@@ -22582,6 +22583,7 @@ Dialog:tutoconnaitre3(playerid, response, listitem, inputtext[])
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre3, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le powergame?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		if (strlen(inputtext) >= 1 && strlen(inputtext) <= 196)
 			return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		PlayerData[playerid][pNoob] = 1;
 	}
 	return 1;
 }
@@ -22603,6 +22605,7 @@ Dialog:tutoconnaitre4(playerid, response, listitem, inputtext[])
 		DCC_SendChannelMessage(discordaaa,msg2);
 		TogglePlayerControllable(playerid, 0);
 		PlayerData[playerid][pTutorialStage] = 5;
+		PlayerData[playerid][pNoob] = 1;
 	}
 	return 1;
 }

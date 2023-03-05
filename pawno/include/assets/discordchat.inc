@@ -220,7 +220,7 @@ DISCORD:appsa( DCC_Channel: channel, DCC_User: author, params[ ] )
 		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");
 		TogglePlayerControllable(userid, 1);
 		PlayerData[userid][pTutorialStage] = 6;
-		SetPlayerCheckpoint(userid, -228.8403, 1401.1831, 27.7656, 2.0);
+		PlayerData[userid][pNoob] = 2;
 		tuto1 = "\0";
 		tuto2 = "\0";
 		tuto3 = "\0";
@@ -240,7 +240,8 @@ DISCORD:appsr( DCC_Channel: channel, DCC_User: author, params[ ] )
 		if (sscanf(params, "u", userid))
 			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsr [playerid/name]");
 		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
-		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");		
+		SendServerMessage(userid,"Votre demande viens d'être refusé par un admin sur discord.");
+		PlayerData[userid][pNoob] = 1;
 		tuto1 = "\0";
 		tuto2 = "\0";
 		tuto3 = "\0";
