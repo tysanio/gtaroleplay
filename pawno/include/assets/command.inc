@@ -4196,7 +4196,7 @@ CMD:open(playerid, params[])
 	else if (IsPlayerNearDynamicObject(playerid, PrisonData[prisonDoors][0]))
 	{
 	    if (FactionData[facass][factionacces][1] == 0)
-	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte..");
+	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte.");
 	    if (!PrisonData[prisonDoorOpened][0])
 		{
 			SetDynamicObjectRot(PrisonData[prisonDoors][0], 0.0, 0.0, -90.0);
@@ -4213,7 +4213,7 @@ CMD:open(playerid, params[])
 	else if (IsPlayerNearDynamicObject(playerid, PrisonData[prisonDoors][1]))
 	{
 	    if (FactionData[facass][factionacces][1] == 0)
-	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte..");
+	        return SendErrorMessage(playerid, "Tu doit être officer de police pour ouvrir la porte.");
 	    if (!PrisonData[prisonDoorOpened][1])
 		{
 			SetDynamicObjectRot(PrisonData[prisonDoors][1], 0.0, 0.0, 0.0);
@@ -4252,13 +4252,13 @@ CMD:open(playerid, params[])
 		{
 			MoveDynamicObject(PrisonData[prisonCells][i], PrisonCells[i][0], PrisonCells[i][1] + 1.6, PrisonCells[i][2], 3.0);
 		    PrisonData[prisonCellOpened][i] = true;
-		    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend c'est clés et ouvre the prison cell.", ReturnName(playerid, 0));
+		    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend c'est clés et ouvre une porte de prison.", ReturnName(playerid, 0));
 		}
 		else
 		{
 		    MoveDynamicObject(PrisonData[prisonCells][i], PrisonCells[i][0], PrisonCells[i][1], PrisonCells[i][2], 3.0);
 		    PrisonData[prisonCellOpened][i] = false;
-		    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend c'est clés et ferme the prison cell.", ReturnName(playerid, 0));
+		    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend c'est clés et ferme une porte de prison.", ReturnName(playerid, 0));
 		}
 		break;
 	}
@@ -8681,7 +8681,7 @@ CMD:appeler(playerid, params[])
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 	    	return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des kevlars.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
 		if (argent_entreprise[moneyentrepriseid][argentpolice] < 5000)
-		    return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (minimum 5000$)");
+		    return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (minimum 5000$)");
 		//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 		Dialog_Show(playerid, kevlar, DIALOG_STYLE_MSGBOX,"Vous-vouler commander quoi?","Est-ce que vous vouler commander des Kevlar (10) ?", "Oui", "Non");
 	}

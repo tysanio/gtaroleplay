@@ -16255,13 +16255,35 @@ script OnPlayerAirbreak(playerid)
 script commandlunch(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new commando,rand = random(3),count;
+	new rand = random(26),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	commando = DropItem("Boite de matos", "Commande",2040, 1,x,y,z+0.1, 0,0);
-	DroppedItems[commando][droppedQuantity] = 25;
+	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
+	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
+	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
+	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
+	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
+	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
+	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
+	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
+	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
+	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
+	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
+	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
+	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
+	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
+	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
+	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
+	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
+	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
+	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
+	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
+	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
+	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
+	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
+	DropItem("Boite de matos", "Commande",2040,25,x,y,z+0.1, 0,0);
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -16287,11 +16309,34 @@ script commandlunch(playerid)
 script commandlunchkevlar(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(3),count;
+	new rand = random(26),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
+	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
+	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
+	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
+	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
+	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
+	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
+	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
+	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
+	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
+	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
+	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
+	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
+	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
+	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
+	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
+	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
+	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
+	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
+	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
+	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
+	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
+	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
+	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -16318,11 +16363,34 @@ script commandlunchkevlar(playerid)
 script commandlunchsoins(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(3),count;
+	new rand = random(26),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
+	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
+	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
+	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
+	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
+	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
+	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
+	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
+	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
+	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
+	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
+	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
+	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
+	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
+	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
+	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
+	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
+	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
+	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
+	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
+	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
+	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
+	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
+	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -16350,11 +16418,34 @@ script commandlunchsoins(playerid)
 script commandlunchpaint(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(3),count;
+	new rand = random(26),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
+	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
+	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
+	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
+	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
+	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
+	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
+	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
+	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
+	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
+	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
+	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
+	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
+	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
+	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
+	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
+	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
+	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
+	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
+	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
+	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
+	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
+	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
+	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -16380,11 +16471,34 @@ script commandlunchpaint(playerid)
 script commandlunchoutils(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(3),count;
+	new rand = random(26),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
+	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
+	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
+	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
+	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
+	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
+	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
+	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
+	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
+	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
+	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
+	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
+	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
+	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
+	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
+	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
+	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
+	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
+	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
+	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
+	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
+	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
+	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
+	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -16410,11 +16524,34 @@ script commandlunchoutils(playerid)
 script commandlunchnos(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(3),count;
+	new rand = random(26),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
+	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
+	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
+	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
+	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
+	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
+	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
+	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
+	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
+	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
+	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
+	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
+	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
+	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
+	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
+	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
+	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
+	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
+	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
+	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
+	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
+	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
+	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
+	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];

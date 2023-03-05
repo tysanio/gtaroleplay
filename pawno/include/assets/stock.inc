@@ -8466,7 +8466,7 @@ Dialog:FactionSkin(playerid, response, listitem, inputtext[])
 		switch (listitem)
 		{
 		    case 0:
-		        Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311):", "Ajouter", "Annuler");
+		        Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311/20004-30000):", "Ajouter", "Annuler");
 
 			case 1:
 			{
@@ -8496,9 +8496,9 @@ Dialog:FactionModel(playerid, response, listitem, inputtext[])
 	{
 	    new skin = strval(inputtext);
 	    if (isnull(inputtext))
-	        return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311):", "Ajouter", "Annuler");
+	        return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311/20004-30000):", "Ajouter", "Annuler");
 		if (skin < 0 || skin > 311 && skin < 20004 || skin > 30000)
-		    return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Erreur: Dans le skin minimun 0 et max 311.\n\nEntrée un skin entre (0-311):", "Ajouter", "Annuler");
+		    return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Erreur: Dans le skin minimun 0 et max 311 ou 20004-30000.\n\nEntrée un skin entre (0-311):", "Ajouter", "Annuler");
         FactionData[PlayerData[playerid][pFactionEdit]][factionSkins][PlayerData[playerid][pSelectedSlot]] = skin;
 		Faction_Save(PlayerData[playerid][pFactionEdit]);
 
@@ -18537,7 +18537,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18551,7 +18551,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18565,7 +18565,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18579,7 +18579,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18593,7 +18593,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18607,7 +18607,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18621,7 +18621,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18635,7 +18635,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18649,7 +18649,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18663,7 +18663,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchpaint",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -18672,7 +18672,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchoutils",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -18681,7 +18681,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (500$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (500$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchnos",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -18777,7 +18777,7 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 						return SendServerMessage(playerid, "Vous êtes qui vous?");
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 7500)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (7500$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (7500$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"Adam : Une livraison a une place a été commencer.(10 minutes environ pour la livraison)");
 					SetTimer("commandlunch",1000,0);
 				}
@@ -18826,7 +18826,7 @@ Dialog:kevlar(playerid,response,listitem,inputtext[])
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
 		if (argent_entreprise[moneyentrepriseid][argentpolice] < 5000)
-				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 		SendClientMessage(playerid,COLOR_YELLOW,"Adam : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 		SetTimer("commandlunchkevlar",1000,0);
 		return 1;
@@ -18844,7 +18844,7 @@ Dialog:soinssoins(playerid,response,listitem,inputtext[])
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
 		if (argent_entreprise[moneyentrepriseid][argentmedecin] < 5000)
-				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
+				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
 		SendClientMessage(playerid,COLOR_YELLOW,"Adam : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 		SetTimer("commandlunchsoins",1000,0);
 		return 1;
