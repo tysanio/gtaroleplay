@@ -18,7 +18,6 @@
 #include <a_samp>
 #include <assets/include>
 native IsValidVehicle(vehicleid);
-#include <FCNPC>
 #include <assets/extactor>
 #include <assets/LB_TDBox>
 #include <assets/define>
@@ -28,7 +27,6 @@ native IsValidVehicle(vehicleid);
 #include <assets/stamina>
 #include <assets/pop>
 #include <assets/callback>
-#include <assets/bowling>
 #include <assets/zombie>
 #include <assets/discordchat>
 #include <assets/poker3>
@@ -7347,7 +7345,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		IsInBus[playerid] = 0;
 	}
 	if (newkeys & KEY_SUBMISSION && GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {cmd_phare(playerid,"");}
-	if (newkeys & KEY_CTRL_BACK)
+	if (newkeys & KEY_CTRL_BACK) //ah ajouter armes UGMP
 	{
 	    if (PlayerData[playerid][pUsedMagazine])
 	    {
@@ -8044,11 +8042,11 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyObject(Indicators_xqz[vid][5]),DestroyObject(Indicators_xqz[vid][2]), DestroyObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
+					DestroyDynamicObject(Indicators_xqz[vid][5]),DestroyDynamicObject(Indicators_xqz[vid][2]), DestroyDynamicObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
 				}
             	else if(Indicators_xqz[vid][0])
 				{
-					DestroyObject(Indicators_xqz[vid][4]),DestroyObject(Indicators_xqz[vid][0]), DestroyObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
+					DestroyDynamicObject(Indicators_xqz[vid][4]),DestroyDynamicObject(Indicators_xqz[vid][0]), DestroyDynamicObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
 					TextDrawColor(compteur9[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
@@ -8069,7 +8067,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 	  		  	if(Indicators_xqz[vid][0])
 				{
-					DestroyObject(Indicators_xqz[vid][4]),DestroyObject(Indicators_xqz[vid][0]),DestroyObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
+					DestroyDynamicObject(Indicators_xqz[vid][4]),DestroyDynamicObject(Indicators_xqz[vid][0]),DestroyDynamicObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
 					TextDrawColor(compteur9[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
@@ -8081,7 +8079,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyObject(Indicators_xqz[vid][5]), DestroyObject(Indicators_xqz[vid][2]), DestroyObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
+					DestroyDynamicObject(Indicators_xqz[vid][5]), DestroyDynamicObject(Indicators_xqz[vid][2]), DestroyDynamicObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
 				}
 				else SetVehicleIndicator(vid,0,1);
 				TextDrawHideForPlayer(playerid,compteur9[playerid]);
@@ -8099,7 +8097,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyObject(Indicators_xqz[vid][5]),DestroyObject(Indicators_xqz[vid][2]), DestroyObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
+					DestroyDynamicObject(Indicators_xqz[vid][5]),DestroyDynamicObject(Indicators_xqz[vid][2]), DestroyDynamicObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
 				}
       	      	else if(Indicators_xqz[vid][0])
       	      	{
@@ -8107,7 +8105,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyObject(Indicators_xqz[vid][4]),DestroyObject(Indicators_xqz[vid][0]), DestroyObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
+					DestroyDynamicObject(Indicators_xqz[vid][4]),DestroyDynamicObject(Indicators_xqz[vid][0]), DestroyDynamicObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
 				}
 				else {
 				SetVehicleIndicator(vid,1,0);

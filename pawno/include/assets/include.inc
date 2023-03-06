@@ -1,6 +1,6 @@
-#include <a_samp>
 #include <a_http>
 #include <a_mysql1>
+#include <FCNPC>
 #include <assets/antiairbreak>
 #include <foreach>
 #include <easyDialog>

@@ -478,7 +478,8 @@ enum carData {
 	carfuel,
 	Float:carvie,
 	boitier,
-	carblinder
+	carblinder,
+	carObject
 };
 enum carStorage {
 	cItemID,

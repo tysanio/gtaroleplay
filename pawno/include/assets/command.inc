@@ -1427,6 +1427,8 @@ CMD:porte(playerid, params[])
 				if (!CarData[id][carLocked])
 				{
 					CarData[id][carLocked] = true;
+					GetVehiclePos(CarData[id][carVehicle], CarData[id][carPos][0], CarData[id][carPos][1], CarData[id][carPos][2]);
+					GetVehicleZAngle(CarData[id][carVehicle], CarData[id][carPos][3]);
 					Car_Save(id);
 					PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
 					TextDrawSetString(compteur6[playerid], "~r~Porte :~w~ Fermer");
@@ -1436,6 +1438,8 @@ CMD:porte(playerid, params[])
 				else
 				{
 					CarData[id][carLocked] = false;
+					GetVehiclePos(CarData[id][carVehicle], CarData[id][carPos][0], CarData[id][carPos][1], CarData[id][carPos][2]);
+					GetVehicleZAngle(CarData[id][carVehicle], CarData[id][carPos][3]);
 					Car_Save(id);
 					PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
 					TextDrawSetString(compteur6[playerid], "~r~Porte :~w~ Ouvert");
@@ -11781,3 +11785,23 @@ CMD:perso(playerid,params[])
 	ShowCharacterMenu(playerid);
 	return 1;
 }
+/*CMD:rgb(playerid, params[])
+{
+	new carid = GetPlayerVehicleID(playerid);
+	if (!carid)
+	    return SendErrorMessage(playerid, "Vous devez être dans un véhicule.");
+	if ((carid = Car_GetID(carid)) != -1 )
+	{
+	    if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+	        return SendErrorMessage(playerid, "Vous devez être le chauffeur du véhicule.");
+		ToggleVehicleColorRGB(carid, VEHICLE_COLOR_PRIMARY, enable);
+		ToggleVehicleColorRGB(carid, VEHICLE_COLOR_SECONDARY, enable);
+		ToggleVehicleColorRGB(carid, VEHICLE_COLOR_TERTIARY, enable);
+		ToggleVehicleColorRGB(carid, VEHICLE_COLOR_QUATERNARY, enable);
+		ChangeVehiclePearlColor(carid, random(100));
+		ChangeVehiclePearlColorRGB(carid, random(100), random(100), random(100));
+		SendVehiculeMessage(playerid, "Vous avez modifier couleur du vehicule");
+	}
+	else SendErrorMessage(playerid, "Vous n'êtes pas dans un véhicule modifiable.");
+	return 1;
+}*/	
