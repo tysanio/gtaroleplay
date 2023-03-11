@@ -3427,27 +3427,6 @@ enum gouvernementinfo
 new info_gouvernementinfo[MAX_PLAYERS][gouvernementinfo];
 //clignotant
 new Indicators_xqz[MAX_VEHICLES][6];
-//salaire gouve
-enum salairemairied
-{
-	salairemairieiddd,	
-	salairemairie1,
-	salairemairie2,
-	salairemairie3,
-	salairemairie4,
-	salairemairie5,
-	salairemairie6,
-	salairemairie7,
-	salairemairie8,
-	salairemairie9,
-	salairemairie10,
-	salairemairie11,
-	salairemairie12,
-	salairemairie13,
-	salairemairie14,
-	salairemairie15
-}
-new info_salairemairie[MAX_FACTIONS][salairemairied];
 //salaire fbi
 enum salairefbid
 {

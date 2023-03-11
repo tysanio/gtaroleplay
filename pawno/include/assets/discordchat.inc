@@ -249,6 +249,49 @@ DISCORD:appsr( DCC_Channel: channel, DCC_User: author, params[ ] )
 		KickEx(userid);
 	}
 	return 1;
+}
+DISCORD:voir( DCC_Channel: channel, DCC_User: author, params[ ] )
+{
+	static target;
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
+	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+	{
+		if (sscanf(params, "u", target))
+			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?voir [playerid/name]");
+		if (target == INVALID_PLAYER_ID)
+			return DCC_SendChannelMessage(discordaaa,"Vous avez mis un [id/nom] invalide.");
+		DCC_TriggerBotTypingIndicator(discordaaa);
+        new name[MAX_PLAYER_NAME], skin_image[200], Float:health, Float:armour, weapon_name1[30], str[50];
+        GetPlayerName(target, name, MAX_PLAYER_NAME);
+        GetPlayerHealth(target, health);
+        GetPlayerArmour(target, armour);
+        GetWeaponName(GetPlayerWeapon(target), weapon_name1, 30);
+        if(!strlen(weapon_name1))
+        {
+			format(weapon_name1, sizeof weapon_name1, "Poing");
+        }
+        format(skin_image, sizeof skin_image, "https://gtaundergroundmod.com/resources/media/skins/%d.png", GetPlayerSkin(target));
+        
+        new DCC_Embed:embed = DCC_CreateEmbed();
+        format(str, sizeof str, "%s's stats.", name);
+        DCC_SetEmbedTitle(embed, str);
+        DCC_SetEmbedThumbnail(embed, skin_image);
+        
+        format(str, sizeof str, "%0.1f", health);
+        DCC_AddEmbedField(embed, "Vie", str, true);
+        
+        format(str, sizeof str, "%0.1f", armour);
+        DCC_AddEmbedField(embed, "Armure", str, true);
+
+        DCC_AddEmbedField(embed, "Arme", weapon_name1, true);
+		DCC_AddEmbedField(embed, "", "👢 = kick \n🔨 = Ban \n❄️ = debug\n🌪 = respawn", true);
+
+		DCC_SendChannelEmbedMessage(discordaaa, embed, "", "OnPostPlayerStat", "i", target);
+	}
+	return 1;	
 }	
 DISCORD:stats( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
@@ -435,6 +478,19 @@ DISCORD:abus( DCC_Channel: channel, DCC_User: author, params[ ] )
 		DCC_SendChannelMessage(discordlog, string1);
 	}
 	return 1;
+}
+DISCORD:aide( DCC_Channel: channel, DCC_User: author, params[ ] )
+{
+	DCC_HasGuildMemberRole(GUILD_ID1,author,RoleJoueur,simembreroleok);
+	if (simembreroleok)
+	{
+		new DCC_Embed:embed = DCC_CreateEmbed();
+		DCC_SetEmbedTitle(embed, "Commandes d'aide");
+		DCC_SetEmbedColor(Embed,0x00FF00);
+		DCC_AddEmbedField(embed, "", "🇨 = Aide Chat \n🇲 = Aide Maison \n🇬 = Aide General\n🇩 = Aide Divers\n🇻 = Aide Vehicule\n🇧 Aide Biz\n🧩 = Aide Discord", true);
+		DCC_SendChannelEmbedMessage(discordlog, embed, "", "OnPostAide");
+	}
+	else DCC_SendChannelMessage( discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 }
 script OnViewDeath(extraid[])
 {
@@ -874,20 +930,6 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		DCC_AddEmbedField(embed, "", "👢 = kick \n🔨 = Ban \n❄️ = debug\n🌪 = respawn", true);
 
 		DCC_SendChannelEmbedMessage(discordaaa, embed, "", "OnPostPlayerStat", "i", target);
-	}
-    else if(!strcmp(command_name, "!aide", true))
-    {
-		DCC_HasGuildMemberRole(GUILD_ID1,author,RoleJoueur,simembreroleok);
-		if (simembreroleok)
-		{
-			new DCC_Embed:embed = DCC_CreateEmbed();
-			DCC_SetEmbedTitle(embed, "Commandes d'aide");
-			DCC_SetEmbedColor(Embed,0x00FF00);
-			DCC_AddEmbedField(embed, "", "🇨 = Aide Chat \n🇲 = Aide Maison \n🇬 = Aide General\n🇩 = Aide Divers\n🇻 = Aide Vehicule\n🇧 Aide Biz\n🧩 = Aide Discord", true);
-
-			DCC_SendChannelEmbedMessage(discordlog, embed, "", "OnPostAide");
-		}
-		else DCC_SendChannelMessage( discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 	}
     return 1;
 }

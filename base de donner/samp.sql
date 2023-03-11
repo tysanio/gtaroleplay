@@ -1185,38 +1185,6 @@ INSERT INTO `salairelivreurbiz` (`idfaction`, `salairerang1`, `salairerang2`, `s
 
 
 --
--- Structure de la table `salairemairie`
---
-
-CREATE TABLE `salairemairie` (
-  `idfaction` int NOT NULL,
-  `salairerang1` int DEFAULT '0',
-  `salairerang2` int DEFAULT '0',
-  `salairerang3` int DEFAULT '0',
-  `salairerang4` int DEFAULT '0',
-  `salairerang5` int DEFAULT '0',
-  `salairerang6` int DEFAULT '0',
-  `salairerang7` int DEFAULT '0',
-  `salairerang8` int DEFAULT '0',
-  `salairerang9` int DEFAULT '0',
-  `salairerang10` int DEFAULT '0',
-  `salairerang11` int DEFAULT '0',
-  `salairerang12` int DEFAULT '0',
-  `salairerang13` int DEFAULT '0',
-  `salairerang14` int DEFAULT '0',
-  `salairerang15` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Déchargement des données de la table `salairemairie`
---
-
-INSERT INTO `salairemairie` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
-(1, 800, 850, 900, 950, 1050, 1100, 1150, 1200, 2500, 2500, 1350, 2400, 2500, 1200, 2500);
-
-
-
---
 -- Structure de la table `salairemecano`
 --
 
@@ -1807,12 +1775,6 @@ ALTER TABLE `salairelivreurbiz`
   ADD PRIMARY KEY (`idfaction`);
 
 --
--- Index pour la table `salairemairie`
---
-ALTER TABLE `salairemairie`
-  ADD PRIMARY KEY (`idfaction`);
-
---
 -- Index pour la table `salairemecano`
 --
 ALTER TABLE `salairemecano`
@@ -2148,11 +2110,6 @@ ALTER TABLE `salairejournaliste`
 ALTER TABLE `salairelivreurbiz`
   MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT pour la table `salairemairie`
---
-ALTER TABLE `salairemairie`
-  MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `salairemecano`

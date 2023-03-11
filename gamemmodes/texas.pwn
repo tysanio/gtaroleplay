@@ -2740,52 +2740,9 @@ script MinuteCheck()
 			}
             else if(FactionData[factionid][factionacces][7] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
 			{
-	            if (PlayerData[i][pFactionRank] == 1)
-				{ paycheck = info_salairemairie[rank][salairemairie1];
- 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 2)
-				{ paycheck = info_salairemairie[rank][salairemairie2];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 3)
-				{ paycheck = info_salairemairie[rank][salairemairie3];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 4)
-				{ paycheck = info_salairemairie[rank][salairemairie4];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 5)
-				{ paycheck = info_salairemairie[rank][salairemairie5];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 6)
-				{ paycheck = info_salairemairie[rank][salairemairie6];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 7)
-				{ paycheck = info_salairemairie[rank][salairemairie7];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 8)
-				{ paycheck = info_salairemairie[rank][salairemairie8];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 9)
-				{ paycheck = info_salairemairie[rank][salairemairie9];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 10)
-				{ paycheck = info_salairemairie[rank][salairemairie10];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 11)
-				{ paycheck = info_salairemairie[rank][salairemairie11];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 12)
-				{ paycheck = info_salairemairie[rank][salairemairie12];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 13)
-				{ paycheck = info_salairemairie[rank][salairemairie13];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 14)
-				{ paycheck = info_salairemairie[rank][salairemairie14];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				else if (PlayerData[i][pFactionRank] == 15)
-				{ paycheck = info_salairemairie[rank][salairemairie15];
-		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
-				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
+				paycheck = FactionData[factionid][factionsalaire][Derp];
+				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
+				FactionData[factionid][factioncoffre] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
             else if (FactionData[factionid][factionacces][6] == 1 && FactionData[factionid][factioncoffre] >= 0)
@@ -11584,7 +11541,7 @@ script OnGameModeInit()
 	SetTimer("SystemPolomka",60000,1);
 	SetTimer("OnUnoccupiedVehicleUpdate",3000,1);
 	SetTimer("Timephone",60000*15,1);
-	SetTimer("GameTimeTimeTimer2",300000, 0);
+	//SetTimer("GameTimeTimeTimer2",300000, 0);
 	//job meuble
 	new stringi147[600],infostockmeuble = info_stockjobinfo[stockjobinfoid][stockjobinfomeuble];
     format(stringi147, sizeof(stringi147), "{FFD700}Entrepôt de meuble{FFFFFF}\nEn stock: {ff3300}%d meuble{ffffff}",infostockmeuble);
@@ -11597,20 +11554,19 @@ script OnGameModeInit()
 	stockinfoboismenuiserie = CreateDynamicObject(19805,1604.7517, -1814.6948, 1014.6152,   0.00000, 0.00000, 90.000);
     SetDynamicObjectMaterialText(stockinfoboismenuiserie, 0, stringi20, OBJECT_MATERIAL_SIZE_256x128,"Arial", 22, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 	//carpintero = table de travail
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.6732, -1815.0839, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.6718, -1814.9323, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.1953, -1815.0953, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1622.8530, -1816.1132, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1623.4221, -1806.5026, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.3716, -1807.2134, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.2001, -1807.2498, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.5315, -1807.3160, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.6732, -1815.0839, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.6718, -1814.9323, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.1953, -1815.0953, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1622.8530, -1816.1132, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1623.4221, -1806.5026, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.3716, -1807.2134, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.2001, -1807.2498, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.5315, -1807.3160, 1012.9468+0.6,4.0); //Terminar
 	CreateDynamic3DTextLabel("{FFFFFF}Pour commencé à travaillait taper {c7a24a}/commencermeuble\n{FFFFFF}Pour quitter le job taper {c7a24a}/quittermeuble",0xFFFFFFFC,1603.2142, -1811.9705, 1013.4863+0.6,8.0);//Lugar
 	moneyentrepriseload();
 	gouvernementinfoload();
 	salairejobinfoload();
 	//tuningload();
-	salairemairieload();
 	salairefbiload();
 	salairepoliceload();
 	salaireswatload();
@@ -14664,54 +14620,6 @@ script gouvernementinfosave(gouvernementinfoid)
 	info_gouvernementinfo[gouvernementinfoid][gouvernementbiz]);
     mysql_tquery(g_iHandle, query);
 }
-//salaire mairie
-script salairemairie(rank)
-{
-	new query[900];
-    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairemairie SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
-	    info_salairemairie[rank][salairemairie1],
-	    info_salairemairie[rank][salairemairie2],
-	    info_salairemairie[rank][salairemairie3],
-	    info_salairemairie[rank][salairemairie4],
-	    info_salairemairie[rank][salairemairie5],
-	    info_salairemairie[rank][salairemairie6],
-	    info_salairemairie[rank][salairemairie7],
-	    info_salairemairie[rank][salairemairie8],
-	    info_salairemairie[rank][salairemairie9],
-	    info_salairemairie[rank][salairemairie10],
-	    info_salairemairie[rank][salairemairie11],
-	    info_salairemairie[rank][salairemairie12],
-	    info_salairemairie[rank][salairemairie13],
-	    info_salairemairie[rank][salairemairie14],
-	    info_salairemairie[rank][salairemairie15]);
-    mysql_tquery(g_iHandle, query);
-}
-script salairemairieload()
-{
-    new query[600];
-    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairemairie");
-    new Cache:result = mysql_query(g_iHandle,query);
-	for(new rank = 0; rank < cache_get_row_count(); rank++)
-	{
-	    info_salairemairie[rank][salairemairieiddd] = cache_get_field_content_int(rank,"idfaction");
-	    info_salairemairie[rank][salairemairie1] = cache_get_field_content_int(rank,"salairerang1");
-	    info_salairemairie[rank][salairemairie2] = cache_get_field_content_int(rank,"salairerang2");
-	    info_salairemairie[rank][salairemairie3] = cache_get_field_content_int(rank,"salairerang3");
-	    info_salairemairie[rank][salairemairie4] = cache_get_field_content_int(rank,"salairerang4");
-	    info_salairemairie[rank][salairemairie5] = cache_get_field_content_int(rank,"salairerang5");
-	    info_salairemairie[rank][salairemairie6] = cache_get_field_content_int(rank,"salairerang6");
-	    info_salairemairie[rank][salairemairie7] = cache_get_field_content_int(rank,"salairerang7");
-	    info_salairemairie[rank][salairemairie8] = cache_get_field_content_int(rank,"salairerang8");
-	    info_salairemairie[rank][salairemairie9] = cache_get_field_content_int(rank,"salairerang9");
-	    info_salairemairie[rank][salairemairie10] = cache_get_field_content_int(rank,"salairerang10");
-	    info_salairemairie[rank][salairemairie11] = cache_get_field_content_int(rank,"salairerang11");
-	    info_salairemairie[rank][salairemairie12] = cache_get_field_content_int(rank,"salairerang12");
-	    info_salairemairie[rank][salairemairie13] = cache_get_field_content_int(rank,"salairerang13");
-	    info_salairemairie[rank][salairemairie14] = cache_get_field_content_int(rank,"salairerang14");
-	    info_salairemairie[rank][salairemairie15] = cache_get_field_content_int(rank,"salairerang15");
-	}
-	cache_delete(result);
-}
 script salairefbi(rank)
 {
 	new query[900];
@@ -17026,7 +16934,7 @@ script GameTimeTimer2()
 	}
 	RaceStarted = 1;
 	Prepared = 1;
-	SetTimer("HorseStartTimer", 900000,0);
+	SetTimer("HorseStartTimer", 180000,0);
 }
 script GameTimeTimeTimer2()
 {
@@ -17113,7 +17021,7 @@ script GameTimeTimeTimer2()
 			SendServerMessage(i,"1 heure avant la course! Vous pouvez pariez avec /parier sur votre cheval !");
 		}
 	}
-	SetTimer("GameTimeTimer2", 3600000, 0);
+	SetTimer("GameTimeTimer2", 180000, 0);
 }
 script HorseStartTimer()
 {
