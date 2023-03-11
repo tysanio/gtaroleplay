@@ -396,13 +396,13 @@ CMD:capot(playerid, params[])
 		{
 	        SetHoodStatus(i, true);
 	        SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a ouvert le capot du véhicule.", ReturnName(playerid, 0));
-	        ShowPlayerFooter(playerid, "Vous avez ~gouvert~w~ le capot!");
+	        ShowPlayerFooter(playerid, "Vous avez ~g~ouvert~w~ le capot!");
 		}
 		else
 		{
 			SetHoodStatus(i, false);
 	        SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a fermer le capot du véhicule.", ReturnName(playerid, 0));
-	        ShowPlayerFooter(playerid, "Vous avez ~g~fermer~w~ le capot!");
+	        ShowPlayerFooter(playerid, "Vous avez ~r~fermer~w~ le capot!");
 		}
 	    return 1;
 	}
@@ -5490,17 +5490,8 @@ CMD:salaire(playerid, params[])
     	return SendErrorMessage(playerid, "Tu n'est pas du gouvernement.");
 	if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
     	return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);		
-	if (sscanf(params, "s[24]",type)) return SendSyntaxMessage(playerid, "/salaire [gouv,fbi,police,urgentiste,swat]");
-    if (!strcmp(type, "gouv", true))
-	{	
-		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
-		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
-		format(string3, sizeof(string3), "Rang 11\nRang 12\nRang 13\nRang 14\nRang 15");
-		format(string, sizeof(string),"%s%s%s",string1,string2,string3);
-		Dialog_Show(playerid,Salairegouv,2,"Pour le max rang faites /frang",string,"Valider","Quitter",FactionData[PlayerData[playerid][pFaction]][factionRanks]);
-		return 1;
-	}
-    else if (!strcmp(type, "fbi", true))
+	if (sscanf(params, "s[24]",type)) return SendSyntaxMessage(playerid, "/salaire [fbi,police,urgentiste,swat]");
+    if (!strcmp(type, "fbi", true))
 	{
 		format(string1, sizeof(string1), "Rang 1\nRang 2\nRang 3\nRang 4\nRang 5\n");
 		format(string2, sizeof(string2), "Rang 6\nRang 7\nRang 8\nRang 9\nRang 10\n");
@@ -6695,20 +6686,19 @@ CMD:stylecombat(playerid, params[])
 	new channel;
 	if (sscanf(params, "d", channel))
  	{
-	 	SendSyntaxMessage(playerid, "/stylecombat entre 0 et 6");
+	 	SendSyntaxMessage(playerid, "/stylecombat entre 0 et 4");
 		return 1;
 	}
-	if (channel < 0 || channel > 5)
-	    return SendErrorMessage(playerid, "Entre 0 et 5 pour le style de combat.");
+	if (channel < 0 || channel > 4)
+	    return SendErrorMessage(playerid, "Entre 0 et 4 pour le style de combat.");
 	PlayerData[playerid][pCombat] = channel;
 	switch(channel)
 	{
 		case 0: SetPlayerFightingStyle (playerid, FIGHT_STYLE_NORMAL);
-		case 1: SetPlayerFightingStyle (playerid, FIGHT_STYLE_BOXING);
-		case 2: SetPlayerFightingStyle (playerid, FIGHT_STYLE_KUNGFU);
-		case 3: SetPlayerFightingStyle (playerid, FIGHT_STYLE_KNEEHEAD);
-		case 4: SetPlayerFightingStyle (playerid, FIGHT_STYLE_GRABKICK);
-		case 5: SetPlayerFightingStyle (playerid, FIGHT_STYLE_ELBOW);
+		case 1: if(PlayerData[playerid][pparcouru] >= 3501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_BOXING);//difficle
+		case 2: if(PlayerData[playerid][pparcouru] >= 3501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_KUNGFU);//diffcile
+		case 3: if(PlayerData[playerid][pparcouru] >= 1501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_GRABKICK);//normal
+		case 4: if(PlayerData[playerid][pparcouru] >= 1501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_ELBOW);//normal
 	}	
 	SendServerMessage(playerid, "Vous avez changer votre style de combat");
 	return 1;
@@ -9428,7 +9418,7 @@ CMD:commencerboucher(playerid, params[])
 	SendClientMessage(playerid,0xF6808EF6, "Vous obtenez un emploi, allez à la boutique.");
 	OldSkin[playerid] = GetPlayerSkin(playerid);
 	SetPlayerSkin(playerid, 168);
-	SetPlayerAttachedObject( playerid, 0, 29071, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
+	SetPlayerAttachedObject( playerid, 0, 29071, 5, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
 	PlayerInJob[playerid] = 1;
 	PlayerCheckPointToMeat(playerid);
     return 1;

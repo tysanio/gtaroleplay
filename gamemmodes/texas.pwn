@@ -1886,9 +1886,8 @@ script OnQueryFinished(extraid, threadid)
 						case 0: SetPlayerFightingStyle(extraid, FIGHT_STYLE_NORMAL);
 						case 1: SetPlayerFightingStyle(extraid, FIGHT_STYLE_BOXING);
 						case 2: SetPlayerFightingStyle(extraid, FIGHT_STYLE_KUNGFU);
-						case 3: SetPlayerFightingStyle(extraid, FIGHT_STYLE_KNEEHEAD);
-						case 4: SetPlayerFightingStyle(extraid, FIGHT_STYLE_GRABKICK);
-						case 5: SetPlayerFightingStyle(extraid, FIGHT_STYLE_ELBOW);
+						case 3: SetPlayerFightingStyle(extraid, FIGHT_STYLE_GRABKICK);
+						case 4: SetPlayerFightingStyle(extraid, FIGHT_STYLE_ELBOW);
 					}
 					new factionid = PlayerData[extraid][pFaction];
 					if (FactionData[factionid][factionacces][1] == 1) {cop_nbrCops++;}
