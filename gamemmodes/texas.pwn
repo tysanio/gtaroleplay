@@ -8839,7 +8839,7 @@ script OnPlayerEnterCheckpoint(playerid)
 			TogglePlayerControllable(playerid, 0);
 			PlayerData[playerid][pNoob] = 1;
 		}
-		if (PlayerData[playerid][pTutorialStage] == 6)
+		if (PlayerData[playerid][pTutorialStage] == 6 && IsPlayerInRangeOfPoint(playerid, 1.5, -228.8403, 1401.1831, 27.7656))
 		{
 		    for (new i = 0; i < 5; i ++) {
 		        SendClientMessage(playerid,-1,"");

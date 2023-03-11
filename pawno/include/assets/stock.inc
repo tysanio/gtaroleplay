@@ -13910,6 +13910,8 @@ stock IsDoorVehicle(vehicleid) //a faire
 		    return 1;
 		case 540..547, 549..552, 554..562, 565..568, 573, 575, 576, 578..580, 582, 585, 587..589, 596..605, 609:
 			return 1;
+		case 613,614,662,663,665,666,668,796,799,965,1199..1206,1326,1699,3138,3222..3247,3248,4776,6552..6561,6563,6566..6569,6571..6577,6658..6698,6793,6799,25365,25370,25378,25380,25383..25385,25389,25390,25401,25420,25438,25484..25486,25489..25491,25522,25537,25576,25577,256904776,4777,4781,4790,4791,4796,4799,5092,5101,6028,6270,6526,6529,6530,6550: //lc-lcs
+			return 1;
 	}
 	return 0;
 }
@@ -20091,27 +20093,6 @@ stock ReturnDiscordName( DCC_User: author )
 	DCC_GetUserName( author, name, sizeof( name ) );
 	return name;
 }
-//tuto
-Dialog:TutoriaBTonfirm(playerid, response, listitem, inputtext[])
-{
-    PlayerData[playerid][pTutorialStage] = 0;
-	if (!response)
-	{
-	    PlayerData[playerid][pCreated] = 1;
-	    PlayerData[playerid][pTask] = 1;
-  		PlayerData[playerid][pTutorial] = 0;
-		PlayerData[playerid][pTutorialTime] = 0;
-		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");
-	}
-	else
-	{
-	    PlayerData[playerid][pCreated] = 1;
-	    PlayerData[playerid][pTask] = 1;
-		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");
-		StartTutorial(playerid);
-	}
-	return 1;
-}
 //blackjack
 Dialog:BlackJackMiser(playerid, response, listitem, inputtext[])
 {
@@ -20619,7 +20600,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			}
 			case 9:
 			{
-				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur na pas été tirer dessus depuis sa connection au serveur.");}
+				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur n'a pas été tirer dessus depuis sa connection au serveur.");}
 				SendServerMessage(playerid, "%s a tirer sur %s (%s).", ReturnName(PlayerData[AdminTarget[playerid]][pLastShot]),ReturnName(AdminTarget[playerid], 0), GetDuration(gettime() - PlayerData[AdminTarget[playerid]][pShotTime]));
 				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}

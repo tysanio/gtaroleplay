@@ -7943,7 +7943,7 @@ CMD:usemag(playerid, params[])
 {
 	new weaponid = PlayerData[playerid][pHoldWeapon];
 	if (!weaponid)
-	    return SendErrorMessage(playerid, "Tu na pas d'arme vide sur toi.");
+	    return SendErrorMessage(playerid, "Tu n'a pas d'arme vide sur toi.");
 	if (PlayerData[playerid][pUsedMagazine])
 	    return SendErrorMessage(playerid, "Vous avez déja utiliser un chargeur pour votre arme.");
 	if (Inventory_HasItem(playerid, "Chargeur"))
@@ -10381,7 +10381,7 @@ CMD:regardercourse(playerid, params[])
 			Watching[playerid] = 1;
 			SendServerMessage(playerid,"Vous regardez maintenant la course.");
 		}
-		else return SendErrorMessage(playerid,"La course na pas commencer. Taper /parier pour parier sur un cheval.");
+		else return SendErrorMessage(playerid,"La course n'a pas commencer. Taper /parier pour parier sur un cheval.");
 	}
 	else return SendErrorMessage(playerid,"Vous n'êtes pas dans le PMU");
 	return 1;
@@ -10421,7 +10421,7 @@ CMD:parier(playerid, params[])
 		}
 		else return SendErrorMessage(playerid,"Vous n'êtes pas dans le PMU");
 	}
-	else return SendSyntaxMessage(playerid,"/bet [cheval(1-4)][montant(%d-%d]",CashLowerBounds,CashHigherBounds);
+	else return SendSyntaxMessage(playerid,"/parier [cheval(1-4)][montant(%d-%d]",CashLowerBounds,CashHigherBounds);
 	return 1;
 }
 //roulette
@@ -11618,7 +11618,10 @@ CMD:appsa(playerid, params[])
 	SendServerMessage(userid,"Votre demande viens d'être accepté par %s.", ReturnName(playerid));
 	TogglePlayerControllable(userid, 1);
 	PlayerData[userid][pTutorialStage] = 6;
+	PlayerData[userid][pCreated] = 1;
+	PlayerData[userid][pTask] = 1;
 	PlayerData[userid][pNoob] = 2;
+	SetPlayerCheckpoint(playerid, -228.8403, 1401.1831, 27.7656, 1.0);	
 	tuto1 = "\0";
 	tuto2 = "\0";
 	tuto3 = "\0";
