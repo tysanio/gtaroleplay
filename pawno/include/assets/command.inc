@@ -254,12 +254,12 @@ CMD:dynamichelp(playerid, params[])
 {
 	if (PlayerData[playerid][pAdmin] < 3)
 	    return 1;
-	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /creermaison, /creerbiz, /creerentrer, /creerpump, /creercrate, /creerfaction, /creerbot, /creerobject");
+	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /creermaison, /creerbiz, /creerentrer, /creerpump, /creercrate, /creerfaction, /creerbot, /creerobject, /creeratm, /creerbanker");
     SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /creergate, /creercar, /creervendor, /creergarbage,/creerdetector, /creerrack, /creercaisse, /creergarage.");
 	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /creerbillboard, /creerspeed, /creergraffiti, /editrack, /editbillboard, /editentrer, /editfaction, /editgate, /editcaisse, /editobject.");
-	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /editpump, /supentrer, /supump, /supcrate, /supfaction, /supgate, /supcaisse, /supgraffiti /supgarage, /supobject.");
+	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /editatm, /editpump, /supentrer, /supump, /supcrate, /supfaction, /supgate, /supcaisse, /supgraffiti /supgarage, /supobject.");
 	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /supgarbage, /suprack,  /supspeed, /supbiz, /suphouse, /supcrate.");
-	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /suplant, /supdetector, /supbillboard, /bizstate, /setpump.");
+	SendClientMessage(playerid, COLOR_CLIENT, "DYNAMIC:{FFFFFF} /supatm, /suplant, /supdetector, /supbillboard, /bizstate, /setpump.");
 	return 1;
 }
 CMD:changermdp(playerid, params[])
@@ -2280,8 +2280,8 @@ CMD:creerbiz(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "dd", type, price))
  	{
-	 	SendSyntaxMessage(playerid, "/creerbiz [type] [price]");
     	SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie | 11 : VIP");
+	 	SendSyntaxMessage(playerid, "/creerbiz [type] [price]");
     	return 1;
 	}
 	if (type < 1 || type > 11)
@@ -4088,7 +4088,7 @@ CMD:ouvrircargaison(playerid, params[])
 CMD:planter(playerid, params[])
 {
 	if (isnull(params))
-	    return SendSyntaxMessage(playerid, "/plant [weed/cocaine/heroin]");
+	    return SendSyntaxMessage(playerid, "/planter [weed/cocaine/heroin]");
 	if (Plant_Nearest(playerid) != -1)
 	    return SendErrorMessage(playerid, "Tu ne peux planter trop proche d'un autre plant.");
 	if (GetPlayerInterior(playerid) > 0 || GetPlayerVirtualWorld(playerid) > 0) return SendErrorMessage(playerid, "Seulement a l'extérieur.");
@@ -6695,10 +6695,10 @@ CMD:stylecombat(playerid, params[])
 	switch(channel)
 	{
 		case 0: SetPlayerFightingStyle (playerid, FIGHT_STYLE_NORMAL);
-		case 1: if(PlayerData[playerid][pparcouru] >= 3501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_BOXING);//difficle
-		case 2: if(PlayerData[playerid][pparcouru] >= 3501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_KUNGFU);//diffcile
-		case 3: if(PlayerData[playerid][pparcouru] >= 1501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_GRABKICK);//normal
-		case 4: if(PlayerData[playerid][pparcouru] >= 1501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_ELBOW);//normal
+		case 1: if(PlayerData[playerid][pparcouru] <= 3501 && PlayerData[playerid][prepetitions] <= 3501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_BOXING);//difficle
+		case 2: if(PlayerData[playerid][pparcouru] <= 3501 && PlayerData[playerid][prepetitions] <= 3501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_KUNGFU);//diffcile
+		case 3: if(PlayerData[playerid][pparcouru] <= 1501 && PlayerData[playerid][prepetitions] <= 1501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_GRABKICK);//normal
+		case 4: if(PlayerData[playerid][pparcouru] <= 1501 && PlayerData[playerid][prepetitions] <= 1501) return SendErrorMessage(playerid,"Vous n'êtes pas asser entrainer pour ce style de combat"); else SetPlayerFightingStyle (playerid, FIGHT_STYLE_ELBOW);//normal
 	}	
 	SendServerMessage(playerid, "Vous avez changer votre style de combat");
 	return 1;
@@ -9792,7 +9792,15 @@ CMD:louerveh(playerid, params[])
 CMD:delouerveh(playerid, params[])
 {
 	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar);
-	if (!IsPlayerInRangeOfPoint(playerid, 20.0,2055.8477,-1912.5133,13.5469) && !PlayerData[playerid][pAdmin]) return SendVehiculeMessage(playerid,"Veuillez remettre le véhicule a coté de l'auto-école.");
+	new id1 = GetClosestEntrance(playerid, 1);
+	/*if (id1 == -1)
+		return SendErrorMessage(playerid, "Il a aucun(e) auto-école sur le serveur.");
+	SetPlayerCheckpoint(playerid, EntranceData[id1][entrancePos][0], EntranceData[id1][entrancePos][1], EntranceData[id1][entrancePos][2], 1.0);
+	SendServerMessage(playerid, "Un point a été mit sur la plus proche auto école (marquer sur le radar).");
+
+
+
+	&& !PlayerData[playerid][pAdmin]) return SendVehiculeMessage(playerid,"Veuillez remettre le véhicule a coté de l'auto-école.");*/
 	if (PlayerData[playerid][pLocaID] == 0) return SendVehiculeMessage(playerid,"Vous ne louez pas de véhicule.");
 	if (PlayerData[playerid][pLocaID] != CarData[id][carID]) return SendVehiculeMessage(playerid, "Vous ne louez pas ce véhicule.");
 	if (CarData[id][carfuel] < 15)
@@ -11317,19 +11325,18 @@ CMD:creerbanker(playerid, params[])
 	if(id == -1) return SendErrorMessage(playerid,"Can't create any more bankers.");
 	new skin,label_string[64],query[144];
 	if(sscanf(params, "i", skin)) return SendSyntaxMessage(playerid,"/createbanker [skin id]");
-	if(!(0 <= skin <= 311)) return SendErrorMessage(playerid,"Invalid skin ID.");
+	if(!(0 <= skin <= 27474)) return SendErrorMessage(playerid,"Invalid skin ID.");
 	BankerData[id][Skin] = skin;
 	GetPlayerPos(playerid, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ]);
 	GetPlayerFacingAngle(playerid, BankerData[id][bankerA]);
 	SetPlayerPos(playerid, BankerData[id][bankerX] + (1.0 * floatsin(-BankerData[id][bankerA], degrees)), BankerData[id][bankerY] + (1.0 * floatcos(-BankerData[id][bankerA], degrees)), BankerData[id][bankerZ]);
 	BankerData[id][bankerActorID] = CreateActor(skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
 	if(IsValidActor(BankerData[id][bankerActorID])) SetActorInvulnerable(BankerData[id][bankerActorID], true);
-	#if defined BANKER_USE_MAPICON
-	BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
-	#endif
+	BankerData[id][bankerVW] = GetPlayerVirtualWorld(playerid);
+	SetActorVirtualWorld(BankerData[id][bankerActorID],BankerData[id][bankerVW]); 
 	format(label_string, sizeof(label_string), "Banker (%d)\n\n{FFFFFF}Utiliser {F1C40F}/banque!", id);
 	BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25, 5.0, .testlos = 1);
-	mysql_format(g_iHandle, query, sizeof(query), "INSERT INTO bankers SET ID=%d, Skin=%d, PosX='%f', PosY='%f', PosZ='%f', PosA='%f'", id, skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
+	mysql_format(g_iHandle, query, sizeof(query), "INSERT INTO bankers SET ID=%d, Skin=%d, PosX='%f', PosY='%f', PosZ='%f', PosA='%f', VW='%d'", id, skin, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA],BankerData[id][bankerVW]);
 	mysql_tquery(g_iHandle, query);
 	Iter_Add(Bankers, id);
 	return 1;
@@ -11345,17 +11352,14 @@ CMD:setbankerpos(playerid, params[])
 	DestroyActor(BankerData[id][bankerActorID]);
 	BankerData[id][bankerActorID] = CreateActor(BankerData[id][Skin], BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
 	if(IsValidActor(BankerData[id][bankerActorID])) SetActorInvulnerable(BankerData[id][bankerActorID], true);
-	#if defined BANKER_USE_MAPICON
-	Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, BankerData[id][bankerIconID], E_STREAMER_X, BankerData[id][bankerX]);
-	Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, BankerData[id][bankerIconID], E_STREAMER_Y, BankerData[id][bankerY]);
-	Streamer_SetFloatData(STREAMER_TYPE_MAP_ICON, BankerData[id][bankerIconID], E_STREAMER_Z, BankerData[id][bankerZ]);
-	#endif
+	BankerData[id][bankerVW] = GetPlayerVirtualWorld(playerid);
+	SetActorVirtualWorld(BankerData[id][bankerActorID],BankerData[id][bankerVW]);
 	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, BankerData[id][bankerLabel], E_STREAMER_X, BankerData[id][bankerX]);
 	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, BankerData[id][bankerLabel], E_STREAMER_Y, BankerData[id][bankerY]);
 	Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, BankerData[id][bankerLabel], E_STREAMER_Z, BankerData[id][bankerZ]);	
 	SetPlayerPos(playerid, BankerData[id][bankerX] + (1.0 * floatsin(-BankerData[id][bankerA], degrees)), BankerData[id][bankerY] + (1.0 * floatcos(-BankerData[id][bankerA], degrees)), BankerData[id][bankerZ]);
 	new query[144];
-	mysql_format(g_iHandle, query, sizeof(query), "UPDATE bankers SET PosX='%f', PosY='%f', PosZ='%f', PosA='%f' WHERE ID=%d", BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA], id);
+	mysql_format(g_iHandle, query, sizeof(query), "UPDATE bankers SET PosX='%f', PosY='%f', PosZ='%f', PosA='%f', VW='%d' WHERE ID=%d", BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA],BankerData[id][bankerVW], id);
 	mysql_tquery(g_iHandle, query);
 	return 1;
 }
@@ -11383,10 +11387,7 @@ CMD:supbanker(playerid, params[])
 	if(!Iter_Contains(Bankers, id)) return SendErrorMessage(playerid,"Invalid banker ID.");
 	if(IsValidActor(BankerData[id][bankerActorID])) DestroyActor(BankerData[id][bankerActorID]);
 	BankerData[id][bankerActorID] = -1;
-	#if defined BANKER_USE_MAPICON
-	if(IsValidDynamicMapIcon(BankerData[id][bankerIconID])) DestroyDynamicMapIcon(BankerData[id][bankerIconID]);
-    BankerData[id][bankerIconID] = -1;
-    #endif
+    BankerData[id][bankerVW] = -1;
     if(IsValidDynamic3DTextLabel(BankerData[id][bankerLabel])) DestroyDynamic3DTextLabel(BankerData[id][bankerLabel]);
     BankerData[id][bankerLabel] = Text3D: -1;
 	Iter_Remove(Bankers, id);
@@ -11611,7 +11612,7 @@ CMD:appsa(playerid, params[])
 	PlayerData[userid][pCreated] = 1;
 	PlayerData[userid][pTask] = 1;
 	PlayerData[userid][pNoob] = 2;
-	SetPlayerCheckpoint(playerid, -228.8403, 1401.1831, 27.7656, 1.0);	
+	SetPlayerCheckpoint(playerid, -228.8403, 1401.1831, 27.7656, 25.0);	
 	tuto1 = "\0";
 	tuto2 = "\0";
 	tuto3 = "\0";

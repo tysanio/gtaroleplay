@@ -34,7 +34,7 @@ native IsValidVehicle(vehicleid);
 #include <assets/pool2>
 #include <assets/map>
 //#include <assets/mapls>
-#include <assets/maison>
+#include <assets/removeb>
 main()
 {
     print(" ");
@@ -7567,7 +7567,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(cop_nbrCops < info_serveursetting[serveurinfo][settingpolice]) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
 			foreach (new y : Player)
 			{
-				if (FactionData[facass][factionacces][1] == 1) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
+				if (IsACops(y)) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
 			}
 			if(FactionData[facass][factionacces][1] == 1)
 			{ SendServerMessage(playerid,  "RADIO: Un vol de magasin au %s (marquée sur la carte).", BusinessData[bizid][bizName]);}
@@ -10742,9 +10742,9 @@ script OnPlayerConnect(playerid)
 	RemoveBuildingForPlayer(playerid, 2753, 0.0, 0.0, 0.0, 60000.0);
 	RemoveBuildingForPlayer(playerid, 2369, 0.0, 0.0, 0.0, 60000.0);
 	RemoveBuildingForPlayer(playerid, 1514, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1676, 0.0, 0.0, 0.0, 60000.00);
-	RemoveBuildingForPlayer(playerid, 3465, 0.0, 0.0, 0.0, 60000.00);
-	RemoveBuildingForPlayer(playerid, 1686, 0.0, 0.0, 0.0, 60000.00);
+	RemoveBuildingForPlayer(playerid, 1676, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 3465, 0.0, 0.0, 0.0, 60000.0);
+	RemoveBuildingForPlayer(playerid, 1686, 0.0, 0.0, 0.0, 60000.0);
  	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 60000.0);
     RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 60000.0);
     RemoveBuildingForPlayer(playerid, 955, 	0.0, 0.0, 0.0, 60000.0);
@@ -10752,9 +10752,9 @@ script OnPlayerConnect(playerid)
     RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 60000.0);
     RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 60000.0);
     RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 60000.00);
+    RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 60000.0);
 	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 60000.0);
-	MaisonIntEXTREM(playerid);
+	RemoveNormal(playerid);
 	//fin remove
 	CancelSelectTextDraw(playerid);
 	GetPlayerIp(playerid, PlayerData[playerid][pIP], 16);
@@ -11022,8 +11022,6 @@ script OnGameModeInit()
 	RoleStaff3 = DCC_Role:DCC_FindRoleById(Dadmin3);    //role
 	RoleStaff4 = DCC_Role:DCC_FindRoleById(Dadmin4);    //role
 	DeleteSavedStatMessage();
-	//CreateServerObjectsLosSantos();
-	MaisonIntEXT();
 	//partie fs oubliger
 	/*SendRconCommand("unloadfs skins");
 	SendRconCommand("loadfs skins");*/
@@ -18409,16 +18407,14 @@ script LoadBankers()
 		    BankerData[id][bankerY] = cache_get_field_content_float(i, "PosY");
 		    BankerData[id][bankerZ] = cache_get_field_content_float(i, "PosZ");
 		    BankerData[id][bankerA] = cache_get_field_content_float(i, "PosA");
-
+            BankerData[id][bankerVW] = cache_get_field_content_int(i, "VW");
 		    BankerData[id][bankerActorID] = CreateActor(BankerData[id][Skin], BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
+		    SetActorVirtualWorld(BankerData[id][bankerActorID],BankerData[id][bankerVW]);
 		    if(!IsValidActor(BankerData[id][bankerActorID])) {
 				printf("  [Bank System] Couldn't create an actor for banker ID %d.", id);
 			}else{
 			    SetActorInvulnerable(BankerData[id][bankerActorID], true); // people may use a version where actors aren't invulnerable by default
 			}
-			#if defined BANKER_USE_MAPICON
-			BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
-			#endif
 			format(label_string, sizeof(label_string), "Banker (%d)\n\n{FFFFFF}Utiliser {F1C40F}/banque!", id);
 			BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25,5.0,INVALID_PLAYER_ID, INVALID_VEHICLE_ID,0,-1,-1);
 			Iter_Add(Bankers, id);

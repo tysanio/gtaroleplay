@@ -1137,7 +1137,7 @@ stock Backpack_Open(playerid)
 	    new
 	        string[MAX_BACKPACK_CAPACITY * 32],
 			count = 0;
-		string = "Add Item\n";
+		string = "Ajouter Object\n";
 	    for (new i = 0; i < MAX_BACKPACKS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id)
 	    {
 	        if (BackpackItems[i][bItemQuantity] == 1)
@@ -21239,7 +21239,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n\
 				- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenêtre du véhicule\
 				\n- /ceinture pour attacher votre ceinture \n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un vehicule,\
-				\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela,\
+				\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela),\
 				\n- /vpreter voir le vehicule qu'on vous a prêter,\n- /vdouble Pour prêter les clés de votre véhicule,\
 				\n- /vjeter pour jetter le double des clés prêter,\n- /payersabot pour payer le sabot du vehicule,\
 				\n- /achetergarage pour acheter un garage,\n- /garage pour aller dans votre garage","Quitter","");
@@ -21725,9 +21725,7 @@ loadbank()
     for(new i; i < MAX_BANKERS; i++)
     {
         BankerData[i][bankerActorID] = -1;
-        #if defined BANKER_USE_MAPICON
-        BankerData[i][bankerIconID] = -1;
-        #endif
+        BankerData[i][bankerVW] = -1;
         BankerData[i][bankerLabel] = Text3D: -1;
     }
     for(new i; i < MAX_ATMS; i++)
@@ -21747,7 +21745,8 @@ loadbank()
 	  `PosX` float NOT NULL,\
 	  `PosY` float NOT NULL,\
 	  `PosZ` float NOT NULL,\
-	  `PosA` float NOT NULL\
+	  `PosA` float NOT NULL,\
+	  `VW` smallint NOT NULL\
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     mysql_tquery(g_iHandle, "CREATE TABLE IF NOT EXISTS `bank_atms` (\
 	  `ID` int(11) NOT NULL,\
