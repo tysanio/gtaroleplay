@@ -5940,7 +5940,7 @@ CMD:creercar(playerid, params[])
 	static model[32],color1,color2,id = -1,type = -1,loca = 0;
     if (PlayerData[playerid][pAdmin] < 3)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	if (sscanf(params, "s[32]I(-1)I(-1)I(0)I(0)", model, color1, color2, type, loca))
+	if (sscanf(params, "s[32]I(-1)I(-1)I(-1)I(0)", model, color1, color2, type, loca))
  	{
 	 	SendSyntaxMessage(playerid, "/creercar [model id/name] [color 1] [color 2] <faction id> <location 0/1>");
 	 	return 1;
@@ -9767,7 +9767,7 @@ CMD:louerveh(playerid, params[])
 	PlayerData[playerid][pLocaID] = CarData[id][carID];
 	CarData[id][carLocaID] = PlayerData[playerid][pID];
 	PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
-	TSM(playerid, "~r~/delouerveh pour delouer le vehicule\n~w~Oublier pas de delouer quand vous avez fini avec!\nProche de l'auto-ecole", "Location", 5000, 0x00000088, 20.0000, 110.000000, 130.000000);
+	TSM(playerid, "~r~/delouerveh pour delouer le vehicule\n~w~Oublier pas de delouer quand vous avez fini avec!", "Location", 5000, 0x00000088, 20.0000, 110.000000, 130.000000);
 	GiveMoney(playerid,-200);
 	for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists] && FactionData[i][factionacces][13] == 1) {
 		count++;
@@ -9791,16 +9791,13 @@ CMD:louerveh(playerid, params[])
 
 CMD:delouerveh(playerid, params[])
 {
-	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar);
-	new id1 = GetClosestEntrance(playerid, 1);
-	/*if (id1 == -1)
-		return SendErrorMessage(playerid, "Il a aucun(e) auto-école sur le serveur.");
-	SetPlayerCheckpoint(playerid, EntranceData[id1][entrancePos][0], EntranceData[id1][entrancePos][1], EntranceData[id1][entrancePos][2], 1.0);
-	SendServerMessage(playerid, "Un point a été mit sur la plus proche auto école (marquer sur le radar).");
-
-
-
-	&& !PlayerData[playerid][pAdmin]) return SendVehiculeMessage(playerid,"Veuillez remettre le véhicule a coté de l'auto-école.");*/
+	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar),serveurinfo;
+	if (!IsPlayerInRangeOfPoint(playerid,20,info_serveursetting[serveurinfo][settingpos][0],info_serveursetting[serveurinfo][settingpos][1],info_serveursetting[serveurinfo][settingpos][2]))
+	{
+		SetPlayerCheckpoint(playerid,info_serveursetting[serveurinfo][settingpos][0],info_serveursetting[serveurinfo][settingpos][1],info_serveursetting[serveurinfo][settingpos][2],15.0);
+		SendServerMessage(playerid, "Un point a été mit sur l'endroit ou délouer le vehicule.");
+		return 1;
+	}	
 	if (PlayerData[playerid][pLocaID] == 0) return SendVehiculeMessage(playerid,"Vous ne louez pas de véhicule.");
 	if (PlayerData[playerid][pLocaID] != CarData[id][carID]) return SendVehiculeMessage(playerid, "Vous ne louez pas ce véhicule.");
 	if (CarData[id][carfuel] < 15)
@@ -10425,12 +10422,12 @@ CMD:parier(playerid, params[])
 //roulette
 CMD:roulette(playerid, params[])
 {
-	if (PlayerData[playerid][pPlayingHours] < 50) {
-		SendErrorMessage(playerid, "La roulette est bloquer il vous faut un certain nombre d'heure de jeux.");
-		SendErrorMessage(playerid, "Si vous trouver cela abusif fait /abus.");
-	}
 	if(IsPlayerInRangeOfPoint(playerid, 5.0, -233.4578,-30.9058,1004.1461))
 	{
+		if (PlayerData[playerid][pPlayingHours] < 50) {
+		SendErrorMessage(playerid, "La roulette est bloquer il vous faut un certain nombre d'heure de jeux.");
+		SendErrorMessage(playerid, "Si vous trouver cela abusif fait /abus.");
+		}
 		new moneyentrepriseid;
 		if (argent_entreprise[moneyentrepriseid][argentmafiazone1] >= 500000) return SendErrorMessage(playerid,"La roulette est bloquée veuillez jouer aux autres jeux.");
 		if(Actived[playerid] == 0)

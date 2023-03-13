@@ -15082,13 +15082,13 @@ stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
 	    {
 	        new omg = GetVehicleModel(GetVehicleTrailer(vehicleid));
             GetVehicleModelInfo(omg, VEHICLE_MODEL_INFO_SIZE, _vX[0], _vY[0], _vZ[0]);
- 			Indicators_xqz[vehicleid][4] = CreateDynamicObject(19294, 0, 0, 0,0,0,0);
+ 			Indicators_xqz[vehicleid][4] = CreateObject(19294, 0, 0, 0,0,0,0);
 			AttachObjectToVehicle(Indicators_xqz[vehicleid][4], GetVehicleTrailer(vehicleid),  _vX[0]/2.4, -_vY[0]/3.35, -1.0 ,0,0,0);
 		}
 	    GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, _vX[0], _vY[0], _vZ[0]);
- 		Indicators_xqz[vehicleid][0] = CreateDynamicObject(19294, 0, 0, 0,0,0,0);
+ 		Indicators_xqz[vehicleid][0] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][0], vehicleid,  _vX[0]/2.23, _vY[0]/2.23, 0.1 ,0,0,0);
- 		Indicators_xqz[vehicleid][1] = CreateDynamicObject(19294, 0, 0, 0,0,0,0);
+ 		Indicators_xqz[vehicleid][1] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][1], vehicleid,  _vX[0]/2.23, -_vY[0]/2.23, 0.1 ,0,0,0);
 	}
 	if(leftindicator)
@@ -15097,13 +15097,13 @@ stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
 	    {
 	    	new omg = GetVehicleModel(GetVehicleTrailer(vehicleid));
             GetVehicleModelInfo(omg, VEHICLE_MODEL_INFO_SIZE, _vX[0], _vY[0], _vZ[0]);
- 			Indicators_xqz[vehicleid][5] = CreateDynamicObject(19294, 0, 0, 0,0,0,0);
+ 			Indicators_xqz[vehicleid][5] = CreateObject(19294, 0, 0, 0,0,0,0);
 			AttachObjectToVehicle(Indicators_xqz[vehicleid][5], GetVehicleTrailer(vehicleid),  -_vX[0]/2.4, -_vY[0]/3.35, -1.0 ,0,0,0);
 		}
 	    GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, _vX[0], _vY[0], _vZ[0]);
- 		Indicators_xqz[vehicleid][2] = CreateDynamicObject(19294, 0, 0, 0,0,0,0);
+ 		Indicators_xqz[vehicleid][2] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][2], vehicleid,  -_vX[0]/2.23, _vY[0]/2.23, 0.1 ,0,0,0);
- 		Indicators_xqz[vehicleid][3] = CreateDynamicObject(19294, 0, 0, 0,0,0,0);
+ 		Indicators_xqz[vehicleid][3] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][3], vehicleid,  -_vX[0]/2.23, -_vY[0]/2.23, 0.1 ,0,0,0);
 	}
 	return 1;

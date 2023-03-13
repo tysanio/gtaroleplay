@@ -3513,8 +3513,8 @@ script OnVehicleDeath(vehicleid)
 	    Crate_Delete(i);
 	}
 	//clignotant
-	if(Indicators_xqz[vehicleid][2]) DestroyDynamicObject(Indicators_xqz[vehicleid][2]), DestroyDynamicObject(Indicators_xqz[vehicleid][3]),DestroyDynamicObject(Indicators_xqz[vehicleid][5]),Indicators_xqz[vehicleid][2]=0;
-	if(Indicators_xqz[vehicleid][0]) DestroyDynamicObject(Indicators_xqz[vehicleid][0]), DestroyDynamicObject(Indicators_xqz[vehicleid][1]),DestroyDynamicObject(Indicators_xqz[vehicleid][4]),Indicators_xqz[vehicleid][0]=0;
+	if(Indicators_xqz[vehicleid][2]) DestroyObject(Indicators_xqz[vehicleid][2]), DestroyObject(Indicators_xqz[vehicleid][3]),DestroyObject(Indicators_xqz[vehicleid][5]),Indicators_xqz[vehicleid][2]=0;
+	if(Indicators_xqz[vehicleid][0]) DestroyObject(Indicators_xqz[vehicleid][0]), DestroyObject(Indicators_xqz[vehicleid][1]),DestroyObject(Indicators_xqz[vehicleid][4]),Indicators_xqz[vehicleid][0]=0;
 	return 1;
 }
 public OnVehicleRespray(playerid, vehicleid, color1, color2)
@@ -7998,11 +7998,11 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyDynamicObject(Indicators_xqz[vid][5]),DestroyDynamicObject(Indicators_xqz[vid][2]), DestroyDynamicObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
+					DestroyObject(Indicators_xqz[vid][5]),DestroyObject(Indicators_xqz[vid][2]), DestroyObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
 				}
             	else if(Indicators_xqz[vid][0])
 				{
-					DestroyDynamicObject(Indicators_xqz[vid][4]),DestroyDynamicObject(Indicators_xqz[vid][0]), DestroyDynamicObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
+					DestroyObject(Indicators_xqz[vid][4]),DestroyObject(Indicators_xqz[vid][0]), DestroyObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
 					TextDrawColor(compteur9[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
@@ -8023,7 +8023,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 	  		  	if(Indicators_xqz[vid][0])
 				{
-					DestroyDynamicObject(Indicators_xqz[vid][4]),DestroyDynamicObject(Indicators_xqz[vid][0]),DestroyDynamicObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
+					DestroyObject(Indicators_xqz[vid][4]),DestroyObject(Indicators_xqz[vid][0]),DestroyObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
 					TextDrawColor(compteur9[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
@@ -8035,7 +8035,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyDynamicObject(Indicators_xqz[vid][5]), DestroyDynamicObject(Indicators_xqz[vid][2]), DestroyDynamicObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
+					DestroyObject(Indicators_xqz[vid][5]), DestroyObject(Indicators_xqz[vid][2]), DestroyObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
 				}
 				else SetVehicleIndicator(vid,0,1);
 				TextDrawHideForPlayer(playerid,compteur9[playerid]);
@@ -8053,7 +8053,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyDynamicObject(Indicators_xqz[vid][5]),DestroyDynamicObject(Indicators_xqz[vid][2]), DestroyDynamicObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
+					DestroyObject(Indicators_xqz[vid][5]),DestroyObject(Indicators_xqz[vid][2]), DestroyObject(Indicators_xqz[vid][3]),Indicators_xqz[vid][2]=0;
 				}
       	      	else if(Indicators_xqz[vid][0])
       	      	{
@@ -8061,7 +8061,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					TextDrawShowForPlayer(playerid,compteur9[playerid]);
 					TextDrawColor(compteur10[playerid], -1);
 					TextDrawShowForPlayer(playerid,compteur10[playerid]);
-					DestroyDynamicObject(Indicators_xqz[vid][4]),DestroyDynamicObject(Indicators_xqz[vid][0]), DestroyDynamicObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
+					DestroyObject(Indicators_xqz[vid][4]),DestroyObject(Indicators_xqz[vid][0]), DestroyObject(Indicators_xqz[vid][1]),Indicators_xqz[vid][0]=0;
 				}
 				else {
 				SetVehicleIndicator(vid,1,0);
@@ -8474,7 +8474,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(PlayingPool[playerid] && PoolAimer != playerid && !UsingChalk[playerid])
 			{
 				SetTimerEx("PlayPoolSound", 1400, 0, "d", 31807);
-				SetPlayerArmedWeapon(playerid, 0);
+				SetPlayerArmedWeapon(playerid, 7);
 				SetPlayerAttachedObject(playerid, OBJ_SLOT_POOL, 338, 6, 0, 0.07, -0.85, 0, 0, 0);
                 ApplyAnimation(playerid, "POOL", "POOL_ChalkCue",3.0,0,0,0,0,0,1);
                 UsingChalk[playerid] = 1;
@@ -17316,11 +17316,6 @@ script OnPlayerShootDynamicObject(playerid, weaponid,objectid, Float:x, Float:y,
 //blackjack
 script blackjackstart1(playerid)
 {
-    new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
-    SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
-   	format(string, sizeof(string), "%d",sommetotal);
-    PlayerTextDrawSetString(playerid,BlackJackTD[8][playerid],string);
-    PlayerTextDrawShow(playerid,BlackJackTD[8][playerid]);
     switch (random(13))
 	{
 	    case 0:
@@ -17493,15 +17488,15 @@ script blackjackstart1(playerid)
 			PlayerTextDrawShow(playerid,BlackJackTD[1][playerid]);
 		}
 	}
-	return 1;
-}
-script blackjackstart2(playerid)
-{
     new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
     SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
    	format(string, sizeof(string), "%d",sommetotal);
     PlayerTextDrawSetString(playerid,BlackJackTD[8][playerid],string);
     PlayerTextDrawShow(playerid,BlackJackTD[8][playerid]);
+	return 1;
+}
+script blackjackstart2(playerid)
+{
     switch (random(13))
 	{
 	    case 0:
@@ -17674,6 +17669,11 @@ script blackjackstart2(playerid)
 			PlayerTextDrawShow(playerid,BlackJackTD[2][playerid]);
 		}
 	}
+    new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
+    SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
+   	format(string, sizeof(string), "%d",sommetotal);
+    PlayerTextDrawSetString(playerid,BlackJackTD[8][playerid],string);
+    PlayerTextDrawShow(playerid,BlackJackTD[8][playerid]);
 	return 1;
 }
 script blackjackstart3(playerid)
@@ -18271,7 +18271,7 @@ script blackjackcroupier(playerid)
   			new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[4],count;
     		SendBlackJackMessage(playerid,"Votre somme est de %d et le croupier est de %d",sommetotal,blackjackcroupierpoint2);
     		format(string, sizeof(string), "%d",blackjackcroupierpoint2);
-    		if((sommetotal > blackjackcroupierpoint2) && blackjackcroupierpoint == 21)
+    		if((sommetotal > blackjackcroupierpoint2) && blackjackcroupierpoint != 21)
     		{
     		    SendBlackJackMessage(playerid,"Vous avez gagner votre main contre le croupier.");
     		    PlayerTextDrawSetString(playerid,BlackJackTD[18][playerid],string);
