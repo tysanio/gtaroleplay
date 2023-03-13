@@ -1345,7 +1345,6 @@ stock StartTutorial(playerid)
 	TogglePlayerControllable(playerid, 0);
     PlayerData[playerid][pTutorial] = 1;
     PlayerData[playerid][pTutorialTime] = 10;
-	new serveurinfo;
 	if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 	{
 	    SetPlayerPos(playerid, 1806.737, -2043.505, 44.733);
@@ -14654,7 +14653,6 @@ stock SetCameraData(playerid)
 {
 	if(!IsPlayerNPC(playerid))
 	{
-		new serveurinfo;
 		if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 		{
 			SetPlayerPos(playerid, 2096.8398,-1879.4764,15.000);
@@ -17570,7 +17568,6 @@ Dialog:decodeur(playerid, response, listitem, inputtext[])
 //serveur setting
 Dialog:serveur(playerid,response,listitem,inputtext[])
 {
-	new serveurinfo;
 	if(!response) return 0;
 	if (response)
 	{
@@ -17659,7 +17656,7 @@ Dialog:serveur1(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive]);
 		if (amount < 0 || amount > 1)
@@ -17669,7 +17666,6 @@ Dialog:serveur1(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17678,7 +17674,7 @@ Dialog:serveur2(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingpmactive]);
 		if (amount < 0 || amount > 1)
@@ -17688,7 +17684,6 @@ Dialog:serveur2(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17697,7 +17692,7 @@ Dialog:serveur3(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagenpcactive]);
 		if (amount < 0 || amount > 1)
@@ -17707,7 +17702,6 @@ Dialog:serveur3(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17716,7 +17710,7 @@ Dialog:serveur4(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagebankactive]);
 		if (amount < 0 || amount > 1)
@@ -17726,7 +17720,6 @@ Dialog:serveur4(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17735,7 +17728,7 @@ Dialog:serveur5(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafkactive]);
 		if (amount < 0 || amount > 1)
@@ -17745,7 +17738,6 @@ Dialog:serveur5(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17754,7 +17746,7 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 en minute","Valider","Fermer",info_serveursetting[serveurinfo][settingafktime]);
 		if (amount < 1 || amount > 20)
@@ -17770,7 +17762,6 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 		}
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17782,37 +17773,37 @@ Dialog:serveur8(playerid,response,listitem,inputtext[])
 	{
 		switch(listitem)
 		{
-			case 0:
+			case 0:			
 			{
-				new serveurinfo,query[900];
+				new query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='1' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 1:
 			{
-				new serveurinfo,query[900];
+				new query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='2' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 2:
 			{
-				new serveurinfo,query[900];
+				new query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='3' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 3:
 			{
-				new serveurinfo,query[900];
+				new query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='4' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 4:
 			{
-				new serveurinfo,query[900];
+				new query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='5' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
@@ -17821,7 +17812,6 @@ Dialog:serveur8(playerid,response,listitem,inputtext[])
 	}
 	else
 	{
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17830,7 +17820,7 @@ Dialog:serveur9(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingnouveau]);
 		if (amount < 0 || amount > 1)
@@ -17840,7 +17830,6 @@ Dialog:serveur9(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17849,7 +17838,7 @@ Dialog:serveur10(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire ","Valider","Fermer",info_serveursetting[serveurinfo][settingpolice]);
 		if (amount < 0 || amount > 10)
@@ -17859,7 +17848,6 @@ Dialog:serveur10(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur10,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17868,7 +17856,7 @@ Dialog:serveur11(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer",info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 		if (amount < 0 || amount > 10)
@@ -17878,7 +17866,6 @@ Dialog:serveur11(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur11,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -17887,7 +17874,7 @@ Dialog:serveur12(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext),serveurinfo;
+	    new amount = strval(inputtext);
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur12,DIALOG_STYLE_INPUT,"Serveur setting whitelist","Whiteliste : %d\nPour activer 1 pour désactiver 0","Valider","Fermer",info_serveursetting[serveurinfo][settingwl]);
 		if (amount < 0 || amount > 1)
@@ -17897,14 +17884,12 @@ Dialog:serveur12(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
-	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
 Dialog:serveur13(playerid, response, listitem, inputtext[])
 {
-	new serveurinfo;
 	if (response)
 	{
 	    if (isnull(inputtext))
@@ -17920,7 +17905,6 @@ Dialog:serveur13(playerid, response, listitem, inputtext[])
 }
 Dialog:serveur14(playerid, response, listitem, inputtext[])
 {
-	new serveurinfo;
 	if (response)
 	{
 	    if (isnull(inputtext))

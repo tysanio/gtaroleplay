@@ -192,7 +192,7 @@ CMD:bas(playerid, params[])
 }
 CMD:o(playerid, params[])
 {
-	new serveurinfo, string[64], string2[64];
+	new string[64], string2[64];
 	if(info_serveursetting[serveurinfo][settingoocactive] == 1) return SendErrorMessage(playerid,"Le OOC est désactivé");
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/o [global OOC]");
@@ -467,7 +467,6 @@ CMD:a(playerid, params[])
 }
 CMD:n(playerid, params[])
 {
-	new serveurinfo;
 	if(info_serveursetting[serveurinfo][settingnouveau] == 1) return SendErrorMessage(playerid,"Le chat nouveau est désactivé");
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/n [nouveau] text]");
@@ -1031,7 +1030,6 @@ CMD:togooc(playerid, params[])
 {
     if (PlayerData[playerid][pAdmin] < 2)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	new serveurinfo;
 	if(info_serveursetting[serveurinfo][settingoocactive] == 0)
 	{
 	    SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: OOC OFF.");
@@ -5277,7 +5275,6 @@ CMD:gps(playerid, params[])
 CMD:pm(playerid, params[])
 {
 	static userid, text[128];
-	new serveurinfo;
 	if(info_serveursetting[serveurinfo][settingpmactive] == 1 && PlayerData[playerid][pAdmin] < 1 && PlayerData[playerid][pTester] < 1) return SendErrorMessage(playerid,"Les PM est désactivé");
 	if (sscanf(params, "us[128]", userid, text))
 	    return SendSyntaxMessage(playerid, "/pm [playerid/name] [message]");
@@ -9681,7 +9678,6 @@ CMD:serveur(playerid,params[])
 {
 	if (PlayerData[playerid][pAdmin] < 4)
     	return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
-	new serveurinfo;
 	Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	return 1;
 }
@@ -9791,7 +9787,7 @@ CMD:louerveh(playerid, params[])
 
 CMD:delouerveh(playerid, params[])
 {
-	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar),serveurinfo;
+	new voicar = GetPlayerVehicleID(playerid),id = Car_GetID(voicar);
 	if (!IsPlayerInRangeOfPoint(playerid,20,info_serveursetting[serveurinfo][settingpos][0],info_serveursetting[serveurinfo][settingpos][1],info_serveursetting[serveurinfo][settingpos][2]))
 	{
 		SetPlayerCheckpoint(playerid,info_serveursetting[serveurinfo][settingpos][0],info_serveursetting[serveurinfo][settingpos][1],info_serveursetting[serveurinfo][settingpos][2],15.0);
@@ -10653,7 +10649,7 @@ CMD:bjstop(playerid, params[])
 //voler item
 CMD:voleritem(playerid,params[])
 {
-	static bizid = -1,serveurinfo;
+	static bizid = -1;
 	new facass = PlayerData[playerid][pFaction];
 	if ((bizid = Business_Inside(playerid)) != -1)
 	{

@@ -1,6 +1,5 @@
-new TruckingCheck[MAX_PLAYERS];
-new Text3D:vehicle3Dtext[MAX_VEHICLES];
-new vehiclecallsign[MAX_VEHICLES];
+new TruckingCheck[MAX_PLAYERS],Text3D:vehicle3Dtext[MAX_VEHICLES],vehiclecallsign[MAX_VEHICLES];
+new serveurinfo; //ajoute global
 enum playerData {
 	pID,
 	pAccount,

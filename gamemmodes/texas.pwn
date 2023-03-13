@@ -7562,7 +7562,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		for (new i = 0; i != MAX_caisseS; i ++) if (caisseMachineData[i][caisseExists] && IsPlayerInRangeOfPoint(playerid, 1.0, caisseMachineData[i][caissePos][0], caisseMachineData[i][caissePos][1], caisseMachineData[i][caissePos][2]))
 		{
-			new bizid = Business_Inside(playerid),moneyganho,serveurinfo,facass = PlayerData[playerid][pFaction];
+			new bizid = Business_Inside(playerid),moneyganho,facass = PlayerData[playerid][pFaction];
 			if(info_serveursetting[serveurinfo][settingbraquagenpcactive] == 1) {ShowPlayerFooter(playerid, "Les braquages sont desactiver");return 1;}
 			if(cop_nbrCops < info_serveursetting[serveurinfo][settingpolice]) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
 			foreach (new y : Player)
@@ -8843,7 +8843,6 @@ script OnPlayerEnterCheckpoint(playerid)
 		    for (new i = 0; i < 5; i ++) {
 		        SendClientMessage(playerid,-1,"");
 			}
-			new serveurinfo;
 			if(info_serveursetting[serveurinfo][settingvilleactive] > 0)
 			{
 			    new money = random(1000) + 2500;
@@ -11212,7 +11211,7 @@ script OnGameModeInit()
     brat[8] = CreateDynamicPickup(1575, 2, 2533.9824,-1297.0844,1044.1250);
     brat[7] = CreateDynamicPickup(1275, 2, 2567.7590,-1281.4629,1044.1250);
     new str11[200],electronicstok = info_stockjobinfo[stockjobinfoid][stockjobinfoelectronic];
-    format(str11, sizeof(str11), "{FFD700}Entrepôt électronic{FFFFFF}\nEn stock: {ff3300}%d matériel électronic{ffffff}",electronicstok);
+    format(str11, sizeof(str11), "{FFD700}Entrepôt électronique{FFFFFF}\nEn stock: {ff3300}%d matériel électronique{ffffff}",electronicstok);
 	stockinfousineelectronic = CreateDynamicObject(19805, 2652.9836, -1588.6438, 15.9040,   0.0000, 0.0000, -91.3800);
 	SetDynamicObjectMaterialText(stockinfousineelectronic, 0, str11, OBJECT_MATERIAL_SIZE_256x128,"Arial", 18, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 	//job fabrication armes a faire
@@ -11569,7 +11568,6 @@ script OnGameModeInit()
 	salaireswatload();
 	salaireurgentisteload();
 	//afk
-	new serveurinfo;
 	AFKActiver = info_serveursetting[serveurinfo][settingafkactive];
 	//if(AFKActiver == 0) {AFKTimer = SetTimer("AFK",60000,1);}
 	//porte vol
@@ -11618,7 +11616,6 @@ script OnGameModeExit()
 		KillTimer(timerslot[i]);
 	}
 	//afk
-	new serveurinfo;
 	AFKActiver = info_serveursetting[serveurinfo][settingafkactive];
 	if(AFKActiver == 1) {KillTimer(AFKTimer);}
 	//horse
@@ -11931,7 +11928,6 @@ script OnPlayerCommandTextEx(playerid, cmdtext[])
 	//bank
     if(strcmp(cmdtext, "/volerbanque", true) == 0)
     {
-        new serveurinfo;
         if(info_serveursetting[serveurinfo][settingbraquagebankactive] == 1) return SendErrorMessage(playerid,"Les braquages sont désactivé pour les admins");
         if(portevol == 1) return SendErrorMessage(playerid,"Cela fait moins de une heure que la banque a été voler");
         if(info_serveursetting[serveurinfo][settingswat] < swat_nbrCops) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~swat~w~ en ville"); return 1;}
@@ -15647,7 +15643,6 @@ script salairejobinfosave(salairejobinfoid)
 script AFK()
 {
 	new Float:x,Float:y,Float:z;
- 	new serveurinfo;
 	foreach (new i : Player)
 	{
 	    if(IsPlayerConnected(i))
@@ -16620,44 +16615,44 @@ script serveursettinginfoload()
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM serveursetting");
     new Cache:result = mysql_query(g_iHandle,query);
-	for(new serveurinfo = 0; serveurinfo < cache_get_row_count(); serveurinfo++)
+	for(new serveurinfo1 = 0; serveurinfo1 < cache_get_row_count(); serveurinfo1++)
 	{
-	    info_serveursetting[serveurinfo][serveurinfod] = cache_get_field_content_int(serveurinfo,"id");
-	    info_serveursetting[serveurinfo][settingafkactive] = cache_get_field_content_int(serveurinfo,"afkactive");
-		info_serveursetting[serveurinfo][settingafktime] = cache_get_field_content_int(serveurinfo,"afktime");
-		info_serveursetting[serveurinfo][settingbraquagenpcactive] = cache_get_field_content_int(serveurinfo,"braquagenpcactive");
-		info_serveursetting[serveurinfo][settingbraquagebankactive] = cache_get_field_content_int(serveurinfo,"braquagebanqueactive");
-		info_serveursetting[serveurinfo][settingoocactive] = cache_get_field_content_int(serveurinfo,"oocactive");
-		info_serveursetting[serveurinfo][settingpmactive] = cache_get_field_content_int(serveurinfo,"pmactive");
-		info_serveursetting[serveurinfo][settingvilleactive] = cache_get_field_content_int(serveurinfo,"villeactive");
-		info_serveursetting[serveurinfo][settingnouveau] = cache_get_field_content_int(serveurinfo,"nouveau");
-		info_serveursetting[serveurinfo][settingpolice] = cache_get_field_content_int(serveurinfo,"police");
-		info_serveursetting[serveurinfo][settingswat] = cache_get_field_content_int(serveurinfo,"swat");
-		info_serveursetting[serveurinfo][settingwl] = cache_get_field_content_int(serveurinfo,"whiteliste");
-		info_serveursetting[serveurinfo][settingpos][0] = cache_get_field_content_int(serveurinfo,"spawnpos1");
-		info_serveursetting[serveurinfo][settingpos][1] = cache_get_field_content_int(serveurinfo,"spawnpos2");
-		info_serveursetting[serveurinfo][settingpos][2] = cache_get_field_content_int(serveurinfo,"spawnpos3");
+	    info_serveursetting[serveurinfo1][serveurinfod] = cache_get_field_content_int(serveurinfo1,"id");
+	    info_serveursetting[serveurinfo1][settingafkactive] = cache_get_field_content_int(serveurinfo1,"afkactive");
+		info_serveursetting[serveurinfo1][settingafktime] = cache_get_field_content_int(serveurinfo1,"afktime");
+		info_serveursetting[serveurinfo1][settingbraquagenpcactive] = cache_get_field_content_int(serveurinfo1,"braquagenpcactive");
+		info_serveursetting[serveurinfo1][settingbraquagebankactive] = cache_get_field_content_int(serveurinfo1,"braquagebanqueactive");
+		info_serveursetting[serveurinfo1][settingoocactive] = cache_get_field_content_int(serveurinfo1,"oocactive");
+		info_serveursetting[serveurinfo1][settingpmactive] = cache_get_field_content_int(serveurinfo1,"pmactive");
+		info_serveursetting[serveurinfo1][settingvilleactive] = cache_get_field_content_int(serveurinfo1,"villeactive");
+		info_serveursetting[serveurinfo1][settingnouveau] = cache_get_field_content_int(serveurinfo1,"nouveau");
+		info_serveursetting[serveurinfo1][settingpolice] = cache_get_field_content_int(serveurinfo1,"police");
+		info_serveursetting[serveurinfo1][settingswat] = cache_get_field_content_int(serveurinfo1,"swat");
+		info_serveursetting[serveurinfo1][settingwl] = cache_get_field_content_int(serveurinfo1,"whiteliste");
+		info_serveursetting[serveurinfo1][settingpos][0] = cache_get_field_content_int(serveurinfo1,"spawnpos1");
+		info_serveursetting[serveurinfo1][settingpos][1] = cache_get_field_content_int(serveurinfo1,"spawnpos2");
+		info_serveursetting[serveurinfo1][settingpos][2] = cache_get_field_content_int(serveurinfo1,"spawnpos3");
 	}
 	cache_delete(result);
 }
-script serveursettinginfosave(serveurinfo)
+script serveursettinginfosave(serveurinfo1)
 {
 	new query[800];
 	mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d, whiteliste=%d, spawnpos1=%.4f,spawnpos2=%.4f,spawnpos3=%.4f WHERE id='1'",
-	info_serveursetting[serveurinfo][settingafkactive],
-	info_serveursetting[serveurinfo][settingafktime],
-	info_serveursetting[serveurinfo][settingbraquagenpcactive],
-	info_serveursetting[serveurinfo][settingbraquagebankactive],
-	info_serveursetting[serveurinfo][settingoocactive],
-	info_serveursetting[serveurinfo][settingpmactive],
-	info_serveursetting[serveurinfo][settingvilleactive],
-    info_serveursetting[serveurinfo][settingnouveau],
-    info_serveursetting[serveurinfo][settingpolice],
-    info_serveursetting[serveurinfo][settingswat],
-	info_serveursetting[serveurinfo][settingwl],
-	info_serveursetting[serveurinfo][settingpos][0],
-	info_serveursetting[serveurinfo][settingpos][1],
-	info_serveursetting[serveurinfo][settingpos][2]
+	info_serveursetting[serveurinfo1][settingafkactive],
+	info_serveursetting[serveurinfo1][settingafktime],
+	info_serveursetting[serveurinfo1][settingbraquagenpcactive],
+	info_serveursetting[serveurinfo1][settingbraquagebankactive],
+	info_serveursetting[serveurinfo1][settingoocactive],
+	info_serveursetting[serveurinfo1][settingpmactive],
+	info_serveursetting[serveurinfo1][settingvilleactive],
+    info_serveursetting[serveurinfo1][settingnouveau],
+    info_serveursetting[serveurinfo1][settingpolice],
+    info_serveursetting[serveurinfo1][settingswat],
+	info_serveursetting[serveurinfo1][settingwl],
+	info_serveursetting[serveurinfo1][settingpos][0],
+	info_serveursetting[serveurinfo1][settingpos][1],
+	info_serveursetting[serveurinfo1][settingpos][2]
 	);
     mysql_tquery(g_iHandle, query);
 }
