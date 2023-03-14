@@ -3829,81 +3829,201 @@ script OnPlayerUseItem(playerid, itemid, name[])
  		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
-    else if (!strcmp(name, "Pizza surgele", true)) {
-        cmd_cuisiner(playerid, "pizza");
-    }
-    else if (!strcmp(name, "Burger surgele", true)) {
-        cmd_cuisiner(playerid, "burger");
-    }
-    else if (!strcmp(name, "Gilet par balles", true)) {
-        cmd_veste(playerid, "\1");
-    }
-    else if (!strcmp(name, "Munition", true)) {
-        cmd_chargeur(playerid, "\1");
-    }
-    else if (!strcmp(name, "9mm Pistol", true)) {
-        EquipWeapon(playerid, "9mm Pistol");
-    }
-    else if (!strcmp(name, "Desert Eagle", true)) {
-        EquipWeapon(playerid, "Desert Eagle");
-    }
-    else if (!strcmp(name, "Shotgun", true)) {
-        EquipWeapon(playerid, "Shotgun");
-    }
-    else if (!strcmp(name, "Mac 10", true)) {
-        EquipWeapon(playerid, "Mac 10");
-    }
-    else if (!strcmp(name, "Tec-9", true)) {
-        EquipWeapon(playerid, "Tec-9");
-    }
-    else if (!strcmp(name, "MP5", true)) {
-        EquipWeapon(playerid, "MP5");
-    }
-    else if (!strcmp(name, "AK-47", true)) {
-        EquipWeapon(playerid, "AK-47");
-    }
-    else if (!strcmp(name, "M4", true)) {
-        EquipWeapon(playerid, "M4");
-    }
-    else if (!strcmp(name, "Sawn-off Shotgun", true)) {
-        EquipWeapon(playerid, "Sawn-off Shotgun");
-    }
-    else if (!strcmp(name, "Cocktail Molotov", true)) {
-        EquipWeapon(playerid, "Cocktail Molotov");
-    }
-    else if (!strcmp(name, "Rifle", true)) {
-        EquipWeapon(playerid, "Rifle");
-    }
-    else if (!strcmp(name, "Sniper", true)) {
-        EquipWeapon(playerid, "Sniper");
-    }
-    else if (!strcmp(name, "Golf Club", true)) {
-        EquipWeapon(playerid, "Golf Club");
-    }
-    else if (!strcmp(name, "Couteau", true)) {
-        EquipWeapon(playerid, "Couteau");
-    }
-    else if (!strcmp(name, "Pelle", true)) {
-        EquipWeapon(playerid, "Pelle");
-    }
-    else if (!strcmp(name, "Katana", true)) {
-        EquipWeapon(playerid, "Katana");
-    }
-    else if (!strcmp(name, "Graine marijuana", true)) {
-        cmd_planter(playerid, "Weed");
-    }
-    else if (!strcmp(name, "Graine cocaine", true)) {
-        cmd_planter(playerid, "Cocaine");
-    }
-    else if (!strcmp(name, "Graine Heroin Opium", true)) {
-        cmd_planter(playerid, "Heroin");
-    }
-    else if (!strcmp(name, "Dynamite", true)) {
-        cmd_dynamite(playerid, "\1");
-    }
-    else if (!strcmp(name, "Decodeur", true)) {
-        cmd_decodeur(playerid, "\1");
-    }
+    else if (!strcmp(name, "Pizza surgele", true)) cmd_cuisiner(playerid, "pizza");
+    else if (!strcmp(name, "Burger surgele", true)) cmd_cuisiner(playerid, "burger");
+    else if (!strcmp(name, "Gilet par balles", true)) cmd_veste(playerid, "\1");
+    else if (!strcmp(name, "Munition", true)) cmd_chargeur(playerid, "\1");
+    else if (!strcmp(name, "9mm Pistol", true)) EquipWeapon(playerid, "9mm Pistol");
+    else if (!strcmp(name, "Desert Eagle", true)) EquipWeapon(playerid, "Desert Eagle");
+    else if (!strcmp(name, "Shotgun", true)) EquipWeapon(playerid, "Shotgun");
+    else if (!strcmp(name, "Mac 10", true)) EquipWeapon(playerid, "Mac 10");
+    else if (!strcmp(name, "Tec-9", true)) EquipWeapon(playerid, "Tec-9");
+    else if (!strcmp(name, "MP5", true))  EquipWeapon(playerid, "MP5");
+    else if (!strcmp(name, "AK-47", true)) EquipWeapon(playerid, "AK-47");
+    else if (!strcmp(name, "M4", true)) EquipWeapon(playerid, "M4");
+    else if (!strcmp(name, "Sawn-off Shotgun", true)) EquipWeapon(playerid, "Sawn-off Shotgun");
+    else if (!strcmp(name, "Cocktail Molotov", true)) EquipWeapon(playerid, "Cocktail Molotov");
+    else if (!strcmp(name, "Rifle", true)) EquipWeapon(playerid, "Rifle");
+    else if (!strcmp(name, "Sniper", true)) EquipWeapon(playerid, "Sniper");
+    else if (!strcmp(name, "Golf Club", true)) EquipWeapon(playerid, "Golf Club");
+    else if (!strcmp(name, "Couteau", true)) EquipWeapon(playerid, "Couteau");
+    else if (!strcmp(name, "Pelle", true)) EquipWeapon(playerid, "Pelle");
+    else if (!strcmp(name, "Katana", true)) EquipWeapon(playerid, "Katana");
+    else if (!strcmp(name, "Graine marijuana", true)) cmd_planter(playerid, "Weed");
+    else if (!strcmp(name, "Graine cocaine", true)) cmd_planter(playerid, "Cocaine");
+    else if (!strcmp(name, "Graine Heroin Opium", true)) cmd_planter(playerid, "Heroin");
+    else if (!strcmp(name, "Dynamite", true)) cmd_dynamite(playerid, "\1");
+    else if (!strcmp(name, "Decodeur", true)) cmd_decodeur(playerid, "\1");
+    //arme UG
+	else if (!strcmp(name, "sab_ak47", true)) EquipWeapon(playerid, "sab_ak47");
+	else if (!strcmp(name, "sab_glock", true)) EquipWeapon(playerid, "sab_glock");
+	else if (!strcmp(name, "sab_psg1", true)) EquipWeapon(playerid, "sab_psg1");
+	else if (!strcmp(name, "lc_ak47", true)) EquipWeapon(playerid, "lc_ak47");
+	else if (!strcmp(name, "lc_bat", true)) EquipWeapon(playerid, "lc_bat");
+	else if (!strcmp(name, "lc_colt45", true)) EquipWeapon(playerid, "lc_colt45");
+	else if (!strcmp(name, "lc_m16", true)) EquipWeapon(playerid, "lc_m16");
+	else if (!strcmp(name, "lc_shotgun", true)) EquipWeapon(playerid, "lc_shotgun");
+	else if (!strcmp(name, "lc_sniper", true)) EquipWeapon(playerid, "lc_sniper");
+	else if (!strcmp(name, "lc_uzi", true)) EquipWeapon(playerid, "lc_uzi");
+	else if (!strcmp(name, "vc_buddyshot", true)) EquipWeapon(playerid, "vc_buddyshot");
+	else if (!strcmp(name, "vc_chromegun", true)) EquipWeapon(playerid, "vc_chromegun");
+	else if (!strcmp(name, "vc_colt45", true)) EquipWeapon(playerid, "vc_colt45");
+	else if (!strcmp(name, "vc_ingram", true)) EquipWeapon(playerid, "vc_ingram");
+	else if (!strcmp(name, "vc_katana", true)) EquipWeapon(playerid, "vc_katana");
+	else if (!strcmp(name, "vc_laser", true)) EquipWeapon(playerid, "vc_laser");
+	else if (!strcmp(name, "vc_m4", true)) EquipWeapon(playerid, "vc_m4");
+	else if (!strcmp(name, "vc_m60", true)) EquipWeapon(playerid, "vc_m60");
+	else if (!strcmp(name, "vc_mp5lng", true)) EquipWeapon(playerid, "vc_mp5lng");
+	else if (!strcmp(name, "vc_python", true)) EquipWeapon(playerid, "vc_python");
+	else if (!strcmp(name, "vc_ruger", true)) EquipWeapon(playerid, "vc_ruger");
+	else if (!strcmp(name, "vc_shotgspa", true)) EquipWeapon(playerid, "vc_shotgspa");
+	else if (!strcmp(name, "vc_sniper", true)) EquipWeapon(playerid, "vc_sniper");
+	else if (!strcmp(name, "vc_tec9", true)) EquipWeapon(playerid, "vc_tec9");
+	else if (!strcmp(name, "vc_uzi", true)) EquipWeapon(playerid, "vc_uzi");
+	else if (!strcmp(name, "vcps2_ruger", true)) EquipWeapon(playerid, "vcps2_ruger");
+	else if (!strcmp(name, "vcb_coltsil", true)) EquipWeapon(playerid, "vcb_coltsil");
+	else if (!strcmp(name, "vcb_ingramsl", true)) EquipWeapon(playerid, "vcb_ingramsl");
+	else if (!strcmp(name, "vcb_mp5short", true)) EquipWeapon(playerid, "vcb_mp5short");
+	else if (!strcmp(name, "vcb_nailgun", true)) EquipWeapon(playerid, "vcb_nailgun");
+	else if (!strcmp(name, "vcb_stapleg", true)) EquipWeapon(playerid, "vcb_stapleg");
+	else if (!strcmp(name, "vcb_steyr", true)) EquipWeapon(playerid, "vcb_steyr");
+	else if (!strcmp(name, "lcs_ak47", true)) EquipWeapon(playerid, "lcs_ak47");
+	else if (!strcmp(name, "lcs_buddyshot", true)) EquipWeapon(playerid, "lcs_buddyshot");
+	else if (!strcmp(name, "lcs_chromegun", true)) EquipWeapon(playerid, "lcs_chromegun");
+	else if (!strcmp(name, "lcs_glock17", true)) EquipWeapon(playerid, "lcs_glock17");
+	else if (!strcmp(name, "lcs_ingram", true)) EquipWeapon(playerid, "lcs_ingram");
+	else if (!strcmp(name, "lcs_laser", true)) EquipWeapon(playerid, "lcs_laser");
+	else if (!strcmp(name, "lcs_m4", true)) EquipWeapon(playerid, "lcs_m4");
+	else if (!strcmp(name, "lcs_m21", true)) EquipWeapon(playerid, "lcs_m21");
+	else if (!strcmp(name, "lcs_M60", true)) EquipWeapon(playerid, "lcs_M60");
+	else if (!strcmp(name, "lcs_mp5k", true)) EquipWeapon(playerid, "lcs_mp5k");
+	else if (!strcmp(name, "lcs_python", true)) EquipWeapon(playerid, "lcs_python");
+	else if (!strcmp(name, "lcs_shotgspa", true)) EquipWeapon(playerid, "lcs_shotgspa");
+	else if (!strcmp(name, "lcs_tec9", true)) EquipWeapon(playerid, "lcs_tec9");
+	else if (!strcmp(name, "lcs_uzi", true)) EquipWeapon(playerid, "lcs_uzi");
+	else if (!strcmp(name, "vcs_ak47", true)) EquipWeapon(playerid, "vcs_ak47");
+	else if (!strcmp(name, "vcs_beretta", true)) EquipWeapon(playerid, "vcs_beretta");
+	else if (!strcmp(name, "vcs_buddyshot", true)) EquipWeapon(playerid, "vcs_buddyshot");
+	else if (!strcmp(name, "vcs_chromegun", true)) EquipWeapon(playerid, "vcs_chromegun");
+	else if (!strcmp(name, "vcs_equalizer", true)) EquipWeapon(playerid, "vcs_equalizer");
+	else if (!strcmp(name, "vcs_ingramsl", true)) EquipWeapon(playerid, "vcs_ingramsl");
+	else if (!strcmp(name, "vcs_M16", true)) EquipWeapon(playerid, "vcs_M16");
+	else if (!strcmp(name, "vcs_m21", true)) EquipWeapon(playerid, "vcs_m21");
+	else if (!strcmp(name, "vcs_m72", true)) EquipWeapon(playerid, "vcs_m72");
+	else if (!strcmp(name, "vcs_m249", true)) EquipWeapon(playerid, "vcs_m249");
+	else if (!strcmp(name, "vcs_skorpion", true)) EquipWeapon(playerid, "vcs_skorpion");
+	else if (!strcmp(name, "vcs_sp89", true)) EquipWeapon(playerid, "vcs_sp89");
+	else if (!strcmp(name, "vcs_shotgspa", true)) EquipWeapon(playerid, "vcs_shotgspa");
+	else if (!strcmp(name, "vcs_svd", true)) EquipWeapon(playerid, "vcs_svd");
+	else if (!strcmp(name, "vcs_uzi", true)) EquipWeapon(playerid, "vcs_uzi");
+	else if (!strcmp(name, "ug_56II", true)) EquipWeapon(playerid, "ug_56II");
+	else if (!strcmp(name, "ug_93r", true)) EquipWeapon(playerid, "ug_93r");
+	else if (!strcmp(name, "ug_aa12", true)) EquipWeapon(playerid, "ug_aa12");
+	else if (!strcmp(name, "ug_aks74u", true)) EquipWeapon(playerid, "ug_aks74u");
+	else if (!strcmp(name, "ug_auga3", true)) EquipWeapon(playerid, "ug_auga3");
+	else if (!strcmp(name, "ug_awp", true)) EquipWeapon(playerid, "ug_awp");
+	else if (!strcmp(name, "ug_cartelrevolver", true)) EquipWeapon(playerid, "ug_cartelrevolver");
+	else if (!strcmp(name, "ug_colt1911", true)) EquipWeapon(playerid, "ug_colt1911");
+	else if (!strcmp(name, "ug_es57", true)) EquipWeapon(playerid, "ug_es57");
+	else if (!strcmp(name, "ug_famas", true)) EquipWeapon(playerid, "ug_famas");
+	else if (!strcmp(name, "ug_fasthawk", true)) EquipWeapon(playerid, "ug_fasthawk");
+	else if (!strcmp(name, "ug_g3", true)) EquipWeapon(playerid, "ug_g3");
+	else if (!strcmp(name, "ug_g36c", true)) EquipWeapon(playerid, "ug_g36c");
+	else if (!strcmp(name, "ug_galil", true)) EquipWeapon(playerid, "ug_galil");
+	else if (!strcmp(name, "ug_hk416", true)) EquipWeapon(playerid, "ug_hk416");
+	else if (!strcmp(name, "ug_kriss", true)) EquipWeapon(playerid, "ug_kriss");
+	else if (!strcmp(name, "ug_luger", true)) EquipWeapon(playerid, "ug_luger");
+	else if (!strcmp(name, "ug_luxwalt", true)) EquipWeapon(playerid, "ug_luxwalt");
+	else if (!strcmp(name, "ug_m1garand", true)) EquipWeapon(playerid, "ug_m1garand");
+	else if (!strcmp(name, "ug_m82", true)) EquipWeapon(playerid, "ug_m82");
+	else if (!strcmp(name, "ug_m200", true)) EquipWeapon(playerid, "ug_m200");
+	else if (!strcmp(name, "ug_m1903", true)) EquipWeapon(playerid, "ug_m1903");
+	else if (!strcmp(name, "ug_mauser", true)) EquipWeapon(playerid, "ug_mauser");
+	else if (!strcmp(name, "ug_mp7", true)) EquipWeapon(playerid, "ug_mp7");
+	else if (!strcmp(name, "ug_mp40", true)) EquipWeapon(playerid, "ug_mp40");
+	else if (!strcmp(name, "ug_oa93", true)) EquipWeapon(playerid, "ug_oa93");
+	else if (!strcmp(name, "ug_oldie", true)) EquipWeapon(playerid, "ug_oldie");
+	else if (!strcmp(name, "ug_p90", true)) EquipWeapon(playerid, "ug_p90");
+	else if (!strcmp(name, "ug_pumpshot", true)) EquipWeapon(playerid, "ug_pumpshot");
+	else if (!strcmp(name, "ug_revolver", true)) EquipWeapon(playerid, "ug_revolver");
+	else if (!strcmp(name, "ug_revolverrifle", true)) EquipWeapon(playerid, "ug_revolverrifle");
+	else if (!strcmp(name, "ug_scar", true)) EquipWeapon(playerid, "ug_scar");
+	else if (!strcmp(name, "ug_scout", true)) EquipWeapon(playerid, "ug_scout");
+	else if (!strcmp(name, "ug_silenceduzi", true)) EquipWeapon(playerid, "ug_silenceduzi");
+	else if (!strcmp(name, "ug_songbird", true)) EquipWeapon(playerid, "ug_songbird");
+	else if (!strcmp(name, "ug_spas15", true)) EquipWeapon(playerid, "ug_spas15");
+	else if (!strcmp(name, "ug_spcarbine", true)) EquipWeapon(playerid, "ug_spcarbine");
+	else if (!strcmp(name, "ug_tmp", true)) EquipWeapon(playerid, "ug_tmp");
+	else if (!strcmp(name, "ug_tomahawk", true)) EquipWeapon(playerid, "ug_tomahawk");
+	else if (!strcmp(name, "ug_tommygun", true)) EquipWeapon(playerid, "ug_tommygun");
+	else if (!strcmp(name, "ug_tripleshot", true)) EquipWeapon(playerid, "ug_tripleshot");
+	else if (!strcmp(name, "ug_ump45", true)) EquipWeapon(playerid, "ug_ump45");
+	else if (!strcmp(name, "ug_woodshot", true)) EquipWeapon(playerid, "ug_woodshot");
+	else if (!strcmp(name, "ug_woodspal", true)) EquipWeapon(playerid, "ug_woodspal");
+	else if (!strcmp(name, "ug_wrench", true)) EquipWeapon(playerid, "ug_wrench");
+	else if (!strcmp(name, "ug_xm8", true)) EquipWeapon(playerid, "ug_xm8");
+	else if (!strcmp(name, "ug_xm1014", true)) EquipWeapon(playerid, "ug_xm1014");
+	else if (!strcmp(name, "bw_bbgun", true)) EquipWeapon(playerid, "bw_bbgun");
+	else if (!strcmp(name, "cc_deagle", true)) EquipWeapon(playerid, "cc_deagle");
+	else if (!strcmp(name, "cc_glock", true)) EquipWeapon(playerid, "cc_glock");
+	else if (!strcmp(name, "cc_ingram", true)) EquipWeapon(playerid, "cc_ingram");
+	else if (!strcmp(name, "cc_m4", true)) EquipWeapon(playerid, "cc_m4");
+	else if (!strcmp(name, "cc_nailgun", true)) EquipWeapon(playerid, "cc_nailgun");
+	else if (!strcmp(name, "cc_psg1", true)) EquipWeapon(playerid, "cc_psg1");
+	else if (!strcmp(name, "cc_revolver", true)) EquipWeapon(playerid, "cc_revolver");
+	else if (!strcmp(name, "cc_shotgspa", true)) EquipWeapon(playerid, "cc_shotgspa");
+	else if (!strcmp(name, "cc_shotgun", true)) EquipWeapon(playerid, "cc_shotgun");
+	else if (!strcmp(name, "cc_sniper", true)) EquipWeapon(playerid, "cc_sniper");
+	else if (!strcmp(name, "cc_tranq", true)) EquipWeapon(playerid, "cc_tranq");
+	else if (!strcmp(name, "cm_deagle", true)) EquipWeapon(playerid, "cm_deagle");
+	else if (!strcmp(name, "cm_glock", true)) EquipWeapon(playerid, "cm_glock");
+	else if (!strcmp(name, "cm_ingram", true)) EquipWeapon(playerid, "cm_ingram");
+	else if (!strcmp(name, "cm_m4", true)) EquipWeapon(playerid, "cm_m4");
+	else if (!strcmp(name, "cm_revolver", true)) EquipWeapon(playerid, "cm_revolver");
+	else if (!strcmp(name, "cm_shotgspa", true)) EquipWeapon(playerid, "cm_shotgspa");
+	else if (!strcmp(name, "cm_shotgun", true)) EquipWeapon(playerid, "cm_shotgun");
+	else if (!strcmp(name, "cm_circularsaw", true)) EquipWeapon(playerid, "cm_circularsaw");
+	else if (!strcmp(name, "cm_clipboard", true)) EquipWeapon(playerid, "cm_clipboard");
+	else if (!strcmp(name, "cm_crossbow", true)) EquipWeapon(playerid, "cm_crossbow");
+	else if (!strcmp(name, "cm_dildo", true)) EquipWeapon(playerid, "cm_dildo");
+	else if (!strcmp(name, "cm_fireex", true)) EquipWeapon(playerid, "cm_fireex");
+	else if (!strcmp(name, "cm_flaregun", true)) EquipWeapon(playerid, "cm_flaregun");
+	else if (!strcmp(name, "cm_flashlight", true)) EquipWeapon(playerid, "cm_flashlight");
+	else if (!strcmp(name, "cm_hacksaw", true)) EquipWeapon(playerid, "cm_hacksaw");
+	else if (!strcmp(name, "cm_hammer", true)) EquipWeapon(playerid, "cm_hammer");
+	else if (!strcmp(name, "cm_katana", true)) EquipWeapon(playerid, "cm_katana");
+	else if (!strcmp(name, "cm_mace", true)) EquipWeapon(playerid, "cm_mace");
+	else if (!strcmp(name, "cm_newspaper", true)) EquipWeapon(playerid, "cm_newspaper");
+	else if (!strcmp(name, "cm_picket", true)) EquipWeapon(playerid, "cm_picket");
+	else if (!strcmp(name, "cm_saw", true)) EquipWeapon(playerid, "cm_saw");
+	else if (!strcmp(name, "cm_scissors", true)) EquipWeapon(playerid, "cm_scissors");
+	else if (!strcmp(name, "cm_sniper", true)) EquipWeapon(playerid, "cm_sniper");
+	else if (!strcmp(name, "cm_stunbaton", true)) EquipWeapon(playerid, "cm_stunbaton");
+	else if (!strcmp(name, "vc_bat", true)) EquipWeapon(playerid, "vc_bat");
+	else if (!strcmp(name, "vc_cane", true)) EquipWeapon(playerid, "vc_cane");
+	else if (!strcmp(name, "ug_2tglock", true)) EquipWeapon(playerid, "ug_2tglock");
+	else if (!strcmp(name, "ug_aksopmod", true)) EquipWeapon(playerid, "ug_aksopmod");
+	else if (!strcmp(name, "ug_ar7", true)) EquipWeapon(playerid, "ug_ar7");
+	else if (!strcmp(name, "ug_bat", true)) EquipWeapon(playerid, "ug_bat");
+	else if (!strcmp(name, "ug_brassknuckle", true)) EquipWeapon(playerid, "ug_brassknuckle");
+	else if (!strcmp(name, "ug_calico", true)) EquipWeapon(playerid, "ug_calico");
+	else if (!strcmp(name, "ug_camosniper", true)) EquipWeapon(playerid, "ug_camosniper");
+	else if (!strcmp(name, "ug_fmg9", true)) EquipWeapon(playerid, "ug_fmg9");
+	else if (!strcmp(name, "ug_karambit", true)) EquipWeapon(playerid, "ug_karambit");
+	else if (!strcmp(name, "ug_m202a1", true)) EquipWeapon(playerid, "ug_m202a1");
+	else if (!strcmp(name, "ug_matador", true)) EquipWeapon(playerid, "ug_matador");
+	else if (!strcmp(name, "ug_paintball", true)) EquipWeapon(playerid, "ug_paintball");
+	else if (!strcmp(name, "ug_plunger", true)) EquipWeapon(playerid, "ug_plunger");
+	else if (!strcmp(name, "ug_rpg26", true)) EquipWeapon(playerid, "ug_rpg26");
+	else if (!strcmp(name, "ug_sew500", true)) EquipWeapon(playerid, "ug_sew500");
+	else if (!strcmp(name, "ug_silverrevolver", true)) EquipWeapon(playerid, "ug_silverrevolver");
+	else if (!strcmp(name, "ug_snub", true)) EquipWeapon(playerid, "ug_snub");
+	else if (!strcmp(name, "ug_spikedknuckle", true)) EquipWeapon(playerid, "ug_spikedknuckle");
+	else if (!strcmp(name, "ug_srsa1", true)) EquipWeapon(playerid, "ug_srsa1");
+	else if (!strcmp(name, "ug_sturmgewehr", true)) EquipWeapon(playerid, "ug_sturmgewehr");
+	else if (!strcmp(name, "ug_sword", true)) EquipWeapon(playerid, "ug_sword");
+	else if (!strcmp(name, "ug_tennisracket", true)) EquipWeapon(playerid, "ug_tennisracket");
+	else if (!strcmp(name, "ug_volcanic", true)) EquipWeapon(playerid, "ug_volcanic");
     else if (!strcmp(name, "des", true)) {
 		if (Inventory_Count(playerid, "des") > 2) return SendErrorMessage(playerid, "Vous n'avez pas de dés pour jouer (x2).");
 		new  randResult[2];
@@ -7405,6 +7525,222 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			        Inventory_Remove(playerid, "Sniper");
 					PlayReloadAnimation(playerid, weaponid);
 					GiveWeaponToPlayer(playerid, weaponid, 5);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 111:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_ak47");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 30);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 113:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_colt45");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 12);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 114:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_flame");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 500);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 117:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_m16");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 60);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 120:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_shotgun");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 5);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 121:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_sniper");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 5);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 122:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lc_uzi");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 25);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 174:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_glock17");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 17);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 191:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_python");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 6);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 163:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_ak47");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 25);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 171:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_chromegun");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 5);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 193:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_shotgspa");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 7);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 166:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_buddyshot");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 4);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 182:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_m4");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 30);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 195:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_tec9");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 36);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 196:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_uzi");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 30);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 178:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_ingram");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 32);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 189:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_mp5k");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 30);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 183:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_m21");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 8);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 181:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_laser");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 5);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 173:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_flame");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 500);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 184:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_M60");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 100);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 186:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_minigun");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 500);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
+				}
+		        case 167:
+			    {
+			        HoldWeapon(playerid, 0);
+				    PlayerPlaySoundEx(playerid, 36401);
+			        Inventory_Remove(playerid, "lcs_camera");
+					PlayReloadAnimation(playerid, weaponid);
+					GiveWeaponToPlayer(playerid, weaponid, 36);
 					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
 				}
 			}
@@ -11031,7 +11367,7 @@ script OnGameModeInit()
     LoadPool2();
     //fin des fs oubliger
     //zombie + radiation
-	//ZombiesTimer = SetTimer("CreateZombies", 50, true);
+	ZombiesTimer = SetTimer("CreateZombies", 50, true);
 	SetTimer("UpdateRadiation",5000, 1);
 	//fin zombie
     AntiDeAMX();
@@ -15818,8 +16154,6 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if (newtarget == missionactor[3])
     {
-	    if (FactionData[facass][factionacces][8] == 0)
-	    	return SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu veux quoi toi?");
 		if (FactionData[facass][factionacces][8] == 1 && mission[3][playerid] == 0)
 			return Dialog_Show(playerid, Mission3, DIALOG_STYLE_MSGBOX, "Robert", "Salut toi, Tu veux avoir un peut d'argent?\nRapporte moi une caise de type Six\nSi tu veux tu peut gardé la marchandise ou\nme la rapporté pour avoir de l'argent", "Valider", "Quitter");
 		else SendClientMessage(playerid,COLOR_WHITE,"Robert : Tu veux quoi?");

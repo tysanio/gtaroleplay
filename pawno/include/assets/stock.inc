@@ -1378,7 +1378,7 @@ stock StartTutorial(playerid)
 }
 stock IsValidobjectModel(modelid)
 {
-	if (modelid < 0 || modelid > 20000)
+	if (modelid < 0 || modelid > 30000)
 	    return 0;
     switch (modelid)
 	{
@@ -1975,6 +1975,634 @@ stock EquipWeapon(playerid, weapon[])
 	    Inventory_Remove(playerid, "Katana");
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) Katana de son inventaire.", ReturnName(playerid, 0));
 	}
+    else if (!strcmp(weapon, "sa_csgolfclub", true))
+	{
+	    if (!Inventory_HasItem(playerid, "sa_csgolfclub"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 103))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 103, 1);
+	    Inventory_Remove(playerid, "sa_csgolfclub");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) golf club de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "sa_csshovel", true))
+	{
+	    if (!Inventory_HasItem(playerid, "sa_csshovel"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 106))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 106, 1);
+	    Inventory_Remove(playerid, "sa_csshovel");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) pelle de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "sab_skateboard", true))
+	{
+	    if (!Inventory_HasItem(playerid, "sab_skateboard"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 107))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 107, 1);
+	    Inventory_Remove(playerid, "sab_skateboard");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) skateboard de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "sa_csswitchblade", true))
+	{
+	    if (!Inventory_HasItem(playerid, "sa_csswitchblade"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 109))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 109, 1);
+	    Inventory_Remove(playerid, "sa_csswitchblade");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) switch blade de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "sa_csthrowingkf", true))
+	{
+	    if (!Inventory_HasItem(playerid, "sa_csthrowingkf"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 110))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 110, 1);
+	    Inventory_Remove(playerid, "sa_csthrowingkf");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) couteau de lancé de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lc_bat", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_bat"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 112))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 112, 1);
+	    Inventory_Remove(playerid, "lc_bat");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) bat de baseball de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_chnsaw", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_chnsaw"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 125))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 125, 1);
+	    Inventory_Remove(playerid, "vc_chnsaw");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) chainsaw de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_cleaver", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_cleaver"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 127))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 127, 1);
+	    Inventory_Remove(playerid, "vc_cleaver");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) hachoir de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_golfclub", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_golfclub"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 130))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 130, 1);
+	    Inventory_Remove(playerid, "vc_golfclub");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) golf club de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_hammer", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_hammer"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 132))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 132, 1);
+	    Inventory_Remove(playerid, "vc_hammer");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) marteau de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_katana", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_katana"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 134))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 134, 1);
+	    Inventory_Remove(playerid, "vc_katana");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) katana de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_knifecur", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_knifecur"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 135))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 135, 1);
+	    Inventory_Remove(playerid, "vc_knifecur");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) couteau de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_machete", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_machete"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 139))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 139, 1);
+	    Inventory_Remove(playerid, "vc_machete");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) machette de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_nitestick", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_nitestick"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 144))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 144, 1);
+	    Inventory_Remove(playerid, "vc_nitestick");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) matraque de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "vc_screwdriver", true))
+	{
+	    if (!Inventory_HasItem(playerid, "vc_screwdriver"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 148))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 148, 1);
+	    Inventory_Remove(playerid, "vc_screwdriver");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) tournevis de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_chisel", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_chisel"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 169))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 169, 1);
+	    Inventory_Remove(playerid, "lcs_chisel");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) Chisel de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_hockey", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_hockey"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 177))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 177, 1);
+	    Inventory_Remove(playerid, "lcs_hockey");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) baton d'hockey de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_nitestick", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_nitestick"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 190))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 190, 1);
+	    Inventory_Remove(playerid, "lcs_nitestick");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) matraque de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_knifecur", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_knifecur"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 180))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 180, 1);
+	    Inventory_Remove(playerid, "lcs_knifecur");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) couteau de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_bat", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_bat"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 164))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 164, 1);
+	    Inventory_Remove(playerid, "lcs_bat");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) bat de baseball de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_handaxe", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_handaxe"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 176))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 176, 1);
+	    Inventory_Remove(playerid, "lcs_handaxe");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) hache de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_cleaver", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_cleaver"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 172))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 172, 1);
+	    Inventory_Remove(playerid, "lcs_cleaver");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) hachoir de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_machete", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_machete"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 185))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 185, 1);
+	    Inventory_Remove(playerid, "lcs_machete");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) machete de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_katana", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_katana"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 179))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 179, 1);
+	    Inventory_Remove(playerid, "lcs_katana");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) katana de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_chnsaw", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_chnsaw"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 170))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 170, 1);
+	    Inventory_Remove(playerid, "lcs_chnsaw");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) Chainsaw de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_brassknuckle", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_brassknuckle"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 165))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 165, 1);
+	    Inventory_Remove(playerid, "lcs_brassknuckle");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) poing américan de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_cane", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_cane"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 168))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 168, 1);
+	    Inventory_Remove(playerid, "lcs_cane");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) cane de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lc_grenade", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_grenade"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 115))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 115, 1);
+	    Inventory_Remove(playerid, "lc_grenade");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) grenade de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lc_heatseek", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_heatseek"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 116))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 116, 1);
+	    Inventory_Remove(playerid, "lc_heatseek");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) rocket launcher de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lc_molotov", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_molotov"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 119))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 119, 1);
+	    Inventory_Remove(playerid, "lc_molotov");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) cocktail molotov de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_molotov", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_molotov"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 188))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 188, 1);
+	    Inventory_Remove(playerid, "lcs_molotov");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) cocktail molotov de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_grenade", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_grenade"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 175))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 175, 1);
+	    Inventory_Remove(playerid, "lcs_grenade");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) grenade de son inventaire.", ReturnName(playerid, 0));
+	}	
+    else if (!strcmp(weapon, "lcs_teargas", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_teargas"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 194))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 194, 1);
+	    Inventory_Remove(playerid, "lcs_teargas");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) grenade lacrymo de son inventaire.", ReturnName(playerid, 0));
+	}
+    else if (!strcmp(weapon, "lcs_rocketla", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_rocketla"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 192))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	    GiveWeaponToPlayer(playerid, 192, 1);
+	    Inventory_Remove(playerid, "lcs_rocketla");
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) rocket launcher de son inventaire.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(weapon, "lc_ak47", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_ak47"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 111))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 111);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type ak47 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lc_colt45", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_colt45"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 113))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 113);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type colt vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lc_flame", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_flame"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 114))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 114);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type lance-flamme vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lc_m16", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_m16"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 117))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 117);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m16 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lc_shotgun", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_shotgun"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 120))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 120);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lc_sniper", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_sniper"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 121))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 121);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type sniper rifle vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lc_uzi", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lc_uzi"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 122))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 122);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type uzi vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_glock17", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_glock17"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 174))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 174);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type glock vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_python", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_python"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 191))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 191);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type python vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_ak47", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_ak47"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 163))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 163);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type ak-47 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_chromegun", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_chromegun"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 171))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 171);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_shotgspa", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_shotgspa"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 193))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 193);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_buddyshot", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_buddyshot"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 166))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 166);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_m4", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_m4"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 182))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 182);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m4 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_tec9", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_tec9"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 195))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 195);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type tec9 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_uzi", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_uzi"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 196))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 196);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type uzi vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_ingram", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_ingram"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 178))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 178);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type mac vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_mp5k", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_mp5k"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 189))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 189);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type mp5k vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_m21", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_m21"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 183))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 183);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m21 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_laser", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_laser"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 181))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 181);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type laser rifle vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_flame", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_flame"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 173))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 173);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type lance-flamme vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_M60", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_M60"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 184))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 184);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m60 vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_minigun", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_minigun"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 186))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 186);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type minigun vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}
+	else if (!strcmp(weapon, "lcs_camera", true))
+	{
+	    if (!Inventory_HasItem(playerid, "lcs_camera"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
+	    if (PlayerHasWeapon(playerid, 167))
+	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+		if (PlayerData[playerid][pHoldWeapon] > 0)
+		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		HoldWeapon(playerid, 167);
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type camera vide et la tien dans ces mains.", ReturnName(playerid, 0));
+	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
+	}	
 	return 1;
 }
 stock SetPlayerInPrison(playerid)

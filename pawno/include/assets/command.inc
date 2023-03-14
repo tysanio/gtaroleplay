@@ -8018,8 +8018,222 @@ CMD:usemag(playerid, params[])
 				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
 				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
 			}
-			default:
-				return SendErrorMessage(playerid, "Tu ne peut chargé cette arme.");
+		    case 111:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+				PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 113:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 114:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+				PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 117:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+				PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 120:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 121:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 122:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+				PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 174:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 191:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+				PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 163:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 171:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 193:
+			{
+			    PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 166:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 182:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 195:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 196:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 178:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));					
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");				}
+		    case 189:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 183:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 181:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 173:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 184:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+		    case 186:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+	        case 167:
+		    {
+		        PlayerData[playerid][pUsedMagazine] = 1;
+			    PlayerPlaySoundEx(playerid, 36401);
+				PlayReloadAnimation(playerid, 24);
+				Inventory_Remove(playerid, "Chargeur");
+				SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s recharge son arme.", ReturnName(playerid, 0));
+				ShowPlayerFooter(playerid, "Appuyer ~y~'H'~w~ pour charger l'arme.");
+			}
+			default: return SendErrorMessage(playerid, "Tu ne peut chargé cette arme.");
 		}
 	}
 	if (Inventory_HasItem(playerid, "douille de shotgun"))

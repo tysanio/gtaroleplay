@@ -1006,7 +1006,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"carrosserie",3117},
 	{"jeton poker",1924},
 	{"paquet de bandage",11748},
-	{"bandage",11747}/*,
+	{"bandage",11747},
 	//arme de UG
 	{"sab_ak47",29000},
 	{"sab_glock",29001},
@@ -1131,7 +1131,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"cm_deagle",29251},
 	{"cm_glock",29254},
 	{"cm_ingram",29256},
-	{"cm_m4 ",29257},
+	{"cm_m4",29257},
 	{"cm_revolver",29261},
 	{"cm_shotgspa",29264},
 	{"cm_shotgun",29265},
@@ -1176,7 +1176,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"ug_sturmgewehr",29326},
 	{"ug_sword",29327},
 	{"ug_tennisracket",29328},
-	{"ug_volcanic",29329}*/
+	{"ug_volcanic",29329}
 };
 new const Float:arrHospitalDeliver[9][3] = {
     {-2692.6580, 635.4608, 14.4531},
