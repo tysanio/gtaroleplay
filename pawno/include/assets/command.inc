@@ -2750,11 +2750,10 @@ CMD:chargeur(playerid, params[])
 	{
 		switch ((weaponid = GetWeapon(playerid)))
 		{
-			case 22, 23, 24: GiveWeaponToPlayer(playerid, weaponid, 68);
-			case 25, 26, 27: GiveWeaponToPlayer(playerid, weaponid, 20);
-			case 28, 31, 32: GiveWeaponToPlayer(playerid, weaponid, 200);
-			case 29, 30: GiveWeaponToPlayer(playerid, weaponid, 120);
-			case 33, 34: GiveWeaponToPlayer(playerid, weaponid, 20);
+			case 22, 23, 24,102,113,128,145,155,159,160,174,191,199,208,232,239,241,242,254,255,261,265,272,278,324,325,333,336,351,354,362,370,377,395,401,413,414,415,421: GiveWeaponToPlayer(playerid, weaponid, 68);
+			case 30,31, 100,111,117,137,147,154,161,163,182,197,217,231,236,243,246..248,250,274,293,330,357,396,397: GiveWeaponToPlayer(playerid, weaponid, 200);
+			case 28,29,32,122,133,143,152,153,157,158,178,189,195,196,214,225,226,230,234,252,262..264,266,277,280,283,285,288,328,356,403,409,418: GiveWeaponToPlayer(playerid, weaponid, 120);
+			case 33, 34,105,121,136,150,181,183,219,228,237,256..259,273,276,297,335,342,343,374,387,402,417: GiveWeaponToPlayer(playerid, weaponid, 20);
 			case 35..37: GiveWeaponToPlayer(playerid, weaponid, 4);
 			case 38: GiveWeaponToPlayer(playerid, weaponid, 500);
 			default: return SendErrorMessage(playerid, "Tu ne peut utiliser de chargeur.");
@@ -2765,7 +2764,7 @@ CMD:chargeur(playerid, params[])
 	{
 		switch ((weaponid = GetWeapon(playerid)))
 		{
-			case 25, 26, 27: GiveWeaponToPlayer(playerid, weaponid, 20);
+			case 25, 26, 27, 120,124,126,149,166,171,193,202,207,227,233,271,279,287,290,294,338,339,364,365: GiveWeaponToPlayer(playerid, weaponid, 25);
 			default: return SendErrorMessage(playerid, "Tu ne peut utiliser de douille de shotgun.");
 		}
 		Inventory_Remove(playerid, "douille de shotgun");

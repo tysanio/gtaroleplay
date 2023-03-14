@@ -5938,7 +5938,23 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 2:
+                case 2:
+		        {
+		            if (!Inventory_HasItem(playerid, "License arme"))
+		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
+		            if (Inventory_Count(playerid, "douille de shotgun") >= 20)
+		                return SendErrorMessage(playerid, "Tu a 20 douille de shotgun, tu ne peut plus en acheter.");
+					new id = Inventory_Add(playerid, "douille de shotgun", 2038);
+					if (id == -1)
+        				return SendErrorMessage(playerid, "Inventaire plein.");
+					GiveMoney(playerid, -price);
+					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a payé %s $ et a reçu une douille de shotgun.", ReturnName(playerid, 0), FormatNumber(price));
+					BusinessData[bizid][bizProducts]--;
+					BusinessData[bizid][bizVault] += Tax_Percent(price);
+					Business_Save(bizid);
+					Tax_AddPercent(price);
+			    }
+				case 3:
 		        {
 		            if (!Inventory_HasItem(playerid, "License arme"))
 		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
@@ -5954,7 +5970,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 3:
+				case 4:
 				{
 				    if (!Inventory_HasItem(playerid, "License arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
@@ -5970,7 +5986,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 4:
+				case 5:
 				{
 				    if (!Inventory_HasItem(playerid, "License arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
@@ -5987,7 +6003,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 5:
+				case 6:
 				{
 				    if (!Inventory_HasItem(playerid, "License arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
@@ -10003,13 +10019,14 @@ Business_PurchaseMenu(playerid, bizid)
 		}
 		case 2:
 	    {
-			format(string, sizeof(string), "Chargeur\t%s$\nMunition\t%s$\nGilet par balle\t%s$\n9mm Pistol\t%s$\nRemington 870\t%s$\nM14 Rifle\t%s$",
+			format(string, sizeof(string), "Chargeur\t%s$\nMunition\t%s$\nDouille de shotgun\t%s$\nGilet par balle\t%s$\n9mm Pistol\t%s$\nRemington 870\t%s$\nM14 Rifle\t%s$",
 				FormatNumber(BusinessData[bizid][bizPrices][0]),
 				FormatNumber(BusinessData[bizid][bizPrices][1]),
 				FormatNumber(BusinessData[bizid][bizPrices][2]),
 				FormatNumber(BusinessData[bizid][bizPrices][3]),
 				FormatNumber(BusinessData[bizid][bizPrices][4]),
-				FormatNumber(BusinessData[bizid][bizPrices][5])
+				FormatNumber(BusinessData[bizid][bizPrices][5]),
+				FormatNumber(BusinessData[bizid][bizPrices][6])
 			);
 			Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_TABLIST, BusinessData[bizid][bizName], string, "Acheter", "Annuler");
 		}
@@ -10336,10 +10353,11 @@ Business_Create(playerid, type, price)
 
                     BusinessData[i][bizPrices][0] = 50;
 					BusinessData[i][bizPrices][1] = 100;
-		            BusinessData[i][bizPrices][2] = 200;
-		            BusinessData[i][bizPrices][3] = 400;
-		            BusinessData[i][bizPrices][4] = 600;
-		            BusinessData[i][bizPrices][5] = 800;
+					BusinessData[i][bizPrices][2] = 100;
+		            BusinessData[i][bizPrices][3] = 200;
+		            BusinessData[i][bizPrices][4] = 400;
+		            BusinessData[i][bizPrices][5] = 600;
+		            BusinessData[i][bizPrices][6] = 800;
 				}
 				else if (type == 3) {
                 	BusinessData[i][bizInt][0] = 161.4801;
