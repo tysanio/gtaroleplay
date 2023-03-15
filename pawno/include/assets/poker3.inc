@@ -39,8 +39,7 @@
 #define DRAWDISTANCE_CHIP_MACHINE_MISC		50.0
 #define IsNull(%1) \
 ((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
-new szzString[4096];
-new PlayerText:PlayerPokerUI[MAX_PLAYERS][MAX_PLAYERPOKERUI];
+new szzString[4096],PlayerText:PlayerPokerUI[MAX_PLAYERS][MAX_PLAYERPOKERUI];
 enum pkrInfo
 {
 	pkrActive,
@@ -417,17 +416,14 @@ stock BubbleSort(a[], size)
 		}
 	} while(swapped);
 }
-
-forward PokerExit(playerid);
-public PokerExit(playerid)
+script PokerExit(playerid)
 {
 	SetCameraBehindPlayer(playerid);
 	TogglePlayerControllable(playerid, 1);
 	ClearAnimations(playerid);
 	CancelSelectTextDraw(playerid);
 }
-forward PokerPulse(tableid);
-public PokerPulse(tableid)
+script PokerPulse(tableid)
 {
 	// Idle Animation Loop & Re-seater
 	for(new i = 0; i < 6; i++) {
@@ -961,7 +957,6 @@ public PokerPulse(tableid)
 	}
 	return 1;
 }
-
 CameraRadiusSetPos(playerid, Float:x, Float:y, Float:z, Float:degree = 0.0, Float:height = 3.0, Float:radius = 8.0)
 {
 	new Float:deltaToX = x + radius * floatsin(-degree, degrees);
@@ -980,9 +975,7 @@ GlobalPlaySound(soundid, Float:x, Float:y, Float:z)
 		}
 	}
 }
-
-forward split(const strsrc[], strdest[][], delimiter);
-public split(const strsrc[], strdest[][], delimiter)
+script split(const strsrc[], strdest[][], delimiter)
 {
 	new i, li,aNum,len;
 	while(i <= strlen(strsrc)){
@@ -996,7 +989,6 @@ public split(const strsrc[], strdest[][], delimiter)
 	}
 	return 1;
 }
-
 PokerOptions(playerid, option)
 {
 	switch(option)
@@ -1042,27 +1034,22 @@ PokerOptions(playerid, option)
 		}
 	}
 }
-
 PokerCallHand(playerid)
 {
 	ShowCasinoGamesMenu(playerid, DIALOG_CGAMESCALLPOKER);
 }
-
 PokerRaiseHand(playerid)
 {
 	ShowCasinoGamesMenu(playerid, DIALOG_CGAMESRAISEPOKER);
 }
-
 PokerCheckHand(playerid)
 {
 	if(GetPVarInt(playerid, "pkrActiveHand")) {
 		SetPVarString(playerid, "pkrStatusString", "Check");
 	}
-
 	// Animation
 	ApplyAnimation(playerid, "CASINO", "cards_raise", 4.1, 0, 1, 1, 1, 1, 1);
 }
-
 PokerFoldHand(playerid)
 {
 	if(GetPVarInt(playerid, "pkrActiveHand")) {
@@ -1082,11 +1069,9 @@ PokerFoldHand(playerid)
 		ApplyAnimation(playerid, "CASINO", "cards_out", 4.1, 0, 1, 1, 1, 1, 1);
 	}
 }
-
 PokerDealHands(tableid)
 {
 	new tmp = 0;
-
 	// Loop through active players.
 	for(new i = 0; i < 6; i++) {
 		new playerid = PokerTable[tableid][pkrSlot][i];
@@ -1111,7 +1096,6 @@ PokerDealHands(tableid)
 			}
 		}
 	}
-
 	// Loop through community cards.
 	for(new i = 0; i < 5; i++) {
 
@@ -1119,17 +1103,14 @@ PokerDealHands(tableid)
 		tmp++;
 	}
 }
-
 PokerShuffleDeck(tableid)
 {
 	// SFX
 	GlobalPlaySound(5600, PokerTable[tableid][pkrX], PokerTable[tableid][pkrY], PokerTable[tableid][pkrZ]);
-
 	// Order the deck
 	for(new i = 0; i < 52; i++) {
 		PokerTable[tableid][pkrDeck][i] = i;
 	}
-
 	// Randomize the array (AKA Shuffle Algorithm)
 	new rand, tmp, i;
 	for(i = 52; i > 1; i--) {
@@ -1139,7 +1120,6 @@ PokerShuffleDeck(tableid)
 		PokerTable[tableid][pkrDeck][i-1] = tmp;
 	}
 }
-
 PokerFindPlayerOrder(tableid, index)
 {
 	new tmpIndex = -1;
@@ -2095,7 +2075,7 @@ PlacePokerTable(tableid, skipmisc, Float:x, Float:y, Float:z, Float:rx, Float:ry
 	if(skipmisc != 0) {
 	}
 	format(szzString, sizeof(szzString), "Poker Table %d", tableid);
-	PokerTable[tableid][pkrText3DID] = CreateDynamic3DTextLabel(szzString, COLOR_GOLD, x, y, z+1.3, DRAWDISTANCE_POKER_MISC,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, virtualworld,interior);
+	PokerTable[tableid][pkrText3DID] = CreateDynamic3DTextLabel(szzString, COLOR_GOLD, x, y, z+1.0, DRAWDISTANCE_POKER_MISC,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, virtualworld,interior);
 	SavePokerTables();
 	return tableid;
 }
@@ -2484,7 +2464,7 @@ CMD:debugtextsize(playerid, params[])
 	}
 	return 1;
 }
-public OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:fY, Float:fZ)
+script OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:fY, Float:fZ)
 {
     if(type == SELECT_OBJECT_GLOBAL_OBJECT)
     {
@@ -2492,7 +2472,7 @@ public OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:f
     }
     return 1;
 }
-public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
+script OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	if(dialogid == DIALOG_CGAMESADMINMENU)
 	{

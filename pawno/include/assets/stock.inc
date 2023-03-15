@@ -6031,19 +6031,19 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 
 					switch (PlayerData[playerid][pGender])
                     {
-                        case 1: ShowModelSelectionMenu(playerid, "Clothes", MODEL_SELECTION_CLOTHES, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
-						case 2: ShowModelSelectionMenu(playerid, "Clothes", MODEL_SELECTION_CLOTHES, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
+                        case 1: ShowModelSelectionMenu(playerid, "Vetements", MODEL_SELECTION_CLOTHES, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
+						case 2: ShowModelSelectionMenu(playerid, "Vetements", MODEL_SELECTION_CLOTHES, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
                     }
 				}
 		        case 1:
 				{
 				    PlayerData[playerid][pClothesType] = 2;
-					ShowModelSelectionMenu(playerid, "Glasses", MODEL_SELECTION_CLOTHES, {19006, 19007, 19008, 19009, 19010, 19011, 19012, 19013, 19014, 19015, 19016, 19017, 19018, 19019, 19020, 19021, 19022, 19023, 19024, 19025, 19026, 19027, 19028, 19029, 19030, 19031, 19032, 19033, 19034, 19035,19138,19139,19140}, 33, 0.0, 0.0, 90.0);
+					ShowModelSelectionMenu(playerid, "Lunettes", MODEL_SELECTION_CLOTHES, {19006, 19007, 19008, 19009, 19010, 19011, 19012, 19013, 19014, 19015, 19016, 19017, 19018, 19019, 19020, 19021, 19022, 19023, 19024, 19025, 19026, 19027, 19028, 19029, 19030, 19031, 19032, 19033, 19034, 19035,19138,19139,19140}, 33, 0.0, 0.0, 90.0);
 				}
 			    case 2:
 				{
 				    PlayerData[playerid][pClothesType] = 3;
-					ShowModelSelectionMenu(playerid, "Hats", MODEL_SELECTION_CLOTHES, {18891,18892,18893,18894,18895,18896,18897,18898,18899,18900,18901,18902,18903,18904,18905,18906,18907,18908,18909,18910,18921,18922,18923,18924,18925,18926,18927,18928,18929,18930,18931,18932,18933,18934,18935,18936,18937,18938,18944,18945,18946,18947,18948,18949,18950,18951,18953,18954,18962,18964,18965,18966,18967,18968,18969,18970,18971,18972,18973,19107,19108,19111,19112,19113,19114,19115,19116,19117,19118,19119,19120}, 71, -20.0, -90.0, 0.0);
+					ShowModelSelectionMenu(playerid, "Chapeaux", MODEL_SELECTION_CLOTHES, {18891,18892,18893,18894,18895,18896,18897,18898,18899,18900,18901,18902,18903,18904,18905,18906,18907,18908,18909,18910,18921,18922,18923,18924,18925,18926,18927,18928,18929,18930,18931,18932,18933,18934,18935,18936,18937,18938,18944,18945,18946,18947,18948,18949,18950,18951,18953,18954,18962,18964,18965,18966,18967,18968,18969,18970,18971,18972,18973,19107,19108,19111,19112,19113,19114,19115,19116,19117,19118,19119,19120}, 71, -20.0, -90.0, 0.0);
 				}
 				case 3:
 				{
@@ -19240,6 +19240,9 @@ stock GetWeaponModel1(weaponid)
 
 		case 46:
 		    return 371;
+			
+		case 100 .. 421:
+			return weaponid+28900;
 	}
 	return 0;
 }
@@ -21594,8 +21597,8 @@ Dialog:ModifcationInfoPlus(playerid, response, listitem, inputtext[])
 			{
 				switch (PlayerData[AdminTarget[playerid]][pGender])
 				{
-					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
-					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
+					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Vetements", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
+					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Vetements", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
 				}
 				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 			}	

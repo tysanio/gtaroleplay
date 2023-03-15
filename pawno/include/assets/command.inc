@@ -2349,7 +2349,7 @@ CMD:cuisiner(playerid, params[])
 	if (houseid == -1)
 	    return SendErrorMessage(playerid, "Vous devez être a l'intérieur d'une maison pour cela");
 	if (isnull(params))
-	    return SendSyntaxMessage(playerid, "/cuisiner [burger/pizza/jambon/sandwich jambon/sandwich steak/sandwich poulet]");
+	    return SendSyntaxMessage(playerid, "/cuisiner [burger/pizza/jambon/sandwich jambon/sandwich steak/sandwich poulet/pain]");
     if (PlayerData[playerid][pCuffed])
 	    return SendErrorMessage(playerid, "Tu ne peut utiliser cette commande maintenant.");
 	if (!strcmp(params, "burger", true))
@@ -2362,7 +2362,7 @@ CMD:cuisiner(playerid, params[])
 		PlayerData[playerid][pCooking] = 1;
 		PlayerData[playerid][pCookingTime] = 20;
 		PlayerData[playerid][pCookingHouse] = houseid;
-		Inventory_Remove(playerid, "Burger surgele");
+		Inventory_Remove(playerid, "Burger surgele",1);
         SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas. (20 seconds).", ReturnName(playerid, 0));
 	}
 	else if (!strcmp(params, "pizza", true))
@@ -2375,7 +2375,7 @@ CMD:cuisiner(playerid, params[])
 		PlayerData[playerid][pCooking] = 2;
 		PlayerData[playerid][pCookingTime] = 55;
 		PlayerData[playerid][pCookingHouse] = houseid;
-        Inventory_Remove(playerid, "Pizza surgele");
+        Inventory_Remove(playerid, "Pizza surgele",1);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas. (55 seconds).", ReturnName(playerid, 0));
 	}
 	else if (!strcmp(params, "jambon", true))
@@ -2387,8 +2387,51 @@ CMD:cuisiner(playerid, params[])
 		PlayerData[playerid][pCooking] = 3;
 		PlayerData[playerid][pCookingTime] = 60;
 		PlayerData[playerid][pCookingHouse] = houseid;
-        Inventory_Remove(playerid, "jambon");
+        Inventory_Remove(playerid, "jambon",1);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas. (60 seconds).", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(params, "sandwich jambon", true))
+	{
+	    if (!Inventory_HasItem(playerid, "jambon") && !Inventory_HasItem(playerid, "tranche de pain") && Inventory_Count(playerid, "tranche de pain") < 2)
+	        return SendErrorMessage(playerid, "Vous n'avez pas d'aliment. (jambon & tranche de pain x2)");
+		if (PlayerData[playerid][pCooking])
+		    return SendErrorMessage(playerid, "Vous préparez déja un repas.");
+        Inventory_Remove(playerid, "jambon",1);
+        Inventory_Remove(playerid, "tranche de pain",2);
+		Inventory_Add(playerid, "sandwich au jambon", 2880);
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(params, "sandwich steak", true))
+	{
+	    if (!Inventory_HasItem(playerid, "steak cuit") && !Inventory_HasItem(playerid, "tranche de pain") && Inventory_Count(playerid, "tranche de pain") < 2)
+	        return SendErrorMessage(playerid, "Vous n'avez pas d'aliment. (steak cuit & tranche de pain x2)");
+		if (PlayerData[playerid][pCooking])
+		    return SendErrorMessage(playerid, "Vous préparez déja un repas.");
+        Inventory_Remove(playerid, "steak cuit",1);
+        Inventory_Remove(playerid, "tranche de pain",2);
+		Inventory_Add(playerid, "sandwich a la viande", 2880);
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(params, "sandwich au poulet", true))
+	{
+	    if (!Inventory_HasItem(playerid, "Poulet") && !Inventory_HasItem(playerid, "tranche de pain") && Inventory_Count(playerid, "tranche de pain") < 2)
+	        return SendErrorMessage(playerid, "Vous n'avez pas d'aliment. (poulet & tranche de pain x2)");
+		if (PlayerData[playerid][pCooking])
+		    return SendErrorMessage(playerid, "Vous préparez déja un repas.");
+        Inventory_Remove(playerid, "Poulet",1);
+        Inventory_Remove(playerid, "tranche de pain",2);
+		Inventory_Add(playerid, "sandwich au poulet", 2880);
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(params, "pain", true))
+	{
+	    if (!Inventory_HasItem(playerid, "pain"))
+	        return SendErrorMessage(playerid, "Vous n'avez pas d'aliment.");
+		if (PlayerData[playerid][pCooking])
+		    return SendErrorMessage(playerid, "Vous préparez déja un repas.");
+        Inventory_Remove(playerid, "pain",1);
+		Inventory_Add(playerid, "tranche de pain", 2880,10);
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s se prépare un repas.", ReturnName(playerid, 0));
 	}
 	return 1;
 }
@@ -4281,7 +4324,7 @@ CMD:jeter(playerid, params[])
 	GetPlayerFacingAngle(playerid, angle);
 	x += 1.5 * floatsin(-angle, degrees);
 	y += 1.5 * floatcos(-angle, degrees);
-    DropItem(ReturnWeaponName(weaponid), ReturnName(playerid, 0), GetWeaponModel1(weaponid), 1, x, y, z - 1, GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid), weaponid, GetPlayerAmmo(playerid));
+    DropItem(ReturnWeaponName(weaponid), ReturnName(playerid, 0), GetWeaponModel1(weaponid), 1, x, y, z - 0.5, GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid), weaponid, GetPlayerAmmo(playerid));
 	ResetWeapon(playerid, weaponid);
     ApplyAnimation(playerid, "GRENADE", "WEAPON_throwu", 4.1, 0, 0, 0, 0, 0, 1);
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s jette son arme.", ReturnName(playerid, 0), ReturnWeaponName(weaponid));
@@ -9684,18 +9727,16 @@ CMD:ceinture(playerid, params[])
         SeatbeltStatus[playerid] = 1;
         if(IsAMotorBike(GetPlayerVehicleID(playerid)))
 		{
-            //format(string, sizeof(string), "* %s Met le casque a l'aide de ses deux mains.", GetPlayerName(playerid));
-            //SCBubble(playerid,string,true,0xFFFF00AA,10,5000);
             SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s Met le casque a l'aide de ses deux mains.", ReturnName(playerid, 0));
 			SendClientMessage(playerid, COLOR_WHITE, "Vous avez mis votre casque.");
 			TextDrawShowForPlayer(playerid, compteur11[playerid]);
 			TextDrawShowForPlayer(playerid, compteur16[playerid]);
+			SetPlayerAttachedObject(playerid, 6, 18977, 2,0.00, 0.10, 0.35, -35.224993, 45.215, 1.50, 5.00,1.500, 1.50,0xAFAFAFAA);
+			EditAttachedObject(playerid, 2);
 			
         }
         else
 		{
-            //format(string, sizeof(string), "* %s Attache sa ceinture a l'aide de la main droite.", GetPlayerName(playerid));
-            //SCBubble(playerid,string,true,0xFFFF00AA,10,5000);
             SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s Attache sa ceinture a l'aide de sa main droite.", ReturnName(playerid, 0));
 			SendClientMessage(playerid, COLOR_WHITE, "Vous avez mis votre ceinture de sécurité.");
 			TextDrawShowForPlayer(playerid, compteur11[playerid]);
