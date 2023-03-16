@@ -3760,7 +3760,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'eau sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 1;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3775,7 +3775,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de jus de pomme sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 1;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3790,7 +3790,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de jus de d'orange sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 1;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3805,7 +3805,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de café sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 1;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3819,7 +3819,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'alcool sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 1;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);

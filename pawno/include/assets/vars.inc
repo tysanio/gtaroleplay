@@ -932,6 +932,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"gold bar",19941},
 	{"roche",905},
 	{"Permis de chasse",19792},
+	{"Permis de peche",19792},
 	{"cafe",19835},
 	{"douille de shotgun",2038},
 	{"sandwich au poulet",2880},
