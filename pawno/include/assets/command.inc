@@ -10061,6 +10061,7 @@ CMD:delouerveh(playerid, params[])
     //DernieVehLoc[playerid]=-1;
     //DernieVehLocID[playerid]=-1;
 	Car_Save(id);
+	DisablePlayerCheckpoint(playerid);
 	Log_Write("logs/louerveh.txt", "[%s] %s a délouer le vehicule id %d.", ReturnDate(), ReturnName(playerid, 0), CarData[id][carID]);
 	//SetVehicleParamsEx(id, 0, lights, alarm, doors, bonnet, boot, objective);
 	return 1;
@@ -11859,7 +11860,7 @@ CMD:appsa(playerid, params[])
 	PlayerData[userid][pCreated] = 1;
 	PlayerData[userid][pTask] = 1;
 	PlayerData[userid][pNoob] = 2;
-	SetPlayerCheckpoint(playerid, -228.8403, 1401.1831, 27.7656, 25.0);	
+	SetPlayerCheckpoint(userid, -228.8403, 1401.1831, 27.7656, 25.0);	
 	tuto1 = "\0";
 	tuto2 = "\0";
 	tuto3 = "\0";

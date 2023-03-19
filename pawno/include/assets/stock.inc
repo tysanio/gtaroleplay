@@ -8773,15 +8773,11 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 	                if (!PlayerData[playerid][pOnDuty])
 	                {
 	                    PlayerData[playerid][pOnDuty] = true;
-						foreach (new i : Player)
-						{
-							new facass = PlayerData[i][pFaction];
-							if (FactionData[facass][factionacces][1] == 1) {cop_nbrCops++;}
-							if (FactionData[facass][factionacces][4] == 1) {swat_nbrCops++;}
-						}
+						if (FactionData[factionid][factionacces][1] == 1) {cop_nbrCops++;}
+						if (FactionData[factionid][factionacces][4] == 1) {swat_nbrCops++;}
 	                    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a pointé son entrée.", ReturnName(playerid, 0));
 						if (Inventory_Items(playerid) >= MAX_INVENTORY - 1)
-							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de paBTe dans l'inventaire)");
+							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de placee dans l'inventaire)");
 						if (FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)Inventory_Add(playerid, "Menottes",19418, 1);
 	                }
 	                else
@@ -21523,8 +21519,8 @@ Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 		}
 		else
 		{
-			if (PlayerData[AdminTarget[playerid]][pPlayingHours] < 10)
-				return SendErrorMessage(playerid, "Il doit avoir au moins 10 heures de jeux.");
+			if (PlayerData[AdminTarget[playerid]][pPlayingHours] < 5)
+				return SendErrorMessage(playerid, "Il doit avoir au moins 5 heures de jeux.");
 			SetFaction(AdminTarget[playerid], strval(inputtext));
 			PlayerData[AdminTarget[playerid]][pFactionRank] = FactionData[strval(inputtext)][factionRanks];
 			SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);

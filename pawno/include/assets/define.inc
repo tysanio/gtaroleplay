@@ -1,15 +1,15 @@
 #pragma dynamic 																400000
 
-#define SQL_HOSTNAME 															" "
-#define SQL_USERNAME 															" "
-#define SQL_DATABASE 															" "
-#define SQL_PASSWORD															" "
+#define SQL_HOSTNAME 															""
+#define SQL_USERNAME 															""
+#define SQL_DATABASE 															""
+#define SQL_PASSWORD															""
 
 //Information serveur
-#define SERVER_NAME 	 														" " //pour le nom du serveur
-#define SERVER_URL 		 														" "
-#define SERVER_REVISION  														" "
-#define LANGUAGE																"Français"
+#define SERVER_NAME 	 														"" //pour le nom du serveur
+#define SERVER_URL 		 														""
+#define SERVER_REVISION  														""
+#define LANGUAGE																""
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
 //Couleur
@@ -108,7 +108,7 @@
 #define MAX_DRUG_PLANTS 														(200)
 #define MAX_FACTIONS 															(20)
 #define MAX_ARREST_POINTS 														(5)
-#define MAX_PLAYER_TICKETS 														(15)
+#define MAX_PLAYER_TICKETS 														(25)
 #define MAX_BARRICADES 															(15)
 #define MAX_BOOTHS 																(8)
 #define MAX_batiementS															(250)

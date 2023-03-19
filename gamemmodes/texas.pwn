@@ -6382,7 +6382,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				else if (EntranceData[id][entranceType] == 1 && !PlayerData[playerid][pTestTask])
 				{
 			    	PlayerData[playerid][pTestTask] = 1;
-			    	Dialog_Show(playerid, ShowOnly, DIALOG_STYLE_MSGBOX, "AUTO-ÉCOLE", "Ici l'auto-école pour passé votre permis de conduire", "Fermer", "");
+			    	Dialog_Show(playerid, ShowOnly, DIALOG_STYLE_MSGBOX, "AUTO-ÉCOLE", "Ici l'auto-école pour passé votre permis de conduire\nViser le bot pour passé le permis!", "Fermer", "");
 
 				    if (IsTaskCompleted(playerid))
 					{
@@ -8884,7 +8884,7 @@ script OnPlayerUpdate(playerid)
 	{
 	    PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
 
-		if (PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerHasTazer(playerid) && !PlayerHasflashball(playerid) && PlayerData[playerid][pRangeBooth] == -1 && PlayerData[playerid][pCharacter] > 0)
+		if (PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 421 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerHasTazer(playerid) && !PlayerHasflashball(playerid) && PlayerData[playerid][pRangeBooth] == -1 && PlayerData[playerid][pCharacter] > 0)
 		{
 		    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a été banni pour arme cheat (%s).", ReturnName(playerid, 0), ReturnWeaponName(PlayerData[playerid][pWeapon]));
 			Log_Write("logs/cheat_log.txt", "[%s] %s was banned for weapon hacks (%s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(PlayerData[playerid][pWeapon]));
@@ -9948,8 +9948,10 @@ script OnGameModeInit()
 		case 16: missionactor[3] = CreateActor(26179,7333.1997,8065.5410,33.7944,223.7729); // actor
 	}
 	//amendes
-	actorvendeuramendes[0] = CreateActor(310,1563.0867,-1650.5616,3001.2083,181.9357);
-	SetActorVirtualWorld(actorvendeuramendes[0],1000);
+	actorvendeuramendes[0] = CreateActor(310,7888.6826,-7974.2344,1007.2028,231.7454);
+	SetActorVirtualWorld(actorvendeuramendes[0],7096);
+	armespolice = CreateActor(267,7906.7012,-7988.1152,1007.2028,53.5425);//bot arme jetter
+	SetActorVirtualWorld(armespolice,7069);
 	//permis
 	actorvendeurpermis[0] = CreateActor(240,-2035.0946,-117.3694,1035.1719,272.2659);
 	SetActorVirtualWorld(actorvendeurpermis[0], 7002);
@@ -9965,9 +9967,7 @@ script OnGameModeInit()
 	//bot commando
 	piececaisse = CreateActor(111,2565.9041,-1216.2356,1026.1957,84.0109);//bot command crate
 	soinbot = CreateActor(274,-196.3317, -1743.2111, 675.3954,96.44); //bot soins
-	armespolice = CreateActor(267,1548.5010,-1629.3090,3001.0859,205.6856);//bot arme jetter
 	SetActorVirtualWorld(piececaisse, 7039);
-	SetActorVirtualWorld(armespolice,1000);
 	SetActorVirtualWorld(soinbot,5003);
 	for (new i = 0; i < sizeof(arrBoothPositions); i ++) {
 	    CreateDynamic3DTextLabel("[Shooting Range]\n{FFFFFF}Press 'F' pour utiliser cette emplacement.", COLOR_DARKBLUE, arrBoothPositions[i][0], arrBoothPositions[i][1], arrBoothPositions[i][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, 7);
