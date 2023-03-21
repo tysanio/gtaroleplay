@@ -350,7 +350,6 @@ stock HoldWeapon(playerid, weaponid)
     PlayerData[playerid][pUsedMagazine] = 0;
 	if (weaponid != 0)
 	{
-		SetPlayerAttachedObject(playerid, 4, IsWeaponModel(weaponid), 6);
   		SetPlayerArmedWeapon(playerid, 0);
 	}
 	return 1;
@@ -3742,43 +3741,26 @@ GetClosestHospital(playerid)
 	}
 	return iIndex;
 }
-/*IsWeaponModel(model) {
-    new const g_aWeaponModels[] = {
-		0, 331, 333, 334, 335, 336, 337, 338, 339, 341, 321, 322, 323, 324,
-		325, 326, 342, 343, 344, 0, 0, 0, 346, 347, 348, 349, 350, 351, 352,
-		353, 355, 356, 372, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366,
-		367, 368, 368, 371,
-		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-		29000,29001,29002,29003,29004,29005,29006,29007,29008,29009,29010,29011,29012,29013,29014,29015,
-		29016,29017,0,29019,29020,29021,29022,29023,29024,29025,29026,29027,29028,29029,29030,29031,29032,
-		29033,29034,29035,29036,29037,29038,29039,29040,29041,29042,29043,29045,29047,29048,29049,29050,
-		29051,29052,29053,29054,29055,0,29057,29058,29059,29060,29061,0,29082,29069,29064,29085,29097,29297,29065,
-		29065,29074,29083,29071,29071,29094,29080,29076,29070,29066,29089,29073,29068,29092,29086,29091,29095,
-		29072,29096,29079,29075,29090,29067,29081,29093,29084,29077,29087,29088,29116,29104,29114,29132,29099,
-		29119,29100,29131,29298,29109,29117,29115,29128,29106,29101,29110,29105,29123,0,29103,29120,0,29125,
-		29127,29129,29107,29130,29112,29121,29124,29118,29126,29111,29122,29134,29135,29136,29137,29138,29139,
-		29140,29141,29142,29143,29144,29145,29146,29147,29148,29149,29150,29151,29152,29153,29154,29155,29156,
-		29157,29158,29159,29160,29161,29162,29163,29164,29165,29166,29167,29168,29169,0,29171,29172,29173,29174,
-		29175,29176,29177,29178,29179,29180,29181,29323,29182,29183,29184,29185,29186,29187,29188,29189,29190,29191,29192,
-		29193,29194,29195,29196,29197,29198,29199,29200,29201,29202,29203,29204,29205,29206,29207,29208,29209,29210,
-		29211,29212,29213,29214,29215,29216,29217,29218,29219,29220,29221,29222,29223,29224,29225,29226,29227,29228,29229,
-		29230,29231,29232,29233,29234,29235,29236,29237,29238,29239,29240,29241,29242,29243,29244,29245,29246,29272,29273,29247,
-		29248,29249,29250,29251,29252,29253,29254,29255,29256,29257,29258,29259,29260,29261,29262,29263,29264,29265,29266,29267,
-		29268,29269,29270,29271,29274,29275,29276,29277,29278,29279,29280,29281,29282,29283,29284,29285,29286,29287,29288,29289,
-		29290,0,29295,29296,29299,29300,29301,29302,0,29304,29306,29307,29309,29312,0,29313,0,29315,29316,29317,29319,29320,
-		29321,29322,29324,29325,29326,29327,29328,29329
-    };
-    for (new i = 0; i < sizeof(g_aWeaponModels); i ++) if (g_aWeaponModels[i] == model) {
-        return 1;
-	}
-	return 0;
-}*/
 IsWeaponModel(model) {
     new const g_aWeaponModels[] = {
-		0, 331, 333, 334, 335, 336, 337, 338, 339, 341, 321, 322, 323, 324,
-		325, 326, 342, 343, 344, 0, 0, 0, 346, 347, 348, 349, 350, 351, 352,
-		353, 355, 356, 372, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366,
-		367, 368, 368, 371
+		0,331,333,334,335,336,337,338,339,341,321,322,323,324,325,326,342,343,344,0,0,
+		345,346,347,348,349,350,351,352,353,355,356,372,357,358,359,360,361,362,363,363,365,366,367,368,369,371,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		29000,29001,29002,29003,29004,29005,29006,29007,29008,29009,29010,29011,29012,29013,29014,29015,29016,29017,
+		29018,29019,29020,29021,29022,29023,29024,29025,29026,29027,29028,29029,29030,29031,29032,29033,29034,29035,29036,
+		29037,29038,29039,29040,29041,29042,29043,29044,29045,29046,29047,29048,29049,29050,29051,29052,29053,29054,29055,0,
+		29057,29058,29059,29060,29061,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,29082,29069,29064,29085,29097,29297,29065,29074,29083,29071,29094,29080,29076,29070,
+		29066,29089,29073,29068,29092,29086,29091,29095,29072,29096,29079,29075,29090,29067,29081,29093,29084,29077,29087,29088,
+		29116,29104,29114,29132,29099,29119,29100,29131,29298,29109,29117,29115,29128,29106,29101,29110,29105,29123,29103,0,29120,
+		0,29125,29127,29129,29107,29130,29112,29121,29124,29118,29126,29111,29122,29134,29135,29136,29137,29138,29139,29140,29141,
+		29142,29143,29144,29145,29146,29147,29148,29149,29150,29151,29152,29153,29154,29155,29156,29157,29158,29159,29160,29161,29162,
+		29163,29164,29165,29166,29167,29168,29169,0,29171,29172,29173,29174,29175,29176,29177,29178,29179,29180,29181,29323,29182,29183,
+		29184,29185,29186,29187,29188,29189,29190,29191,29192,29193,29194,29195,29196,29197,29198,29199,29200,29201,29202,29203,29204,29205,
+		29206,29207,29208,29209,29210,29211,29212,29213,29214,29215,29216,29217,29218,29219,29220,29221,29222,29223,29224,29225,29226,29227,
+		29228,29229,29230,29231,29232,29233,29234,29235,29236,29237,29238,29239,29240,29241,29242,29243,29244,29245,29246,29272,29273,29247,
+		29248,29249,29250,29251,29252,29253,29254,29255,29256,29257,29258,29259,29260,29261,29262,29263,29264,29265,29266,29267,29268,29269,
+		29270,29271,29274,29275,29276,29277,29278,29279,29280,29281,29282,29283,29284,29285,29286,29287,29288,29289,29290,0,0,0,0,29295,29296,0,0,
+		29299,29300,29301,29302,0,29304,29306,29307,29309,29312,0,29313,0,29315,29316,29317,0,29319,29320,29321,29322,29324,29325,29326,29327,29328,29329
     };
     for (new i = 0; i < sizeof(g_aWeaponModels); i ++) if (g_aWeaponModels[i] == model) {
         return 1;
@@ -3843,11 +3825,11 @@ DropItem(item[], player[], model, quantity, Float:x, Float:y, Float:z, interior,
 		DroppedItems[i][droppedPos][2] = z;
 		DroppedItems[i][droppedInt] = interior;
 		DroppedItems[i][droppedWorld] = world;
-		if (IsWeaponModel(model)) {
+		/*if (IsWeaponModel(model)) {
 			DroppedItems[i][droppedObject] = CreateDynamicObject(model, x, y, z, 93.7, 120.0, 120.0, world, interior);
-		} else {
+		} else {*/
 			DroppedItems[i][droppedObject] = CreateDynamicObject(model, x, y, z, 0.0, 0.0, 0.0, world, interior);
-		}
+		//}
  		DroppedItems[i][droppedText3D] = CreateDynamic3DTextLabel(item, COLOR_CYAN, x, y, z, 5.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, world, interior);
 		if (strcmp(item, "Demo Soda") != 0)
 		{
@@ -19204,38 +19186,17 @@ stock GetWeaponModel1(weaponid)
 {
 	switch(weaponid)
 	{
-	    case 1:
-	        return 331;
-
-		case 2..8:
-		    return weaponid+331;
-
-        case 9:
-		    return 341;
-
-		case 10..15:
-			return weaponid+311;
-
-		case 16..18:
-		    return weaponid+326;
-			
-		case 22..24:
-			return weaponid+324;
-			
-		case 25..29:
-		    return weaponid+324;
-
-		case 30,31:
-		    return weaponid+325;
-
-		case 32:
-		    return 372;
-
-		case 33..45:
-		    return weaponid+324;
-
-		case 46:
-		    return 371;
+	    case 1: return 331;
+		case 2..8: return weaponid+331;
+        case 9: return 341; 
+		case 10..15: return weaponid+311; 
+		case 16..18: return weaponid+326;
+		case 22..24: return weaponid+324;
+		case 25..29: return weaponid+324;
+		case 30,31: return weaponid+325;
+		case 32: return 372;
+		case 33..45: return weaponid+324;
+		case 46: return 371;
 			
 		case 100 .. 421:
 			return weaponid+28900;
@@ -22033,33 +21994,50 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 		{	
 			case 0:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 1)
-					return SendErrorMessage(playerid, "Tu a besoin de 1 gold bar pour l'échanger");
+				if (Inventory_Count(playerid, "gold bar") < 5)
+					return SendErrorMessage(playerid, "Tu a besoin de 5 gold bar pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",5);
+				PlayerData[playerid][pBankMoney] += 5000;
+				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
 			}
 			case 1:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 2)
-					return SendErrorMessage(playerid, "Tu a besoin de 2 gold bars pour l'échanger");
+				if (Inventory_Count(playerid, "gold bar") < 10)
+					return SendErrorMessage(playerid, "Tu a besoin de 10 gold bars pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",10);
+				PlayerData[playerid][pBankMoney] += 10000;
+				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
 			}
 			case 2:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 3)
-					return SendErrorMessage(playerid, "Tu a besoin de 3 gold bars pour l'échanger");
+				if (Inventory_Count(playerid, "gold bar") < 15)
+					return SendErrorMessage(playerid, "Tu a besoin de 15 gold bars pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",15);
+				PlayerData[playerid][pBankMoney] += 15000;
+				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
 			}
 			case 3:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 4)
-					return SendErrorMessage(playerid, "Tu a besoin de 4 gold bars pour l'échanger");
+				if (Inventory_Count(playerid, "gold bar") < 20)
+					return SendErrorMessage(playerid, "Tu a besoin de 20 gold bars pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",20);
+				PlayerData[playerid][pBankMoney] += 20000;
+				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
 			}
 			case 4:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 5)
-					return SendErrorMessage(playerid, "Tu a besoin de 5 golds bar pour l'échanger");
+				if (Inventory_Count(playerid, "gold bar") < 25)
+					return SendErrorMessage(playerid, "Tu a besoin de 25 golds bar pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",25);
+				PlayerData[playerid][pBankMoney] += 25000;
+				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
 			}
 			case 5:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 1)
-					return SendErrorMessage(playerid, "Tu a besoin de 1 gold bar pour l'échanger");
+				if (Inventory_Count(playerid, "gold bar") < 30)
+					return SendErrorMessage(playerid, "Tu a besoin de 30 gold bar pour l'échanger");
+				Inventory_Remove(playerid,"gold bar",30);
+				PlayerData[playerid][pPlayingHours] += 5;
 			}
 			case 6:
 			{

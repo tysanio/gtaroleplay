@@ -4033,7 +4033,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
     }
     else if (!strcmp(name, "gold bar", true)) {
 		if(!Inventory_HasItem(playerid,"gold bar")) return SendErrorMessage(playerid,"Il vous faut une gold bar minimun pour accéder a ce menu.");
-		Dialog_Show(playerid,echanger,DIALOG_STYLE_TABLIST,"Menu d'échange","Argent 100$\t 1 Gold bar\nArgent 200$\t 2 Gold bars\nArgent 300$\t 3 Gold bars\nArgent 400$\t 4 Gold bars\nArgent 500$\t 5 Gold bars\nHeure de jeux 1\t 1 Gold bar\n1000% batterie de téléphone!\t 5 Gold bars\nMettre la chance de mourir rapidement à 0\t 25 Gold bars\nDouble personnage autorisé\t 75 gold bars\nAjouter capacité d'inventaire (35 places)\t 25 gold bars","Valider","Quitter");
+		Dialog_Show(playerid,echanger,DIALOG_STYLE_TABLIST,"Menu d'échange","Chèque 5000$\t 5 Gold bar\nChèque 10000$\t 10 Gold bars\nChèque  15000$\t 15 Gold bars\nChèque 20000$\t 20 Gold bars\nChèque  25000$\t 25 Gold bars\nHeure de jeux +5\t 30 Gold bar\n1000% batterie de téléphone!\t 5 Gold bars\nMettre la chance de mourir rapidement à 0\t 25 Gold bars\nDouble personnage autorisé\t 75 gold bars\nAjouter capacité d'inventaire (35 places)\t 25 gold bars","Valider","Quitter");
     }
     else if (!strcmp(name, "dual muffler", true)) {
             AddVehicleComponent(car,1019);
@@ -8607,7 +8607,7 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	{
 		new stringm[900];
 		format(stringm, sizeof(stringm), "Appuyez sur ~r~~k~~VEHICLE_FIREWEAPON_ALT~~w~ pour demarrer.~n~~n~Appuyer sur ~r~~k~~TOGGLE_SUBMISSIONS~~w~ pour les phares.~n~~n~Appuyer sur ~r~~k~~VEHICLE_LOOKLEFT~ ~w~ou ~r~~k~~VEHICLE_LOOKRIGHT~~w~ pour les clignotants");
-		TSM(playerid, stringm, " ", 10000, 0x00000088, 20.0000, 110.000000, 130.000000);// 110 130
+		TSM(playerid, stringm, " ", 20000, 0x00000088, 20.0000, 110.000000, 130.000000);// 110 130
 		if (IsSpeedoVehicle(vehicleid)){
 		    TextDrawShowForPlayer(playerid,compteur2[playerid]);
 		    TextDrawShowForPlayer(playerid,compteur3[playerid]);

@@ -263,5 +263,4 @@ public CreateRemoveLS(playerid)
     RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 6000.0);
     RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 6000.00);
 	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 6000.0);
-
 }
