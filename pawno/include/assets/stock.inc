@@ -5890,7 +5890,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 	    	{
 		        case 0:
 		        {
-		            if (!Inventory_HasItem(playerid, "License arme"))
+		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
 		                return SendErrorMessage(playerid, "Vous ne posséder pas la license de port d'arme.");
 		            if (Inventory_Count(playerid, "Chargeur") >= 10)
 		                return SendErrorMessage(playerid, "Tu a 10 magazines, tu ne peut plus en acheter.");
@@ -5906,7 +5906,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
                 case 1:
 		        {
-		            if (!Inventory_HasItem(playerid, "License arme"))
+		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
 		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 		            if (Inventory_Count(playerid, "Munition") >= 10)
 		                return SendErrorMessage(playerid, "Tu a 10 cartouches de munitions, tu ne peut plus en acheter.");
@@ -5922,7 +5922,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
                 case 2:
 		        {
-		            if (!Inventory_HasItem(playerid, "License arme"))
+		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
 		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 		            if (Inventory_Count(playerid, "douille de shotgun") >= 20)
 		                return SendErrorMessage(playerid, "Tu a 20 douille de shotgun, tu ne peut plus en acheter.");
@@ -5938,7 +5938,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
 				case 3:
 		        {
-		            if (!Inventory_HasItem(playerid, "License arme"))
+		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
 		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 		            if (Inventory_Count(playerid, "Gilet par balles") >= 1)
 		                return SendErrorMessage(playerid, "Tu a un gilet par balle, tu ne peut plus en acheter.");
@@ -5954,7 +5954,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
 				case 4:
 				{
-				    if (!Inventory_HasItem(playerid, "License arme"))
+				    if (!Inventory_HasItem(playerid, "Permis d'arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 				    if (PlayerData[playerid][pPlayingHours] < 24)
 				        return SendErrorMessage(playerid, "Vous devez avoir au moins 24 heures de jeux.");
@@ -5970,7 +5970,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
 				case 5:
 				{
-				    if (!Inventory_HasItem(playerid, "License arme"))
+				    if (!Inventory_HasItem(playerid, "Permis d'arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 
 				    if (PlayerData[playerid][pPlayingHours] < 24)
@@ -5987,7 +5987,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
 				case 6:
 				{
-				    if (!Inventory_HasItem(playerid, "License arme"))
+				    if (!Inventory_HasItem(playerid, "Permis d'arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 				    if (PlayerData[playerid][pPlayingHours] < 24)
 				        return SendErrorMessage(playerid, "Vous devez avoir au moins 24 heures de jeux.");
@@ -7831,8 +7831,8 @@ Dialog:TakeItems(playerid, response, listitem, inputtext[])
 		    Inventory_Remove(PlayerData[playerid][pTakeItems], "Talkie-Walkie", -1);
 		    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a confisqué la radio portable %s.", ReturnName(playerid, 0), ReturnName(PlayerData[playerid][pTakeItems], 0));
 		}
-		else if (!strcmp(inputtext, "Take License arme")) {
-		    Inventory_Remove(PlayerData[playerid][pTakeItems], "License arme", -1);
+		else if (!strcmp(inputtext, "Take Permis d'arme")) {
+		    Inventory_Remove(PlayerData[playerid][pTakeItems], "Permis d'arme", -1);
 	        SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a confisqué la lisence d'arme de %s.", ReturnName(playerid, 0), ReturnName(PlayerData[playerid][pTakeItems], 0));
 		}
 		else if (!strcmp(inputtext, "Take permis de conduire")) {
@@ -9997,7 +9997,7 @@ Business_PurchaseMenu(playerid, bizid)
 		}
 		case 2:
 	    {
-			format(string, sizeof(string), "Chargeur\t%s$\nMunition\t%s$\nDouille de shotgun\t%s$\nGilet par balle\t%s$\n9mm Pistol\t%s$\nRemington 870\t%s$\nM14 Rifle\t%s$",
+			format(string, sizeof(string), "Chargeur\t%s$\nMunition\t%s$\nDouille de shotgun\t%s$\nGilet par balle\t%s$\n9mm Pistol\t%s$\nRemington 870\t%s$\nRifle\t%s$",
 				FormatNumber(BusinessData[bizid][bizPrices][0]),
 				FormatNumber(BusinessData[bizid][bizPrices][1]),
 				FormatNumber(BusinessData[bizid][bizPrices][2]),
@@ -10085,6 +10085,20 @@ Business_PurchaseMenu(playerid, bizid)
 				BusinessData[bizid][bizitemname3],FormatNumber(BusinessData[bizid][bizPrices][2]),
 				BusinessData[bizid][bizitemname4],FormatNumber(BusinessData[bizid][bizPrices][3]),
 				BusinessData[bizid][bizitemname5],FormatNumber(BusinessData[bizid][bizPrices][4])
+			);
+			Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_TABLIST, BusinessData[bizid][bizName], string, "Acheter", "Annuler");
+		}
+		case 12:
+	    {
+			format(string, sizeof(string), "Appat 1\t%s$\nAppat 2\t%s$\nAppat 3\t%s$\nAppat 4\t%s$\nCanne à peche\t%s$\nArc a flèche\t%s$\nMunition\t%s$\nPaintBall\t%s$",
+				FormatNumber(BusinessData[bizid][bizPrices][0]),
+				FormatNumber(BusinessData[bizid][bizPrices][1]),
+				FormatNumber(BusinessData[bizid][bizPrices][2]),
+				FormatNumber(BusinessData[bizid][bizPrices][3]),
+				FormatNumber(BusinessData[bizid][bizPrices][4]),
+				FormatNumber(BusinessData[bizid][bizPrices][5]),
+				FormatNumber(BusinessData[bizid][bizPrices][6]),
+				FormatNumber(BusinessData[bizid][bizPrices][7])
 			);
 			Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_TABLIST, BusinessData[bizid][bizName], string, "Acheter", "Annuler");
 		}
@@ -10484,7 +10498,7 @@ Business_Create(playerid, type, price)
 		            BusinessData[i][bizPrices][8] = 20;
 		            BusinessData[i][bizPrices][9] = 10;
 				}
-				else if (type == 11) {
+				else if (type == 11) { //vip
                 	BusinessData[i][bizInt][0] = -27.2829;
                 	BusinessData[i][bizInt][1] = -58.1948;
                 	BusinessData[i][bizInt][2] = 1003.0910;
@@ -10492,6 +10506,21 @@ Business_Create(playerid, type, price)
 					BusinessData[i][bizInterior] = 6;
 
 				}
+				else if (type == 12) {
+                	BusinessData[i][bizInt][0] = 316.3963;
+                	BusinessData[i][bizInt][1] = -169.8375;
+                	BusinessData[i][bizInt][2] = 999.6010;
+                	BusinessData[i][bizInt][3] = 0.0000;
+					BusinessData[i][bizInterior] = 6;
+
+                    BusinessData[i][bizPrices][0] = 3;
+					BusinessData[i][bizPrices][1] = 7;
+					BusinessData[i][bizPrices][2] = 8;
+		            BusinessData[i][bizPrices][3] = 12;
+		            BusinessData[i][bizPrices][4] = 200;
+		            BusinessData[i][bizPrices][5] = 800;
+		            BusinessData[i][bizPrices][6] = 75;
+				}				
 				BusinessData[i][bizExterior] = GetPlayerInterior(playerid);
 				BusinessData[i][bizExteriorVW] = GetPlayerVirtualWorld(playerid);
 

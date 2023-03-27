@@ -2142,11 +2142,11 @@ CMD:editbiz(playerid, params[])
 	    if (sscanf(string, "d", typeint))
 	    {
 	        SendSyntaxMessage(playerid, "/editbiz [id] [type] [biz type]");
-			SendSyntaxMessage(playerid,"[TYPES]: 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10: Quincaillerie | 11: VIP");
+			SendSyntaxMessage(playerid,"[TYPES]: 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10: Quincaillerie | 11: VIP | 12 Métier & Divertissement");
 			return 1;
 		}
-		if (typeint < 1 || typeint > 11)
-			return SendErrorMessage(playerid, "Le type doit être entre 1 et 11.");
+		if (typeint < 1 || typeint > 12)
+			return SendErrorMessage(playerid, "Le type doit être entre 1 et 12.");
         BusinessData[id][bizType] = typeint;
         switch (typeint) {
             case 1: {
@@ -2198,7 +2198,7 @@ CMD:editbiz(playerid, params[])
       			BusinessData[id][bizInt][3] = 270.0000;
 				BusinessData[id][bizInterior] = 6;
 			}
-			case 8: { //non la sur VC
+			case 8: {
                	BusinessData[id][bizInt][0] = 501.98098;
                	BusinessData[id][bizInt][1] = -69.150199;
                	BusinessData[id][bizInt][2] = 998.757812;
@@ -2225,7 +2225,14 @@ CMD:editbiz(playerid, params[])
                 BusinessData[id][bizInt][2] = 1003.0910;
                 BusinessData[id][bizInt][3] = 0.0000;
 				BusinessData[id][bizInterior] = 6;
-            }			
+            }
+            case 12: {
+            	BusinessData[id][bizInt][0] = 316.3963;
+            	BusinessData[id][bizInt][1] = -169.8375;
+            	BusinessData[id][bizInt][2] = 999.6010;
+            	BusinessData[id][bizInt][3] = 0.0000;
+				BusinessData[id][bizInterior] = 6;
+			}			
 		}
 		foreach (new i : Player)
 		{
@@ -2278,12 +2285,12 @@ CMD:creerbiz(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "dd", type, price))
  	{
-    	SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie | 11 : VIP");
+    	SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie | 11 : VIP | 12 : Métier & Divertissement");
 	 	SendSyntaxMessage(playerid, "/creerbiz [type] [price]");
     	return 1;
 	}
-	if (type < 1 || type > 11)
-	    return SendErrorMessage(playerid, "Type invalide. Essayer entre 1 et 11.");
+	if (type < 1 || type > 12)
+	    return SendErrorMessage(playerid, "Type invalide. Essayer entre 1 et 12.");
 	id = Business_Create(playerid, type, price);
 	if (id == -1)
 	    return SendErrorMessage(playerid, "MAX LIMITES");
@@ -6413,9 +6420,9 @@ CMD:donnerlicense(playerid, params[])
 	    return SendErrorMessage(playerid, "Tu ne peut te donner une license d'arme.");
 	if (GetMoney(userid) < 15000)
 	    return SendErrorMessage(playerid, "Le joueur n.a pas asser d'argent (15000$)");
-	if (Inventory_HasItem(userid, "License arme"))
+	if (Inventory_HasItem(userid, "Permis d'arme"))
 	    return SendErrorMessage(playerid, "Ce joueur a déjà une License d'arme.");
-	Inventory_Add(userid, "License arme", 19792);
+	Inventory_Add(userid, "Permis d'arme", 19792);
 	GiveMoney(userid,-15000);
 	argent_entreprise[moneyentrepriseid][argentpolice] += 15000;
 	moneyentreprisesave(moneyentrepriseid);
@@ -6434,9 +6441,9 @@ CMD:enleverlicense(playerid, params[])
 	    return SendErrorMessage(playerid, "Ce joueur n'est point la.");
 	if (userid == playerid)
 	    return SendErrorMessage(playerid, "Tu ne peut t'enlever ta license d'arme.");
-	if (!Inventory_HasItem(userid, "License arme"))
+	if (!Inventory_HasItem(userid, "Permis d'arme"))
 	    return SendErrorMessage(playerid, "Ce joueur n'a pas de license d'arme.");
-	Inventory_Remove(userid, "License arme");
+	Inventory_Remove(userid, "Permis d'arme");
 	SendServerMessage(playerid, "Vous avez enlever à %s sa license d'arme.", ReturnName(userid, 0));
 	SendServerMessage(userid, "Votre license d'arme à été enlever par %s.", ReturnName(playerid, 0));
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s à enlevé à %s sa license d'arme.", ReturnName(playerid, 0), ReturnName(userid, 0));
@@ -7625,8 +7632,8 @@ CMD:confisquer(playerid, params[])
 	    strcat(string, "Take Radio\n");
 	if (Inventory_HasItem(userid, "Backpack") && GetPlayerBackpack(userid) != -1)
 	    strcat(string, "Take Backpack\n");
-    if (Inventory_HasItem(userid, "License arme"))
-	    strcat(string, "Take License arme\n");
+    if (Inventory_HasItem(userid, "Permis d'arme"))
+	    strcat(string, "Take Permis d'arme\n");
    	if (Inventory_HasItem(userid, "permis de conduire"))
 	    strcat(string, "Take permis de conduire\n");
 	if (!strlen(string))
@@ -7863,7 +7870,7 @@ CMD:montrerpermis(playerid, params[])
 	SendClientMessage(userid, COLOR_GREY, "-----------------------------------------------------------");
 	if (Inventory_HasItem(playerid, "permis de conduire")) SendClientMessageEx(userid, COLOR_WHITE, "* Permis de conduire {33CC33}(Passer)");
  	else SendClientMessageEx(userid, COLOR_WHITE, "* Permis de conduire {AA3333}(Pas passer)");
-	if (Inventory_HasItem(playerid, "License arme")) SendClientMessageEx(userid, COLOR_WHITE, "* Permis de port d'arme {33CC33}(Passer)");
+	if (Inventory_HasItem(playerid, "Permis d'arme")) SendClientMessageEx(userid, COLOR_WHITE, "* Permis de port d'arme {33CC33}(Passer)");
 	else SendClientMessageEx(userid, COLOR_WHITE, "* Permis de port d'arme {AA3333}(Pas passer)");
 	SendClientMessage(userid, COLOR_GREY, "-----------------------------------------------------------");
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend ces license et les montres a %s.", ReturnName(playerid, 0), ReturnName(userid, 0));
@@ -11668,7 +11675,7 @@ CMD:itemliste(playerid, params[])
 {
 	static string[2000];
 	string[0] = '\0';
-	if(!Inventory_HasItem(playerid, "License arme")) return SendErrorMessage(playerid, "Il vous faut une license d'arme pour voir la liste des objects.");
+	if(!Inventory_HasItem(playerid, "Permis d'arme")) return SendErrorMessage(playerid, "Il vous faut une license d'arme pour voir la liste des objects.");
 	if (!strlen(string)) {
 		for (new i = 20; i < sizeof(g_aInventoryItems); i ++) {
 			strcat(string,g_aInventoryItems[i][e_InventoryItem]);

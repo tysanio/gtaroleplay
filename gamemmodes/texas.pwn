@@ -6203,7 +6203,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		else for (new i = 0; i < MAX_BOOTHS; i ++) if (!g_BoothUsed[i] && IsPlayerInRangeOfPoint(playerid, 0.5, arrBoothPositions[i][0], arrBoothPositions[i][1], arrBoothPositions[i][2]))
 		{
-			if (!Inventory_HasItem(playerid, "License arme"))
+			if (!Inventory_HasItem(playerid, "Permis d'arme"))
 				return SendErrorMessage(playerid, "Il faut avoir une license d'arme pour utiliser la cabine de tir.");
 		    g_BoothUsed[i] = true;
 		    PlayerData[playerid][pRangeBooth] = i;
