@@ -10852,9 +10852,6 @@ stock Inventory_Remove(playerid, item[], quantity = 1)
 	return 0;
 }
 
-stock RemoveAlpha(color) {
-    return (color & ~0xFF);
-}
 stock CancelDrivingTest(playerid)
 {
 	if (PlayerData[playerid][pDrivingTest])

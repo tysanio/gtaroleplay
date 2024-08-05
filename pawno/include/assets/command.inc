@@ -131,7 +131,10 @@ CMD:me(playerid, params[])
 	else {
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "* %s %s", ReturnName(playerid, 0), params);
 	}
-	Log_Write("logs/me.txt", "[%s] [ME] %s : %s.", ReturnDate(), ReturnName(playerid, 0), params);
+	static string[128],string6[128];
+	format(string, sizeof(string),"[%s] [ME] %s : %s.", ReturnDate(), ReturnName(playerid, 0), params);
+	utf8encode(string6,string,sizeof(string6));
+	DCC_SendChannelMessage(discordspam,string6);
 	return 1;
 }
 CMD:do(playerid, params[])
@@ -146,7 +149,10 @@ CMD:do(playerid, params[])
 	else {
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "* %s (( %s ))", params, ReturnName(playerid, 0));
 	}
-	Log_Write("logs/do.txt", "[%s] [DO] %s : %s.", ReturnDate(), ReturnName(playerid, 0), params);
+	static string[128],string6[128];
+	format(string, sizeof(string),"[%s] [DO] %s : %s.", ReturnDate(), ReturnName(playerid, 0), params);
+	utf8encode(string6,string,sizeof(string6));
+	DCC_SendChannelMessage(discordspam,string6);
 	return 1;
 }
 CMD:ame(playerid, params[])
@@ -214,7 +220,6 @@ CMD:o(playerid, params[])
 	format(string,sizeof(string),"> (%s) (OOC) %s: %s", ReturnDate(),ReturnName(playerid, 0), params);
 	utf8encode(string2,string,sizeof(string2));
 	DCC_SendChannelMessage(discordooc,string2);
-	Log_Write("logs/ooc.txt", "[%s] [OOC] %s: %s",ReturnDate(),ReturnName(playerid, 0), params);
 	return 1;
 }
 CMD:aide(playerid, params[])
@@ -481,7 +486,10 @@ CMD:n(playerid, params[])
 	    	SendHelperMessage(COLOR_LIGHTRED, "** [Aide]  %s: %s", ReturnName(playerid, 0), params);
 	}
 	//SendDC(channelaide, "[Canal Aide]  %s: %s", ReturnName(playerid, 0), params);
-	Log_Write("logs/nouveau_log.txt", "[%s] %s : %.100s", ReturnDate(),ReturnName(playerid),params);
+	static string[128],string6[128];
+	format(string, sizeof(string),"[%s] [Nouveau] %s : %s.", ReturnDate(), ReturnName(playerid, 0), params);
+	utf8encode(string6,string,sizeof(string6));
+	DCC_SendChannelMessage(discordspam,string6);
 	return 1;
 }
 CMD:aduty(playerid, params[])
@@ -664,7 +672,10 @@ CMD:jail(playerid, params[])
 	SendAdminAction(playerid, "Vous avez mis en prison admin %s pour %d minutes (%s).", ReturnName(userid, 0), minutes, reason);
 	SendAdminAction(userid, "%s vous à mis en prison admin pour  %d minutes (%s).", ReturnName(playerid, 0), minutes, reason);
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s à mis en prison admin %s pour %d minutes raison: %s", ReturnName(playerid, 0), ReturnName(userid, 0), minutes, reason);
-	Log_Write("logs/jail_log.txt", "[%s] %s a mis en prison admin %s pour %d minutes, raison: %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0), minutes, reason);
+	static string[128],string6[128];
+	format(string, sizeof(string),"[%s] %s a mis en prison admin %s pour %d minutes, raison: %s.", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0), minutes, reason);
+	utf8encode(string6,string,sizeof(string6));
+	DCC_SendChannelMessage(discordspam,string6);
 	return 1;
 }
 CMD:dejail(playerid, params[])
@@ -682,7 +693,10 @@ CMD:dejail(playerid, params[])
 	TogglePlayerControllable(playerid, 1);
 	SendAdminAction(playerid, "Vous avez sortie de prison %s.", ReturnName(userid, 0));
 	SendAdminAction(userid, "%s vous a libéré.", ReturnName(playerid, 0));
-	Log_Write("logs/jail_log.txt", "[%s] %s a libéré %s .", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0));
+	static string[128],string6[128];
+	format(string, sizeof(string),"[%s] %s a libéré %s .", ReturnDate(), ReturnName(playerid, 0), ReturnName(userid, 0));
+	utf8encode(string6,string,sizeof(string6));
+	DCC_SendChannelMessage(discordspam,string6);
 	return 1;
 }
 CMD:respawn(playerid, params[])
@@ -721,7 +735,10 @@ CMD:ban(playerid, params[])
 	}
 	Dialog_Show(userid, ShowOnly, DIALOG_STYLE_MSGBOX, "Ban", "Tu a été bannie.\n\nJoueur: %s\nRaison: %s\nL'admin qui ta ban: %s\n\nAppuyer F8 si c'est une erreur.", "Fermer", "", PlayerData[userid][pUsername], reason, ReturnName(playerid, 0));
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: %s a été banni par %s raison: %s.", ReturnName(userid, 0), ReturnName(playerid, 0), reason);
-	Log_Write("logs/ban_log.txt", "[%s] %s a été banni par %s raison: %s.", ReturnDate(), ReturnName(userid, 0), ReturnName(playerid, 0), reason);
+	static string[128],string6[128];
+	format(string, sizeof(string),"[%s] %s a été banni par %s raison: %s.", ReturnDate(), ReturnName(userid, 0), ReturnName(playerid, 0), reason);
+	utf8encode(string6,string,sizeof(string6));
+	DCC_SendChannelMessage(discordspam,string6);
 	Blacklist_Add(PlayerData[userid][pIP], PlayerData[userid][pUsername], PlayerData[playerid][pUsername], reason);
 	KickEx(userid);
 	return 1;
@@ -977,7 +994,10 @@ CMD:unban(playerid, params[])
 	    Blacklist_Remove(params);
 	    SendServerMessage(playerid, "Vous avez débannie \"%s\" avec succès", params);
 	    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a débanni \"%s\".", ReturnName(playerid, 0), params);
-	    Log_Write("logs/ban_log.txt", "[%s] %s a débanni \"%s\".", ReturnDate(), ReturnName(playerid, 0), params);
+		static string[128],string6[128];
+		format(string, sizeof(string),"[%s] %s a débanni \"%s\".", ReturnDate(), ReturnName(playerid, 0), params);
+		utf8encode(string6,string,sizeof(string6));
+		DCC_SendChannelMessage(discordspam,string6);
 	}
 	return 1;
 }
@@ -1002,7 +1022,10 @@ CMD:blacklist(playerid, params[])
 		Blacklist_Add("0.0.0.0", params, PlayerData[playerid][pUsername], "Name Ban (/blacklist)");
 	    SendServerMessage(playerid, "Vous avez banni \"%s\" avec succès.", params);
 	    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a banni \"%s\".", ReturnName(playerid, 0), params);
-	    Log_Write("logs/ban_log.txt", "[%s] %s a banni \"%s\".", ReturnDate(), ReturnName(playerid, 0), params);
+		static string[128],string6[128];
+		format(string, sizeof(string),"[%s] %s a banni \"%s\".", ReturnDate(), ReturnName(playerid, 0), params);
+		utf8encode(string6,string,sizeof(string6));
+		DCC_SendChannelMessage(discordspam,string6);		
 	}
 	else if (!strcmp(type, "banip", true))
 	{
@@ -1014,7 +1037,10 @@ CMD:blacklist(playerid, params[])
 		Blacklist_Add(params, "", PlayerData[playerid][pUsername], "IP Ban (/blacklist)");
 	    SendServerMessage(playerid, "Vous avez banned IP \"%s\" avec succès.", params);
 	    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a banni IP \"%s\".", ReturnName(playerid, 0), params);
-	    Log_Write("logs/ban_log.txt", "[%s] %s a banni IP \"%s\".", ReturnDate(), ReturnName(playerid, 0), params);
+		static string[128],string6[128];
+		format(string, sizeof(string),"[%s] %s a banni IP \"%s\".", ReturnDate(), ReturnName(playerid, 0), params);
+		utf8encode(string6,string,sizeof(string6));
+		DCC_SendChannelMessage(discordspam,string6);			
 	}
 	else if (!strcmp(type, "unbanip", true))
 	{

@@ -1,6 +1,6 @@
 Projet reprise par un serveur
 
-Quand ce github es tmise a jour cela vu dire que je travail sur se gm pour un serveur!
+Quand ce github est mise a jour cela vu dire que je travail sur se gm pour un serveur!
 
 Aucune modification privé est sur se github
 

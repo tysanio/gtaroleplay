@@ -188,3 +188,7 @@ modification du questionnaire pour etre approuver IG/Discord
 Modification des commande pool
 Ajout de commande pour changer de couleur pour skin VCS seulement(test)
 modification bdd pour spawn joueur
+
+05/08/2024
+enlever code inutile
+Modifcation des type log pour log discord (spam a lot)
