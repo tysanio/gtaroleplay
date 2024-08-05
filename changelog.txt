@@ -185,3 +185,4 @@ modification du discord BOT pour des commandes a réaction
 enlever tout se qui était radio prégénérez
 ajoute dans le /serveur du spawn joueur
 modification du questionnaire pour etre approuver IG/Discord
+Modification des commande pool
