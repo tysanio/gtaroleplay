@@ -186,3 +186,5 @@ enlever tout se qui était radio prégénérez
 ajoute dans le /serveur du spawn joueur
 modification du questionnaire pour etre approuver IG/Discord
 Modification des commande pool
+Ajout de commande pour changer de couleur pour skin VCS seulement(test)
+modification bdd pour spawn joueur
