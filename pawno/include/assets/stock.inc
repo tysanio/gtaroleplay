@@ -350,6 +350,7 @@ stock HoldWeapon(playerid, weaponid)
     PlayerData[playerid][pUsedMagazine] = 0;
 	if (weaponid != 0)
 	{
+		SetPlayerAttachedObject(playerid, 4, IsWeaponModel(weaponid), 6);
   		SetPlayerArmedWeapon(playerid, 0);
 	}
 	return 1;
@@ -584,6 +585,7 @@ stock ResetVehicle(vehicleid)
 		CoreVehicles[vehicleid][vehTrash] = 0;
 		CoreVehicles[vehicleid][vehRepairing] = 0;
 		CoreVehicles[vehicleid][vehSirenOn] = 0;
+		CoreVehicles[vehicleid][vehRadio] = 0;
 		SetVehicleHealth(vehicleid,1000.0);
 	}
 	return 1;
@@ -972,8 +974,7 @@ stock Garbage_Save(garbageid)
 }
 stock Booth_GetPlayer(id)
 {
-	foreach (new i : Player) if (PlayerData[i][pRangeBooth] == id) {
-	    return i;
+	foreach (new i : Player) if (PlayerData[i][pRangeBooth] == id) {return i;
 	}
 	return INVALID_PLAYER_ID;
 }
@@ -1136,7 +1137,7 @@ stock Backpack_Open(playerid)
 	    new
 	        string[MAX_BACKPACK_CAPACITY * 32],
 			count = 0;
-		string = "Ajouter Object\n";
+		string = "Add Item\n";
 	    for (new i = 0; i < MAX_BACKPACKS; i ++) if (BackpackItems[i][bItemExists] && BackpackItems[i][bItemBackpack] == id)
 	    {
 	        if (BackpackItems[i][bItemQuantity] == 1)
@@ -1344,6 +1345,7 @@ stock StartTutorial(playerid)
 	TogglePlayerControllable(playerid, 0);
     PlayerData[playerid][pTutorial] = 1;
     PlayerData[playerid][pTutorialTime] = 10;
+	new serveurinfo;
 	if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 	{
 	    SetPlayerPos(playerid, 1806.737, -2043.505, 44.733);
@@ -1377,7 +1379,7 @@ stock StartTutorial(playerid)
 }
 stock IsValidobjectModel(modelid)
 {
-	if (modelid < 0 || modelid > 30000)
+	if (modelid < 0 || modelid > 20000)
 	    return 0;
     switch (modelid)
 	{
@@ -1974,354 +1976,354 @@ stock EquipWeapon(playerid, weapon[])
 	    Inventory_Remove(playerid, "Katana");
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) Katana de son inventaire.", ReturnName(playerid, 0));
 	}
-    else if (!strcmp(weapon, "sa_csgolfclub", true))
+ else if (!strcmp(weapon, "sa_csgolfclub", true))
 	{
 	    if (!Inventory_HasItem(playerid, "sa_csgolfclub"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 103))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 103, 1);
 	    Inventory_Remove(playerid, "sa_csgolfclub");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) golf club de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) golf club de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "sa_csshovel", true))
 	{
 	    if (!Inventory_HasItem(playerid, "sa_csshovel"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 106))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 106, 1);
 	    Inventory_Remove(playerid, "sa_csshovel");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) pelle de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) pelle de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "sab_skateboard", true))
 	{
 	    if (!Inventory_HasItem(playerid, "sab_skateboard"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 107))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 107, 1);
 	    Inventory_Remove(playerid, "sab_skateboard");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) skateboard de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) skateboard de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "sa_csswitchblade", true))
 	{
 	    if (!Inventory_HasItem(playerid, "sa_csswitchblade"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 109))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 109, 1);
 	    Inventory_Remove(playerid, "sa_csswitchblade");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) switch blade de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) switch blade de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "sa_csthrowingkf", true))
 	{
 	    if (!Inventory_HasItem(playerid, "sa_csthrowingkf"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 110))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 110, 1);
 	    Inventory_Remove(playerid, "sa_csthrowingkf");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) couteau de lancé de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) couteau de lanc? de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lc_bat", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lc_bat"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 112))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 112, 1);
 	    Inventory_Remove(playerid, "lc_bat");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) bat de baseball de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) bat de baseball de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_chnsaw", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_chnsaw"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 125))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 125, 1);
 	    Inventory_Remove(playerid, "vc_chnsaw");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) chainsaw de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) chainsaw de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_cleaver", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_cleaver"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 127))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 127, 1);
 	    Inventory_Remove(playerid, "vc_cleaver");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) hachoir de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) hachoir de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_golfclub", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_golfclub"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 130))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 130, 1);
 	    Inventory_Remove(playerid, "vc_golfclub");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) golf club de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) golf club de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_hammer", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_hammer"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 132))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 132, 1);
 	    Inventory_Remove(playerid, "vc_hammer");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) marteau de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) marteau de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_katana", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_katana"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 134))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 134, 1);
 	    Inventory_Remove(playerid, "vc_katana");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) katana de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) katana de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_knifecur", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_knifecur"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 135))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 135, 1);
 	    Inventory_Remove(playerid, "vc_knifecur");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) couteau de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) couteau de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_machete", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_machete"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 139))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 139, 1);
 	    Inventory_Remove(playerid, "vc_machete");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) machette de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) machette de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_nitestick", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_nitestick"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 144))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 144, 1);
 	    Inventory_Remove(playerid, "vc_nitestick");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) matraque de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) matraque de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "vc_screwdriver", true))
 	{
 	    if (!Inventory_HasItem(playerid, "vc_screwdriver"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 148))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 148, 1);
 	    Inventory_Remove(playerid, "vc_screwdriver");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) tournevis de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) tournevis de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_chisel", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_chisel"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 169))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 169, 1);
 	    Inventory_Remove(playerid, "lcs_chisel");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) Chisel de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) Chisel de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_hockey", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_hockey"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 177))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 177, 1);
 	    Inventory_Remove(playerid, "lcs_hockey");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) baton d'hockey de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) baton d'hockey de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_nitestick", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_nitestick"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 190))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 190, 1);
 	    Inventory_Remove(playerid, "lcs_nitestick");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) matraque de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) matraque de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_knifecur", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_knifecur"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 180))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 180, 1);
 	    Inventory_Remove(playerid, "lcs_knifecur");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) couteau de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) couteau de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_bat", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_bat"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 164))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 164, 1);
 	    Inventory_Remove(playerid, "lcs_bat");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) bat de baseball de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) bat de baseball de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_handaxe", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_handaxe"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 176))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 176, 1);
 	    Inventory_Remove(playerid, "lcs_handaxe");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) hache de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) hache de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_cleaver", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_cleaver"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 172))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 172, 1);
 	    Inventory_Remove(playerid, "lcs_cleaver");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) hachoir de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) hachoir de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_machete", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_machete"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 185))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 185, 1);
 	    Inventory_Remove(playerid, "lcs_machete");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) machete de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) machete de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_katana", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_katana"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 179))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 179, 1);
 	    Inventory_Remove(playerid, "lcs_katana");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) katana de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) katana de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_chnsaw", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_chnsaw"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 170))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 170, 1);
 	    Inventory_Remove(playerid, "lcs_chnsaw");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) Chainsaw de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) Chainsaw de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_brassknuckle", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_brassknuckle"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 165))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 165, 1);
 	    Inventory_Remove(playerid, "lcs_brassknuckle");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) poing américan de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) poing am?rican de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_cane", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_cane"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 168))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 168, 1);
 	    Inventory_Remove(playerid, "lcs_cane");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) cane de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) cane de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lc_grenade", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lc_grenade"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 115))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 115, 1);
 	    Inventory_Remove(playerid, "lc_grenade");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) grenade de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) grenade de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lc_heatseek", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lc_heatseek"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 116))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 116, 1);
 	    Inventory_Remove(playerid, "lc_heatseek");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) rocket launcher de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) rocket launcher de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lc_molotov", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lc_molotov"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 119))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 119, 1);
 	    Inventory_Remove(playerid, "lc_molotov");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) cocktail molotov de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) cocktail molotov de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_molotov", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_molotov"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 188))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 188, 1);
 	    Inventory_Remove(playerid, "lcs_molotov");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) cocktail molotov de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) cocktail molotov de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_grenade", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_grenade"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 175))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 175, 1);
 	    Inventory_Remove(playerid, "lcs_grenade");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) grenade de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) grenade de son inventaire.", ReturnName(playerid, 0));
 	}	
     else if (!strcmp(weapon, "lcs_teargas", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_teargas"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 194))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 194, 1);
 	    Inventory_Remove(playerid, "lcs_teargas");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) grenade lacrymo de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) grenade lacrymo de son inventaire.", ReturnName(playerid, 0));
 	}
     else if (!strcmp(weapon, "lcs_rocketla", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lcs_rocketla"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 192))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 	    GiveWeaponToPlayer(playerid, 192, 1);
 	    Inventory_Remove(playerid, "lcs_rocketla");
-	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est équiper d'un(e) rocket launcher de son inventaire.", ReturnName(playerid, 0));
+	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s c'est ?quiper d'un(e) rocket launcher de son inventaire.", ReturnName(playerid, 0));
 	}
 	else if (!strcmp(weapon, "lc_ak47", true))
 	{
 	    if (!Inventory_HasItem(playerid, "lc_ak47"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 111))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 111);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type ak47 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2331,9 +2333,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lc_colt45"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 113))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 113);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type colt vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2343,9 +2345,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lc_flame"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 114))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 114);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type lance-flamme vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2355,9 +2357,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lc_m16"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 117))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 117);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m16 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2367,9 +2369,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lc_shotgun"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 120))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 120);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2379,9 +2381,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lc_sniper"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 121))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 121);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type sniper rifle vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2391,9 +2393,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lc_uzi"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 122))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 122);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type uzi vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2403,9 +2405,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_glock17"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 174))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 174);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type glock vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2415,9 +2417,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_python"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 191))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 191);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type python vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2427,9 +2429,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_ak47"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 163))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 163);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type ak-47 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2439,9 +2441,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_chromegun"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 171))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 171);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2451,9 +2453,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_shotgspa"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 193))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 193);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2463,9 +2465,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_buddyshot"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 166))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 166);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type shotgun vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2475,9 +2477,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_m4"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 182))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 182);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m4 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2487,9 +2489,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_tec9"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 195))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 195);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type tec9 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2499,9 +2501,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_uzi"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 196))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 196);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type uzi vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2511,9 +2513,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_ingram"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 178))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 178);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type mac vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2523,9 +2525,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_mp5k"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 189))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 189);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type mp5k vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2535,9 +2537,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_m21"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 183))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 183);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m21 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2547,9 +2549,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_laser"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 181))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 181);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type laser rifle vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2559,9 +2561,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_flame"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 173))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 173);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type lance-flamme vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2571,9 +2573,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_M60"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 184))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 184);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type m60 vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2583,9 +2585,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_minigun"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 186))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 186);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type minigun vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -2595,9 +2597,9 @@ stock EquipWeapon(playerid, weapon[])
 	    if (!Inventory_HasItem(playerid, "lcs_camera"))
 	        return SendErrorMessage(playerid, "Vous n'avez pas cette arme.");
 	    if (PlayerHasWeapon(playerid, 167))
-	        return SendErrorMessage(playerid, "Vous avez déjà cette arme.");
+	        return SendErrorMessage(playerid, "Vous avez d?j? cette arme.");
 		if (PlayerData[playerid][pHoldWeapon] > 0)
-		    return SendErrorMessage(playerid, "Tu a déjà une arme en hold appuye sur N pour la ranger.");
+		    return SendErrorMessage(playerid, "Tu a d?j? une arme en hold appuye sur N pour la ranger.");
 		HoldWeapon(playerid, 167);
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une arme de type camera vide et la tien dans ces mains.", ReturnName(playerid, 0));
 	    SendServerMessage(playerid, "Appuie sur N pour le ranger et pour l'utiliser il faut un chargeur.");
@@ -3741,26 +3743,43 @@ GetClosestHospital(playerid)
 	}
 	return iIndex;
 }
+/*IsWeaponModel(model) {
+    new const g_aWeaponModels[] = {
+		0, 331, 333, 334, 335, 336, 337, 338, 339, 341, 321, 322, 323, 324,
+		325, 326, 342, 343, 344, 0, 0, 0, 346, 347, 348, 349, 350, 351, 352,
+		353, 355, 356, 372, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366,
+		367, 368, 368, 371,
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		29000,29001,29002,29003,29004,29005,29006,29007,29008,29009,29010,29011,29012,29013,29014,29015,
+		29016,29017,0,29019,29020,29021,29022,29023,29024,29025,29026,29027,29028,29029,29030,29031,29032,
+		29033,29034,29035,29036,29037,29038,29039,29040,29041,29042,29043,29045,29047,29048,29049,29050,
+		29051,29052,29053,29054,29055,0,29057,29058,29059,29060,29061,0,29082,29069,29064,29085,29097,29297,29065,
+		29065,29074,29083,29071,29071,29094,29080,29076,29070,29066,29089,29073,29068,29092,29086,29091,29095,
+		29072,29096,29079,29075,29090,29067,29081,29093,29084,29077,29087,29088,29116,29104,29114,29132,29099,
+		29119,29100,29131,29298,29109,29117,29115,29128,29106,29101,29110,29105,29123,0,29103,29120,0,29125,
+		29127,29129,29107,29130,29112,29121,29124,29118,29126,29111,29122,29134,29135,29136,29137,29138,29139,
+		29140,29141,29142,29143,29144,29145,29146,29147,29148,29149,29150,29151,29152,29153,29154,29155,29156,
+		29157,29158,29159,29160,29161,29162,29163,29164,29165,29166,29167,29168,29169,0,29171,29172,29173,29174,
+		29175,29176,29177,29178,29179,29180,29181,29323,29182,29183,29184,29185,29186,29187,29188,29189,29190,29191,29192,
+		29193,29194,29195,29196,29197,29198,29199,29200,29201,29202,29203,29204,29205,29206,29207,29208,29209,29210,
+		29211,29212,29213,29214,29215,29216,29217,29218,29219,29220,29221,29222,29223,29224,29225,29226,29227,29228,29229,
+		29230,29231,29232,29233,29234,29235,29236,29237,29238,29239,29240,29241,29242,29243,29244,29245,29246,29272,29273,29247,
+		29248,29249,29250,29251,29252,29253,29254,29255,29256,29257,29258,29259,29260,29261,29262,29263,29264,29265,29266,29267,
+		29268,29269,29270,29271,29274,29275,29276,29277,29278,29279,29280,29281,29282,29283,29284,29285,29286,29287,29288,29289,
+		29290,0,29295,29296,29299,29300,29301,29302,0,29304,29306,29307,29309,29312,0,29313,0,29315,29316,29317,29319,29320,
+		29321,29322,29324,29325,29326,29327,29328,29329
+    };
+    for (new i = 0; i < sizeof(g_aWeaponModels); i ++) if (g_aWeaponModels[i] == model) {
+        return 1;
+	}
+	return 0;
+}*/
 IsWeaponModel(model) {
     new const g_aWeaponModels[] = {
-		0,331,333,334,335,336,337,338,339,341,321,322,323,324,325,326,342,343,344,0,0,
-		345,346,347,348,349,350,351,352,353,355,356,372,357,358,359,360,361,362,363,363,365,366,367,368,369,371,
-		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-		29000,29001,29002,29003,29004,29005,29006,29007,29008,29009,29010,29011,29012,29013,29014,29015,29016,29017,
-		29018,29019,29020,29021,29022,29023,29024,29025,29026,29027,29028,29029,29030,29031,29032,29033,29034,29035,29036,
-		29037,29038,29039,29040,29041,29042,29043,29044,29045,29046,29047,29048,29049,29050,29051,29052,29053,29054,29055,0,
-		29057,29058,29059,29060,29061,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,29082,29069,29064,29085,29097,29297,29065,29074,29083,29071,29094,29080,29076,29070,
-		29066,29089,29073,29068,29092,29086,29091,29095,29072,29096,29079,29075,29090,29067,29081,29093,29084,29077,29087,29088,
-		29116,29104,29114,29132,29099,29119,29100,29131,29298,29109,29117,29115,29128,29106,29101,29110,29105,29123,29103,0,29120,
-		0,29125,29127,29129,29107,29130,29112,29121,29124,29118,29126,29111,29122,29134,29135,29136,29137,29138,29139,29140,29141,
-		29142,29143,29144,29145,29146,29147,29148,29149,29150,29151,29152,29153,29154,29155,29156,29157,29158,29159,29160,29161,29162,
-		29163,29164,29165,29166,29167,29168,29169,0,29171,29172,29173,29174,29175,29176,29177,29178,29179,29180,29181,29323,29182,29183,
-		29184,29185,29186,29187,29188,29189,29190,29191,29192,29193,29194,29195,29196,29197,29198,29199,29200,29201,29202,29203,29204,29205,
-		29206,29207,29208,29209,29210,29211,29212,29213,29214,29215,29216,29217,29218,29219,29220,29221,29222,29223,29224,29225,29226,29227,
-		29228,29229,29230,29231,29232,29233,29234,29235,29236,29237,29238,29239,29240,29241,29242,29243,29244,29245,29246,29272,29273,29247,
-		29248,29249,29250,29251,29252,29253,29254,29255,29256,29257,29258,29259,29260,29261,29262,29263,29264,29265,29266,29267,29268,29269,
-		29270,29271,29274,29275,29276,29277,29278,29279,29280,29281,29282,29283,29284,29285,29286,29287,29288,29289,29290,0,0,0,0,29295,29296,0,0,
-		29299,29300,29301,29302,0,29304,29306,29307,29309,29312,0,29313,0,29315,29316,29317,0,29319,29320,29321,29322,29324,29325,29326,29327,29328,29329
+		0, 331, 333, 334, 335, 336, 337, 338, 339, 341, 321, 322, 323, 324,
+		325, 326, 342, 343, 344, 0, 0, 0, 346, 347, 348, 349, 350, 351, 352,
+		353, 355, 356, 372, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366,
+		367, 368, 368, 371
     };
     for (new i = 0; i < sizeof(g_aWeaponModels); i ++) if (g_aWeaponModels[i] == model) {
         return 1;
@@ -3825,11 +3844,11 @@ DropItem(item[], player[], model, quantity, Float:x, Float:y, Float:z, interior,
 		DroppedItems[i][droppedPos][2] = z;
 		DroppedItems[i][droppedInt] = interior;
 		DroppedItems[i][droppedWorld] = world;
-		/*if (IsWeaponModel(model)) {
+		if (IsWeaponModel(model)) {
 			DroppedItems[i][droppedObject] = CreateDynamicObject(model, x, y, z, 93.7, 120.0, 120.0, world, interior);
-		} else {*/
+		} else {
 			DroppedItems[i][droppedObject] = CreateDynamicObject(model, x, y, z, 0.0, 0.0, 0.0, world, interior);
-		//}
+		}
  		DroppedItems[i][droppedText3D] = CreateDynamic3DTextLabel(item, COLOR_CYAN, x, y, z, 5.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, world, interior);
 		if (strcmp(item, "Demo Soda") != 0)
 		{
@@ -5890,7 +5909,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 	    	{
 		        case 0:
 		        {
-		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
+		            if (!Inventory_HasItem(playerid, "License arme"))
 		                return SendErrorMessage(playerid, "Vous ne posséder pas la license de port d'arme.");
 		            if (Inventory_Count(playerid, "Chargeur") >= 10)
 		                return SendErrorMessage(playerid, "Tu a 10 magazines, tu ne peut plus en acheter.");
@@ -5906,7 +5925,7 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 			    }
                 case 1:
 		        {
-		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
+		            if (!Inventory_HasItem(playerid, "License arme"))
 		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 		            if (Inventory_Count(playerid, "Munition") >= 10)
 		                return SendErrorMessage(playerid, "Tu a 10 cartouches de munitions, tu ne peut plus en acheter.");
@@ -5920,25 +5939,9 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-                case 2:
+				case 2:
 		        {
-		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
-		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
-		            if (Inventory_Count(playerid, "douille de shotgun") >= 20)
-		                return SendErrorMessage(playerid, "Tu a 20 douille de shotgun, tu ne peut plus en acheter.");
-					new id = Inventory_Add(playerid, "douille de shotgun", 2038);
-					if (id == -1)
-        				return SendErrorMessage(playerid, "Inventaire plein.");
-					GiveMoney(playerid, -price);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a payé %s $ et a reçu une douille de shotgun.", ReturnName(playerid, 0), FormatNumber(price));
-					BusinessData[bizid][bizProducts]--;
-					BusinessData[bizid][bizVault] += Tax_Percent(price);
-					Business_Save(bizid);
-					Tax_AddPercent(price);
-			    }
-				case 3:
-		        {
-		            if (!Inventory_HasItem(playerid, "Permis d'arme"))
+		            if (!Inventory_HasItem(playerid, "License arme"))
 		                return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 		            if (Inventory_Count(playerid, "Gilet par balles") >= 1)
 		                return SendErrorMessage(playerid, "Tu a un gilet par balle, tu ne peut plus en acheter.");
@@ -5952,9 +5955,9 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 4:
+				case 3:
 				{
-				    if (!Inventory_HasItem(playerid, "Permis d'arme"))
+				    if (!Inventory_HasItem(playerid, "License arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 				    if (PlayerData[playerid][pPlayingHours] < 24)
 				        return SendErrorMessage(playerid, "Vous devez avoir au moins 24 heures de jeux.");
@@ -5968,9 +5971,9 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 5:
+				case 4:
 				{
-				    if (!Inventory_HasItem(playerid, "Permis d'arme"))
+				    if (!Inventory_HasItem(playerid, "License arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 
 				    if (PlayerData[playerid][pPlayingHours] < 24)
@@ -5985,9 +5988,9 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 					Business_Save(bizid);
 					Tax_AddPercent(price);
 			    }
-				case 6:
+				case 5:
 				{
-				    if (!Inventory_HasItem(playerid, "Permis d'arme"))
+				    if (!Inventory_HasItem(playerid, "License arme"))
 				        return SendErrorMessage(playerid, "Ce magasin vend uniquement aux personnes possédant une licence d'arme.");
 				    if (PlayerData[playerid][pPlayingHours] < 24)
 				        return SendErrorMessage(playerid, "Vous devez avoir au moins 24 heures de jeux.");
@@ -6013,19 +6016,19 @@ Dialog:BusinessBuy(playerid, response, listitem, inputtext[])
 
 					switch (PlayerData[playerid][pGender])
                     {
-                        case 1: ShowModelSelectionMenu(playerid, "Vetements", MODEL_SELECTION_CLOTHES, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
-						case 2: ShowModelSelectionMenu(playerid, "Vetements", MODEL_SELECTION_CLOTHES, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
+                        case 1: ShowModelSelectionMenu(playerid, "Clothes", MODEL_SELECTION_CLOTHES, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
+						case 2: ShowModelSelectionMenu(playerid, "Clothes", MODEL_SELECTION_CLOTHES, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
                     }
 				}
 		        case 1:
 				{
 				    PlayerData[playerid][pClothesType] = 2;
-					ShowModelSelectionMenu(playerid, "Lunettes", MODEL_SELECTION_CLOTHES, {19006, 19007, 19008, 19009, 19010, 19011, 19012, 19013, 19014, 19015, 19016, 19017, 19018, 19019, 19020, 19021, 19022, 19023, 19024, 19025, 19026, 19027, 19028, 19029, 19030, 19031, 19032, 19033, 19034, 19035,19138,19139,19140}, 33, 0.0, 0.0, 90.0);
+					ShowModelSelectionMenu(playerid, "Glasses", MODEL_SELECTION_CLOTHES, {19006, 19007, 19008, 19009, 19010, 19011, 19012, 19013, 19014, 19015, 19016, 19017, 19018, 19019, 19020, 19021, 19022, 19023, 19024, 19025, 19026, 19027, 19028, 19029, 19030, 19031, 19032, 19033, 19034, 19035,19138,19139,19140}, 33, 0.0, 0.0, 90.0);
 				}
 			    case 2:
 				{
 				    PlayerData[playerid][pClothesType] = 3;
-					ShowModelSelectionMenu(playerid, "Chapeaux", MODEL_SELECTION_CLOTHES, {18891,18892,18893,18894,18895,18896,18897,18898,18899,18900,18901,18902,18903,18904,18905,18906,18907,18908,18909,18910,18921,18922,18923,18924,18925,18926,18927,18928,18929,18930,18931,18932,18933,18934,18935,18936,18937,18938,18944,18945,18946,18947,18948,18949,18950,18951,18953,18954,18962,18964,18965,18966,18967,18968,18969,18970,18971,18972,18973,19107,19108,19111,19112,19113,19114,19115,19116,19117,19118,19119,19120}, 71, -20.0, -90.0, 0.0);
+					ShowModelSelectionMenu(playerid, "Hats", MODEL_SELECTION_CLOTHES, {18891,18892,18893,18894,18895,18896,18897,18898,18899,18900,18901,18902,18903,18904,18905,18906,18907,18908,18909,18910,18921,18922,18923,18924,18925,18926,18927,18928,18929,18930,18931,18932,18933,18934,18935,18936,18937,18938,18944,18945,18946,18947,18948,18949,18950,18951,18953,18954,18962,18964,18965,18966,18967,18968,18969,18970,18971,18972,18973,19107,19108,19111,19112,19113,19114,19115,19116,19117,19118,19119,19120}, 71, -20.0, -90.0, 0.0);
 				}
 				case 3:
 				{
@@ -6872,7 +6875,7 @@ Dialog:HouseMoney(playerid, response, listitem, inputtext[])
 			switch (listitem)
 			{
 			    case 0: {
-					Dialog_Show(playerid, HouseWithdrawCash, DIALOG_STYLE_INPUT, "Retiré du coffre", "Coffre de la maison: %s\n\nCombien vous voulez retirer du coffre:", "Retirer", " <-- ", FormatNumber(HouseData[houseid][houseMoney]));
+					Dialog_Show(playerid, HouseWithdrawCash, DIALOG_STYLE_INPUT, "Retiré du coffre", "Coffre de la maison: %s\n\nCombien vous voulez withdraw from the safe:", "Retirer", " <-- ", FormatNumber(HouseData[houseid][houseMoney]));
 				}
 				case 1: {
 				    Dialog_Show(playerid, HouseDepositCash, DIALOG_STYLE_INPUT, "Déposé dans le coffre", "Coffre de la maison: %s\n\nCombien vous voulez déposé dans le coffre de la maison:", "Retirer", " <-- ", FormatNumber(HouseData[houseid][houseMoney]));
@@ -7598,6 +7601,8 @@ Dialog:GraffitiText(playerid, response, listitem, inputtext[])
 	}
 	return 1;
 }
+
+
 Dialog:NewTasks(playerid, response, listitem, inputtext[])
 {
 	if (response)
@@ -7831,8 +7836,8 @@ Dialog:TakeItems(playerid, response, listitem, inputtext[])
 		    Inventory_Remove(PlayerData[playerid][pTakeItems], "Talkie-Walkie", -1);
 		    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a confisqué la radio portable %s.", ReturnName(playerid, 0), ReturnName(PlayerData[playerid][pTakeItems], 0));
 		}
-		else if (!strcmp(inputtext, "Take Permis d'arme")) {
-		    Inventory_Remove(PlayerData[playerid][pTakeItems], "Permis d'arme", -1);
+		else if (!strcmp(inputtext, "Take License arme")) {
+		    Inventory_Remove(PlayerData[playerid][pTakeItems], "License arme", -1);
 	        SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a confisqué la lisence d'arme de %s.", ReturnName(playerid, 0), ReturnName(PlayerData[playerid][pTakeItems], 0));
 		}
 		else if (!strcmp(inputtext, "Take permis de conduire")) {
@@ -8755,11 +8760,15 @@ Dialog:Locker(playerid, response, listitem, inputtext[])
 	                if (!PlayerData[playerid][pOnDuty])
 	                {
 	                    PlayerData[playerid][pOnDuty] = true;
-						if (FactionData[factionid][factionacces][1] == 1) {cop_nbrCops++;}
-						if (FactionData[factionid][factionacces][4] == 1) {swat_nbrCops++;}
+						foreach (new i : Player)
+						{
+							new facass = PlayerData[i][pFaction];
+							if (FactionData[facass][factionacces][1] == 1) {cop_nbrCops++;}
+							if (FactionData[facass][factionacces][4] == 1) {swat_nbrCops++;}
+						}
 	                    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a pointé son entrée.", ReturnName(playerid, 0));
 						if (Inventory_Items(playerid) >= MAX_INVENTORY - 1)
-							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de placee dans l'inventaire)");
+							return SendErrorMessage(playerid, "Vous ne pouvez pas prendre les menotte. (pas de paBTe dans l'inventaire)");
 						if (FactionData[factionid][factionacces][1] == 1 || FactionData[factionid][factionacces][4] == 1 || FactionData[factionid][factionacces][3] == 1)Inventory_Add(playerid, "Menottes",19418, 1);
 	                }
 	                else
@@ -9033,8 +9042,8 @@ Dialog:FactionWeaponID(playerid, response, listitem, inputtext[])
 	    if (isnull(inputtext))
 	        return Dialog_Show(playerid, FactionWeaponID, DIALOG_STYLE_INPUT, "Mettre Arme", "Arme présent: %s (%d)\n\nPlease enter the new weapon ID pour slot %d:", "Envoyer", "Annulé", ReturnWeaponName(FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]]), FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]],PlayerData[playerid][pSelectedSlot]);
 
-		if (weaponid < 0 || weaponid > 46 && weaponid < 99 || weaponid > 421)
-		    return Dialog_Show(playerid, FactionWeaponID, DIALOG_STYLE_INPUT, "Mettre Arme", "Erreur: Arme de 0 a 46 ou 100 a 421.\n\nArme présent: %s (%d)\n\nEntrée une arme valide pour le slot %d:", "Envoyer", "Annulé", ReturnWeaponName(FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]]), FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]],PlayerData[playerid][pSelectedSlot]);
+		if (weaponid < 0 || weaponid > 46)
+		    return Dialog_Show(playerid, FactionWeaponID, DIALOG_STYLE_INPUT, "Mettre Arme", "Erreur: Arme de 0 a 46.\n\nArme présent: %s (%d)\n\nEntrée une arme valide pour le slot %d:", "Envoyer", "Annulé", ReturnWeaponName(FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]]), FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]],PlayerData[playerid][pSelectedSlot]);
 
         FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]] = weaponid;
         Faction_Save(PlayerData[playerid][pFactionEdit]);
@@ -9087,7 +9096,7 @@ Dialog:FactionSkin(playerid, response, listitem, inputtext[])
 		switch (listitem)
 		{
 		    case 0:
-		        Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311/20004-30000):", "Ajouter", "Annuler");
+		        Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311):", "Ajouter", "Annuler");
 
 			case 1:
 			{
@@ -9117,9 +9126,9 @@ Dialog:FactionModel(playerid, response, listitem, inputtext[])
 	{
 	    new skin = strval(inputtext);
 	    if (isnull(inputtext))
-	        return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311/20004-30000):", "Ajouter", "Annuler");
+	        return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Entrée un skin entre (0-311):", "Ajouter", "Annuler");
 		if (skin < 0 || skin > 311 && skin < 20004 || skin > 30000)
-		    return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Erreur: Dans le skin minimun 0 et max 311 ou 20004-30000.\n\nEntrée un skin entre (0-311):", "Ajouter", "Annuler");
+		    return Dialog_Show(playerid, FactionModel, DIALOG_STYLE_INPUT, "Ajouter par ID", "Erreur: Dans le skin minimun 0 et max 311.\n\nEntrée un skin entre (0-311):", "Ajouter", "Annuler");
         FactionData[PlayerData[playerid][pFactionEdit]][factionSkins][PlayerData[playerid][pSelectedSlot]] = skin;
 		Faction_Save(PlayerData[playerid][pFactionEdit]);
 
@@ -9997,14 +10006,13 @@ Business_PurchaseMenu(playerid, bizid)
 		}
 		case 2:
 	    {
-			format(string, sizeof(string), "Chargeur\t%s$\nMunition\t%s$\nDouille de shotgun\t%s$\nGilet par balle\t%s$\n9mm Pistol\t%s$\nRemington 870\t%s$\nRifle\t%s$",
+			format(string, sizeof(string), "Chargeur\t%s$\nMunition\t%s$\nGilet par balle\t%s$\n9mm Pistol\t%s$\nRemington 870\t%s$\nM14 Rifle\t%s$",
 				FormatNumber(BusinessData[bizid][bizPrices][0]),
 				FormatNumber(BusinessData[bizid][bizPrices][1]),
 				FormatNumber(BusinessData[bizid][bizPrices][2]),
 				FormatNumber(BusinessData[bizid][bizPrices][3]),
 				FormatNumber(BusinessData[bizid][bizPrices][4]),
-				FormatNumber(BusinessData[bizid][bizPrices][5]),
-				FormatNumber(BusinessData[bizid][bizPrices][6])
+				FormatNumber(BusinessData[bizid][bizPrices][5])
 			);
 			Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_TABLIST, BusinessData[bizid][bizName], string, "Acheter", "Annuler");
 		}
@@ -10085,20 +10093,6 @@ Business_PurchaseMenu(playerid, bizid)
 				BusinessData[bizid][bizitemname3],FormatNumber(BusinessData[bizid][bizPrices][2]),
 				BusinessData[bizid][bizitemname4],FormatNumber(BusinessData[bizid][bizPrices][3]),
 				BusinessData[bizid][bizitemname5],FormatNumber(BusinessData[bizid][bizPrices][4])
-			);
-			Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_TABLIST, BusinessData[bizid][bizName], string, "Acheter", "Annuler");
-		}
-		case 12:
-	    {
-			format(string, sizeof(string), "Appat 1\t%s$\nAppat 2\t%s$\nAppat 3\t%s$\nAppat 4\t%s$\nCanne à peche\t%s$\nArc a flèche\t%s$\nMunition\t%s$\nPaintBall\t%s$",
-				FormatNumber(BusinessData[bizid][bizPrices][0]),
-				FormatNumber(BusinessData[bizid][bizPrices][1]),
-				FormatNumber(BusinessData[bizid][bizPrices][2]),
-				FormatNumber(BusinessData[bizid][bizPrices][3]),
-				FormatNumber(BusinessData[bizid][bizPrices][4]),
-				FormatNumber(BusinessData[bizid][bizPrices][5]),
-				FormatNumber(BusinessData[bizid][bizPrices][6]),
-				FormatNumber(BusinessData[bizid][bizPrices][7])
 			);
 			Dialog_Show(playerid, BusinessBuy, DIALOG_STYLE_TABLIST, BusinessData[bizid][bizName], string, "Acheter", "Annuler");
 		}
@@ -10345,11 +10339,10 @@ Business_Create(playerid, type, price)
 
                     BusinessData[i][bizPrices][0] = 50;
 					BusinessData[i][bizPrices][1] = 100;
-					BusinessData[i][bizPrices][2] = 100;
-		            BusinessData[i][bizPrices][3] = 200;
-		            BusinessData[i][bizPrices][4] = 400;
-		            BusinessData[i][bizPrices][5] = 600;
-		            BusinessData[i][bizPrices][6] = 800;
+		            BusinessData[i][bizPrices][2] = 200;
+		            BusinessData[i][bizPrices][3] = 400;
+		            BusinessData[i][bizPrices][4] = 600;
+		            BusinessData[i][bizPrices][5] = 800;
 				}
 				else if (type == 3) {
                 	BusinessData[i][bizInt][0] = 161.4801;
@@ -10498,7 +10491,7 @@ Business_Create(playerid, type, price)
 		            BusinessData[i][bizPrices][8] = 20;
 		            BusinessData[i][bizPrices][9] = 10;
 				}
-				else if (type == 11) { //vip
+				else if (type == 11) {
                 	BusinessData[i][bizInt][0] = -27.2829;
                 	BusinessData[i][bizInt][1] = -58.1948;
                 	BusinessData[i][bizInt][2] = 1003.0910;
@@ -10506,21 +10499,6 @@ Business_Create(playerid, type, price)
 					BusinessData[i][bizInterior] = 6;
 
 				}
-				else if (type == 12) {
-                	BusinessData[i][bizInt][0] = 316.3963;
-                	BusinessData[i][bizInt][1] = -169.8375;
-                	BusinessData[i][bizInt][2] = 999.6010;
-                	BusinessData[i][bizInt][3] = 0.0000;
-					BusinessData[i][bizInterior] = 6;
-
-                    BusinessData[i][bizPrices][0] = 3;
-					BusinessData[i][bizPrices][1] = 7;
-					BusinessData[i][bizPrices][2] = 8;
-		            BusinessData[i][bizPrices][3] = 12;
-		            BusinessData[i][bizPrices][4] = 200;
-		            BusinessData[i][bizPrices][5] = 800;
-		            BusinessData[i][bizPrices][6] = 75;
-				}				
 				BusinessData[i][bizExterior] = GetPlayerInterior(playerid);
 				BusinessData[i][bizExteriorVW] = GetPlayerVirtualWorld(playerid);
 
@@ -13706,7 +13684,7 @@ ResetStatistics(playerid)
 	PlayerData[playerid][pSpectator] = INVALID_PLAYER_ID;
 	PlayerData[playerid][pJailTime] = 0;
 	PlayerData[playerid][pKicked] = 0;
-	PlayerData[playerid][pNoob] = 0;
+	PlayerData[playerid][pNoob] = 1;
 	PlayerData[playerid][pMuted] = 0;
 	PlayerData[playerid][pSpamCount] = 0;
 	PlayerData[playerid][pCommandCount] = 0;
@@ -14562,8 +14540,6 @@ stock IsDoorVehicle(vehicleid) //a faire
 		    return 1;
 		case 540..547, 549..552, 554..562, 565..568, 573, 575, 576, 578..580, 582, 585, 587..589, 596..605, 609:
 			return 1;
-		case 613,614,662,663,665,666,668,796,799,965,1199..1206,1326,1699,3138,3222..3247,3248,4776,6552..6561,6563,6566..6569,6571..6577,6658..6698,6793,6799,25365,25370,25378,25380,25383..25385,25389,25390,25401,25420,25438,25484..25486,25489..25491,25522,25537,25576,25577,256904776,4777,4781,4790,4791,4796,4799,5092,5101,6028,6270,6526,6529,6530,6550: //lc-lcs
-			return 1;
 	}
 	return 0;
 }
@@ -14580,9 +14556,7 @@ stock IsLoadableVehicle(vehicleid) //a faire
 	if (GetVehicleTrailer(vehicleid))
 	    modelid = GetVehicleModel(GetVehicleTrailer(vehicleid));
 	switch (modelid) {
-	    case 609, 414, 498, 403, 456, 499, 514, 515, 435, 591, 422, 478, 489, 505, 543, 552, 554, 440,\
-		25516,6589,25359,25518,6624,6568,6695,6563,6618,25498,25497,6656,6577,6584,6522,6268,6588,4802,6654,6635,6669,6637,25608,25613,25463: return 1;
-
+	    case 609, 414, 498, 403, 456, 499, 514, 515, 435, 591, 422, 478, 489, 505, 543, 552, 554, 440: return 1;
 	}
 	return 0;
 }//a checker le max transport en haut et en bas
@@ -14590,11 +14564,11 @@ stock GetMaxCrates(vehicleid) //a faire
 {
 	new crates;
 	switch (GetVehicleModel(vehicleid)) {
-	    case 498, 609,25516,6589: crates = 10;
-	    case 414,25518,6624,6568,6695: crates = 8;
-	    case 456, 499,6584,25498,25497,6656,6577: crates = 6;
-	    case 435, 591, 514, 515,25608,25613,25463: crates = 15;
-		case 440, 422, 489, 505, 543, 552, 554,6637,6669,6288,6268,6552,6635,2883: crates = 4;
+	    case 498, 609: crates = 10;
+	    case 414: crates = 8;
+	    case 456, 499: crates = 6;
+	    case 435, 591, 514, 515: crates = 15;
+		case 440, 422, 489, 505, 543, 552, 554: crates = 4;
 	}
 	return crates;
 }
@@ -14661,7 +14635,7 @@ stock IsABike(vehicleid)
 stock IsAVelo(vehicleid)
 {
 	switch (GetVehicleModel(vehicleid)) {
-		case 481, 509, 510,6677,6678,25500,25501,25502,25503,25504,25505,25506,25507,25508,25509,25510: return 1;
+		case 481, 509, 510,6677,6678,25500,25501,25502,25503,25504,255,05,25506,25507,25508,25509,25510: return 1;
 	}
 	return 0;
 }
@@ -15306,6 +15280,7 @@ stock SetCameraData(playerid)
 {
 	if(!IsPlayerNPC(playerid))
 	{
+		new serveurinfo;
 		if(info_serveursetting[serveurinfo][settingvilleactive] == 1)
 		{
 			SetPlayerPos(playerid, 2096.8398,-1879.4764,15.000);
@@ -15757,6 +15732,303 @@ stock SetVehicleIndicator(vehicleid, leftindicator=0, rightindicator=0)
  		Indicators_xqz[vehicleid][3] = CreateObject(19294, 0, 0, 0,0,0,0);
 		AttachObjectToVehicle(Indicators_xqz[vehicleid][3], vehicleid,  -_vX[0]/2.23, -_vY[0]/2.23, 0.1 ,0,0,0);
 	}
+	return 1;
+}
+//salaire gouv
+Dialog:Salairegouv(playerid, response, listitem, inputtext[])
+{
+	if (response)
+	{
+	    switch (listitem)
+	    {
+	        case 0: {cmd_gouvrang1(playerid, "");}
+			case 1: {cmd_gouvrang2(playerid, "");}
+			case 2: {cmd_gouvrang3(playerid, "");}
+			case 3: {cmd_gouvrang4(playerid, "");}
+			case 4: {cmd_gouvrang5(playerid, "");}
+			case 5: {cmd_gouvrang6(playerid, "");}
+			case 6: {cmd_gouvrang7(playerid, "");}
+			case 7: {cmd_gouvrang8(playerid, "");}
+			case 8: {cmd_gouvrang9(playerid, "");}
+			case 9: {cmd_gouvrang10(playerid, "");}
+			case 10: {cmd_gouvrang11(playerid, "");}
+			case 11: {cmd_gouvrang12(playerid, "");}
+			case 12: {cmd_gouvrang13(playerid, "");}
+			case 13: {cmd_gouvrang14(playerid, "");}
+			case 14: {cmd_gouvrang15(playerid, "");}
+		}
+	}
+	if (!response) {return 0;}
+	return 1;
+}
+Dialog:GouvRank1(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie1] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank1, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 1", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank1, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 1", "Nouveau Salaire du Rang 1 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank2(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie2] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank1, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 2", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank2, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 2", "Nouveau Salaire du Rang 2 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank3(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie3] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank3, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 3", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank3, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 3", "Nouveau Salaire du Rang 3 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank4(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie4] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank4, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 4", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank4, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 4", "Nouveau Salaire du Rang 4 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank5(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie5] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank5, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 5", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank5, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 5", "Nouveau Salaire du Rang 5 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank6(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie6] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank6, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 6", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank6, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 6", "Nouveau Salaire du Rang 6 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank7(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie7] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank7, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 7", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank7, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 7", "Nouveau Salaire du Rang 7 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank8(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie8] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank8, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 8", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank8, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 8", "Nouveau Salaire du Rang 8 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank9(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie9] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank9, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 9", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank9, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 9", "Nouveau Salaire du Rang 9 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank10(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie10] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank10, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 10", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank10, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 10", "Nouveau Salaire du Rang 10 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank11(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie11] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank11, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 11", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank11, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 11", "Nouveau Salaire du Rang 11 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank12(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie12] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank12, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 12", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank12, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 12", "Nouveau Salaire du Rang 12 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank13(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie13] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank13, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 13", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank13, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 13", "Nouveau Salaire du Rang 13 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank14(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie14] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank14, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 14", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank14, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 14", "Nouveau Salaire du Rang 14 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
+	return 1;
+}
+Dialog:GouvRank15(playerid, response, listitem, inputtext[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][7] == 0 && PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
+	    return 0;
+	if (response)
+	{
+		new taxe = strval(inputtext);
+	    static rank;
+		info_salairemairie[rank][salairemairie15] = taxe;
+		if (taxe < 1 || taxe > 2500)
+			return Dialog_Show(playerid, GouvRank15, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 15", "Erreur: Entre 1 et 2500:", "Continuer", " X ");
+		Dialog_Show(playerid, GouvRank15, DIALOG_STYLE_INPUT, "Gouvernement Salaire Rang 15", "Nouveau Salaire du Rang 15 %d $", "Continuer", " X ",taxe);
+		salairemairie(rank);
+	}
+	else {}
 	return 1;
 }
 //salaire fbi
@@ -18221,6 +18493,7 @@ Dialog:decodeur(playerid, response, listitem, inputtext[])
 //serveur setting
 Dialog:serveur(playerid,response,listitem,inputtext[])
 {
+	new serveurinfo;
 	if(!response) return 0;
 	if (response)
 	{
@@ -18309,7 +18582,7 @@ Dialog:serveur1(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur1,DIALOG_STYLE_INPUT,"Serveur setting","OOC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive]);
 		if (amount < 0 || amount > 1)
@@ -18319,6 +18592,7 @@ Dialog:serveur1(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18327,7 +18601,7 @@ Dialog:serveur2(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur2,DIALOG_STYLE_INPUT,"Serveur setting","PM : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingpmactive]);
 		if (amount < 0 || amount > 1)
@@ -18337,6 +18611,7 @@ Dialog:serveur2(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18345,7 +18620,7 @@ Dialog:serveur3(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur3,DIALOG_STYLE_INPUT,"Serveur setting","Braquage NPC : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagenpcactive]);
 		if (amount < 0 || amount > 1)
@@ -18355,6 +18630,7 @@ Dialog:serveur3(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18363,7 +18639,7 @@ Dialog:serveur4(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur4,DIALOG_STYLE_INPUT,"Serveur setting","Braquage Banque : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingbraquagebankactive]);
 		if (amount < 0 || amount > 1)
@@ -18373,6 +18649,7 @@ Dialog:serveur4(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18381,7 +18658,7 @@ Dialog:serveur5(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur5,DIALOG_STYLE_INPUT,"Serveur setting","AFK : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingafkactive]);
 		if (amount < 0 || amount > 1)
@@ -18391,6 +18668,7 @@ Dialog:serveur5(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18399,7 +18677,7 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur6,DIALOG_STYLE_INPUT,"Serveur setting","Temps AFK : %d\nMettre une valeur supérieur a 1 en minute","Valider","Fermer",info_serveursetting[serveurinfo][settingafktime]);
 		if (amount < 1 || amount > 20)
@@ -18415,6 +18693,7 @@ Dialog:serveur6(playerid, response, listitem, inputtext[])
 		}
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18426,37 +18705,37 @@ Dialog:serveur8(playerid,response,listitem,inputtext[])
 	{
 		switch(listitem)
 		{
-			case 0:			
+			case 0:
 			{
-				new query[900];
+				new serveurinfo,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='1' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 1:
 			{
-				new query[900];
+				new serveurinfo,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='2' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 2:
 			{
-				new query[900];
+				new serveurinfo,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='3' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 3:
 			{
-				new query[900];
+				new serveurinfo,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='4' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 			}
 			case 4:
 			{
-				new query[900];
+				new serveurinfo,query[900];
 				format(query, sizeof(query), "UPDATE `serveursetting` SET `villeactive`='5' WHERE `id`='1'", info_serveursetting[serveurinfo][settingvilleactive]);
 				mysql_tquery(g_iHandle, query);
 				Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
@@ -18465,6 +18744,7 @@ Dialog:serveur8(playerid,response,listitem,inputtext[])
 	}
 	else
 	{
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18473,7 +18753,7 @@ Dialog:serveur9(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur9,DIALOG_STYLE_INPUT,"Serveur setting Nouveau chat","Nouveau chat : %d\nPour activer 0 pour désactiver 1","Valider","Fermer",info_serveursetting[serveurinfo][settingnouveau]);
 		if (amount < 0 || amount > 1)
@@ -18483,6 +18763,7 @@ Dialog:serveur9(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18491,7 +18772,7 @@ Dialog:serveur10(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur10,DIALOG_STYLE_INPUT,"Serveur setting Police","Entrée le nombre de police nécessaire ","Valider","Fermer",info_serveursetting[serveurinfo][settingpolice]);
 		if (amount < 0 || amount > 10)
@@ -18501,6 +18782,7 @@ Dialog:serveur10(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur10,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18509,7 +18791,7 @@ Dialog:serveur11(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur11,DIALOG_STYLE_INPUT,"Serveur setting Swat","Entrée le nombre de swat nécessaire ","Valider","Fermer",info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 		if (amount < 0 || amount > 10)
@@ -18519,6 +18801,7 @@ Dialog:serveur11(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur11,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
@@ -18527,7 +18810,7 @@ Dialog:serveur12(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new amount = strval(inputtext);
+	    new amount = strval(inputtext),serveurinfo;
 	    if (isnull(inputtext))
 			return Dialog_Show(playerid,serveur12,DIALOG_STYLE_INPUT,"Serveur setting whitelist","Whiteliste : %d\nPour activer 1 pour désactiver 0","Valider","Fermer",info_serveursetting[serveurinfo][settingwl]);
 		if (amount < 0 || amount > 1)
@@ -18537,12 +18820,14 @@ Dialog:serveur12(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	else {
+	    new serveurinfo;
 		Dialog_Show(playerid,serveur,DIALOG_STYLE_TABLIST,"Serveur setting",serveursetting1,"Valider","Fermer",info_serveursetting[serveurinfo][settingoocactive],info_serveursetting[serveurinfo][settingpmactive],info_serveursetting[serveurinfo][settingbraquagenpcactive],info_serveursetting[serveurinfo][settingbraquagebankactive],info_serveursetting[serveurinfo][settingafkactive],info_serveursetting[serveurinfo][settingafktime],info_serveursetting[serveurinfo][settingvilleactive],info_serveursetting[serveurinfo][settingnouveau],info_serveursetting[serveurinfo][settingpolice],info_serveursetting[serveurinfo][settingswat],info_serveursetting[serveurinfo][settingwl]);
 	}
 	return 1;
 }
 Dialog:serveur13(playerid, response, listitem, inputtext[])
 {
+	new serveurinfo;
 	if (response)
 	{
 	    if (isnull(inputtext))
@@ -18558,6 +18843,7 @@ Dialog:serveur13(playerid, response, listitem, inputtext[])
 }
 Dialog:serveur14(playerid, response, listitem, inputtext[])
 {
+	new serveurinfo;
 	if (response)
 	{
 	    if (isnull(inputtext))
@@ -18879,7 +19165,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18893,7 +19179,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18907,7 +19193,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18921,7 +19207,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18935,7 +19221,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18949,7 +19235,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18963,7 +19249,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18977,7 +19263,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -18991,7 +19277,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					if(rand == 0)
 					{ x=-1707.1; y= 25.8385; z= 2.6546; a= 353.193;}
 					else if(rand == 1)
@@ -19005,7 +19291,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchpaint",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -19014,7 +19300,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchoutils",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -19023,7 +19309,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (500$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (500$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchnos",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -19119,7 +19405,7 @@ Dialog:commande1(playerid, response, listitem, inputtext[])
 						return SendServerMessage(playerid, "Vous êtes qui vous?");
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 7500)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (7500$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (7500$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"Adam : Une livraison a une place a été commencer.(10 minutes environ pour la livraison)");
 					SetTimer("commandlunch",1000,0);
 				}
@@ -19168,7 +19454,7 @@ Dialog:kevlar(playerid,response,listitem,inputtext[])
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
 		if (argent_entreprise[moneyentrepriseid][argentpolice] < 5000)
-				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 		SendClientMessage(playerid,COLOR_YELLOW,"Adam : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 		SetTimer("commandlunchkevlar",1000,0);
 		return 1;
@@ -19186,7 +19472,7 @@ Dialog:soinssoins(playerid,response,listitem,inputtext[])
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
 		if (argent_entreprise[moneyentrepriseid][argentmedecin] < 5000)
-				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transaction. (5000$)");
+				return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 		SendClientMessage(playerid,COLOR_YELLOW,"Adam : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 		SetTimer("commandlunchsoins",1000,0);
 		return 1;
@@ -19215,20 +19501,38 @@ stock GetWeaponModel1(weaponid)
 {
 	switch(weaponid)
 	{
-	    case 1: return 331;
-		case 2..8: return weaponid+331;
-        case 9: return 341; 
-		case 10..15: return weaponid+311; 
-		case 16..18: return weaponid+326;
-		case 22..24: return weaponid+324;
-		case 25..29: return weaponid+324;
-		case 30,31: return weaponid+325;
-		case 32: return 372;
-		case 33..45: return weaponid+324;
-		case 46: return 371;
+	    case 1:
+	        return 331;
+
+		case 2..8:
+		    return weaponid+331;
+
+        case 9:
+		    return 341;
+
+		case 10..15:
+			return weaponid+311;
+
+		case 16..18:
+		    return weaponid+326;
 			
-		case 100 .. 421:
-			return weaponid+28900;
+		case 22..24:
+			return weaponid+324;
+			
+		case 25..29:
+		    return weaponid+324;
+
+		case 30,31:
+		    return weaponid+325;
+
+		case 32:
+		    return 372;
+
+		case 33..45:
+		    return weaponid+324;
+
+		case 46:
+		    return 371;
 	}
 	return 0;
 }
@@ -20712,6 +21016,28 @@ stock ReturnDiscordName( DCC_User: author )
 	DCC_GetUserName( author, name, sizeof( name ) );
 	return name;
 }
+//tuto
+Dialog:TutoriaBTonfirm(playerid, response, listitem, inputtext[])
+{
+    PlayerData[playerid][pTutorialStage] = 0;
+	if (!response)
+	{
+	    PlayerData[playerid][pCreated] = 1;
+	    PlayerData[playerid][pTask] = 1;
+  		PlayerData[playerid][pTutorial] = 0;
+		PlayerData[playerid][pTutorialTime] = 0;
+		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");//\nImmigrant
+		Dialog_Show(playerid, Spawntype, DIALOG_STYLE_LIST, "D'où vous venez?", "Aéroport\nCaravane", "Accepter", "");
+	}
+	else
+	{
+	    PlayerData[playerid][pCreated] = 1;
+	    PlayerData[playerid][pTask] = 1;
+		//SendServerMessage(playerid, "Tapez /etape pour savoir quoi faire.");
+		StartTutorial(playerid);
+	}
+	return 1;
+}
 //blackjack
 Dialog:BlackJackMiser(playerid, response, listitem, inputtext[])
 {
@@ -21076,7 +21402,6 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 					{
 						PlayerData[AdminTarget[playerid]][pBleeding] = 1;
 						PlayerData[AdminTarget[playerid]][pBleedTime] = 10;
-						CreateBlood(AdminTarget[playerid],25);
 						SetTimerEx("HidePlayerBox", 500, false, "dd", AdminTarget[playerid], _:ShowPlayerBox(AdminTarget[playerid], 0xFF000066));
 						SendServerMessage(playerid, "Vous avez saigné %s.", ReturnName(AdminTarget[playerid], 0));
 					}
@@ -21219,7 +21544,7 @@ Dialog:ModifierInformation(playerid, response, listitem, inputtext[])
 			}
 			case 9:
 			{
-				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur n'a pas été tirer dessus depuis sa connection au serveur.");}
+				if (PlayerData[AdminTarget[playerid]][pLastShot] == INVALID_PLAYER_ID) {SendErrorMessage(playerid, "Ce joueur na pas été tirer dessus depuis sa connection au serveur.");}
 				SendServerMessage(playerid, "%s a tirer sur %s (%s).", ReturnName(PlayerData[AdminTarget[playerid]][pLastShot]),ReturnName(AdminTarget[playerid], 0), GetDuration(gettime() - PlayerData[AdminTarget[playerid]][pShotTime]));
 				Dialog_Show(playerid,ModifierInformation,DIALOG_STYLE_LIST,"Modification des stats",menuclick2fr,"Valider","Annuler");	
 			}
@@ -21509,8 +21834,8 @@ Dialog:ModifierInformation9(playerid, response, listitem, inputtext[])
 		}
 		else
 		{
-			if (PlayerData[AdminTarget[playerid]][pPlayingHours] < 5)
-				return SendErrorMessage(playerid, "Il doit avoir au moins 5 heures de jeux.");
+			if (PlayerData[AdminTarget[playerid]][pPlayingHours] < 10)
+				return SendErrorMessage(playerid, "Il doit avoir au moins 10 heures de jeux.");
 			SetFaction(AdminTarget[playerid], strval(inputtext));
 			PlayerData[AdminTarget[playerid]][pFactionRank] = FactionData[strval(inputtext)][factionRanks];
 			SendServerMessage(playerid, "Vous avez fait de %s le leader de la faction \"%s\".", ReturnName(AdminTarget[playerid], 0), FactionData[strval(inputtext)][factionName]);
@@ -21583,8 +21908,8 @@ Dialog:ModifcationInfoPlus(playerid, response, listitem, inputtext[])
 			{
 				switch (PlayerData[AdminTarget[playerid]][pGender])
 				{
-					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Vetements", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
-					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Vetements", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
+					case 1: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
+					case 2: ShowModelSelectionMenu(AdminTarget[playerid], "Clothes", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
 				}
 				Dialog_Show(playerid,ModifcationInfoPlus,DIALOG_STYLE_LIST,"Modification Plus",menuclick1fr,"Valider","Annuler");
 			}	
@@ -21857,8 +22182,9 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				\n- /vcoffre Pour ouvrir le coffre du véhicule\n- /demarrer ou appuyer sur ctrl Pour démarrer le moteur du véhicule\
 				\n- /phare ou appuyer sur é Pour allumer les phares du véhicule\n- /crocheterporte Pour forcer la porte d'un véhicule\n\
 				- /capot Pour ouvrir le capot du véhicule\n- /vitre Pour ouvrir et fermer la fenêtre du véhicule\
-				\n- /ceinture pour attacher votre ceinture \n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un vehicule,\
-				\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela),\
+				\n- /ceinture pour attacher votre ceinture\n- /setradio pour écouter la radio dans le véhicule,\
+				\n- /trafiquerfils pour voler un véhicule,\n- /louerveh pour louer un vehicule,\
+				\n- /delouerveh pour délouer un vehicule (attention a être a la bonne place pour cela,\
 				\n- /vpreter voir le vehicule qu'on vous a prêter,\n- /vdouble Pour prêter les clés de votre véhicule,\
 				\n- /vjeter pour jetter le double des clés prêter,\n- /payersabot pour payer le sabot du vehicule,\
 				\n- /achetergarage pour acheter un garage,\n- /garage pour aller dans votre garage","Quitter","");
@@ -21997,7 +22323,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				Dialog_Show(playerid,aidechat,DIALOG_STYLE_MSGBOX,"Aide divers", \
 				" -/proprieter pour voir se que vous êtes le propriétaire,\n- /stats pour afficher les statistiques de votre personnage,\n- /changermdp pour changer de mot de passe\n- /dernierefois Pour connaître la dernière connection d'un joueur,\n- /acc pour enlever ou mettre vos accessoire,\n\
 				- /rapport pour rapporté un méfait,\n- /bjstart pour commencer le blackjack,\n- /bjstop pour stop le black jack,\n- /supporteurs pour avoir la liste des helpeurs disponible,\n- /roulette pour jouer a la roulette au casino\n- /monpanneau pour afficher les options du panneau\n\
-				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet à 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme,\n- /stylecombat choisir votre style de combat,\n- /discordverif pour se faire vérifier discord\
+				- /enlevercp pour enlever tout checkpoint sur votre carte,\n- /stopanim pour stopper une animation en cours,\n- /animcmds Pour la liste des animations,\n- /resetvw Remet à 0 votre virtualWorld,\n- /distancec pour voir la distance du commissariat,\n- /bowlingstats pour avoir votre résultat du bowling,\n- /jeter pour jeter une arme,\n- /stylecombat choisir votre style de combat\
 				","Quitter","");
 			}
 			case 6:
@@ -22023,50 +22349,33 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 		{	
 			case 0:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 5)
-					return SendErrorMessage(playerid, "Tu a besoin de 5 gold bar pour l'échanger");
-				Inventory_Remove(playerid,"gold bar",5);
-				PlayerData[playerid][pBankMoney] += 5000;
-				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
+				if (Inventory_Count(playerid, "gold bar") < 1)
+					return SendErrorMessage(playerid, "Tu a besoin de 1 gold bar pour l'échanger");
 			}
 			case 1:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 10)
-					return SendErrorMessage(playerid, "Tu a besoin de 10 gold bars pour l'échanger");
-				Inventory_Remove(playerid,"gold bar",10);
-				PlayerData[playerid][pBankMoney] += 10000;
-				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
+				if (Inventory_Count(playerid, "gold bar") < 2)
+					return SendErrorMessage(playerid, "Tu a besoin de 2 gold bars pour l'échanger");
 			}
 			case 2:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 15)
-					return SendErrorMessage(playerid, "Tu a besoin de 15 gold bars pour l'échanger");
-				Inventory_Remove(playerid,"gold bar",15);
-				PlayerData[playerid][pBankMoney] += 15000;
-				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
+				if (Inventory_Count(playerid, "gold bar") < 3)
+					return SendErrorMessage(playerid, "Tu a besoin de 3 gold bars pour l'échanger");
 			}
 			case 3:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 20)
-					return SendErrorMessage(playerid, "Tu a besoin de 20 gold bars pour l'échanger");
-				Inventory_Remove(playerid,"gold bar",20);
-				PlayerData[playerid][pBankMoney] += 20000;
-				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
+				if (Inventory_Count(playerid, "gold bar") < 4)
+					return SendErrorMessage(playerid, "Tu a besoin de 4 gold bars pour l'échanger");
 			}
 			case 4:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 25)
-					return SendErrorMessage(playerid, "Tu a besoin de 25 golds bar pour l'échanger");
-				Inventory_Remove(playerid,"gold bar",25);
-				PlayerData[playerid][pBankMoney] += 25000;
-				SendServerMessage(playerid,"Argent ajouté au chèque! Aller à la mairie pour aller le chercher!");
+				if (Inventory_Count(playerid, "gold bar") < 5)
+					return SendErrorMessage(playerid, "Tu a besoin de 5 golds bar pour l'échanger");
 			}
 			case 5:
 			{
-				if (Inventory_Count(playerid, "gold bar") < 30)
-					return SendErrorMessage(playerid, "Tu a besoin de 30 gold bar pour l'échanger");
-				Inventory_Remove(playerid,"gold bar",30);
-				PlayerData[playerid][pPlayingHours] += 5;
+				if (Inventory_Count(playerid, "gold bar") < 1)
+					return SendErrorMessage(playerid, "Tu a besoin de 1 gold bar pour l'échanger");
 			}
 			case 6:
 			{
@@ -22107,7 +22416,7 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 }
 Dialog:discordid(playerid, response, listitem, inputtext[])
 {
-	if(!response) return SendErrorMessage(playerid,"Bon bah pas de vérification pour vous!");
+	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
 	if (response)
 	{
 		new DCC_User:user = DCC_FindUserById(inputtext),amount = strlen(inputtext);
@@ -22116,17 +22425,18 @@ Dialog:discordid(playerid, response, listitem, inputtext[])
 		if(RoleJoueur == DCC_INVALID_ROLE) return Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!\n Erreur 3 ID role", "Voila", " X ");
 		DCC_AddGuildMemberRole(GUILD_ID1,user,RoleJoueur);
 		PlayerData[playerid][pRole] = amount;
-		SendServerMessage(playerid,"Ajout du role discord fait");
+		Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "QCM LSR","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
+		TogglePlayerControllable(playerid, 0);
 		return 1;
 	}
 	return 1;
 }
-Dialog:discordid1(playerid, response, listitem, inputtext[])
+/*Dialog:discordid1(playerid, response, listitem, inputtext[])
 {
-	if(!response) return SendErrorMessage(playerid,"Bon bah pas de vérification pour vous!");
+	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
 	if (response)
 	{
-		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol,amount = strlen(inputtext);//role a faire
+		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol;//role a faire
 		if (role == DCC_INVALID_ROLE)
 			return SendErrorMessage(playerid,"Erreur sur le role"); // invalid role id
 		new DCC_Guild:guild = DCC_FindGuildById(info_serveursetting[lol][settingdiscord]);
@@ -22137,12 +22447,11 @@ Dialog:discordid1(playerid, response, listitem, inputtext[])
 			return SendErrorMessage(playerid,"Erreur sur le id user"); // invalid user id
 		if (!DCC_AddGuildMemberRole(guild, user, role))
 			return SendErrorMessage(playerid,"Erreur sur l'ajout du tout"); // invalid guild, user and/or role passed
-		SendServerMessage(playerid,"Ajout du role discord fait");
-		PlayerData[playerid][pRole] = amount;
+		PlayerData[playerid][pRole] = user;
 		return 1;
 	}
 	return 1;
-}
+}*/
 IsPlayerNearBanker(playerid)
 {
 	foreach(new i : Bankers)
@@ -22361,7 +22670,9 @@ loadbank()
     for(new i; i < MAX_BANKERS; i++)
     {
         BankerData[i][bankerActorID] = -1;
-        BankerData[i][bankerVW] = -1;
+        #if defined BANKER_USE_MAPICON
+        BankerData[i][bankerIconID] = -1;
+        #endif
         BankerData[i][bankerLabel] = Text3D: -1;
     }
     for(new i; i < MAX_ATMS; i++)
@@ -22381,8 +22692,7 @@ loadbank()
 	  `PosX` float NOT NULL,\
 	  `PosY` float NOT NULL,\
 	  `PosZ` float NOT NULL,\
-	  `PosA` float NOT NULL,\
-	  `VW` smallint NOT NULL\
+	  `PosA` float NOT NULL\
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     mysql_tquery(g_iHandle, "CREATE TABLE IF NOT EXISTS `bank_atms` (\
 	  `ID` int(11) NOT NULL,\
@@ -23132,389 +23442,6 @@ Dialog:Mairie(playerid, response, listitem, inputtext[])
 				return 1;
 			}
 		}
-	}
-	return 1;
-}
-//bowling
-Dialog:DIALOG_BOWLING(playerid,response,listitem,inputtext[])
-{
-	if(response)
-	{
-	    switch(listitem)
-	    {
-	        case 0:
-	        {
-	            if(AbleToPlay[playerid] == 1) return SendClientMessage(playerid,0xD92626AA,"You are already playing!");
-	            Dialog_Show(playerid,DIALOG_ROAD, DIALOG_STYLE_LIST, "Choisir votre allée", "{00AA00}1. {FFFFFF}Allé 1 \n{00AA00}2. {FFFFFF}Allé 2 \n{00AA00}3. {FFFFFF}Allé 3 \n{00AA00}4. {FFFFFF}Allé 4 \n{00AA00}5. {FFFFFF}Allé 5  ", "Ok", "Back");
-	        }
-	        case 1:
-	        {
-	            if(AbleToPlay[playerid] == 0) return SendErrorMessage(playerid,"Aucune partie lancé de votre part!");
-	            AbleToPlay[playerid] = 0;
-	            BowlingRoadStatus[PlayersBowlingRoad[playerid]] = ROAD_EMPTY;
-	            KillTimer(BowlingTimer[PlayersBowlingRoad[playerid]]);
-	            BowlingMinutes[playerid] = 0;
-	            BowlingSeconds[playerid] = 0;
-	            SendServerMessage(playerid,"Vous avez mis fin a votre partie!");
-				DestroyBall(playerid);
-				if(PlayersBowlingScore[playerid] > PlayerData[playerid][pBestScore])
-				{
-					SendServerMessage(playerid,"{00CC00}Record Battu! Ancien score: {FFFFFF}%i!",PlayerData[playerid][pBestScore]);
-           			SendServerMessage(playerid,"{00CC00}Nouveau score: {FFFFFF}%i!",PlayersBowlingScore[playerid]);
-					PlayerData[playerid][pBestScore] = PlayersBowlingScore[playerid];
-				}
-				else {SendServerMessage(playerid,"{00CC00}Votre record est: {FFFFFF}%i!",PlayerData[playerid][pBestScore]);}
-                PlayersBowlingScore[playerid] = 0;
-	            if(PlayersBowlingRoad[playerid]==0)
-	            {
-					UpdateDynamic3DTextLabelText(BowlingRoadScreen[0], 0xFFFFFF,"{008800}[{FFFFFF} Allé 1{008800} ]\n Vide");
-					PlayersBowlingRoad[playerid] = ROAD_NONE;
-	                DestroyPins(0);
-	            }
-				else if(PlayersBowlingRoad[playerid]==1)
-				{
-					UpdateDynamic3DTextLabelText(BowlingRoadScreen[1], 0xFFFFFF,"{008800}[{FFFFFF} Allé 2{008800} ]\n Vide");
-					PlayersBowlingRoad[playerid] = ROAD_NONE;
-					DestroyPins(1);
-				}
-				else if(PlayersBowlingRoad[playerid]==2)
-				{
-					UpdateDynamic3DTextLabelText(BowlingRoadScreen[2], 0xFFFFFF,"{008800}[{FFFFFF} Allé 3{008800} ]\n Vide");
-					PlayersBowlingRoad[playerid] = ROAD_NONE;
-					DestroyPins(2);
-                   }
-				else if(PlayersBowlingRoad[playerid]==3)
-                {
-					UpdateDynamic3DTextLabelText(BowlingRoadScreen[3], 0xFFFFFF,"{008800}[{FFFFFF} Allé 4{008800} ]\n Vide");
-					PlayersBowlingRoad[playerid] = ROAD_NONE;
-					DestroyPins(3);
-                }
-				else if(PlayersBowlingRoad[playerid]==4)
-				{
-					UpdateDynamic3DTextLabelText(BowlingRoadScreen[4], 0xFFFFFF,"{008800}[{FFFFFF} Allé 5{008800} ]\n Vide");
-					PlayersBowlingRoad[playerid] = ROAD_NONE;
-					DestroyPins(4);
-				}
-                return 1;
-            }
-            case 2:
-            {
-                if(AbleToPlay[playerid] == 0) return SendClientMessage(playerid,0xD92626AA,"You didn't start game yet!");
-                Dialog_Show(playerid,DIALOG_ADD_TIME, DIALOG_STYLE_LIST, "Ajouté du temps","{00AA00}+3 {FFFFFF}minutes {00AA00} 30$ \n{00AA00}+5 {FFFFFF}minutes {00AA00} 50$ \n{00AA00}+10 {FFFFFF}minutes{00AA00} 100$ \n{00AA00}+25 {FFFFFF}minutes{00AA00} 250$ \n{00AA00}+30 {FFFFFF}minutes{00AA00} 300$ ","Ok","Back");
-            }
-        }
-    }
-	return 1;
-}
-Dialog:DIALOG_ROAD(playerid,response,listitem,inputtext[])
-{
-   	if(response)
-    {
-        switch(listitem)
-        {
-            case 0:
-            {
-                if(BowlingRoadStatus[0] == ROAD_EMPTY)
-                {
-					PlayersBowlingRoad[playerid] = 0;
-					Dialog_Show(playerid,DIALOG_BOWLING_TIME, DIALOG_STYLE_LIST, "Temps","{BBBB00}3 {FFFFFF}minutes {00AA00} 30$ \n{BBBB00}5 {FFFFFF}minutes {00AA00} 50$ \n{BBBB00}10 {FFFFFF}minutes{00AA00} 100$ \n{BBBB00}25 {FFFFFF}minutes{00AA00} 250$ \n{BBBB00}30 {FFFFFF}minutes{00AA00} 300$ ","Ok","Back");
-				}
-				else if(BowlingRoadStatus[0] == ROAD_BUSY) return SendErrorMessage(playerid,"Allé occupé");
-			}
-			case 1:
-            {
-                if(BowlingRoadStatus[1] == ROAD_EMPTY)
-				{
-				    PlayersBowlingRoad[playerid] = 1;
-					Dialog_Show(playerid,DIALOG_BOWLING_TIME, DIALOG_STYLE_LIST, "Temps","{BBBB00}3 {FFFFFF}minutes {00AA00} 30$ \n{BBBB00}5 {FFFFFF}minutes {00AA00} 50$ \n{BBBB00}10 {FFFFFF}minutes{00AA00} 100$ \n{BBBB00}25 {FFFFFF}minutes{00AA00} 250$ \n{BBBB00}30 {FFFFFF}minutes{00AA00} 300$ ","Ok","Back");
-				}
-				else if(BowlingRoadStatus[1] == ROAD_BUSY) return SendErrorMessage(playerid,"Allé occupé");
-			}
-			case 2:
-            {
-                if(BowlingRoadStatus[2] == ROAD_EMPTY)
-                {
-					PlayersBowlingRoad[playerid] = 2;
-					Dialog_Show(playerid,DIALOG_BOWLING_TIME, DIALOG_STYLE_LIST, "Temps","{BBBB00}3 {FFFFFF}minutes {00AA00} 30$ \n{BBBB00}5 {FFFFFF}minutes {00AA00} 50$ \n{BBBB00}10 {FFFFFF}minutes{00AA00} 100$ \n{BBBB00}25 {FFFFFF}minutes{00AA00} 250$ \n{BBBB00}30 {FFFFFF}minutes{00AA00} 300$ ","Ok","Back");
-				}
-				else if(BowlingRoadStatus[2] == ROAD_BUSY) return SendErrorMessage(playerid,"Allé occupé");
-			}
-			case 3:
-            {
-                if(BowlingRoadStatus[3] == ROAD_EMPTY)
-                {
-					PlayersBowlingRoad[playerid] = 3;
-					Dialog_Show(playerid,DIALOG_BOWLING_TIME, DIALOG_STYLE_LIST, "Temps","{BBBB00}3 {FFFFFF}minutes {00AA00} 30$ \n{BBBB00}5 {FFFFFF}minutes {00AA00} 50$ \n{BBBB00}10 {FFFFFF}minutes{00AA00} 100$ \n{BBBB00}25 {FFFFFF}minutes{00AA00} 250$ \n{BBBB00}30 {FFFFFF}minutes{00AA00} 300$ ","Ok","Back");
-				}
-				else if(BowlingRoadStatus[3] == ROAD_BUSY) return SendErrorMessage(playerid,"Allé occupé");
-			}
-			case 4:
-            {
-                if(BowlingRoadStatus[4] == ROAD_EMPTY)
-                {
-					PlayersBowlingRoad[playerid] = 4;
-					Dialog_Show(playerid,DIALOG_BOWLING_TIME, DIALOG_STYLE_LIST, "Temps","{BBBB00}3 {FFFFFF}minutes {00AA00} 30$ \n{BBBB00}5 {FFFFFF}minutes {00AA00} 50$ \n{BBBB00}10 {FFFFFF}minutes{00AA00} 100$ \n{BBBB00}25 {FFFFFF}minutes{00AA00} 250$ \n{BBBB00}30 {FFFFFF}minutes{00AA00} 300$","Ok","Back");
-				}
-				else if(BowlingRoadStatus[4] == ROAD_BUSY) return SendErrorMessage(playerid,"Road busy.");
-			}
-		}
-	}
-	else if(!response)
-	{
- 		PlayersBowlingRoad[playerid] = ROAD_NONE;
-		Dialog_Show(playerid,DIALOG_BOWLING, DIALOG_STYLE_LIST, "Bowling", "{00AA00}1. {FFFFFF}Prendre une allé \n{00AA00}2. {FFFFFF}Fin de votre partie \n{00AA00}3. {FFFFFF}Ajouter du temps", "Ok", "Fermer");
-	}
-	return 1;
-}
-Dialog:DIALOG_BOWLING_TIME(playerid,response,listitem,inputtext[])
-{
-	if(response)
-    {
-		new count;
-        switch(listitem)
-        {
-			case 0:
-			{
-				GameTextForPlayer(playerid,"~y~+3 ~w~minutes",3000,1);
-				BowlingMinutes[playerid] += 3;
-				GiveMoney(playerid,-30);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 30 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 1:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+5 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 5;
-        	    GiveMoney(playerid,-50);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 50 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 2:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+10 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 10;
-        	    GiveMoney(playerid,-100);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 100 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 3:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+25 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 25;
-        	    GiveMoney(playerid,-250);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 250 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 4:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+30 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 30;
-        	    GiveMoney(playerid,-300);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 300 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-		}
-		new str[150];
-		BowlingSeconds[playerid]=59;
-		KillTimer(BowlingTimer[PlayersBowlingRoad[playerid]]);
-		BowlingTimer[PlayersBowlingRoad[playerid]] = SetTimerEx("BowlingCountDown",1000,true,"d",playerid);
-		CreatePins(playerid);
-		if(PlayersBowlingRoad[playerid]==0)
-		{
-		    HelpBowlingRoadPickup[0] = CreateDynamicPickup(1239,3,-1975.0587,416.9655,2.5090);
-			format(str,150,"{E32A2A}[{FFFFFF} Allé 5{E32A2A} ]\nOccupé\n{BBBB00}Joueur:{FFFFFF}%s\n{BBBB00}Temps:{FFFFFF}%02d:%02d\n{BBBB00}Points:{FFFFFF}%i",ReturnName(playerid, 0),BowlingMinutes[playerid],BowlingSeconds[playerid],PlayersBowlingScore[playerid]);
-			UpdateDynamic3DTextLabelText(BowlingRoadScreen[0], 0xFFFFFF,str);
-		}
-		else if(PlayersBowlingRoad[playerid]==1)
-		{
-		    HelpBowlingRoadPickup[1] = CreateDynamicPickup(1239,3,-1975.0587,415.4035,2.5090);
-			format(str,150,"{E32A2A}[{FFFFFF} Allé 5{E32A2A} ]\nOccupé\n{BBBB00}Joueur:{FFFFFF}%s\n{BBBB00}Temps:{FFFFFF}%02d:%02d\n{BBBB00}Points:{FFFFFF}%i",ReturnName(playerid, 0),BowlingMinutes[playerid],BowlingSeconds[playerid],PlayersBowlingScore[playerid]);
-			UpdateDynamic3DTextLabelText(BowlingRoadScreen[1], 0xFFFFFF,str);
-		}
-		else if(PlayersBowlingRoad[playerid]==2)
-		{
-		    HelpBowlingRoadPickup[2] = CreateDynamicPickup(1239,3,-1975.0587,413.8728,2.5090);
-			format(str,150,"{E32A2A}[{FFFFFF} Allé 5{E32A2A} ]\nOccupé\n{BBBB00}Joueur:{FFFFFF}%s\n{BBBB00}Temps:{FFFFFF}%02d:%02d\n{BBBB00}Points:{FFFFFF}%i",ReturnName(playerid, 0),BowlingMinutes[playerid],BowlingSeconds[playerid],PlayersBowlingScore[playerid]);
-			UpdateDynamic3DTextLabelText(BowlingRoadScreen[2], 0xFFFFFF,str);
-		}
-		else if(PlayersBowlingRoad[playerid]==3)
-		{
-		    HelpBowlingRoadPickup[3] = CreateDynamicPickup(1239,3,-1975.0587,412.2807,2.5090);
-			format(str,150,"{E32A2A}[{FFFFFF} Allé 5{E32A2A} ]\nOccupé\n{BBBB00}Joueur:{FFFFFF}%s\n{BBBB00}Temps:{FFFFFF}%02d:%02d\n{BBBB00}Points:{FFFFFF}%i",ReturnName(playerid, 0),BowlingMinutes[playerid],BowlingSeconds[playerid],PlayersBowlingScore[playerid]);
-			UpdateDynamic3DTextLabelText(BowlingRoadScreen[3], 0xFFFFFF,str);
-		}
-		else if(PlayersBowlingRoad[playerid]==4)
-		{
-		    HelpBowlingRoadPickup[4] = CreateDynamicPickup(1239,3,-1975.0587,410.7207,2.5090);
-		    format(str,150,"{E32A2A}[{FFFFFF} Allé 5{E32A2A} ]\nOccupé\n{BBBB00}Joueur:{FFFFFF}%s\n{BBBB00}Temps:{FFFFFF}%02d:%02d\n{BBBB00}Points:{FFFFFF}%i",ReturnName(playerid, 0),BowlingMinutes[playerid],BowlingSeconds[playerid],PlayersBowlingScore[playerid]);
-			UpdateDynamic3DTextLabelText(BowlingRoadScreen[4], 0xFFFFFF,str);
-		}
-		BowlingRoadStatus[PlayersBowlingRoad[playerid]] = ROAD_BUSY;
-		AbleToPlay[playerid] = 1;
-		SendServerMessage(playerid,"Vous avez commencer une partie!");
-		SendServerMessage(playerid,"Allez au début de l'allé et appuyer sur \"~k~~CONVERSATION_NO~\" pour lancer votre boule!");
-	}
-    else if(!response)
-        {Dialog_Show(playerid,DIALOG_ROAD, DIALOG_STYLE_LIST, "Choisir votre allée", "{00AA00}1. {FFFFFF}Allé 1 \n{00AA00}2. {FFFFFF}Allé 2 \n{00AA00}3. {FFFFFF}Allé 3 \n{00AA00}4. {FFFFFF}Allé 4 \n{00AA00}5. {FFFFFF}Allé 5  ", "Ok", "Back");}
-	return 1;
-}
-Dialog:DIALOG_ADD_TIME(playerid,response,listitem,inputtext[])
-{
-	if(response)
-	{
-		new count;
-    	switch(listitem)
-	    {
-        	case 0:
-        	{
-				GameTextForPlayer(playerid,"~y~+3 ~w~minutes",3000,1);
-				BowlingMinutes[playerid] += 3;
-				GiveMoney(playerid,-30);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 30 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 1:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+5 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 5;
-        	    GiveMoney(playerid,-50);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 50 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 2:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+10 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 10;
-        	    GiveMoney(playerid,-100);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 100 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 3:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+25 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 25;
-        	    GiveMoney(playerid,-250);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 250 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-        	case 4:
-        	{
-        	    GameTextForPlayer(playerid,"~y~+30 ~w~minutes",3000,1);
-        	    BowlingMinutes[playerid] += 30;
-        	    GiveMoney(playerid,-300);
-				for (new iii = 0; iii != MAX_FACTIONS; iii ++) if (FactionData[iii][factionExists] && FactionData[iii][factionacces][11] == 1) {
-					count++;
-				}
-				for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][11] == 1)
-				{
-					new aye = 300 / count;
-					if(FactionData[ii][factionacces][11] == 1)
-					{
-						FactionData[ii][factioncoffre] += aye;
-						Faction_Save(ii);
-					}
-				}
-        	}
-		}
-		new str[128];
-		KillTimer(BowlingTimer[PlayersBowlingRoad[playerid]]);
-		BowlingTimer[PlayersBowlingRoad[playerid]] = SetTimerEx("BowlingCountDown",1000,true,"d",playerid);
-		format(str,128,"{E32A2A}[{FFFFFF} Allé 5{E32A2A} ]\n Occupé \n {BBBB00}Joueur: {FFFFFF}%s\n {BBBB00} Temps:{FFFFFF} %02d:%02d ",ReturnName(playerid, 0),BowlingMinutes[playerid],BowlingSeconds[playerid]);
-		UpdateDynamic3DTextLabelText(BowlingRoadScreen[PlayersBowlingRoad[playerid]], 0xFFFFFF,str);
-	}
-	else if(!response)
-	{
-		Dialog_Show(playerid,DIALOG_BOWLING, DIALOG_STYLE_LIST, "Bowling", "{00AA00}1. {FFFFFF}Prendre une allé \n{00AA00}2. {FFFFFF}Fin de votre partie \n{00AA00}3. {FFFFFF}Ajouter du temps", "Ok", "Fermer");
 	}
 	return 1;
 }

@@ -18,6 +18,7 @@
 #include <a_samp>
 #include <assets/include>
 native IsValidVehicle(vehicleid);
+#include <FCNPC>
 #include <assets/extactor>
 #include <assets/LB_TDBox>
 #include <assets/define>
@@ -27,6 +28,7 @@ native IsValidVehicle(vehicleid);
 #include <assets/stamina>
 #include <assets/pop>
 #include <assets/callback>
+#include <assets/bowling>
 #include <assets/zombie>
 #include <assets/discordchat>
 #include <assets/poker3>
@@ -34,7 +36,7 @@ native IsValidVehicle(vehicleid);
 #include <assets/pool2>
 #include <assets/map>
 //#include <assets/mapls>
-#include <assets/removeb>
+//#include <assets/maison>
 main()
 {
     print(" ");
@@ -291,6 +293,7 @@ script RemoveAttachedObject(playerid, slot)
 }
 script MineTime(playerid) {PlayerData[playerid][pMineTime] = 0;}
 script WoodTime(playerid) {PlayerData[playerid][pWoodTime] = 0;}
+script DestroyBlood(objectid) {DestroyDynamicObject(objectid);}
 script PetrolTime(playerid) {PlayerData[playerid][pPetrolTime] = 0;}
 script ExpireMarker(playerid)
 {
@@ -1654,6 +1657,10 @@ script OnQueryFinished(extraid, threadid)
 		    	cache_get_data(rows, fields, g_iHandle);
 		    	if (rows)
 				{
+				    /*Show_LoginTD(extraid);
+					PlayerTextDrawHide(extraid, PlayerData[extraid][pTextdraws][3]);
+					PlayerTextDrawHide(extraid, PlayerData[extraid][pTextdraws][2]);
+					SelectTextDraw(extraid, -1);*/
 			    	static loginDate[36];
 					cache_get_row(0, 0, loginDate, g_iHandle);
 					format(PlayerData[extraid][pLoginDate], 36, loginDate);
@@ -1886,8 +1893,9 @@ script OnQueryFinished(extraid, threadid)
 						case 0: SetPlayerFightingStyle(extraid, FIGHT_STYLE_NORMAL);
 						case 1: SetPlayerFightingStyle(extraid, FIGHT_STYLE_BOXING);
 						case 2: SetPlayerFightingStyle(extraid, FIGHT_STYLE_KUNGFU);
-						case 3: SetPlayerFightingStyle(extraid, FIGHT_STYLE_GRABKICK);
-						case 4: SetPlayerFightingStyle(extraid, FIGHT_STYLE_ELBOW);
+						case 3: SetPlayerFightingStyle(extraid, FIGHT_STYLE_KNEEHEAD);
+						case 4: SetPlayerFightingStyle(extraid, FIGHT_STYLE_GRABKICK);
+						case 5: SetPlayerFightingStyle(extraid, FIGHT_STYLE_ELBOW);
 					}
 					new factionid = PlayerData[extraid][pFaction];
 					if (FactionData[factionid][factionacces][1] == 1) {cop_nbrCops++;}
@@ -2739,9 +2747,52 @@ script MinuteCheck()
 			}
             else if(FactionData[factionid][factionacces][7] == 1 && argent_entreprise[moneyentrepriseid][argentmairie] >= 0)
 			{
-				paycheck = FactionData[factionid][factionsalaire][Derp];
-				interettaxe = floatround((float(paycheck) / 100) * taxerevenue);
-				FactionData[factionid][factioncoffre] -= paycheck;
+	            if (PlayerData[i][pFactionRank] == 1)
+				{ paycheck = info_salairemairie[rank][salairemairie1];
+ 				  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 2)
+				{ paycheck = info_salairemairie[rank][salairemairie2];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 3)
+				{ paycheck = info_salairemairie[rank][salairemairie3];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 4)
+				{ paycheck = info_salairemairie[rank][salairemairie4];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 5)
+				{ paycheck = info_salairemairie[rank][salairemairie5];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 6)
+				{ paycheck = info_salairemairie[rank][salairemairie6];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 7)
+				{ paycheck = info_salairemairie[rank][salairemairie7];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 8)
+				{ paycheck = info_salairemairie[rank][salairemairie8];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 9)
+				{ paycheck = info_salairemairie[rank][salairemairie9];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 10)
+				{ paycheck = info_salairemairie[rank][salairemairie10];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 11)
+				{ paycheck = info_salairemairie[rank][salairemairie11];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 12)
+				{ paycheck = info_salairemairie[rank][salairemairie12];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 13)
+				{ paycheck = info_salairemairie[rank][salairemairie13];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 14)
+				{ paycheck = info_salairemairie[rank][salairemairie14];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				else if (PlayerData[i][pFactionRank] == 15)
+				{ paycheck = info_salairemairie[rank][salairemairie15];
+		  		  interettaxe = floatround((float(paycheck) / 100) * taxerevenue);}
+				argent_entreprise[moneyentrepriseid][argentmairie] -= paycheck;
 		  		argent_entreprise[moneyentrepriseid][argentmairie] += interettaxe;
 			}
             else if (FactionData[factionid][factionacces][6] == 1 && FactionData[factionid][factioncoffre] >= 0)
@@ -3169,7 +3220,7 @@ script PlayerCheck()
 		        SetPlayerHealth(i, ReturnHealth(i) - 3.0);
 			    PlayerData[i][pBleedTime] = 10;
 
-			    CreateBlood(i,25);
+			    SetTimerEx("HidePlayerBox", 500, false, "dd", i, _:ShowPlayerBox(i, 0xFF000066));
 			}
 		}
 		else if (PlayerData[i][pFingerTime] > 0)
@@ -3513,8 +3564,8 @@ script OnVehicleDeath(vehicleid)
 	    Crate_Delete(i);
 	}
 	//clignotant
-	if(Indicators_xqz[vehicleid][2]) DestroyObject(Indicators_xqz[vehicleid][2]), DestroyObject(Indicators_xqz[vehicleid][3]),DestroyObject(Indicators_xqz[vehicleid][5]),Indicators_xqz[vehicleid][2]=0;
-	if(Indicators_xqz[vehicleid][0]) DestroyObject(Indicators_xqz[vehicleid][0]), DestroyObject(Indicators_xqz[vehicleid][1]),DestroyObject(Indicators_xqz[vehicleid][4]),Indicators_xqz[vehicleid][0]=0;
+	if(Indicators_xqz[vehicleid][2]) DestroyDynamicObject(Indicators_xqz[vehicleid][2]), DestroyDynamicObject(Indicators_xqz[vehicleid][3]),DestroyDynamicObject(Indicators_xqz[vehicleid][5]),Indicators_xqz[vehicleid][2]=0;
+	if(Indicators_xqz[vehicleid][0]) DestroyDynamicObject(Indicators_xqz[vehicleid][0]), DestroyDynamicObject(Indicators_xqz[vehicleid][1]),DestroyDynamicObject(Indicators_xqz[vehicleid][4]),Indicators_xqz[vehicleid][0]=0;
 	return 1;
 }
 public OnVehicleRespray(playerid, vehicleid, color1, color2)
@@ -3760,7 +3811,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'eau sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 1;
+        PlayerData[playerid][pDrinking] = 2;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3775,7 +3826,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de jus de pomme sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 1;
+        PlayerData[playerid][pDrinking] = 2;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3790,7 +3841,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de jus de d'orange sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 1;
+        PlayerData[playerid][pDrinking] = 2;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3805,7 +3856,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de café sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 1;
+        PlayerData[playerid][pDrinking] = 2;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3819,7 +3870,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'alcool sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 1;
+        PlayerData[playerid][pDrinking] = 2;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3829,201 +3880,81 @@ script OnPlayerUseItem(playerid, itemid, name[])
  		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
-    else if (!strcmp(name, "Pizza surgele", true)) cmd_cuisiner(playerid, "pizza");
-    else if (!strcmp(name, "Burger surgele", true)) cmd_cuisiner(playerid, "burger");
-    else if (!strcmp(name, "Gilet par balles", true)) cmd_veste(playerid, "\1");
-    else if (!strcmp(name, "Munition", true)) cmd_chargeur(playerid, "\1");
-    else if (!strcmp(name, "9mm Pistol", true)) EquipWeapon(playerid, "9mm Pistol");
-    else if (!strcmp(name, "Desert Eagle", true)) EquipWeapon(playerid, "Desert Eagle");
-    else if (!strcmp(name, "Shotgun", true)) EquipWeapon(playerid, "Shotgun");
-    else if (!strcmp(name, "Mac 10", true)) EquipWeapon(playerid, "Mac 10");
-    else if (!strcmp(name, "Tec-9", true)) EquipWeapon(playerid, "Tec-9");
-    else if (!strcmp(name, "MP5", true))  EquipWeapon(playerid, "MP5");
-    else if (!strcmp(name, "AK-47", true)) EquipWeapon(playerid, "AK-47");
-    else if (!strcmp(name, "M4", true)) EquipWeapon(playerid, "M4");
-    else if (!strcmp(name, "Sawn-off Shotgun", true)) EquipWeapon(playerid, "Sawn-off Shotgun");
-    else if (!strcmp(name, "Cocktail Molotov", true)) EquipWeapon(playerid, "Cocktail Molotov");
-    else if (!strcmp(name, "Rifle", true)) EquipWeapon(playerid, "Rifle");
-    else if (!strcmp(name, "Sniper", true)) EquipWeapon(playerid, "Sniper");
-    else if (!strcmp(name, "Golf Club", true)) EquipWeapon(playerid, "Golf Club");
-    else if (!strcmp(name, "Couteau", true)) EquipWeapon(playerid, "Couteau");
-    else if (!strcmp(name, "Pelle", true)) EquipWeapon(playerid, "Pelle");
-    else if (!strcmp(name, "Katana", true)) EquipWeapon(playerid, "Katana");
-    else if (!strcmp(name, "Graine marijuana", true)) cmd_planter(playerid, "Weed");
-    else if (!strcmp(name, "Graine cocaine", true)) cmd_planter(playerid, "Cocaine");
-    else if (!strcmp(name, "Graine Heroin Opium", true)) cmd_planter(playerid, "Heroin");
-    else if (!strcmp(name, "Dynamite", true)) cmd_dynamite(playerid, "\1");
-    else if (!strcmp(name, "Decodeur", true)) cmd_decodeur(playerid, "\1");
-    //arme UG
-	else if (!strcmp(name, "sab_ak47", true)) EquipWeapon(playerid, "sab_ak47");
-	else if (!strcmp(name, "sab_glock", true)) EquipWeapon(playerid, "sab_glock");
-	else if (!strcmp(name, "sab_psg1", true)) EquipWeapon(playerid, "sab_psg1");
-	else if (!strcmp(name, "lc_ak47", true)) EquipWeapon(playerid, "lc_ak47");
-	else if (!strcmp(name, "lc_bat", true)) EquipWeapon(playerid, "lc_bat");
-	else if (!strcmp(name, "lc_colt45", true)) EquipWeapon(playerid, "lc_colt45");
-	else if (!strcmp(name, "lc_m16", true)) EquipWeapon(playerid, "lc_m16");
-	else if (!strcmp(name, "lc_shotgun", true)) EquipWeapon(playerid, "lc_shotgun");
-	else if (!strcmp(name, "lc_sniper", true)) EquipWeapon(playerid, "lc_sniper");
-	else if (!strcmp(name, "lc_uzi", true)) EquipWeapon(playerid, "lc_uzi");
-	else if (!strcmp(name, "vc_buddyshot", true)) EquipWeapon(playerid, "vc_buddyshot");
-	else if (!strcmp(name, "vc_chromegun", true)) EquipWeapon(playerid, "vc_chromegun");
-	else if (!strcmp(name, "vc_colt45", true)) EquipWeapon(playerid, "vc_colt45");
-	else if (!strcmp(name, "vc_ingram", true)) EquipWeapon(playerid, "vc_ingram");
-	else if (!strcmp(name, "vc_katana", true)) EquipWeapon(playerid, "vc_katana");
-	else if (!strcmp(name, "vc_laser", true)) EquipWeapon(playerid, "vc_laser");
-	else if (!strcmp(name, "vc_m4", true)) EquipWeapon(playerid, "vc_m4");
-	else if (!strcmp(name, "vc_m60", true)) EquipWeapon(playerid, "vc_m60");
-	else if (!strcmp(name, "vc_mp5lng", true)) EquipWeapon(playerid, "vc_mp5lng");
-	else if (!strcmp(name, "vc_python", true)) EquipWeapon(playerid, "vc_python");
-	else if (!strcmp(name, "vc_ruger", true)) EquipWeapon(playerid, "vc_ruger");
-	else if (!strcmp(name, "vc_shotgspa", true)) EquipWeapon(playerid, "vc_shotgspa");
-	else if (!strcmp(name, "vc_sniper", true)) EquipWeapon(playerid, "vc_sniper");
-	else if (!strcmp(name, "vc_tec9", true)) EquipWeapon(playerid, "vc_tec9");
-	else if (!strcmp(name, "vc_uzi", true)) EquipWeapon(playerid, "vc_uzi");
-	else if (!strcmp(name, "vcps2_ruger", true)) EquipWeapon(playerid, "vcps2_ruger");
-	else if (!strcmp(name, "vcb_coltsil", true)) EquipWeapon(playerid, "vcb_coltsil");
-	else if (!strcmp(name, "vcb_ingramsl", true)) EquipWeapon(playerid, "vcb_ingramsl");
-	else if (!strcmp(name, "vcb_mp5short", true)) EquipWeapon(playerid, "vcb_mp5short");
-	else if (!strcmp(name, "vcb_nailgun", true)) EquipWeapon(playerid, "vcb_nailgun");
-	else if (!strcmp(name, "vcb_stapleg", true)) EquipWeapon(playerid, "vcb_stapleg");
-	else if (!strcmp(name, "vcb_steyr", true)) EquipWeapon(playerid, "vcb_steyr");
-	else if (!strcmp(name, "lcs_ak47", true)) EquipWeapon(playerid, "lcs_ak47");
-	else if (!strcmp(name, "lcs_buddyshot", true)) EquipWeapon(playerid, "lcs_buddyshot");
-	else if (!strcmp(name, "lcs_chromegun", true)) EquipWeapon(playerid, "lcs_chromegun");
-	else if (!strcmp(name, "lcs_glock17", true)) EquipWeapon(playerid, "lcs_glock17");
-	else if (!strcmp(name, "lcs_ingram", true)) EquipWeapon(playerid, "lcs_ingram");
-	else if (!strcmp(name, "lcs_laser", true)) EquipWeapon(playerid, "lcs_laser");
-	else if (!strcmp(name, "lcs_m4", true)) EquipWeapon(playerid, "lcs_m4");
-	else if (!strcmp(name, "lcs_m21", true)) EquipWeapon(playerid, "lcs_m21");
-	else if (!strcmp(name, "lcs_M60", true)) EquipWeapon(playerid, "lcs_M60");
-	else if (!strcmp(name, "lcs_mp5k", true)) EquipWeapon(playerid, "lcs_mp5k");
-	else if (!strcmp(name, "lcs_python", true)) EquipWeapon(playerid, "lcs_python");
-	else if (!strcmp(name, "lcs_shotgspa", true)) EquipWeapon(playerid, "lcs_shotgspa");
-	else if (!strcmp(name, "lcs_tec9", true)) EquipWeapon(playerid, "lcs_tec9");
-	else if (!strcmp(name, "lcs_uzi", true)) EquipWeapon(playerid, "lcs_uzi");
-	else if (!strcmp(name, "vcs_ak47", true)) EquipWeapon(playerid, "vcs_ak47");
-	else if (!strcmp(name, "vcs_beretta", true)) EquipWeapon(playerid, "vcs_beretta");
-	else if (!strcmp(name, "vcs_buddyshot", true)) EquipWeapon(playerid, "vcs_buddyshot");
-	else if (!strcmp(name, "vcs_chromegun", true)) EquipWeapon(playerid, "vcs_chromegun");
-	else if (!strcmp(name, "vcs_equalizer", true)) EquipWeapon(playerid, "vcs_equalizer");
-	else if (!strcmp(name, "vcs_ingramsl", true)) EquipWeapon(playerid, "vcs_ingramsl");
-	else if (!strcmp(name, "vcs_M16", true)) EquipWeapon(playerid, "vcs_M16");
-	else if (!strcmp(name, "vcs_m21", true)) EquipWeapon(playerid, "vcs_m21");
-	else if (!strcmp(name, "vcs_m72", true)) EquipWeapon(playerid, "vcs_m72");
-	else if (!strcmp(name, "vcs_m249", true)) EquipWeapon(playerid, "vcs_m249");
-	else if (!strcmp(name, "vcs_skorpion", true)) EquipWeapon(playerid, "vcs_skorpion");
-	else if (!strcmp(name, "vcs_sp89", true)) EquipWeapon(playerid, "vcs_sp89");
-	else if (!strcmp(name, "vcs_shotgspa", true)) EquipWeapon(playerid, "vcs_shotgspa");
-	else if (!strcmp(name, "vcs_svd", true)) EquipWeapon(playerid, "vcs_svd");
-	else if (!strcmp(name, "vcs_uzi", true)) EquipWeapon(playerid, "vcs_uzi");
-	else if (!strcmp(name, "ug_56II", true)) EquipWeapon(playerid, "ug_56II");
-	else if (!strcmp(name, "ug_93r", true)) EquipWeapon(playerid, "ug_93r");
-	else if (!strcmp(name, "ug_aa12", true)) EquipWeapon(playerid, "ug_aa12");
-	else if (!strcmp(name, "ug_aks74u", true)) EquipWeapon(playerid, "ug_aks74u");
-	else if (!strcmp(name, "ug_auga3", true)) EquipWeapon(playerid, "ug_auga3");
-	else if (!strcmp(name, "ug_awp", true)) EquipWeapon(playerid, "ug_awp");
-	else if (!strcmp(name, "ug_cartelrevolver", true)) EquipWeapon(playerid, "ug_cartelrevolver");
-	else if (!strcmp(name, "ug_colt1911", true)) EquipWeapon(playerid, "ug_colt1911");
-	else if (!strcmp(name, "ug_es57", true)) EquipWeapon(playerid, "ug_es57");
-	else if (!strcmp(name, "ug_famas", true)) EquipWeapon(playerid, "ug_famas");
-	else if (!strcmp(name, "ug_fasthawk", true)) EquipWeapon(playerid, "ug_fasthawk");
-	else if (!strcmp(name, "ug_g3", true)) EquipWeapon(playerid, "ug_g3");
-	else if (!strcmp(name, "ug_g36c", true)) EquipWeapon(playerid, "ug_g36c");
-	else if (!strcmp(name, "ug_galil", true)) EquipWeapon(playerid, "ug_galil");
-	else if (!strcmp(name, "ug_hk416", true)) EquipWeapon(playerid, "ug_hk416");
-	else if (!strcmp(name, "ug_kriss", true)) EquipWeapon(playerid, "ug_kriss");
-	else if (!strcmp(name, "ug_luger", true)) EquipWeapon(playerid, "ug_luger");
-	else if (!strcmp(name, "ug_luxwalt", true)) EquipWeapon(playerid, "ug_luxwalt");
-	else if (!strcmp(name, "ug_m1garand", true)) EquipWeapon(playerid, "ug_m1garand");
-	else if (!strcmp(name, "ug_m82", true)) EquipWeapon(playerid, "ug_m82");
-	else if (!strcmp(name, "ug_m200", true)) EquipWeapon(playerid, "ug_m200");
-	else if (!strcmp(name, "ug_m1903", true)) EquipWeapon(playerid, "ug_m1903");
-	else if (!strcmp(name, "ug_mauser", true)) EquipWeapon(playerid, "ug_mauser");
-	else if (!strcmp(name, "ug_mp7", true)) EquipWeapon(playerid, "ug_mp7");
-	else if (!strcmp(name, "ug_mp40", true)) EquipWeapon(playerid, "ug_mp40");
-	else if (!strcmp(name, "ug_oa93", true)) EquipWeapon(playerid, "ug_oa93");
-	else if (!strcmp(name, "ug_oldie", true)) EquipWeapon(playerid, "ug_oldie");
-	else if (!strcmp(name, "ug_p90", true)) EquipWeapon(playerid, "ug_p90");
-	else if (!strcmp(name, "ug_pumpshot", true)) EquipWeapon(playerid, "ug_pumpshot");
-	else if (!strcmp(name, "ug_revolver", true)) EquipWeapon(playerid, "ug_revolver");
-	else if (!strcmp(name, "ug_revolverrifle", true)) EquipWeapon(playerid, "ug_revolverrifle");
-	else if (!strcmp(name, "ug_scar", true)) EquipWeapon(playerid, "ug_scar");
-	else if (!strcmp(name, "ug_scout", true)) EquipWeapon(playerid, "ug_scout");
-	else if (!strcmp(name, "ug_silenceduzi", true)) EquipWeapon(playerid, "ug_silenceduzi");
-	else if (!strcmp(name, "ug_songbird", true)) EquipWeapon(playerid, "ug_songbird");
-	else if (!strcmp(name, "ug_spas15", true)) EquipWeapon(playerid, "ug_spas15");
-	else if (!strcmp(name, "ug_spcarbine", true)) EquipWeapon(playerid, "ug_spcarbine");
-	else if (!strcmp(name, "ug_tmp", true)) EquipWeapon(playerid, "ug_tmp");
-	else if (!strcmp(name, "ug_tomahawk", true)) EquipWeapon(playerid, "ug_tomahawk");
-	else if (!strcmp(name, "ug_tommygun", true)) EquipWeapon(playerid, "ug_tommygun");
-	else if (!strcmp(name, "ug_tripleshot", true)) EquipWeapon(playerid, "ug_tripleshot");
-	else if (!strcmp(name, "ug_ump45", true)) EquipWeapon(playerid, "ug_ump45");
-	else if (!strcmp(name, "ug_woodshot", true)) EquipWeapon(playerid, "ug_woodshot");
-	else if (!strcmp(name, "ug_woodspal", true)) EquipWeapon(playerid, "ug_woodspal");
-	else if (!strcmp(name, "ug_wrench", true)) EquipWeapon(playerid, "ug_wrench");
-	else if (!strcmp(name, "ug_xm8", true)) EquipWeapon(playerid, "ug_xm8");
-	else if (!strcmp(name, "ug_xm1014", true)) EquipWeapon(playerid, "ug_xm1014");
-	else if (!strcmp(name, "bw_bbgun", true)) EquipWeapon(playerid, "bw_bbgun");
-	else if (!strcmp(name, "cc_deagle", true)) EquipWeapon(playerid, "cc_deagle");
-	else if (!strcmp(name, "cc_glock", true)) EquipWeapon(playerid, "cc_glock");
-	else if (!strcmp(name, "cc_ingram", true)) EquipWeapon(playerid, "cc_ingram");
-	else if (!strcmp(name, "cc_m4", true)) EquipWeapon(playerid, "cc_m4");
-	else if (!strcmp(name, "cc_nailgun", true)) EquipWeapon(playerid, "cc_nailgun");
-	else if (!strcmp(name, "cc_psg1", true)) EquipWeapon(playerid, "cc_psg1");
-	else if (!strcmp(name, "cc_revolver", true)) EquipWeapon(playerid, "cc_revolver");
-	else if (!strcmp(name, "cc_shotgspa", true)) EquipWeapon(playerid, "cc_shotgspa");
-	else if (!strcmp(name, "cc_shotgun", true)) EquipWeapon(playerid, "cc_shotgun");
-	else if (!strcmp(name, "cc_sniper", true)) EquipWeapon(playerid, "cc_sniper");
-	else if (!strcmp(name, "cc_tranq", true)) EquipWeapon(playerid, "cc_tranq");
-	else if (!strcmp(name, "cm_deagle", true)) EquipWeapon(playerid, "cm_deagle");
-	else if (!strcmp(name, "cm_glock", true)) EquipWeapon(playerid, "cm_glock");
-	else if (!strcmp(name, "cm_ingram", true)) EquipWeapon(playerid, "cm_ingram");
-	else if (!strcmp(name, "cm_m4", true)) EquipWeapon(playerid, "cm_m4");
-	else if (!strcmp(name, "cm_revolver", true)) EquipWeapon(playerid, "cm_revolver");
-	else if (!strcmp(name, "cm_shotgspa", true)) EquipWeapon(playerid, "cm_shotgspa");
-	else if (!strcmp(name, "cm_shotgun", true)) EquipWeapon(playerid, "cm_shotgun");
-	else if (!strcmp(name, "cm_circularsaw", true)) EquipWeapon(playerid, "cm_circularsaw");
-	else if (!strcmp(name, "cm_clipboard", true)) EquipWeapon(playerid, "cm_clipboard");
-	else if (!strcmp(name, "cm_crossbow", true)) EquipWeapon(playerid, "cm_crossbow");
-	else if (!strcmp(name, "cm_dildo", true)) EquipWeapon(playerid, "cm_dildo");
-	else if (!strcmp(name, "cm_fireex", true)) EquipWeapon(playerid, "cm_fireex");
-	else if (!strcmp(name, "cm_flaregun", true)) EquipWeapon(playerid, "cm_flaregun");
-	else if (!strcmp(name, "cm_flashlight", true)) EquipWeapon(playerid, "cm_flashlight");
-	else if (!strcmp(name, "cm_hacksaw", true)) EquipWeapon(playerid, "cm_hacksaw");
-	else if (!strcmp(name, "cm_hammer", true)) EquipWeapon(playerid, "cm_hammer");
-	else if (!strcmp(name, "cm_katana", true)) EquipWeapon(playerid, "cm_katana");
-	else if (!strcmp(name, "cm_mace", true)) EquipWeapon(playerid, "cm_mace");
-	else if (!strcmp(name, "cm_newspaper", true)) EquipWeapon(playerid, "cm_newspaper");
-	else if (!strcmp(name, "cm_picket", true)) EquipWeapon(playerid, "cm_picket");
-	else if (!strcmp(name, "cm_saw", true)) EquipWeapon(playerid, "cm_saw");
-	else if (!strcmp(name, "cm_scissors", true)) EquipWeapon(playerid, "cm_scissors");
-	else if (!strcmp(name, "cm_sniper", true)) EquipWeapon(playerid, "cm_sniper");
-	else if (!strcmp(name, "cm_stunbaton", true)) EquipWeapon(playerid, "cm_stunbaton");
-	else if (!strcmp(name, "vc_bat", true)) EquipWeapon(playerid, "vc_bat");
-	else if (!strcmp(name, "vc_cane", true)) EquipWeapon(playerid, "vc_cane");
-	else if (!strcmp(name, "ug_2tglock", true)) EquipWeapon(playerid, "ug_2tglock");
-	else if (!strcmp(name, "ug_aksopmod", true)) EquipWeapon(playerid, "ug_aksopmod");
-	else if (!strcmp(name, "ug_ar7", true)) EquipWeapon(playerid, "ug_ar7");
-	else if (!strcmp(name, "ug_bat", true)) EquipWeapon(playerid, "ug_bat");
-	else if (!strcmp(name, "ug_brassknuckle", true)) EquipWeapon(playerid, "ug_brassknuckle");
-	else if (!strcmp(name, "ug_calico", true)) EquipWeapon(playerid, "ug_calico");
-	else if (!strcmp(name, "ug_camosniper", true)) EquipWeapon(playerid, "ug_camosniper");
-	else if (!strcmp(name, "ug_fmg9", true)) EquipWeapon(playerid, "ug_fmg9");
-	else if (!strcmp(name, "ug_karambit", true)) EquipWeapon(playerid, "ug_karambit");
-	else if (!strcmp(name, "ug_m202a1", true)) EquipWeapon(playerid, "ug_m202a1");
-	else if (!strcmp(name, "ug_matador", true)) EquipWeapon(playerid, "ug_matador");
-	else if (!strcmp(name, "ug_paintball", true)) EquipWeapon(playerid, "ug_paintball");
-	else if (!strcmp(name, "ug_plunger", true)) EquipWeapon(playerid, "ug_plunger");
-	else if (!strcmp(name, "ug_rpg26", true)) EquipWeapon(playerid, "ug_rpg26");
-	else if (!strcmp(name, "ug_sew500", true)) EquipWeapon(playerid, "ug_sew500");
-	else if (!strcmp(name, "ug_silverrevolver", true)) EquipWeapon(playerid, "ug_silverrevolver");
-	else if (!strcmp(name, "ug_snub", true)) EquipWeapon(playerid, "ug_snub");
-	else if (!strcmp(name, "ug_spikedknuckle", true)) EquipWeapon(playerid, "ug_spikedknuckle");
-	else if (!strcmp(name, "ug_srsa1", true)) EquipWeapon(playerid, "ug_srsa1");
-	else if (!strcmp(name, "ug_sturmgewehr", true)) EquipWeapon(playerid, "ug_sturmgewehr");
-	else if (!strcmp(name, "ug_sword", true)) EquipWeapon(playerid, "ug_sword");
-	else if (!strcmp(name, "ug_tennisracket", true)) EquipWeapon(playerid, "ug_tennisracket");
-	else if (!strcmp(name, "ug_volcanic", true)) EquipWeapon(playerid, "ug_volcanic");
+    else if (!strcmp(name, "Pizza surgele", true)) {
+        cmd_cuisiner(playerid, "pizza");
+    }
+    else if (!strcmp(name, "Burger surgele", true)) {
+        cmd_cuisiner(playerid, "burger");
+    }
+    else if (!strcmp(name, "Gilet par balles", true)) {
+        cmd_veste(playerid, "\1");
+    }
+    else if (!strcmp(name, "Munition", true)) {
+        cmd_chargeur(playerid, "\1");
+    }
+    else if (!strcmp(name, "9mm Pistol", true)) {
+        EquipWeapon(playerid, "9mm Pistol");
+    }
+    else if (!strcmp(name, "Desert Eagle", true)) {
+        EquipWeapon(playerid, "Desert Eagle");
+    }
+    else if (!strcmp(name, "Shotgun", true)) {
+        EquipWeapon(playerid, "Shotgun");
+    }
+    else if (!strcmp(name, "Mac 10", true)) {
+        EquipWeapon(playerid, "Mac 10");
+    }
+    else if (!strcmp(name, "Tec-9", true)) {
+        EquipWeapon(playerid, "Tec-9");
+    }
+    else if (!strcmp(name, "MP5", true)) {
+        EquipWeapon(playerid, "MP5");
+    }
+    else if (!strcmp(name, "AK-47", true)) {
+        EquipWeapon(playerid, "AK-47");
+    }
+    else if (!strcmp(name, "M4", true)) {
+        EquipWeapon(playerid, "M4");
+    }
+    else if (!strcmp(name, "Sawn-off Shotgun", true)) {
+        EquipWeapon(playerid, "Sawn-off Shotgun");
+    }
+    else if (!strcmp(name, "Cocktail Molotov", true)) {
+        EquipWeapon(playerid, "Cocktail Molotov");
+    }
+    else if (!strcmp(name, "Rifle", true)) {
+        EquipWeapon(playerid, "Rifle");
+    }
+    else if (!strcmp(name, "Sniper", true)) {
+        EquipWeapon(playerid, "Sniper");
+    }
+    else if (!strcmp(name, "Golf Club", true)) {
+        EquipWeapon(playerid, "Golf Club");
+    }
+    else if (!strcmp(name, "Couteau", true)) {
+        EquipWeapon(playerid, "Couteau");
+    }
+    else if (!strcmp(name, "Pelle", true)) {
+        EquipWeapon(playerid, "Pelle");
+    }
+    else if (!strcmp(name, "Katana", true)) {
+        EquipWeapon(playerid, "Katana");
+    }
+    else if (!strcmp(name, "Graine marijuana", true)) {
+        cmd_planter(playerid, "Weed");
+    }
+    else if (!strcmp(name, "Graine cocaine", true)) {
+        cmd_planter(playerid, "Cocaine");
+    }
+    else if (!strcmp(name, "Graine Heroin Opium", true)) {
+        cmd_planter(playerid, "Heroin");
+    }
+    else if (!strcmp(name, "Dynamite", true)) {
+        cmd_dynamite(playerid, "\1");
+    }
+    else if (!strcmp(name, "Decodeur", true)) {
+        cmd_decodeur(playerid, "\1");
+    }
     else if (!strcmp(name, "des", true)) {
 		if (Inventory_Count(playerid, "des") > 2) return SendErrorMessage(playerid, "Vous n'avez pas de dés pour jouer (x2).");
 		new  randResult[2];
@@ -4033,7 +3964,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
     }
     else if (!strcmp(name, "gold bar", true)) {
 		if(!Inventory_HasItem(playerid,"gold bar")) return SendErrorMessage(playerid,"Il vous faut une gold bar minimun pour accéder a ce menu.");
-		Dialog_Show(playerid,echanger,DIALOG_STYLE_TABLIST,"Menu d'échange","Chèque 5000$\t 5 Gold bar\nChèque 10000$\t 10 Gold bars\nChèque  15000$\t 15 Gold bars\nChèque 20000$\t 20 Gold bars\nChèque  25000$\t 25 Gold bars\nHeure de jeux +5\t 30 Gold bar\n1000% batterie de téléphone!\t 5 Gold bars\nMettre la chance de mourir rapidement à 0\t 25 Gold bars\nDouble personnage autorisé\t 75 gold bars\nAjouter capacité d'inventaire (35 places)\t 25 gold bars","Valider","Quitter");
+		Dialog_Show(playerid,echanger,DIALOG_STYLE_TABLIST,"Menu d'échange","Argent 100$\t 1 Gold bar\nArgent 200$\t 2 Gold bars\nArgent 300$\t 3 Gold bars\nArgent 400$\t 4 Gold bars\nArgent 500$\t 5 Gold bars\nHeure de jeux 1\t 1 Gold bar\n1000% batterie de téléphone!\t 5 Gold bars\nMettre la chance de mourir rapidement à 0\t 25 Gold bars\nDouble personnage autorisé\t 75 gold bars\nAjouter capacité d'inventaire (35 places)\t 25 gold bars","Valider","Quitter");
     }
     else if (!strcmp(name, "dual muffler", true)) {
             AddVehicleComponent(car,1019);
@@ -4682,35 +4613,1876 @@ script OnPlayerUseItem(playerid, itemid, name[])
 		ApplyAnimation(playerid, "VENDING", "VEND_Eat_P", 4.1, 0, 0, 0, 0, 0, 1);
         SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend une pomme rouge et la mange.", ReturnName(playerid, 0));
     }
-    else if (!strcmp(name, "sandwich au poulet", true))
-	{
-	    if (PlayerData[playerid][pHunger] > 90)
-            return SendErrorMessage(playerid, "Vous n'avez pas faim.");
-        PlayerData[playerid][pHunger] = (PlayerData[playerid][pHunger] + 15 > 100) ? (100) : (PlayerData[playerid][pHunger] + 3);
-		Inventory_Remove(playerid, "sandwich au poulet",1);
-		PlayerData[playerid][prepetitions] += random(15);
-		PlayerData[playerid][pparcouru] += random(15);
-		ApplyAnimation(playerid, "VENDING", "VEND_Eat_P", 4.1, 0, 0, 0, 0, 0, 1);
-		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend un sandwich au poulet et la mange.", ReturnName(playerid, 0));
-    }
-    else if (!strcmp(name, "sandwich steak", true))
-	{
-	    if (PlayerData[playerid][pHunger] > 90)
-            return SendErrorMessage(playerid, "Vous n'avez pas faim.");
-        PlayerData[playerid][pHunger] = (PlayerData[playerid][pHunger] + 15 > 100) ? (100) : (PlayerData[playerid][pHunger] + 3);
-		Inventory_Remove(playerid, "sandwich steak",1);
-		PlayerData[playerid][prepetitions] += random(15);
-		PlayerData[playerid][pparcouru] += random(15);
-		ApplyAnimation(playerid, "VENDING", "VEND_Eat_P", 4.1, 0, 0, 0, 0, 0, 1);
-		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend un sandwich a la viande et la mange.", ReturnName(playerid, 0));
-    }
-	else if (!strcmp(name, "Vetement", true)) {
-		Inventory_Remove(playerid,"Vetement");
-		switch (PlayerData[playerid][pGender])
-		{
-			case 1: ShowModelSelectionMenu(playerid, "Vetements", MODEL_SELECTION_VET, g_aMaleSkins, sizeof(g_aMaleSkins), -16.0, 0.0, -55.0);
-			case 2: ShowModelSelectionMenu(playerid, "Vetements", MODEL_SELECTION_VET, g_aFemaleSkins, sizeof(g_aFemaleSkins), -16.0, 0.0, -55.0);
-		}
+	else if (!strcmp(name, "Vetement 0", true)) {
+		Inventory_Remove(playerid,"Vetement 0");
+		SetPlayerSkin(playerid,0);
+		PlayerData[playerid][pSkin] = 0;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 1", true)) {
+		Inventory_Remove(playerid,"Vetement 1");
+		SetPlayerSkin(playerid,1);
+		PlayerData[playerid][pSkin] = 1;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 2", true)) {
+		Inventory_Remove(playerid,"Vetement 2");
+		SetPlayerSkin(playerid,2);
+		PlayerData[playerid][pSkin] = 2;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 3", true)) {
+		Inventory_Remove(playerid,"Vetement 3");
+		SetPlayerSkin(playerid,3);
+		PlayerData[playerid][pSkin] = 3;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 4", true)) {
+		Inventory_Remove(playerid,"Vetement 4");
+		SetPlayerSkin(playerid,4);
+		PlayerData[playerid][pSkin] = 4;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 5", true)) {
+		Inventory_Remove(playerid,"Vetement 5");
+		SetPlayerSkin(playerid,5);
+		PlayerData[playerid][pSkin] = 5;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 6", true)) {
+		Inventory_Remove(playerid,"Vetement 6");
+		SetPlayerSkin(playerid,6);
+		PlayerData[playerid][pSkin] = 6;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 7", true)) {
+		Inventory_Remove(playerid,"Vetement 7");
+		SetPlayerSkin(playerid,7);
+		PlayerData[playerid][pSkin] = 7;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 8", true)) {
+		Inventory_Remove(playerid,"Vetement 8");
+		SetPlayerSkin(playerid,8);
+		PlayerData[playerid][pSkin] = 8;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 9", true)) {
+		Inventory_Remove(playerid,"Vetement 9");
+		SetPlayerSkin(playerid,9);
+		PlayerData[playerid][pSkin] = 9;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 10", true)) {
+		Inventory_Remove(playerid,"Vetement 10");
+		SetPlayerSkin(playerid,10);
+		PlayerData[playerid][pSkin] = 10;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 11", true)) {
+		Inventory_Remove(playerid,"Vetement 11");
+		SetPlayerSkin(playerid,11);
+		PlayerData[playerid][pSkin] = 11;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 12", true)) {
+		Inventory_Remove(playerid,"Vetement 12");
+		SetPlayerSkin(playerid,12);
+		PlayerData[playerid][pSkin] = 12;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 13", true)) {
+		Inventory_Remove(playerid,"Vetement 13");
+		SetPlayerSkin(playerid,13);
+		PlayerData[playerid][pSkin] = 13;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 14", true)) {
+		Inventory_Remove(playerid,"Vetement 14");
+		SetPlayerSkin(playerid,14);
+		PlayerData[playerid][pSkin] = 14;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 15", true)) {
+		Inventory_Remove(playerid,"Vetement 15");
+		SetPlayerSkin(playerid,15);
+		PlayerData[playerid][pSkin] = 15;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 16", true)) {
+		Inventory_Remove(playerid,"Vetement 16");
+		SetPlayerSkin(playerid,16);
+		PlayerData[playerid][pSkin] = 16;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 17", true)) {
+		Inventory_Remove(playerid,"Vetement 17");
+		SetPlayerSkin(playerid,17);
+		PlayerData[playerid][pSkin] = 17;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 18", true)) {
+		Inventory_Remove(playerid,"Vetement 18");
+		SetPlayerSkin(playerid,18);
+		PlayerData[playerid][pSkin] = 18;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 19", true)) {
+		Inventory_Remove(playerid,"Vetement 19");
+		SetPlayerSkin(playerid,19);
+		PlayerData[playerid][pSkin] = 19;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 20", true)) {
+		Inventory_Remove(playerid,"Vetement 20");
+		SetPlayerSkin(playerid,20);
+		PlayerData[playerid][pSkin] = 20;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 21", true)) {
+		Inventory_Remove(playerid,"Vetement 21");
+		SetPlayerSkin(playerid,21);
+		PlayerData[playerid][pSkin] = 21;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 22", true)) {
+		Inventory_Remove(playerid,"Vetement 22");
+		SetPlayerSkin(playerid,22);
+		PlayerData[playerid][pSkin] = 22;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 23", true)) {
+		Inventory_Remove(playerid,"Vetement 23");
+		SetPlayerSkin(playerid,23);
+		PlayerData[playerid][pSkin] = 23;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 24", true)) {
+		Inventory_Remove(playerid,"Vetement 24");
+		SetPlayerSkin(playerid,24);
+		PlayerData[playerid][pSkin] = 24;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 25", true)) {
+		Inventory_Remove(playerid,"Vetement 25");
+		SetPlayerSkin(playerid,25);
+		PlayerData[playerid][pSkin] = 25;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 26", true)) {
+		Inventory_Remove(playerid,"Vetement 26");
+		SetPlayerSkin(playerid,26);
+		PlayerData[playerid][pSkin] = 26;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 27", true)) {
+		Inventory_Remove(playerid,"Vetement 27");
+		SetPlayerSkin(playerid,27);
+		PlayerData[playerid][pSkin] = 27;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 28", true)) {
+		Inventory_Remove(playerid,"Vetement 28");
+		SetPlayerSkin(playerid,28);
+		PlayerData[playerid][pSkin] = 28;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 29", true)) {
+		Inventory_Remove(playerid,"Vetement 29");
+		SetPlayerSkin(playerid,29);
+		PlayerData[playerid][pSkin] = 29;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 30", true)) {
+		Inventory_Remove(playerid,"Vetement 30");
+		SetPlayerSkin(playerid,30);
+		PlayerData[playerid][pSkin] = 30;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 31", true)) {
+		Inventory_Remove(playerid,"Vetement 31");
+		SetPlayerSkin(playerid,31);
+		PlayerData[playerid][pSkin] = 31;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 32", true)) {
+		Inventory_Remove(playerid,"Vetement 32");
+		SetPlayerSkin(playerid,32);
+		PlayerData[playerid][pSkin] = 32;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 33", true)) {
+		Inventory_Remove(playerid,"Vetement 33");
+		SetPlayerSkin(playerid,33);
+		PlayerData[playerid][pSkin] = 33;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 34", true)) {
+		Inventory_Remove(playerid,"Vetement 34");
+		SetPlayerSkin(playerid,34);
+		PlayerData[playerid][pSkin] = 34;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 35", true)) {
+		Inventory_Remove(playerid,"Vetement 35");
+		SetPlayerSkin(playerid,35);
+		PlayerData[playerid][pSkin] = 35;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 36", true)) {
+		Inventory_Remove(playerid,"Vetement 36");
+		SetPlayerSkin(playerid,36);
+		PlayerData[playerid][pSkin] = 36;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 37", true)) {
+		Inventory_Remove(playerid,"Vetement 37");
+		SetPlayerSkin(playerid,37);
+		PlayerData[playerid][pSkin] = 37;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 38", true)) {
+		Inventory_Remove(playerid,"Vetement 38");
+		SetPlayerSkin(playerid,38);
+		PlayerData[playerid][pSkin] = 38;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 39", true)) {
+		Inventory_Remove(playerid,"Vetement 39");
+		SetPlayerSkin(playerid,39);
+		PlayerData[playerid][pSkin] = 39;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 40", true)) {
+		Inventory_Remove(playerid,"Vetement 40");
+		SetPlayerSkin(playerid,40);
+		PlayerData[playerid][pSkin] = 40;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 41", true)) {
+		Inventory_Remove(playerid,"Vetement 41");
+		SetPlayerSkin(playerid,41);
+		PlayerData[playerid][pSkin] = 41;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 42", true)) {
+		Inventory_Remove(playerid,"Vetement 42");
+		SetPlayerSkin(playerid,42);
+		PlayerData[playerid][pSkin] = 42;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 43", true)) {
+		Inventory_Remove(playerid,"Vetement 43");
+		SetPlayerSkin(playerid,43);
+		PlayerData[playerid][pSkin] = 43;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 44", true)) {
+		Inventory_Remove(playerid,"Vetement 44");
+		SetPlayerSkin(playerid,44);
+		PlayerData[playerid][pSkin] = 44;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 45", true)) {
+		Inventory_Remove(playerid,"Vetement 45");
+		SetPlayerSkin(playerid,45);
+		PlayerData[playerid][pSkin] = 45;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 46", true)) {
+		Inventory_Remove(playerid,"Vetement 46");
+		SetPlayerSkin(playerid,46);
+		PlayerData[playerid][pSkin] = 46;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 47", true)) {
+		Inventory_Remove(playerid,"Vetement 47");
+		SetPlayerSkin(playerid,47);
+		PlayerData[playerid][pSkin] = 47;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 48", true)) {
+		Inventory_Remove(playerid,"Vetement 48");
+		SetPlayerSkin(playerid,48);
+		PlayerData[playerid][pSkin] = 48;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 49", true)) {
+		Inventory_Remove(playerid,"Vetement 49");
+		SetPlayerSkin(playerid,49);
+		PlayerData[playerid][pSkin] = 49;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 50", true)) {
+		Inventory_Remove(playerid,"Vetement 50");
+		SetPlayerSkin(playerid,50);
+		PlayerData[playerid][pSkin] = 50;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 51", true)) {
+		Inventory_Remove(playerid,"Vetement 51");
+		SetPlayerSkin(playerid,51);
+		PlayerData[playerid][pSkin] = 51;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 52", true)) {
+		Inventory_Remove(playerid,"Vetement 52");
+		SetPlayerSkin(playerid,52);
+		PlayerData[playerid][pSkin] = 52;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 53", true)) {
+		Inventory_Remove(playerid,"Vetement 53");
+		SetPlayerSkin(playerid,53);
+		PlayerData[playerid][pSkin] = 53;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 54", true)) {
+		Inventory_Remove(playerid,"Vetement 54");
+		SetPlayerSkin(playerid,54);
+		PlayerData[playerid][pSkin] = 54;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 55", true)) {
+		Inventory_Remove(playerid,"Vetement 55");
+		SetPlayerSkin(playerid,55);
+		PlayerData[playerid][pSkin] = 55;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 56", true)) {
+		Inventory_Remove(playerid,"Vetement 56");
+		SetPlayerSkin(playerid,56);
+		PlayerData[playerid][pSkin] = 56;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 57", true)) {
+		Inventory_Remove(playerid,"Vetement 57");
+		SetPlayerSkin(playerid,57);
+		PlayerData[playerid][pSkin] = 57;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 58", true)) {
+		Inventory_Remove(playerid,"Vetement 58");
+		SetPlayerSkin(playerid,58);
+		PlayerData[playerid][pSkin] = 58;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 59", true)) {
+		Inventory_Remove(playerid,"Vetement 59");
+		SetPlayerSkin(playerid,59);
+		PlayerData[playerid][pSkin] = 59;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 60", true)) {
+		Inventory_Remove(playerid,"Vetement 60");
+		SetPlayerSkin(playerid,60);
+		PlayerData[playerid][pSkin] = 60;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 61", true)) {
+		Inventory_Remove(playerid,"Vetement 61");
+		SetPlayerSkin(playerid,61);
+		PlayerData[playerid][pSkin] = 61;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 62", true)) {
+		Inventory_Remove(playerid,"Vetement 62");
+		SetPlayerSkin(playerid,62);
+		PlayerData[playerid][pSkin] = 62;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 63", true)) {
+		Inventory_Remove(playerid,"Vetement 63");
+		SetPlayerSkin(playerid,63);
+		PlayerData[playerid][pSkin] = 63;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 64", true)) {
+		Inventory_Remove(playerid,"Vetement 64");
+		SetPlayerSkin(playerid,64);
+		PlayerData[playerid][pSkin] = 64;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 65", true)) {
+		Inventory_Remove(playerid,"Vetement 65");
+		SetPlayerSkin(playerid,65);
+		PlayerData[playerid][pSkin] = 65;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 66", true)) {
+		Inventory_Remove(playerid,"Vetement 66");
+		SetPlayerSkin(playerid,66);
+		PlayerData[playerid][pSkin] = 66;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 67", true)) {
+		Inventory_Remove(playerid,"Vetement 67");
+		SetPlayerSkin(playerid,67);
+		PlayerData[playerid][pSkin] = 67;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 68", true)) {
+		Inventory_Remove(playerid,"Vetement 68");
+		SetPlayerSkin(playerid,68);
+		PlayerData[playerid][pSkin] = 68;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 69", true)) {
+		Inventory_Remove(playerid,"Vetement 69");
+		SetPlayerSkin(playerid,69);
+		PlayerData[playerid][pSkin] = 69;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 70", true)) {
+		Inventory_Remove(playerid,"Vetement 70");
+		SetPlayerSkin(playerid,70);
+		PlayerData[playerid][pSkin] = 70;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 71", true)) {
+		Inventory_Remove(playerid,"Vetement 71");
+		SetPlayerSkin(playerid,71);
+		PlayerData[playerid][pSkin] = 71;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 72", true)) {
+		Inventory_Remove(playerid,"Vetement 72");
+		SetPlayerSkin(playerid,72);
+		PlayerData[playerid][pSkin] = 72;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 73", true)) {
+		Inventory_Remove(playerid,"Vetement 73");
+		SetPlayerSkin(playerid,73);
+		PlayerData[playerid][pSkin] = 73;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 74", true)) {
+		Inventory_Remove(playerid,"Vetement 74");
+		SetPlayerSkin(playerid,74);
+		PlayerData[playerid][pSkin] = 74;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 75", true)) {
+		Inventory_Remove(playerid,"Vetement 75");
+		SetPlayerSkin(playerid,75);
+		PlayerData[playerid][pSkin] = 75;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 76", true)) {
+		Inventory_Remove(playerid,"Vetement 76");
+		SetPlayerSkin(playerid,76);
+		PlayerData[playerid][pSkin] = 76;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 77", true)) {
+		Inventory_Remove(playerid,"Vetement 77");
+		SetPlayerSkin(playerid,77);
+		PlayerData[playerid][pSkin] = 77;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 78", true)) {
+		Inventory_Remove(playerid,"Vetement 78");
+		SetPlayerSkin(playerid,78);
+		PlayerData[playerid][pSkin] = 78;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 79", true)) {
+		Inventory_Remove(playerid,"Vetement 79");
+		SetPlayerSkin(playerid,79);
+		PlayerData[playerid][pSkin] = 79;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 80", true)) {
+		Inventory_Remove(playerid,"Vetement 80");
+		SetPlayerSkin(playerid,80);
+		PlayerData[playerid][pSkin] = 80;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 81", true)) {
+		Inventory_Remove(playerid,"Vetement 81");
+		SetPlayerSkin(playerid,81);
+		PlayerData[playerid][pSkin] = 81;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 82", true)) {
+		Inventory_Remove(playerid,"Vetement 82");
+		SetPlayerSkin(playerid,82);
+		PlayerData[playerid][pSkin] = 82;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 83", true)) {
+		Inventory_Remove(playerid,"Vetement 83");
+		SetPlayerSkin(playerid,83);
+		PlayerData[playerid][pSkin] = 83;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 84", true)) {
+		Inventory_Remove(playerid,"Vetement 84");
+		SetPlayerSkin(playerid,84);
+		PlayerData[playerid][pSkin] = 84;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 85", true)) {
+		Inventory_Remove(playerid,"Vetement 85");
+		SetPlayerSkin(playerid,85);
+		PlayerData[playerid][pSkin] = 85;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 86", true)) {
+		Inventory_Remove(playerid,"Vetement 86");
+		SetPlayerSkin(playerid,86);
+		PlayerData[playerid][pSkin] = 86;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 87", true)) {
+		Inventory_Remove(playerid,"Vetement 87");
+		SetPlayerSkin(playerid,87);
+		PlayerData[playerid][pSkin] = 87;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 88", true)) {
+		Inventory_Remove(playerid,"Vetement 88");
+		SetPlayerSkin(playerid,88);
+		PlayerData[playerid][pSkin] = 88;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 89", true)) {
+		Inventory_Remove(playerid,"Vetement 89");
+		SetPlayerSkin(playerid,89);
+		PlayerData[playerid][pSkin] = 89;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 90", true)) {
+		Inventory_Remove(playerid,"Vetement 90");
+		SetPlayerSkin(playerid,90);
+		PlayerData[playerid][pSkin] = 90;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 91", true)) {
+		Inventory_Remove(playerid,"Vetement 91");
+		SetPlayerSkin(playerid,91);
+		PlayerData[playerid][pSkin] = 91;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 92", true)) {
+		Inventory_Remove(playerid,"Vetement 92");
+		SetPlayerSkin(playerid,92);
+		PlayerData[playerid][pSkin] = 92;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 93", true)) {
+		Inventory_Remove(playerid,"Vetement 93");
+		SetPlayerSkin(playerid,93);
+		PlayerData[playerid][pSkin] = 93;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 94", true)) {
+		Inventory_Remove(playerid,"Vetement 94");
+		SetPlayerSkin(playerid,94);
+		PlayerData[playerid][pSkin] = 94;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 95", true)) {
+		Inventory_Remove(playerid,"Vetement 95");
+		SetPlayerSkin(playerid,95);
+		PlayerData[playerid][pSkin] = 95;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 96", true)) {
+		Inventory_Remove(playerid,"Vetement 96");
+		SetPlayerSkin(playerid,96);
+		PlayerData[playerid][pSkin] = 96;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 97", true)) {
+		Inventory_Remove(playerid,"Vetement 97");
+		SetPlayerSkin(playerid,97);
+		PlayerData[playerid][pSkin] = 97;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 98", true)) {
+		Inventory_Remove(playerid,"Vetement 98");
+		SetPlayerSkin(playerid,98);
+		PlayerData[playerid][pSkin] = 98;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 99", true)) {
+		Inventory_Remove(playerid,"Vetement 99");
+		SetPlayerSkin(playerid,99);
+		PlayerData[playerid][pSkin] = 99;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 100", true)) {
+		Inventory_Remove(playerid,"Vetement 100");
+		SetPlayerSkin(playerid,100);
+		PlayerData[playerid][pSkin] = 100;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 101", true)) {
+		Inventory_Remove(playerid,"Vetement 101");
+		SetPlayerSkin(playerid,101);
+		PlayerData[playerid][pSkin] = 101;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 102", true)) {
+		Inventory_Remove(playerid,"Vetement 102");
+		SetPlayerSkin(playerid,102);
+		PlayerData[playerid][pSkin] = 102;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 103", true)) {
+		Inventory_Remove(playerid,"Vetement 103");
+		SetPlayerSkin(playerid,103);
+		PlayerData[playerid][pSkin] = 103;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 104", true)) {
+		Inventory_Remove(playerid,"Vetement 104");
+		SetPlayerSkin(playerid,104);
+		PlayerData[playerid][pSkin] = 104;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 105", true)) {
+		Inventory_Remove(playerid,"Vetement 105");
+		SetPlayerSkin(playerid,105);
+		PlayerData[playerid][pSkin] = 105;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 106", true)) {
+		Inventory_Remove(playerid,"Vetement 106");
+		SetPlayerSkin(playerid,106);
+		PlayerData[playerid][pSkin] = 106;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 107", true)) {
+		Inventory_Remove(playerid,"Vetement 107");
+		SetPlayerSkin(playerid,107);
+		PlayerData[playerid][pSkin] = 107;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 108", true)) {
+		Inventory_Remove(playerid,"Vetement 108");
+		SetPlayerSkin(playerid,108);
+		PlayerData[playerid][pSkin] = 108;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 109", true)) {
+		Inventory_Remove(playerid,"Vetement 109");
+		SetPlayerSkin(playerid,109);
+		PlayerData[playerid][pSkin] = 109;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 110", true)) {
+		Inventory_Remove(playerid,"Vetement 110");
+		SetPlayerSkin(playerid,110);
+		PlayerData[playerid][pSkin] = 110;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 111", true)) {
+		Inventory_Remove(playerid,"Vetement 111");
+		SetPlayerSkin(playerid,111);
+		PlayerData[playerid][pSkin] = 111;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 112", true)) {
+		Inventory_Remove(playerid,"Vetement 112");
+		SetPlayerSkin(playerid,112);
+		PlayerData[playerid][pSkin] = 112;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 113", true)) {
+		Inventory_Remove(playerid,"Vetement 113");
+		SetPlayerSkin(playerid,113);
+		PlayerData[playerid][pSkin] = 113;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 114", true)) {
+		Inventory_Remove(playerid,"Vetement 114");
+		SetPlayerSkin(playerid,114);
+		PlayerData[playerid][pSkin] = 114;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 115", true)) {
+		Inventory_Remove(playerid,"Vetement 115");
+		SetPlayerSkin(playerid,115);
+		PlayerData[playerid][pSkin] = 115;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 116", true)) {
+		Inventory_Remove(playerid,"Vetement 116");
+		SetPlayerSkin(playerid,116);
+		PlayerData[playerid][pSkin] = 116;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 117", true)) {
+		Inventory_Remove(playerid,"Vetement 117");
+		SetPlayerSkin(playerid,117);
+		PlayerData[playerid][pSkin] = 117;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 118", true)) {
+		Inventory_Remove(playerid,"Vetement 118");
+		SetPlayerSkin(playerid,118);
+		PlayerData[playerid][pSkin] = 118;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 119", true)) {
+		Inventory_Remove(playerid,"Vetement 119");
+		SetPlayerSkin(playerid,119);
+		PlayerData[playerid][pSkin] = 119;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 120", true)) {
+		Inventory_Remove(playerid,"Vetement 120");
+		SetPlayerSkin(playerid,120);
+		PlayerData[playerid][pSkin] = 120;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 121", true)) {
+		Inventory_Remove(playerid,"Vetement 121");
+		SetPlayerSkin(playerid,121);
+		PlayerData[playerid][pSkin] = 121;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 122", true)) {
+		Inventory_Remove(playerid,"Vetement 122");
+		SetPlayerSkin(playerid,122);
+		PlayerData[playerid][pSkin] = 122;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 123", true)) {
+		Inventory_Remove(playerid,"Vetement 123");
+		SetPlayerSkin(playerid,123);
+		PlayerData[playerid][pSkin] = 123;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 124", true)) {
+		Inventory_Remove(playerid,"Vetement 124");
+		SetPlayerSkin(playerid,124);
+		PlayerData[playerid][pSkin] = 124;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 125", true)) {
+		Inventory_Remove(playerid,"Vetement 125");
+		SetPlayerSkin(playerid,125);
+		PlayerData[playerid][pSkin] = 125;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 126", true)) {
+		Inventory_Remove(playerid,"Vetement 126");
+		SetPlayerSkin(playerid,126);
+		PlayerData[playerid][pSkin] = 126;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 127", true)) {
+		Inventory_Remove(playerid,"Vetement 127");
+		SetPlayerSkin(playerid,127);
+		PlayerData[playerid][pSkin] = 127;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 128", true)) {
+		Inventory_Remove(playerid,"Vetement 128");
+		SetPlayerSkin(playerid,128);
+		PlayerData[playerid][pSkin] = 128;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 129", true)) {
+		Inventory_Remove(playerid,"Vetement 129");
+		SetPlayerSkin(playerid,129);
+		PlayerData[playerid][pSkin] = 129;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 130", true)) {
+		Inventory_Remove(playerid,"Vetement 130");
+		SetPlayerSkin(playerid,130);
+		PlayerData[playerid][pSkin] = 130;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 131", true)) {
+		Inventory_Remove(playerid,"Vetement 131");
+		SetPlayerSkin(playerid,131);
+		PlayerData[playerid][pSkin] = 131;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 132", true)) {
+		Inventory_Remove(playerid,"Vetement 132");
+		SetPlayerSkin(playerid,132);
+		PlayerData[playerid][pSkin] = 132;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 133", true)) {
+		Inventory_Remove(playerid,"Vetement 133");
+		SetPlayerSkin(playerid,133);
+		PlayerData[playerid][pSkin] = 133;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 134", true)) {
+		Inventory_Remove(playerid,"Vetement 134");
+		SetPlayerSkin(playerid,134);
+		PlayerData[playerid][pSkin] = 134;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 135", true)) {
+		Inventory_Remove(playerid,"Vetement 135");
+		SetPlayerSkin(playerid,135);
+		PlayerData[playerid][pSkin] = 135;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 136", true)) {
+		Inventory_Remove(playerid,"Vetement 136");
+		SetPlayerSkin(playerid,136);
+		PlayerData[playerid][pSkin] = 136;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 137", true)) {
+		Inventory_Remove(playerid,"Vetement 137");
+		SetPlayerSkin(playerid,137);
+		PlayerData[playerid][pSkin] = 137;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 138", true)) {
+		Inventory_Remove(playerid,"Vetement 138");
+		SetPlayerSkin(playerid,138);
+		PlayerData[playerid][pSkin] = 138;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 139", true)) {
+		Inventory_Remove(playerid,"Vetement 139");
+		SetPlayerSkin(playerid,139);
+		PlayerData[playerid][pSkin] = 139;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 140", true)) {
+		Inventory_Remove(playerid,"Vetement 140");
+		SetPlayerSkin(playerid,140);
+		PlayerData[playerid][pSkin] = 140;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 141", true)) {
+		Inventory_Remove(playerid,"Vetement 141");
+		SetPlayerSkin(playerid,141);
+		PlayerData[playerid][pSkin] = 141;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 142", true)) {
+		Inventory_Remove(playerid,"Vetement 142");
+		SetPlayerSkin(playerid,142);
+		PlayerData[playerid][pSkin] = 142;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 143", true)) {
+		Inventory_Remove(playerid,"Vetement 143");
+		SetPlayerSkin(playerid,143);
+		PlayerData[playerid][pSkin] = 143;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 144", true)) {
+		Inventory_Remove(playerid,"Vetement 144");
+		SetPlayerSkin(playerid,144);
+		PlayerData[playerid][pSkin] = 144;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 145", true)) {
+		Inventory_Remove(playerid,"Vetement 145");
+		SetPlayerSkin(playerid,145);
+		PlayerData[playerid][pSkin] = 145;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 146", true)) {
+		Inventory_Remove(playerid,"Vetement 146");
+		SetPlayerSkin(playerid,146);
+		PlayerData[playerid][pSkin] = 146;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 147", true)) {
+		Inventory_Remove(playerid,"Vetement 147");
+		SetPlayerSkin(playerid,147);
+		PlayerData[playerid][pSkin] = 147;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 148", true)) {
+		Inventory_Remove(playerid,"Vetement 148");
+		SetPlayerSkin(playerid,148);
+		PlayerData[playerid][pSkin] = 148;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 149", true)) {
+		Inventory_Remove(playerid,"Vetement 149");
+		SetPlayerSkin(playerid,149);
+		PlayerData[playerid][pSkin] = 149;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 150", true)) {
+		Inventory_Remove(playerid,"Vetement 150");
+		SetPlayerSkin(playerid,150);
+		PlayerData[playerid][pSkin] = 150;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 151", true)) {
+		Inventory_Remove(playerid,"Vetement 151");
+		SetPlayerSkin(playerid,151);
+		PlayerData[playerid][pSkin] = 151;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 152", true)) {
+		Inventory_Remove(playerid,"Vetement 152");
+		SetPlayerSkin(playerid,152);
+		PlayerData[playerid][pSkin] = 152;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 153", true)) {
+		Inventory_Remove(playerid,"Vetement 153");
+		SetPlayerSkin(playerid,153);
+		PlayerData[playerid][pSkin] = 153;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 154", true)) {
+		Inventory_Remove(playerid,"Vetement 154");
+		SetPlayerSkin(playerid,154);
+		PlayerData[playerid][pSkin] = 154;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 155", true)) {
+		Inventory_Remove(playerid,"Vetement 155");
+		SetPlayerSkin(playerid,155);
+		PlayerData[playerid][pSkin] = 155;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 156", true)) {
+		Inventory_Remove(playerid,"Vetement 156");
+		SetPlayerSkin(playerid,156);
+		PlayerData[playerid][pSkin] = 156;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 157", true)) {
+		Inventory_Remove(playerid,"Vetement 157");
+		SetPlayerSkin(playerid,157);
+		PlayerData[playerid][pSkin] = 157;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 158", true)) {
+		Inventory_Remove(playerid,"Vetement 158");
+		SetPlayerSkin(playerid,158);
+		PlayerData[playerid][pSkin] = 158;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 159", true)) {
+		Inventory_Remove(playerid,"Vetement 159");
+		SetPlayerSkin(playerid,159);
+		PlayerData[playerid][pSkin] = 159;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 160", true)) {
+		Inventory_Remove(playerid,"Vetement 160");
+		SetPlayerSkin(playerid,160);
+		PlayerData[playerid][pSkin] = 160;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 161", true)) {
+		Inventory_Remove(playerid,"Vetement 161");
+		SetPlayerSkin(playerid,161);
+		PlayerData[playerid][pSkin] = 161;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 162", true)) {
+		Inventory_Remove(playerid,"Vetement 162");
+		SetPlayerSkin(playerid,162);
+		PlayerData[playerid][pSkin] = 162;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 163", true)) {
+		Inventory_Remove(playerid,"Vetement 163");
+		SetPlayerSkin(playerid,163);
+		PlayerData[playerid][pSkin] = 163;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 164", true)) {
+		Inventory_Remove(playerid,"Vetement 164");
+		SetPlayerSkin(playerid,164);
+		PlayerData[playerid][pSkin] = 164;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 165", true)) {
+		Inventory_Remove(playerid,"Vetement 165");
+		SetPlayerSkin(playerid,165);
+		PlayerData[playerid][pSkin] = 165;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 166", true)) {
+		Inventory_Remove(playerid,"Vetement 166");
+		SetPlayerSkin(playerid,166);
+		PlayerData[playerid][pSkin] = 166;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 167", true)) {
+		Inventory_Remove(playerid,"Vetement 167");
+		SetPlayerSkin(playerid,167);
+		PlayerData[playerid][pSkin] = 167;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 168", true)) {
+		Inventory_Remove(playerid,"Vetement 168");
+		SetPlayerSkin(playerid,168);
+		PlayerData[playerid][pSkin] = 168;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 169", true)) {
+		Inventory_Remove(playerid,"Vetement 169");
+		SetPlayerSkin(playerid,169);
+		PlayerData[playerid][pSkin] = 169;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 170", true)) {
+		Inventory_Remove(playerid,"Vetement 170");
+		SetPlayerSkin(playerid,170);
+		PlayerData[playerid][pSkin] = 170;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 171", true)) {
+		Inventory_Remove(playerid,"Vetement 171");
+		SetPlayerSkin(playerid,171);
+		PlayerData[playerid][pSkin] = 171;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 172", true)) {
+		Inventory_Remove(playerid,"Vetement 172");
+		SetPlayerSkin(playerid,172);
+		PlayerData[playerid][pSkin] = 172;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 173", true)) {
+		Inventory_Remove(playerid,"Vetement 173");
+		SetPlayerSkin(playerid,173);
+		PlayerData[playerid][pSkin] = 173;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 174", true)) {
+		Inventory_Remove(playerid,"Vetement 174");
+		SetPlayerSkin(playerid,174);
+		PlayerData[playerid][pSkin] = 174;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 175", true)) {
+		Inventory_Remove(playerid,"Vetement 175");
+		SetPlayerSkin(playerid,175);
+		PlayerData[playerid][pSkin] = 175;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 176", true)) {
+		Inventory_Remove(playerid,"Vetement 176");
+		SetPlayerSkin(playerid,176);
+		PlayerData[playerid][pSkin] = 176;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 177", true)) {
+		Inventory_Remove(playerid,"Vetement 177");
+		SetPlayerSkin(playerid,177);
+		PlayerData[playerid][pSkin] = 177;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 178", true)) {
+		Inventory_Remove(playerid,"Vetement 178");
+		SetPlayerSkin(playerid,178);
+		PlayerData[playerid][pSkin] = 178;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 179", true)) {
+		Inventory_Remove(playerid,"Vetement 179");
+		SetPlayerSkin(playerid,179);
+		PlayerData[playerid][pSkin] = 179;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 180", true)) {
+		Inventory_Remove(playerid,"Vetement 180");
+		SetPlayerSkin(playerid,180);
+		PlayerData[playerid][pSkin] = 180;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 181", true)) {
+		Inventory_Remove(playerid,"Vetement 181");
+		SetPlayerSkin(playerid,181);
+		PlayerData[playerid][pSkin] = 181;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 182", true)) {
+		Inventory_Remove(playerid,"Vetement 182");
+		SetPlayerSkin(playerid,182);
+		PlayerData[playerid][pSkin] = 182;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 183", true)) {
+		Inventory_Remove(playerid,"Vetement 183");
+		SetPlayerSkin(playerid,183);
+		PlayerData[playerid][pSkin] = 183;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 184", true)) {
+		Inventory_Remove(playerid,"Vetement 184");
+		SetPlayerSkin(playerid,184);
+		PlayerData[playerid][pSkin] = 184;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 185", true)) {
+		Inventory_Remove(playerid,"Vetement 185");
+		SetPlayerSkin(playerid,185);
+		PlayerData[playerid][pSkin] = 185;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 186", true)) {
+		Inventory_Remove(playerid,"Vetement 186");
+		SetPlayerSkin(playerid,186);
+		PlayerData[playerid][pSkin] = 186;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 187", true)) {
+		Inventory_Remove(playerid,"Vetement 187");
+		SetPlayerSkin(playerid,187);
+		PlayerData[playerid][pSkin] = 187;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 188", true)) {
+		Inventory_Remove(playerid,"Vetement 188");
+		SetPlayerSkin(playerid,188);
+		PlayerData[playerid][pSkin] = 188;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 189", true)) {
+		Inventory_Remove(playerid,"Vetement 189");
+		SetPlayerSkin(playerid,189);
+		PlayerData[playerid][pSkin] = 189;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 190", true)) {
+		Inventory_Remove(playerid,"Vetement 190");
+		SetPlayerSkin(playerid,190);
+		PlayerData[playerid][pSkin] = 190;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 191", true)) {
+		Inventory_Remove(playerid,"Vetement 191");
+		SetPlayerSkin(playerid,191);
+		PlayerData[playerid][pSkin] = 191;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 192", true)) {
+		Inventory_Remove(playerid,"Vetement 192");
+		SetPlayerSkin(playerid,192);
+		PlayerData[playerid][pSkin] = 192;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 193", true)) {
+		Inventory_Remove(playerid,"Vetement 193");
+		SetPlayerSkin(playerid,193);
+		PlayerData[playerid][pSkin] = 193;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 194", true)) {
+		Inventory_Remove(playerid,"Vetement 194");
+		SetPlayerSkin(playerid,194);
+		PlayerData[playerid][pSkin] = 194;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 195", true)) {
+		Inventory_Remove(playerid,"Vetement 195");
+		SetPlayerSkin(playerid,195);
+		PlayerData[playerid][pSkin] = 195;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 196", true)) {
+		Inventory_Remove(playerid,"Vetement 196");
+		SetPlayerSkin(playerid,196);
+		PlayerData[playerid][pSkin] = 196;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 197", true)) {
+		Inventory_Remove(playerid,"Vetement 197");
+		SetPlayerSkin(playerid,197);
+		PlayerData[playerid][pSkin] = 197;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 198", true)) {
+		Inventory_Remove(playerid,"Vetement 198");
+		SetPlayerSkin(playerid,198);
+		PlayerData[playerid][pSkin] = 198;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 199", true)) {
+		Inventory_Remove(playerid,"Vetement 199");
+		SetPlayerSkin(playerid,199);
+		PlayerData[playerid][pSkin] = 199;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 200", true)) {
+		Inventory_Remove(playerid,"Vetement 200");
+		SetPlayerSkin(playerid,200);
+		PlayerData[playerid][pSkin] = 200;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 201", true)) {
+		Inventory_Remove(playerid,"Vetement 201");
+		SetPlayerSkin(playerid,201);
+		PlayerData[playerid][pSkin] = 201;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 202", true)) {
+		Inventory_Remove(playerid,"Vetement 202");
+		SetPlayerSkin(playerid,202);
+		PlayerData[playerid][pSkin] = 202;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 203", true)) {
+		Inventory_Remove(playerid,"Vetement 203");
+		SetPlayerSkin(playerid,203);
+		PlayerData[playerid][pSkin] = 203;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 204", true)) {
+		Inventory_Remove(playerid,"Vetement 204");
+		SetPlayerSkin(playerid,204);
+		PlayerData[playerid][pSkin] = 204;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 205", true)) {
+		Inventory_Remove(playerid,"Vetement 205");
+		SetPlayerSkin(playerid,205);
+		PlayerData[playerid][pSkin] = 205;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 206", true)) {
+		Inventory_Remove(playerid,"Vetement 206");
+		SetPlayerSkin(playerid,206);
+		PlayerData[playerid][pSkin] = 206;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 207", true)) {
+		Inventory_Remove(playerid,"Vetement 207");
+		SetPlayerSkin(playerid,207);
+		PlayerData[playerid][pSkin] = 207;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 208", true)) {
+		Inventory_Remove(playerid,"Vetement 28");
+		SetPlayerSkin(playerid,28);
+		PlayerData[playerid][pSkin] = 208;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 209", true)) {
+		Inventory_Remove(playerid,"Vetement 209");
+		SetPlayerSkin(playerid,209);
+		PlayerData[playerid][pSkin] = 209;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 210", true)) {
+		Inventory_Remove(playerid,"Vetement 210");
+		SetPlayerSkin(playerid,210);
+		PlayerData[playerid][pSkin] = 210;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 211", true)) {
+		Inventory_Remove(playerid,"Vetement 211");
+		SetPlayerSkin(playerid,211);
+		PlayerData[playerid][pSkin] = 211;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 212", true)) {
+		Inventory_Remove(playerid,"Vetement 212");
+		SetPlayerSkin(playerid,212);
+		PlayerData[playerid][pSkin] = 212;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 213", true)) {
+		Inventory_Remove(playerid,"Vetement 213");
+		SetPlayerSkin(playerid,213);
+		PlayerData[playerid][pSkin] = 213;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 214", true)) {
+		Inventory_Remove(playerid,"Vetement 214");
+		SetPlayerSkin(playerid,214);
+		PlayerData[playerid][pSkin] = 214;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 215", true)) {
+		Inventory_Remove(playerid,"Vetement 215");
+		SetPlayerSkin(playerid,215);
+		PlayerData[playerid][pSkin] = 215;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 216", true)) {
+		Inventory_Remove(playerid,"Vetement 216");
+		SetPlayerSkin(playerid,216);
+		PlayerData[playerid][pSkin] = 216;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 217", true)) {
+		Inventory_Remove(playerid,"Vetement 217");
+		SetPlayerSkin(playerid,217);
+		PlayerData[playerid][pSkin] = 217;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 218", true)) {
+		Inventory_Remove(playerid,"Vetement 218");
+		SetPlayerSkin(playerid,218);
+		PlayerData[playerid][pSkin] = 218;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 219", true)) {
+		Inventory_Remove(playerid,"Vetement 219");
+		SetPlayerSkin(playerid,219);
+		PlayerData[playerid][pSkin] = 219;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 220", true)) {
+		Inventory_Remove(playerid,"Vetement 220");
+		SetPlayerSkin(playerid,220);
+		PlayerData[playerid][pSkin] = 220;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 221", true)) {
+		Inventory_Remove(playerid,"Vetement 221");
+		SetPlayerSkin(playerid,221);
+		PlayerData[playerid][pSkin] = 221;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 222", true)) {
+		Inventory_Remove(playerid,"Vetement 222");
+		SetPlayerSkin(playerid,222);
+		PlayerData[playerid][pSkin] = 222;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 223", true)) {
+		Inventory_Remove(playerid,"Vetement 223");
+		SetPlayerSkin(playerid,223);
+		PlayerData[playerid][pSkin] = 223;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 224", true)) {
+		Inventory_Remove(playerid,"Vetement 224");
+		SetPlayerSkin(playerid,224);
+		PlayerData[playerid][pSkin] = 224;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 225", true)) {
+		Inventory_Remove(playerid,"Vetement 225");
+		SetPlayerSkin(playerid,225);
+		PlayerData[playerid][pSkin] = 225;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 226", true)) {
+		Inventory_Remove(playerid,"Vetement 226");
+		SetPlayerSkin(playerid,226);
+		PlayerData[playerid][pSkin] = 226;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 227", true)) {
+		Inventory_Remove(playerid,"Vetement 227");
+		SetPlayerSkin(playerid,227);
+		PlayerData[playerid][pSkin] = 227;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 228", true)) {
+		Inventory_Remove(playerid,"Vetement 228");
+		SetPlayerSkin(playerid,228);
+		PlayerData[playerid][pSkin] = 228;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 229", true)) {
+		Inventory_Remove(playerid,"Vetement 229");
+		SetPlayerSkin(playerid,229);
+		PlayerData[playerid][pSkin] = 229;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 230", true)) {
+		Inventory_Remove(playerid,"Vetement 230");
+		SetPlayerSkin(playerid,230);
+		PlayerData[playerid][pSkin] = 230;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 231", true)) {
+		Inventory_Remove(playerid,"Vetement 231");
+		SetPlayerSkin(playerid,231);
+		PlayerData[playerid][pSkin] = 231;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 232", true)) {
+		Inventory_Remove(playerid,"Vetement 232");
+		SetPlayerSkin(playerid,232);
+		PlayerData[playerid][pSkin] = 232;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 233", true)) {
+		Inventory_Remove(playerid,"Vetement 233");
+		SetPlayerSkin(playerid,233);
+		PlayerData[playerid][pSkin] = 233;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 234", true)) {
+		Inventory_Remove(playerid,"Vetement 234");
+		SetPlayerSkin(playerid,234);
+		PlayerData[playerid][pSkin] = 234;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 235", true)) {
+		Inventory_Remove(playerid,"Vetement 235");
+		SetPlayerSkin(playerid,235);
+		PlayerData[playerid][pSkin] = 235;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 236", true)) {
+		Inventory_Remove(playerid,"Vetement 236");
+		SetPlayerSkin(playerid,236);
+		PlayerData[playerid][pSkin] = 236;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 237", true)) {
+		Inventory_Remove(playerid,"Vetement 237");
+		SetPlayerSkin(playerid,237);
+		PlayerData[playerid][pSkin] = 237;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 238", true)) {
+		Inventory_Remove(playerid,"Vetement 238");
+		SetPlayerSkin(playerid,238);
+		PlayerData[playerid][pSkin] = 238;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 239", true)) {
+		Inventory_Remove(playerid,"Vetement 239");
+		SetPlayerSkin(playerid,239);
+		PlayerData[playerid][pSkin] = 239;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 240", true)) {
+		Inventory_Remove(playerid,"Vetement 240");
+		SetPlayerSkin(playerid,240);
+		PlayerData[playerid][pSkin] = 240;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 241", true)) {
+		Inventory_Remove(playerid,"Vetement 241");
+		SetPlayerSkin(playerid,241);
+		PlayerData[playerid][pSkin] = 241;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 242", true)) {
+		Inventory_Remove(playerid,"Vetement 242");
+		SetPlayerSkin(playerid,242);
+		PlayerData[playerid][pSkin] = 242;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 243", true)) {
+		Inventory_Remove(playerid,"Vetement 243");
+		SetPlayerSkin(playerid,243);
+		PlayerData[playerid][pSkin] = 243;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 244", true)) {
+		Inventory_Remove(playerid,"Vetement 244");
+		SetPlayerSkin(playerid,244);
+		PlayerData[playerid][pSkin] = 244;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 245", true)) {
+		Inventory_Remove(playerid,"Vetement 245");
+		SetPlayerSkin(playerid,245);
+		PlayerData[playerid][pSkin] = 245;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 246", true)) {
+		Inventory_Remove(playerid,"Vetement 246");
+		SetPlayerSkin(playerid,246);
+		PlayerData[playerid][pSkin] = 246;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 247", true)) {
+		Inventory_Remove(playerid,"Vetement 247");
+		SetPlayerSkin(playerid,247);
+		PlayerData[playerid][pSkin] = 247;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 248", true)) {
+		Inventory_Remove(playerid,"Vetement 248");
+		SetPlayerSkin(playerid,248);
+		PlayerData[playerid][pSkin] = 248;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 249", true)) {
+		Inventory_Remove(playerid,"Vetement 249");
+		SetPlayerSkin(playerid,249);
+		PlayerData[playerid][pSkin] = 249;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 250", true)) {
+		Inventory_Remove(playerid,"Vetement 250");
+		SetPlayerSkin(playerid,250);
+		PlayerData[playerid][pSkin] = 250;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 251", true)) {
+		Inventory_Remove(playerid,"Vetement 251");
+		SetPlayerSkin(playerid,251);
+		PlayerData[playerid][pSkin] = 251;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 252", true)) {
+		Inventory_Remove(playerid,"Vetement 252");
+		SetPlayerSkin(playerid,252);
+		PlayerData[playerid][pSkin] = 252;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 253", true)) {
+		Inventory_Remove(playerid,"Vetement 253");
+		SetPlayerSkin(playerid,253);
+		PlayerData[playerid][pSkin] = 253;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 254", true)) {
+		Inventory_Remove(playerid,"Vetement 254");
+		SetPlayerSkin(playerid,254);
+		PlayerData[playerid][pSkin] = 254;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 255", true)) {
+		Inventory_Remove(playerid,"Vetement 255");
+		SetPlayerSkin(playerid,255);
+		PlayerData[playerid][pSkin] = 255;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 256", true)) {
+		Inventory_Remove(playerid,"Vetement 256");
+		SetPlayerSkin(playerid,256);
+		PlayerData[playerid][pSkin] = 256;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 257", true)) {
+		Inventory_Remove(playerid,"Vetement 257");
+		SetPlayerSkin(playerid,257);
+		PlayerData[playerid][pSkin] = 257;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 258", true)) {
+		Inventory_Remove(playerid,"Vetement 258");
+		SetPlayerSkin(playerid,258);
+		PlayerData[playerid][pSkin] = 258;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 259", true)) {
+		Inventory_Remove(playerid,"Vetement 259");
+		SetPlayerSkin(playerid,259);
+		PlayerData[playerid][pSkin] = 259;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 260", true)) {
+		Inventory_Remove(playerid,"Vetement 260");
+		SetPlayerSkin(playerid,260);
+		PlayerData[playerid][pSkin] = 260;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 261", true)) {
+		Inventory_Remove(playerid,"Vetement 261");
+		SetPlayerSkin(playerid,261);
+		PlayerData[playerid][pSkin] = 261;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 262", true)) {
+		Inventory_Remove(playerid,"Vetement 262");
+		SetPlayerSkin(playerid,262);
+		PlayerData[playerid][pSkin] = 262;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 263", true)) {
+		Inventory_Remove(playerid,"Vetement 263");
+		SetPlayerSkin(playerid,263);
+		PlayerData[playerid][pSkin] = 263;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 264", true)) {
+		Inventory_Remove(playerid,"Vetement 264");
+		SetPlayerSkin(playerid,264);
+		PlayerData[playerid][pSkin] = 264;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 265", true)) {
+		Inventory_Remove(playerid,"Vetement 265");
+		SetPlayerSkin(playerid,265);
+		PlayerData[playerid][pSkin] = 265;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 266", true)) {
+		Inventory_Remove(playerid,"Vetement 266");
+		SetPlayerSkin(playerid,266);
+		PlayerData[playerid][pSkin] = 266;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 267", true)) {
+		Inventory_Remove(playerid,"Vetement 267");
+		SetPlayerSkin(playerid,267);
+		PlayerData[playerid][pSkin] = 267;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 268", true)) {
+		Inventory_Remove(playerid,"Vetement 268");
+		SetPlayerSkin(playerid,268);
+		PlayerData[playerid][pSkin] = 268;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 269", true)) {
+		Inventory_Remove(playerid,"Vetement 269");
+		SetPlayerSkin(playerid,269);
+		PlayerData[playerid][pSkin] = 269;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 270", true)) {
+		Inventory_Remove(playerid,"Vetement 270");
+		SetPlayerSkin(playerid,270);
+		PlayerData[playerid][pSkin] = 270;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 271", true)) {
+		Inventory_Remove(playerid,"Vetement 271");
+		SetPlayerSkin(playerid,271);
+		PlayerData[playerid][pSkin] = 271;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 272", true)) {
+		Inventory_Remove(playerid,"Vetement 272");
+		SetPlayerSkin(playerid,272);
+		PlayerData[playerid][pSkin] = 272;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 273", true)) {
+		Inventory_Remove(playerid,"Vetement 273");
+		SetPlayerSkin(playerid,273);
+		PlayerData[playerid][pSkin] = 273;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 274", true)) {
+		Inventory_Remove(playerid,"Vetement 274");
+		SetPlayerSkin(playerid,274);
+		PlayerData[playerid][pSkin] = 274;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 275", true)) {
+		Inventory_Remove(playerid,"Vetement 275");
+		SetPlayerSkin(playerid,275);
+		PlayerData[playerid][pSkin] = 275;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 276", true)) {
+		Inventory_Remove(playerid,"Vetement 276");
+		SetPlayerSkin(playerid,276);
+		PlayerData[playerid][pSkin] = 276;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 277", true)) {
+		Inventory_Remove(playerid,"Vetement 277");
+		SetPlayerSkin(playerid,277);
+		PlayerData[playerid][pSkin] = 277;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 278", true)) {
+		Inventory_Remove(playerid,"Vetement 278");
+		SetPlayerSkin(playerid,278);
+		PlayerData[playerid][pSkin] = 278;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 279", true)) {
+		Inventory_Remove(playerid,"Vetement 279");
+		SetPlayerSkin(playerid,279);
+		PlayerData[playerid][pSkin] = 279;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 280", true)) {
+		Inventory_Remove(playerid,"Vetement 280");
+		SetPlayerSkin(playerid,280);
+		PlayerData[playerid][pSkin] = 280;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 281", true)) {
+		Inventory_Remove(playerid,"Vetement 281");
+		SetPlayerSkin(playerid,281);
+		PlayerData[playerid][pSkin] = 281;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 282", true)) {
+		Inventory_Remove(playerid,"Vetement 282");
+		SetPlayerSkin(playerid,282);
+		PlayerData[playerid][pSkin] = 282;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 283", true)) {
+		Inventory_Remove(playerid,"Vetement 283");
+		SetPlayerSkin(playerid,283);
+		PlayerData[playerid][pSkin] = 283;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 284", true)) {
+		Inventory_Remove(playerid,"Vetement 284");
+		SetPlayerSkin(playerid,284);
+		PlayerData[playerid][pSkin] = 284;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 285", true)) {
+		Inventory_Remove(playerid,"Vetement 285");
+		SetPlayerSkin(playerid,285);
+		PlayerData[playerid][pSkin] = 285;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 286", true)) {
+		Inventory_Remove(playerid,"Vetement 286");
+		SetPlayerSkin(playerid,286);
+		PlayerData[playerid][pSkin] = 286;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 287", true)) {
+		Inventory_Remove(playerid,"Vetement 287");
+		SetPlayerSkin(playerid,287);
+		PlayerData[playerid][pSkin] = 287;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 288", true)) {
+		Inventory_Remove(playerid,"Vetement 288");
+		SetPlayerSkin(playerid,288);
+		PlayerData[playerid][pSkin] = 288;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 289", true)) {
+		Inventory_Remove(playerid,"Vetement 289");
+		SetPlayerSkin(playerid,289);
+		PlayerData[playerid][pSkin] = 289;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 290", true)) {
+		Inventory_Remove(playerid,"Vetement 290");
+		SetPlayerSkin(playerid,290);
+		PlayerData[playerid][pSkin] = 290;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 291", true)) {
+		Inventory_Remove(playerid,"Vetement 291");
+		SetPlayerSkin(playerid,291);
+		PlayerData[playerid][pSkin] = 291;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 292", true)) {
+		Inventory_Remove(playerid,"Vetement 292");
+		SetPlayerSkin(playerid,292);
+		PlayerData[playerid][pSkin] = 292;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 293", true)) {
+		Inventory_Remove(playerid,"Vetement 293");
+		SetPlayerSkin(playerid,293);
+		PlayerData[playerid][pSkin] = 293;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 294", true)) {
+		Inventory_Remove(playerid,"Vetement 294");
+		SetPlayerSkin(playerid,294);
+		PlayerData[playerid][pSkin] = 294;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 295", true)) {
+		Inventory_Remove(playerid,"Vetement 295");
+		SetPlayerSkin(playerid,295);
+		PlayerData[playerid][pSkin] = 295;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 296", true)) {
+		Inventory_Remove(playerid,"Vetement 296");
+		SetPlayerSkin(playerid,296);
+		PlayerData[playerid][pSkin] = 296;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 297", true)) {
+		Inventory_Remove(playerid,"Vetement 297");
+		SetPlayerSkin(playerid,297);
+		PlayerData[playerid][pSkin] = 297;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 298", true)) {
+		Inventory_Remove(playerid,"Vetement 298");
+		SetPlayerSkin(playerid,298);
+		PlayerData[playerid][pSkin] = 298;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 299", true)) {
+		Inventory_Remove(playerid,"Vetement 299");
+		SetPlayerSkin(playerid,299);
+		PlayerData[playerid][pSkin] = 299;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 300", true)) {
+		Inventory_Remove(playerid,"Vetement 300");
+		SetPlayerSkin(playerid,300);
+		PlayerData[playerid][pSkin] = 300;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 301", true)) {
+		Inventory_Remove(playerid,"Vetement 301");
+		SetPlayerSkin(playerid,301);
+		PlayerData[playerid][pSkin] = 301;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 302", true)) {
+		Inventory_Remove(playerid,"Vetement 302");
+		SetPlayerSkin(playerid,302);
+		PlayerData[playerid][pSkin] = 302;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 303", true)) {
+		Inventory_Remove(playerid,"Vetement 303");
+		SetPlayerSkin(playerid,303);
+		PlayerData[playerid][pSkin] = 303;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 304", true)) {
+		Inventory_Remove(playerid,"Vetement 304");
+		SetPlayerSkin(playerid,304);
+		PlayerData[playerid][pSkin] = 304;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 305", true)) {
+		Inventory_Remove(playerid,"Vetement 305");
+		SetPlayerSkin(playerid,305);
+		PlayerData[playerid][pSkin] = 305;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 306", true)) {
+		Inventory_Remove(playerid,"Vetement 306");
+		SetPlayerSkin(playerid,306);
+		PlayerData[playerid][pSkin] = 306;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 307", true)) {
+		Inventory_Remove(playerid,"Vetement 307");
+		SetPlayerSkin(playerid,307);
+		PlayerData[playerid][pSkin] = 307;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 308", true)) {
+		Inventory_Remove(playerid,"Vetement 308");
+		SetPlayerSkin(playerid,308);
+		PlayerData[playerid][pSkin] = 308;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 309", true)) {
+		Inventory_Remove(playerid,"Vetement 309");
+		SetPlayerSkin(playerid,309);
+		PlayerData[playerid][pSkin] = 309;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 310", true)) {
+		Inventory_Remove(playerid,"Vetement 310");
+		SetPlayerSkin(playerid,310);
+		PlayerData[playerid][pSkin] = 310;
+		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
+	}
+	else if (!strcmp(name, "Vetement 311", true)) {
+		Inventory_Remove(playerid,"Vetement 311");
+		SetPlayerSkin(playerid,311);
+		PlayerData[playerid][pSkin] = 311;
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort des vetements et se change.", ReturnName(playerid, 0));
 	}
     return 1;
@@ -4756,6 +6528,7 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			case 102: Inventory_Add(playerid, "sab_glock",29001);
 			case 105: Inventory_Add(playerid, "sab_psg1",29005);
 			case 111: Inventory_Add(playerid, "lc_ak47",29011);
+			case 112: Inventory_Add(playerid, "lc_bat",29011);
 			case 113: Inventory_Add(playerid, "lc_colt45",29013);
 			case 117: Inventory_Add(playerid, "lc_m16",29017);
 			case 120: Inventory_Add(playerid, "lc_shotgun",29020);
@@ -4765,6 +6538,8 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			case 126: Inventory_Add(playerid, "vc_chromegun",29026);
 			case 128: Inventory_Add(playerid, "vc_colt45",29028);
 			case 133: Inventory_Add(playerid, "vc_ingram",29033);
+			case 134: Inventory_Add(playerid, "vc_katana",29034);
+			case 136: Inventory_Add(playerid, "vc_laser",29036);
 			case 137: Inventory_Add(playerid, "vc_m4",29037);
 			case 138: Inventory_Add(playerid, "vc_m60",29038);
 			case 143: Inventory_Add(playerid, "vc_mp5lng",29043);
@@ -4820,6 +6595,7 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
             case 241: Inventory_Add(playerid, "ug_colt1911",29144);
             case 242: Inventory_Add(playerid, "ug_es57",29145);
             case 243: Inventory_Add(playerid, "ug_famas",29146);
+            case 244: Inventory_Add(playerid, "ug_fasthawk",29147);
             case 246: Inventory_Add(playerid, "ug_g3",29149);
             case 247: Inventory_Add(playerid, "ug_g36c",29150);
             case 248: Inventory_Add(playerid, "ug_galil",29151);
@@ -4847,11 +6623,13 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
             case 279: Inventory_Add(playerid, "ug_spas15",29323);
             case 280: Inventory_Add(playerid, "ug_spcarbine",29181);
             case 283: Inventory_Add(playerid, "ug_tmp",29185);
+            case 284: Inventory_Add(playerid, "ug_tomahawk",29186);
             case 285: Inventory_Add(playerid, "ug_tommygun",29187);
             case 287: Inventory_Add(playerid, "ug_tripleshot",29189);
             case 288: Inventory_Add(playerid, "ug_ump45",29190);
             case 290: Inventory_Add(playerid, "ug_woodshot",29191);
             case 291: Inventory_Add(playerid, "ug_woodspal",29193);
+            case 292: Inventory_Add(playerid, "ug_wrench",29194);
             case 293: Inventory_Add(playerid, "ug_xm8",29195);
             case 294: Inventory_Add(playerid, "ug_xm1014",29196);
             case 297: Inventory_Add(playerid, "bw_bbgun",29199);
@@ -4873,25 +6651,47 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			case 362: Inventory_Add(playerid, "cm_revolver",29261);
 			case 364: Inventory_Add(playerid, "cm_shotgspa",29264);
 			case 365: Inventory_Add(playerid, "cm_shotgun",29265);
+			case 372: Inventory_Add(playerid, "cm_circularsaw",29274);
+			case 373: Inventory_Add(playerid, "cm_clipboard",29275);
 			case 374: Inventory_Add(playerid, "cm_crossbow",29276);
+			case 375: Inventory_Add(playerid, "cm_dildo",29277);
+			case 376: Inventory_Add(playerid, "cm_fireex",29278);
 			case 377: Inventory_Add(playerid, "cm_flaregun",29279);
+			case 378: Inventory_Add(playerid, "cm_flashlight",29280);
+			case 379: Inventory_Add(playerid, "cm_hacksaw",29281);
+			case 380: Inventory_Add(playerid, "cm_hammer",29281);
+			case 381: Inventory_Add(playerid, "cm_katana",29283);
+			case 382: Inventory_Add(playerid, "cm_mace",29284);
+			case 383: Inventory_Add(playerid, "cm_newspaper",29285);
+			case 384: Inventory_Add(playerid, "cm_picket",29286);
+			case 385: Inventory_Add(playerid, "cm_saw",29287);
+			case 386: Inventory_Add(playerid, "cm_scissors",29288);
 			case 387: Inventory_Add(playerid, "cm_sniper",29289);
 			case 388: Inventory_Add(playerid, "cm_stunbaton",29290);
+			case 393: Inventory_Add(playerid, "vc_bat",29295);
+			case 394: Inventory_Add(playerid, "vc_cane",29296);
 			case 395: Inventory_Add(playerid, "ug_2tglock",29299);
 			case 396: Inventory_Add(playerid, "ug_aksopmod",29300);
 			case 397: Inventory_Add(playerid, "ug_ar7",29301);
+			case 398: Inventory_Add(playerid, "ug_bat",29301);
+			case 400: Inventory_Add(playerid, "ug_brassknuckle",29304);
 			case 401: Inventory_Add(playerid, "ug_calico",29306);
 			case 402: Inventory_Add(playerid, "ug_camosniper",29307);
 			case 403: Inventory_Add(playerid, "ug_fmg9",29309);
+			case 404: Inventory_Add(playerid, "ug_karambit",29311);
 			case 406: Inventory_Add(playerid, "ug_m202a1",29313);
 			case 408: Inventory_Add(playerid, "ug_matador",29315);
 			case 409: Inventory_Add(playerid, "ug_paintball",29316);
+			case 410: Inventory_Add(playerid, "ug_plunger",29317);
 			case 412: Inventory_Add(playerid, "ug_rpg26",29319);
 			case 413: Inventory_Add(playerid, "ug_sew500",29320);
 			case 414: Inventory_Add(playerid, "ug_silverrevolver",29321);
 			case 415: Inventory_Add(playerid, "ug_snub",29321);
+			case 416: Inventory_Add(playerid, "ug_spikedknuckle",29324);
 			case 417: Inventory_Add(playerid, "ug_srsa1",29325);
 			case 418: Inventory_Add(playerid, "ug_sturmgewehr",29326);
+			case 419: Inventory_Add(playerid, "ug_sword",29327);
+			case 420: Inventory_Add(playerid, "ug_tennisracket",29328);
 			case 421: Inventory_Add(playerid, "ug_volcanic",29329);
 		}
  	    ResetWeapon(playerid, weaponid);
@@ -4917,47 +6717,6 @@ script OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			return 0;
 		}
 	}
-    if(hittype == BULLET_HIT_TYPE_PLAYER && IsBleedableWeapon(weaponid)) {
-        new Float:rDist = frandom(-5.0, 6.0);
-        if(rDist > 0.0) {
-            new Float:vX, Float:vY, Float:vZ,
-                Float:pX, Float:pY, Float:pZ;
-            GetPlayerLastShotVectors(playerid, vX, vY, vZ, fX, fY, fZ);
-
-            vX = fX - vX;
-            vY = fY - vY;
-            vZ = fZ - vZ;
-
-            new Float:d = VectorSize(vX, vY, vZ);
-            vX /= d;
-            vY /= d;
-            vZ /= d;
-
-            vX *= rDist;
-            vY *= rDist;
-            vZ *= rDist;
-
-            vX += fX + frandom(-0.5, 0.5);
-            vY += fY + frandom(-0.5, 0.5);
-            vZ += fZ + frandom(-0.5, 0.5);
-
-            if(CA_RayCastLineNormal(fX, fY, fZ, vX, vY, vZ, pX, pY, pZ, pX, pY, pZ)) {
-                rDist = frandom(0.005, 0.020, 4);
-                pX *= rDist;
-                pY *= rDist;
-                pZ *= rDist;
-
-                CA_RayCastLineAngle(fX, fY, fZ, vX, vY, vZ, fX, fY, fZ, vX, vY, vZ);
-
-                new objectid = CreateDynamicObject(19836, fX + pX, fY + pY, fZ + pZ, vX, vY, vZ);
-                if(IsValidDynamicObject(objectid)) {
-                    SetDynamicObjectMaterial(objectid, 0, -1, "none", "none", 0xFFFF0000);
-
-                    SetTimerEx("CreateBlood", 1500, false, "ii", objectid, 255);
-                }
-            }
-        }
-    }
 	//deer
 	if(Deer[playerid] == 1)
 	{
@@ -5197,7 +6956,7 @@ script OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
 			    PlayerData[damagedid][pBleeding] = 1;
 			    PlayerData[damagedid][pBleedTime] = 10;
 
-				CreateBlood(damagedid,25);
+			    SetTimerEx("HidePlayerBox", 500, false, "dd", damagedid, _:ShowPlayerBox(damagedid, 0xFF000066));
 			}
 		}
 		if (PlayerData[playerid][pDrugUsed] == 4 && (weaponid >= 0 && weaponid <= 15))
@@ -5580,7 +7339,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		IsInBus[playerid] = 0;
 	}
 	if (newkeys & KEY_SUBMISSION && GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {cmd_phare(playerid,"");}
-	if (newkeys & KEY_CTRL_BACK) //ah ajouter armes UGMP
+	if (newkeys & KEY_CTRL_BACK)
 	{
 	    if (PlayerData[playerid][pUsedMagazine])
 	    {
@@ -5684,222 +7443,6 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			        Inventory_Remove(playerid, "Sniper");
 					PlayReloadAnimation(playerid, weaponid);
 					GiveWeaponToPlayer(playerid, weaponid, 5);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 111:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_ak47");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 30);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 113:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_colt45");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 12);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 114:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_flame");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 500);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 117:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_m16");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 60);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 120:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_shotgun");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 5);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 121:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_sniper");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 5);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 122:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lc_uzi");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 25);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 174:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_glock17");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 17);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 191:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_python");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 6);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 163:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_ak47");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 25);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 171:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_chromegun");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 5);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 193:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_shotgspa");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 7);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 166:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_buddyshot");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 4);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 182:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_m4");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 30);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 195:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_tec9");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 36);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 196:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_uzi");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 30);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 178:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_ingram");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 32);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 189:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_mp5k");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 30);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 183:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_m21");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 8);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 181:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_laser");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 5);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 173:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_flame");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 500);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 184:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_M60");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 100);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 186:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_minigun");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 500);
-					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
-				}
-		        case 167:
-			    {
-			        HoldWeapon(playerid, 0);
-				    PlayerPlaySoundEx(playerid, 36401);
-			        Inventory_Remove(playerid, "lcs_camera");
-					PlayReloadAnimation(playerid, weaponid);
-					GiveWeaponToPlayer(playerid, weaponid, 36);
 					SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son arme.", ReturnName(playerid, 0));
 				}
 			}
@@ -6057,12 +7600,12 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		for (new i = 0; i != MAX_caisseS; i ++) if (caisseMachineData[i][caisseExists] && IsPlayerInRangeOfPoint(playerid, 1.0, caisseMachineData[i][caissePos][0], caisseMachineData[i][caissePos][1], caisseMachineData[i][caissePos][2]))
 		{
-			new bizid = Business_Inside(playerid),moneyganho,facass = PlayerData[playerid][pFaction];
+			new bizid = Business_Inside(playerid),moneyganho,serveurinfo,facass = PlayerData[playerid][pFaction];
 			if(info_serveursetting[serveurinfo][settingbraquagenpcactive] == 1) {ShowPlayerFooter(playerid, "Les braquages sont desactiver");return 1;}
 			if(cop_nbrCops < info_serveursetting[serveurinfo][settingpolice]) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~police~w~ en ville"); return 1;}
 			foreach (new y : Player)
 			{
-				if (IsACops(y)) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
+				if (FactionData[facass][factionacces][1] == 1) {Waypoint_Set(y, "Vol en cours!", BusinessData[bizid][bizPos][0], BusinessData[bizid][bizPos][1], BusinessData[bizid][bizPos][2]);}
 			}
 			if(FactionData[facass][factionacces][1] == 1)
 			{ SendServerMessage(playerid,  "RADIO: Un vol de magasin au %s (marquée sur la carte).", BusinessData[bizid][bizName]);}
@@ -6203,7 +7746,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 		else for (new i = 0; i < MAX_BOOTHS; i ++) if (!g_BoothUsed[i] && IsPlayerInRangeOfPoint(playerid, 0.5, arrBoothPositions[i][0], arrBoothPositions[i][1], arrBoothPositions[i][2]))
 		{
-			if (!Inventory_HasItem(playerid, "Permis d'arme"))
+			if (!Inventory_HasItem(playerid, "License arme"))
 				return SendErrorMessage(playerid, "Il faut avoir une license d'arme pour utiliser la cabine de tir.");
 		    g_BoothUsed[i] = true;
 		    PlayerData[playerid][pRangeBooth] = i;
@@ -6382,7 +7925,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				else if (EntranceData[id][entranceType] == 1 && !PlayerData[playerid][pTestTask])
 				{
 			    	PlayerData[playerid][pTestTask] = 1;
-			    	Dialog_Show(playerid, ShowOnly, DIALOG_STYLE_MSGBOX, "AUTO-ÉCOLE", "Ici l'auto-école pour passé votre permis de conduire\nViser le bot pour passé le permis!", "Fermer", "");
+			    	Dialog_Show(playerid, ShowOnly, DIALOG_STYLE_MSGBOX, "AUTO-ÉCOLE", "Ici l'auto-école pour passé votre permis de conduire", "Fermer", "");
 
 				    if (IsTaskCompleted(playerid))
 					{
@@ -7023,7 +8566,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                             SetPlayerFacingAngle(playerid, poolrot);
                             AimAngle[playerid][0] = poolrot;
                             AimAngle[playerid][1] = poolrot;
-                            SetPlayerArmedWeapon(playerid, 0);
+                            SetPlayerArmedWeapon(playerid, 7);
                             GetXYInFrontOfPos(Xa, Ya, poolrot+180, x, y, 0.085);
                             AimObject = CreateObject(3004, x, y, Za, 7.0, 0, poolrot+180);
 							switch(PoolCamera[playerid])
@@ -7108,7 +8651,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(PlayingPool2[playerid] && Pool2Aimer != playerid && !UsingChalk[playerid])
 			{
 				SetTimerEx("PlayPool2Sound", 1400, 0, "d", 31807);
-				SetPlayerArmedWeapon(playerid, 0);
+				SetPlayerArmedWeapon(playerid, 7);
 				SetPlayerAttachedObject(playerid, OBJ_SLOT_2POOL, 338, 6, 0, 0.07, -0.85, 0, 0, 0);
                 ApplyAnimation(playerid, "POOL", "POOL_ChalkCue",3.0,0,0,0,0,0,1);
                 UsingChalk[playerid] = 1;
@@ -7162,7 +8705,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                             SetPlayerFacingAngle(playerid, Pool2rot);
                             AimAngle[playerid][0] = Pool2rot;
                             AimAngle[playerid][1] = Pool2rot;
-                            SetPlayerArmedWeapon(playerid, 0);
+                            SetPlayerArmedWeapon(playerid, 7);
                             GetXYInFrontOfPos(Xa, Ya, Pool2rot+180, x, y, 0.085);
                             AimObject = CreateObject(3004, x, y, Za, 7.0, 0, Pool2rot+180);
 							switch(Pool2Camera[playerid])
@@ -7318,7 +8861,6 @@ script OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
     	SendServerMessage(playerid,"Votre véhicule est équiper d'un boitier manuel veuiller appuyer sur les touche ~k~~VEHICLE_TURRETUP~ et ~k~~VEHICLE_TURRETUP~ pour changer d'embreyage");
     	KillSpeed = SetTimerEx("SpeedCheck", 500, 1, "i", playerid);
     }
-    else DisablePlayerSpeedCap(playerid);
 	return 1;
 }
 script OnPlayerEnterCheckpoint(playerid)
@@ -7331,13 +8873,13 @@ script OnPlayerEnterCheckpoint(playerid)
 		    //Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!", "Voila", "Non");
 			Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 			TogglePlayerControllable(playerid, 0);
-			PlayerData[playerid][pNoob] = 1;
 		}
 		if (PlayerData[playerid][pTutorialStage] == 6 && IsPlayerInRangeOfPoint(playerid, 1.5, -228.8403, 1401.1831, 27.7656))
 		{
 		    for (new i = 0; i < 5; i ++) {
 		        SendClientMessage(playerid,-1,"");
 			}
+			new serveurinfo;
 			if(info_serveursetting[serveurinfo][settingvilleactive] > 0)
 			{
 			    new money = random(1000) + 2500;
@@ -7351,7 +8893,6 @@ script OnPlayerEnterCheckpoint(playerid)
 			//ici mettre pour réglé plutat le probleme du tuto :@
 			PlayerData[playerid][pCreated] = 1;
 	    	PlayerData[playerid][pTask] = 1;
-	    	PlayerData[playerid][pNoob] = 2;
   			PlayerData[playerid][pTutorial] = 0;
 			PlayerData[playerid][pTutorialTime] = 0;
 			PlayerData[playerid][pTutorialStage] = 0;
@@ -7942,17 +9483,21 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(IsPlayerInRangeOfPoint(playerid, 1.0,958.9435,2172.8105,1011.0234))
 	{
-	    new stringer[900],salairejobinfoid,boucherprix = info_salairejobinfo[salairejobinfoid][salairejobinfoboucher],stockjobinfoid;
+	    new stringer[900];
+	    new salairejobinfoid;
+	    new boucherprix = info_salairejobinfo[salairejobinfoid][salairejobinfoboucher];
 		format(stringer, sizeof(stringer), "Vous avez apporté: %d viande | Vous gagnez : %d$",meats[playerid],meats[playerid]*boucherprix);
 		SendClientMessage(playerid, 0xABD08EF6, stringer);
+		new stockjobinfoid;
 		info_stockjobinfo[stockjobinfoid][stockjobinfoviande] += 1;
 		stockjobinfosave(stockjobinfoid);
 		Updatestockviande();
 		meatprocces[playerid]=0;
 		RemovePlayerAttachedObject(playerid, 2);
-		SetPlayerAttachedObject( playerid, 0, 29071, 2, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
+		SetPlayerAttachedObject( playerid, 0, 335, 6, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 1.000000, 1.000000, 1.000000 );
 		SetPVarInt(playerid, "meatbhp",0);
 		ApplyAnimation(playerid,"PED","IDLE_tired",4.1,0,1,1,0,1);
+		meats[playerid]++;
 		return PlayerCheckPointToMeat(playerid);
 	}
     //job doc fortcarson
@@ -7989,7 +9534,7 @@ script OnPlayerEnterCheckpoint(playerid)
     }
 	if(livraisonjob[playerid] == 0)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8009,7 +9554,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
     if(livraisonjob[playerid] == 1)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8029,7 +9574,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 3)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8049,7 +9594,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 4)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8069,7 +9614,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 5)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8089,7 +9634,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 6)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8109,7 +9654,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 7)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8129,7 +9674,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 8)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8149,7 +9694,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 9)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8169,7 +9714,7 @@ script OnPlayerEnterCheckpoint(playerid)
 	}
 	if(livraisonjob[playerid] == 10)
     {
-		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6563 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 6618)
+		if(GetVehicleModel(GetPlayerVehicleID(playerid)) == 403 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 515 || GetVehicleModel(GetPlayerVehicleID(playerid)) == 514)
 	    {
 	   		if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid))){ SendClientMessage(playerid,COLOR_RED,"* Vous n'avez pas la remorque!"); return 1; }
 		    new stockjobinfoid;
@@ -8607,7 +10152,7 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	{
 		new stringm[900];
 		format(stringm, sizeof(stringm), "Appuyez sur ~r~~k~~VEHICLE_FIREWEAPON_ALT~~w~ pour demarrer.~n~~n~Appuyer sur ~r~~k~~TOGGLE_SUBMISSIONS~~w~ pour les phares.~n~~n~Appuyer sur ~r~~k~~VEHICLE_LOOKLEFT~ ~w~ou ~r~~k~~VEHICLE_LOOKRIGHT~~w~ pour les clignotants");
-		TSM(playerid, stringm, " ", 20000, 0x00000088, 20.0000, 110.000000, 130.000000);// 110 130
+		TSM(playerid, stringm, " ", 10000, 0x00000088, 20.0000, 110.000000, 130.000000);// 110 130
 		if (IsSpeedoVehicle(vehicleid)){
 		    TextDrawShowForPlayer(playerid,compteur2[playerid]);
 		    TextDrawShowForPlayer(playerid,compteur3[playerid]);
@@ -8699,6 +10244,14 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	        PlayerData[playerid][pBoombox] = INVALID_PLAYER_ID;
 			StopAudioStreamForPlayer(playerid);
 	    }
+	    if (IsEngineVehicle(vehicleid) && CoreVehicles[vehicleid][vehRadio])
+	    {
+	        static url[128];
+			strunpack(url, CoreVehicles[vehicleid][vehURL]);
+			StopAudioStreamForPlayer(playerid);
+			PlayAudioStreamForPlayer(playerid, url);
+			PlayerData[playerid][pPlayRadio] = 1;
+		}
 	    foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) {PlayerSpectateVehicle(i, GetPlayerVehicleID(playerid));}
 		if (PlayerData[playerid][pInjured] == 1) {RemoveFromVehicle(playerid);}
 	}
@@ -8709,7 +10262,7 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 	        case 22..421: SetPlayerArmedWeapon(playerid, GetPlayerWeapon(playerid));
 			default: SetPlayerArmedWeapon(playerid, 0);
 		}
-	    if (GetVehicleModel(vehicleid) == 431 || GetVehicleModel(vehicleid) == 437 || GetVehicleModel(vehicleid) == 25521|| GetVehicleModel(vehicleid) == 6591|| GetVehicleModel(vehicleid) == 6556|| GetVehicleModel(vehicleid) == 25575|| GetVehicleModel(vehicleid) == 6691 || GetVehicleModel(vehicleid) == 25424|| GetVehicleModel(vehicleid) == 4777)
+	    if (GetVehicleModel(vehicleid) == 431 || GetVehicleModel(vehicleid) == 437)
 	    {
             SetPlayerPos(playerid, 2022.0273, 2235.2402, 2103.9536);
             SetPlayerTime(playerid, 00,00);
@@ -8884,7 +10437,7 @@ script OnPlayerUpdate(playerid)
 	{
 	    PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
 
-		if (PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 421 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerHasTazer(playerid) && !PlayerHasflashball(playerid) && PlayerData[playerid][pRangeBooth] == -1 && PlayerData[playerid][pCharacter] > 0)
+		if (PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerHasTazer(playerid) && !PlayerHasflashball(playerid) && PlayerData[playerid][pRangeBooth] == -1 && PlayerData[playerid][pCharacter] > 0)
 		{
 		    SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a été banni pour arme cheat (%s).", ReturnName(playerid, 0), ReturnWeaponName(PlayerData[playerid][pWeapon]));
 			Log_Write("logs/cheat_log.txt", "[%s] %s was banned for weapon hacks (%s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(PlayerData[playerid][pWeapon]));
@@ -9218,6 +10771,8 @@ script OnPlayerConnect(playerid)
 	SetPlayerArmedWeapon(playerid, 0);
 	ResetEditing(playerid);
 	PreloadAnimations(playerid);
+    SetPlayerHUDComponentsColour(playerid, HUD_COMPONENT_HEALTH, 233);
+    SetPlayerHUDComponentsColour(playerid, 4, 183);
 	if (g_ServerRestart) {
 		TextDrawShowForPlayer(playerid, gServerTextdraws[3]);
 	}
@@ -9230,25 +10785,25 @@ script OnPlayerConnect(playerid)
 		SetDynamicObjectPos(PrisonData[prisonCells][i], PrisonCells[i][0], PrisonCells[i][1] + 1.6, PrisonCells[i][2]);
 	}
 	//remove inverting
-    RemoveBuildingForPlayer(playerid, 1345, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1294, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1352, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 2753, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 2369, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1514, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1676, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 3465, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1686, 0.0, 0.0, 0.0, 60000.0);
- 	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 955, 	0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 956, 	0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 60000.0);
-    RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 60000.0);
-	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 60000.0);
-	RemoveNormal(playerid);
+    RemoveBuildingForPlayer(playerid, 1345, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1294, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1352, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 2753, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 2369, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1514, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1676, 0.0, 0.0, 0.0, 6000.00);
+	RemoveBuildingForPlayer(playerid, 3465, 0.0, 0.0, 0.0, 6000.00);
+	RemoveBuildingForPlayer(playerid, 1686, 0.0, 0.0, 0.0, 6000.00);
+ 	RemoveBuildingForPlayer(playerid, 1302, 0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 1209, 0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 955, 	0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 956, 	0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 1775, 0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 1776, 0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 6000.0);
+    RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 6000.00);
+	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 6000.0);
+	//MaisonIntEXTREM(playerid);
 	//fin remove
 	CancelSelectTextDraw(playerid);
 	GetPlayerIp(playerid, PlayerData[playerid][pIP], 16);
@@ -9307,7 +10862,7 @@ script OnPlayerDisconnect(playerid, reason)
 	        case 1: format(string, sizeof(string), "* %s a quitté le serveur.", nameStr);
 	        case 2: format(string, sizeof(string), "* %s a quitté le serveur (Kick/Ban).",  nameStr);
 	    }
-	    foreach (new i : Player) SendClientMessageEx(i,COLOR_HOSPITAL,string);
+		SendNearbyMessage(playerid,30.0,COLOR_HOSPITAL,string);
 	}
 	//bowling
     BowlingMinutes[playerid] = 0;
@@ -9505,17 +11060,19 @@ script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 script OnGameModeInit()
 {
     DCC_SetBotPresenceStatus(DO_NOT_DISTURB);
-    DCC_SetBotActivity("Version UGMP");
+    DCC_SetBotActivity("Cette version est pour Winlost seulement :)");
     GUILD_ID1 = DCC_FindGuildById(Ddiscord);
     discordlog = DCC_FindChannelById(Dchat); //chat general
     discordaaa = DCC_FindChannelById(Achat); //chat general
     discordooc = DCC_FindChannelById(ooc);
+    discordspam = DCC_FindChannelById(spamadmin);
     RoleJoueur = DCC_Role:DCC_FindRoleById(Dverifier);
 	RoleStaff1 = DCC_Role:DCC_FindRoleById(Dadmin1);    //role
 	RoleStaff2 = DCC_Role:DCC_FindRoleById(Dadmin2);    //role
 	RoleStaff3 = DCC_Role:DCC_FindRoleById(Dadmin3);    //role
 	RoleStaff4 = DCC_Role:DCC_FindRoleById(Dadmin4);    //role
-	DeleteSavedStatMessage();
+	//CreateServerObjectsLosSantos();
+	//MaisonIntEXT();
 	//partie fs oubliger
 	/*SendRconCommand("unloadfs skins");
 	SendRconCommand("loadfs skins");*/
@@ -9525,6 +11082,7 @@ script OnGameModeInit()
     LoadPool();
     LoadPool2();
     //fin des fs oubliger
+    //CA_Init();
     //zombie + radiation
 	ZombiesTimer = SetTimer("CreateZombies", 50, true);
 	SetTimer("UpdateRadiation",5000, 1);
@@ -9706,7 +11264,7 @@ script OnGameModeInit()
     brat[8] = CreateDynamicPickup(1575, 2, 2533.9824,-1297.0844,1044.1250);
     brat[7] = CreateDynamicPickup(1275, 2, 2567.7590,-1281.4629,1044.1250);
     new str11[200],electronicstok = info_stockjobinfo[stockjobinfoid][stockjobinfoelectronic];
-    format(str11, sizeof(str11), "{FFD700}Entrepôt électronique{FFFFFF}\nEn stock: {ff3300}%d matériel électronique{ffffff}",electronicstok);
+    format(str11, sizeof(str11), "{FFD700}Entrepôt électronic{FFFFFF}\nEn stock: {ff3300}%d matériel électronic{ffffff}",electronicstok);
 	stockinfousineelectronic = CreateDynamicObject(19805, 2652.9836, -1588.6438, 15.9040,   0.0000, 0.0000, -91.3800);
 	SetDynamicObjectMaterialText(stockinfousineelectronic, 0, str11, OBJECT_MATERIAL_SIZE_256x128,"Arial", 18, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 	//job fabrication armes a faire
@@ -9927,31 +11485,9 @@ script OnGameModeInit()
 		case 68: missionactor[2] = CreateActor(179,1689.9331,-2009.1837,14.1215,183.3461); //
 		case 69: missionactor[2] = CreateActor(179,2040.6052,-1830.0254,13.5937,55.5965); //
 	}
-	switch (random(17))//lc
-	{
-	   	case 0: missionactor[3] = CreateActor(26179,7689.1865,8170.7085,3.8213,3.3570); // actor
-	   	case 1: missionactor[3] = CreateActor(26179,7653.4771,8337.4893,18.8196,73.5444); // actor
-	   	case 2: missionactor[3] = CreateActor(26179,7460.9697,8415.9951,29.3884,314.9583); // actor
-	   	case 3: missionactor[3] = CreateActor(26179,7164.0684,8723.7158,23.5813,226.3073); // actor
-	   	case 4: missionactor[3] = CreateActor(26179,7066.6182,8619.4219,23.5643,349.6168); // actor
-	   	case 5: missionactor[3] = CreateActor(26179,7095.4170,8512.4834,3.3916,62.6477); // actor
-		case 6: missionactor[3] = CreateActor(26179,7171.4253,8365.6650,58.7805,23.1674); // actor
-		case 7: missionactor[3] = CreateActor(26179,7096.4014,8359.9766,68.7529,98.9946); // actor
-		case 8: missionactor[3] = CreateActor(26179,6999.3833,8311.4443,68.6574,184.1986); // actor
-		case 9: missionactor[3] = CreateActor(26179,7086.4365,8160.0620,43.8164,77.6878); // actor
-		case 10: missionactor[3] = CreateActor(26179,7051.6499,8080.6113,44.1244,343.0835); // actor
-		case 11: missionactor[3] = CreateActor(26179,7155.2700,8038.7686,43.8433,34.1576); // actor
-		case 12: missionactor[3] = CreateActor(26179,7171.8784,8111.0044,33.7985,210.4210); // actor
-		case 13: missionactor[3] = CreateActor(26179,7383.2930,8033.7798,33.8102,358.7740); // actor
-		case 14: missionactor[3] = CreateActor(26179,7428.3208,8111.6035,33.8193,114.0818); // actor
-		case 15: missionactor[3] = CreateActor(26179,7286.2593,8110.4683,33.8053,195.8626); // actor
-		case 16: missionactor[3] = CreateActor(26179,7333.1997,8065.5410,33.7944,223.7729); // actor
-	}
 	//amendes
-	actorvendeuramendes[0] = CreateActor(310,7888.6826,-7974.2344,1007.2028,231.7454);
-	SetActorVirtualWorld(actorvendeuramendes[0],7096);
-	armespolice = CreateActor(267,7906.7012,-7988.1152,1007.2028,53.5425);//bot arme jetter
-	SetActorVirtualWorld(armespolice,7069);
+	actorvendeuramendes[0] = CreateActor(310,1563.0867,-1650.5616,3001.2083,181.9357);
+	SetActorVirtualWorld(actorvendeuramendes[0],1000);
 	//permis
 	actorvendeurpermis[0] = CreateActor(240,-2035.0946,-117.3694,1035.1719,272.2659);
 	SetActorVirtualWorld(actorvendeurpermis[0], 7002);
@@ -9967,7 +11503,9 @@ script OnGameModeInit()
 	//bot commando
 	piececaisse = CreateActor(111,2565.9041,-1216.2356,1026.1957,84.0109);//bot command crate
 	soinbot = CreateActor(274,-196.3317, -1743.2111, 675.3954,96.44); //bot soins
+	armespolice = CreateActor(267,1548.5010,-1629.3090,3001.0859,205.6856);//bot arme jetter
 	SetActorVirtualWorld(piececaisse, 7039);
+	SetActorVirtualWorld(armespolice,1000);
 	SetActorVirtualWorld(soinbot,5003);
 	for (new i = 0; i < sizeof(arrBoothPositions); i ++) {
 	    CreateDynamic3DTextLabel("[Shooting Range]\n{FFFFFF}Press 'F' pour utiliser cette emplacement.", COLOR_DARKBLUE, arrBoothPositions[i][0], arrBoothPositions[i][1], arrBoothPositions[i][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, 7);
@@ -9989,7 +11527,7 @@ script OnGameModeInit()
 	TextDrawSetProportional(gServerTextdraws[0], 1);
 	TextDrawSetSelectable(gServerTextdraws[0], 0);
 
-	gServerTextdraws[1] = TextDrawCreate(500.000000, 6.000000, "Serveur ~r~ Roleplay");
+	gServerTextdraws[1] = TextDrawCreate(500.000000, 6.000000, "Vice ~p~ Roleplay");
 	TextDrawBackgroundColor(gServerTextdraws[1], 255);
 	TextDrawFont(gServerTextdraws[1], 1);
 	TextDrawLetterSize(gServerTextdraws[1], 0.260000, 1.200000);
@@ -10032,7 +11570,7 @@ script OnGameModeInit()
 	SetTimer("SystemPolomka",60000,1);
 	SetTimer("OnUnoccupiedVehicleUpdate",3000,1);
 	SetTimer("Timephone",60000*15,1);
-	//SetTimer("GameTimeTimeTimer2",300000, 0);
+	SetTimer("GameTimeTimeTimer2",300000, 0);
 	//job meuble
 	new stringi147[600],infostockmeuble = info_stockjobinfo[stockjobinfoid][stockjobinfomeuble];
     format(stringi147, sizeof(stringi147), "{FFD700}Entrepôt de meuble{FFFFFF}\nEn stock: {ff3300}%d meuble{ffffff}",infostockmeuble);
@@ -10045,24 +11583,26 @@ script OnGameModeInit()
 	stockinfoboismenuiserie = CreateDynamicObject(19805,1604.7517, -1814.6948, 1014.6152,   0.00000, 0.00000, 90.000);
     SetDynamicObjectMaterialText(stockinfoboismenuiserie, 0, stringi20, OBJECT_MATERIAL_SIZE_256x128,"Arial", 22, 0, 0xFFFF8200, 0xFF000000, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 	//carpintero = table de travail
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.6732, -1815.0839, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.6718, -1814.9323, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.1953, -1815.0953, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1622.8530, -1816.1132, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1623.4221, -1806.5026, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.3716, -1807.2134, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.2001, -1807.2498, 1012.9468+0.6,4.0); //Terminar
-	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.5315, -1807.3160, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.6732, -1815.0839, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.6718, -1814.9323, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.1953, -1815.0953, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1622.8530, -1816.1132, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1623.4221, -1806.5026, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1617.3716, -1807.2134, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1612.2001, -1807.2498, 1012.9468+0.6,4.0); //Terminar
+	CreateDynamic3DTextLabel("{c7a24a}Cliquez pour fabriquer des meubles\n{FFFFFF}¡D'abord, vous devez prendre du bois!",0xFFFFFFFC,1607.5315, -1807.3160, 1012.9468+0.6,4.0); //Terminar
 	CreateDynamic3DTextLabel("{FFFFFF}Pour commencé à travaillait taper {c7a24a}/commencermeuble\n{FFFFFF}Pour quitter le job taper {c7a24a}/quittermeuble",0xFFFFFFFC,1603.2142, -1811.9705, 1013.4863+0.6,8.0);//Lugar
 	moneyentrepriseload();
 	gouvernementinfoload();
 	salairejobinfoload();
 	//tuningload();
+	salairemairieload();
 	salairefbiload();
 	salairepoliceload();
 	salaireswatload();
 	salaireurgentisteload();
 	//afk
+	new serveurinfo;
 	AFKActiver = info_serveursetting[serveurinfo][settingafkactive];
 	//if(AFKActiver == 0) {AFKTimer = SetTimer("AFK",60000,1);}
 	//porte vol
@@ -10097,7 +11637,6 @@ script OnGameModeInit()
 }
 script OnGameModeExit()
 {
-    DeleteSavedStatMessage();
     foreach (new i : Player) {SQL_SaveCharacter(i);}
     //job generator
 	KillTimer(threesecondtimer);
@@ -10111,6 +11650,7 @@ script OnGameModeExit()
 		KillTimer(timerslot[i]);
 	}
 	//afk
+	new serveurinfo;
 	AFKActiver = info_serveursetting[serveurinfo][settingafkactive];
 	if(AFKActiver == 1) {KillTimer(AFKTimer);}
 	//horse
@@ -10138,13 +11678,13 @@ script WeatherRotator()
 	SetWeather(g_aWeatherRotations[index]);
 	switch (random(7))
 	{
-		case 0: DCC_SetBotActivity("?aide pour plus d'informations");
-		case 1: DCC_SetBotActivity("?aide pour plus d'informations");
-		case 2: DCC_SetBotActivity("?aide pour plus d'informations");
-		case 3: DCC_SetBotActivity("?aide pour plus d'informations");
-		case 4: DCC_SetBotActivity("?aide pour plus d'informations");
-		case 5: DCC_SetBotActivity("?aide pour plus d'informations");
-		case 6: DCC_SetBotActivity("?aide pour plus d'informations");
+		case 0: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 1: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 2: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 3: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 4: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 5: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 6: DCC_SetBotActivity("!aide pour plus d'informations");
 	}
 }
 script LotteryUpdate()
@@ -10266,11 +11806,6 @@ script OnPlayerSpawn(playerid)
 
 		SetCameraBehindPlayer(playerid);
 		PlayerData[playerid][pThirst] = 80;
-        if (PlayerData[playerid][pNoob] == 1)
-        {
-			Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "Questionnaire","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
-			TogglePlayerControllable(playerid, 0);
-		}
 	}
 	else
 	{
@@ -10423,6 +11958,7 @@ script OnPlayerCommandTextEx(playerid, cmdtext[])
 	//bank
     if(strcmp(cmdtext, "/volerbanque", true) == 0)
     {
+        new serveurinfo;
         if(info_serveursetting[serveurinfo][settingbraquagebankactive] == 1) return SendErrorMessage(playerid,"Les braquages sont désactivé pour les admins");
         if(portevol == 1) return SendErrorMessage(playerid,"Cela fait moins de une heure que la banque a été voler");
         if(info_serveursetting[serveurinfo][settingswat] < swat_nbrCops) {ShowPlayerFooter(playerid, " Il n'a pas assez de ~r~swat~w~ en ville"); return 1;}
@@ -11433,8 +12969,13 @@ script OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 	    {
 	        case 1:
 	        {
-				Inventory_Add(playerid,"Vetement",2844);
+	            /*PlayerData[playerid][pSkin] = modelid;
+	            SetPlayerSkin(playerid, modelid);*/
+	            new skinlol[65];
+				format(skinlol,sizeof(skinlol),"Vetement %d",modelid);
+				Inventory_Add(playerid,skinlol,2844);
 	            SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a payé %s $ reçois des vetements.", ReturnName(playerid, 0), FormatNumber(price));
+	            SendServerMessage(playerid,"/vetement pour se changer.");
 			}
 			case 2:
 			{
@@ -11741,7 +13282,7 @@ script OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 				new string[128];
 				CancelSelectTextDraw(playerid);
 				format(string, sizeof(string), "%s\n%s", (!PlayerCharacters[playerid][0][0]) ? ("Vide") : (PlayerCharacters[playerid][0]), (!PlayerCharacters[playerid][1][0]) ? ("Vide") : (PlayerCharacters[playerid][1]));
-				Dialog_Show(playerid, CharList, DIALOG_STYLE_LIST, "Mes personnages", string, "Valider", "Quitter");
+				Dialog_Show(playerid, CharList, DIALOG_STYLE_LIST, "Mon personnage", string, "Valider", "Quitter");
 			}
 			else if (playertextid == PlayerData[playerid][pTextdraws][48])
 			{
@@ -13103,6 +14644,54 @@ script gouvernementinfosave(gouvernementinfoid)
 	info_gouvernementinfo[gouvernementinfoid][gouvernementbiz]);
     mysql_tquery(g_iHandle, query);
 }
+//salaire mairie
+script salairemairie(rank)
+{
+	new query[900];
+    mysql_format(g_iHandle, query, sizeof(query),"UPDATE salairemairie SET salairerang1=%d, salairerang2=%d, salairerang3=%d, salairerang4=%d, salairerang5=%d, salairerang6=%d, salairerang7=%d, salairerang8=%d, salairerang9=%d, salairerang10=%d, salairerang11=%d, salairerang12=%d, salairerang13=%d, salairerang14=%d, salairerang15=%d WHERE idfaction='1'",
+	    info_salairemairie[rank][salairemairie1],
+	    info_salairemairie[rank][salairemairie2],
+	    info_salairemairie[rank][salairemairie3],
+	    info_salairemairie[rank][salairemairie4],
+	    info_salairemairie[rank][salairemairie5],
+	    info_salairemairie[rank][salairemairie6],
+	    info_salairemairie[rank][salairemairie7],
+	    info_salairemairie[rank][salairemairie8],
+	    info_salairemairie[rank][salairemairie9],
+	    info_salairemairie[rank][salairemairie10],
+	    info_salairemairie[rank][salairemairie11],
+	    info_salairemairie[rank][salairemairie12],
+	    info_salairemairie[rank][salairemairie13],
+	    info_salairemairie[rank][salairemairie14],
+	    info_salairemairie[rank][salairemairie15]);
+    mysql_tquery(g_iHandle, query);
+}
+script salairemairieload()
+{
+    new query[600];
+    mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM salairemairie");
+    new Cache:result = mysql_query(g_iHandle,query);
+	for(new rank = 0; rank < cache_get_row_count(); rank++)
+	{
+	    info_salairemairie[rank][salairemairieiddd] = cache_get_field_content_int(rank,"idfaction");
+	    info_salairemairie[rank][salairemairie1] = cache_get_field_content_int(rank,"salairerang1");
+	    info_salairemairie[rank][salairemairie2] = cache_get_field_content_int(rank,"salairerang2");
+	    info_salairemairie[rank][salairemairie3] = cache_get_field_content_int(rank,"salairerang3");
+	    info_salairemairie[rank][salairemairie4] = cache_get_field_content_int(rank,"salairerang4");
+	    info_salairemairie[rank][salairemairie5] = cache_get_field_content_int(rank,"salairerang5");
+	    info_salairemairie[rank][salairemairie6] = cache_get_field_content_int(rank,"salairerang6");
+	    info_salairemairie[rank][salairemairie7] = cache_get_field_content_int(rank,"salairerang7");
+	    info_salairemairie[rank][salairemairie8] = cache_get_field_content_int(rank,"salairerang8");
+	    info_salairemairie[rank][salairemairie9] = cache_get_field_content_int(rank,"salairerang9");
+	    info_salairemairie[rank][salairemairie10] = cache_get_field_content_int(rank,"salairerang10");
+	    info_salairemairie[rank][salairemairie11] = cache_get_field_content_int(rank,"salairerang11");
+	    info_salairemairie[rank][salairemairie12] = cache_get_field_content_int(rank,"salairerang12");
+	    info_salairemairie[rank][salairemairie13] = cache_get_field_content_int(rank,"salairerang13");
+	    info_salairemairie[rank][salairemairie14] = cache_get_field_content_int(rank,"salairerang14");
+	    info_salairemairie[rank][salairemairie15] = cache_get_field_content_int(rank,"salairerang15");
+	}
+	cache_delete(result);
+}
 script salairefbi(rank)
 {
 	new query[900];
@@ -13793,8 +15382,8 @@ script Gunjobanim(playerid)
 script meattimer(playerid)
 {
 	ApplyAnimation(playerid,"CARRY","crry_prtial",4.1,0,1,1,1,1);
-	RemovePlayerAttachedObject(playerid,6);
 	SetPlayerAttachedObject(playerid, 6, 2804, 5, 0.01, 0.1, 0.2, 100, 10, 85);
+	RemovePlayerAttachedObject(playerid,6);
 	SetPlayerCheckpoint(playerid,958.9435,2172.8105,1011.0234,1.0);
 	SetPVarInt(playerid, "meatbhp",1);
 	KillTimer(AnimTimer);
@@ -14133,6 +15722,7 @@ script salairejobinfosave(salairejobinfoid)
 script AFK()
 {
 	new Float:x,Float:y,Float:z;
+ 	new serveurinfo;
 	foreach (new i : Player)
 	{
 	    if(IsPlayerConnected(i))
@@ -14305,51 +15895,6 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 			case 29: missionactor[0] = CreateActor(179,1403.7306,-1298.5013,13.5460,236.3440); // bot25
 		}
 		mission[0][playerid] = 0;
-    }
-    if (newtarget == missionactor[3])
-    {
-		if (FactionData[facass][factionacces][8] == 1 && mission[3][playerid] == 0)
-			return Dialog_Show(playerid, Mission3, DIALOG_STYLE_MSGBOX, "Robert", "Salut toi, Tu veux avoir un peut d'argent?\nRapporte moi une caise de type Six\nSi tu veux tu peut gardé la marchandise ou\nme la rapporté pour avoir de l'argent", "Valider", "Quitter");
-		else SendClientMessage(playerid,COLOR_WHITE,"Robert : Tu veux quoi?");
-		if (mission[3][playerid] == 1 && Inventory_Count(playerid, "Graine marijuana") < 20 && Inventory_Count(playerid, "Graine cocaine") < 20 && Inventory_Count(playerid, "Graine Heroin Opium") < 10)
-		{
-		    SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu a besoin de 20 graine de marijuana.");
-	        SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu a besoin de 20 graine de cocaine.");
-	        SendClientMessage(playerid, COLOR_WHITE,"Robert : Tu a besoin de 10 graine d'héroine.");
-	        return 1;
-		}
-		if (id == -1 || CrateData[id][crateType] != 6) return 0;
-		SetTimerEx("OpenCrate1", 1000, false, "dd", playerid, id);
-		Inventory_Remove(playerid, "Graine cocaine", 20);
-		Inventory_Remove(playerid, "Graine marijuana", 20);
-		Inventory_Remove(playerid, "Graine Heroin Opium", 10);
-		new money = random(2500) + 1500;
-		SendServerMessage(playerid, "Vous avez gagné %d$ pour cette mission.", money);
-		GiveMoney(playerid, money);
-		SendClientMessage(playerid, COLOR_WHITE,"Robert : Merci le kid à la prochaine.");
-		SendClientMessage(playerid, COLOR_WHITE,"Robert : aller je me barre salut!");
-	    DestroyActor(missionactor[3]);
-		switch (random(17))//lc
-		{
-			case 0: missionactor[3] = CreateActor(26179,7689.1865,8170.7085,3.8213,3.3570); // actor
-			case 1: missionactor[3] = CreateActor(26179,7653.4771,8337.4893,18.8196,73.5444); // actor
-			case 2: missionactor[3] = CreateActor(26179,7460.9697,8415.9951,29.3884,314.9583); // actor
-			case 3: missionactor[3] = CreateActor(26179,7164.0684,8723.7158,23.5813,226.3073); // actor
-			case 4: missionactor[3] = CreateActor(26179,7066.6182,8619.4219,23.5643,349.6168); // actor
-			case 5: missionactor[3] = CreateActor(26179,7095.4170,8512.4834,3.3916,62.6477); // actor
-			case 6: missionactor[3] = CreateActor(26179,7171.4253,8365.6650,58.7805,23.1674); // actor
-			case 7: missionactor[3] = CreateActor(26179,7096.4014,8359.9766,68.7529,98.9946); // actor
-			case 8: missionactor[3] = CreateActor(26179,6999.3833,8311.4443,68.6574,184.1986); // actor
-			case 9: missionactor[3] = CreateActor(26179,7086.4365,8160.0620,43.8164,77.6878); // actor
-			case 10: missionactor[3] = CreateActor(26179,7051.6499,8080.6113,44.1244,343.0835); // actor
-			case 11: missionactor[3] = CreateActor(26179,7155.2700,8038.7686,43.8433,34.1576); // actor
-			case 12: missionactor[3] = CreateActor(26179,7171.8784,8111.0044,33.7985,210.4210); // actor
-			case 13: missionactor[3] = CreateActor(26179,7383.2930,8033.7798,33.8102,358.7740); // actor
-			case 14: missionactor[3] = CreateActor(26179,7428.3208,8111.6035,33.8193,114.0818); // actor
-			case 15: missionactor[3] = CreateActor(26179,7286.2593,8110.4683,33.8053,195.8626); // actor
-			case 16: missionactor[3] = CreateActor(26179,7333.1997,8065.5410,33.7944,223.7729); // actor
-		}
-		mission[3][playerid] = 0;
     }
     if(newtarget == missionactor[1])
     {
@@ -14648,35 +16193,13 @@ script OnPlayerAirbreak(playerid)
 script commandlunch(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(26),count;
+	new commando,rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
-	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
-	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
-	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
-	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
-	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
-	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
-	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
-	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
-	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
-	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
-	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
-	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
-	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
-	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
-	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
-	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
-	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
-	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
-	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
-	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
-	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
-	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
-	DropItem("Boite de matos", "Commande",2040,25,x,y,z+0.1, 0,0);
+	commando = DropItem("Boite de matos", "Commande",2040, 1,x,y,z+0.1, 0,0);
+	DroppedItems[commando][droppedQuantity] = 25;
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -14702,34 +16225,11 @@ script commandlunch(playerid)
 script commandlunchkevlar(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(26),count;
+	new rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
-	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
-	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
-	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
-	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
-	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
-	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
-	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
-	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
-	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
-	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
-	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
-	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
-	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
-	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
-	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
-	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
-	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
-	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
-	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
-	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
-	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
-	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -14756,34 +16256,11 @@ script commandlunchkevlar(playerid)
 script commandlunchsoins(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(26),count;
+	new rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
-	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
-	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
-	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
-	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
-	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
-	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
-	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
-	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
-	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
-	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
-	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
-	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
-	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
-	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
-	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
-	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
-	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
-	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
-	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
-	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
-	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
-	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -14811,34 +16288,11 @@ script commandlunchsoins(playerid)
 script commandlunchpaint(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(26),count;
+	new rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
-	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
-	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
-	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
-	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
-	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
-	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
-	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
-	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
-	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
-	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
-	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
-	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
-	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
-	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
-	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
-	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
-	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
-	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
-	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
-	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
-	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
-	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -14864,34 +16318,11 @@ script commandlunchpaint(playerid)
 script commandlunchoutils(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(26),count;
+	new rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
-	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
-	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
-	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
-	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
-	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
-	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
-	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
-	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
-	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
-	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
-	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
-	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
-	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
-	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
-	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
-	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
-	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
-	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
-	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
-	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
-	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
-	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -14917,34 +16348,11 @@ script commandlunchoutils(playerid)
 script commandlunchnos(playerid)
 {
     static Float:x,Float:y,Float:z;
-	new rand = random(26),count;
+	new rand = random(3),count;
 	SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait.");
 	if(rand == 0) { x=1649.5073; y=-2664.3511; z=13.5469;}
 	else if(rand == 1){ x= x = 2510.0442; y=-2671.7708; z =13.6422;}
 	else if(rand == 2) { x=2755.5239; y=-2227.0139; z=16.1875;}
-	else if(rand == 3) { x=7948.85; y=8109.27; z=0.4078;}
-	else if(rand == 4) { x=8385.76; y=8454.86; z=10.5917;}
-	else if(rand == 5) { x=8882.78; y=7574.91; z=0.8597;}
-	else if(rand == 6) { x=8857.75; y=7472.59; z=0.8259;}
-	else if(rand == 7) { x=8799.98; y=7202.19; z=0.7752;}
-	else if(rand == 8) { x=9083.2; y=7136.65; z=0.8968;}
-	else if(rand == 9) { x=9432.4; y=7122.6; z=10.9192;}
-	else if(rand == 10) { x=9727.76; y=7098.46; z=10.9181;}
-	else if(rand == 11) { x=9838.76; y=7626.91; z=10.8861;}
-	else if(rand == 12) { x=9713.01; y=7595.15; z=10.8861;}
-	else if(rand == 13) { x=9226.74; y=7107.63; z=12.2227;}
-	else if(rand == 14) { x=6390.7; y=-5986.78; z=3.5911;}
-	else if(rand == 15) { x=7276.81; y=-6221.17; z=5.8187;}
-	else if(rand == 16) { x=8076.99; y=-9264.57; z=2.5992;}
-	else if(rand == 17) { x=7277.32; y=-8851.78; z=2.1708;}
-	else if(rand == 18) { x=6846.24; y=-8986.95; z=7.8626;}
-	else if(rand == 19) { x=6834.15; y=-9046.25; z=6.5373;}
-	else if(rand == 20) { x=6799.74; y=-9079.8; z=6.598;}
-	else if(rand == 21) { x=6461.27; y=-8951.64; z=5.8446;}
-	else if(rand == 22) { x=6247.81; y=-8898.03; z=2.1767;}
-	else if(rand == 23) { x=6216.52; y=-8787.13; z=8.9246;}
-	else if(rand == 24) { x=5684.11; y=-8754.46; z=8.928;}
-	else if(rand == 25) { x=5670.36; y=-8120.58; z=8.8873;}
 	foreach (new i : Player)
     {
     	new facass1 = PlayerData[i][pFaction];
@@ -15103,44 +16511,44 @@ script serveursettinginfoload()
     new query[600];
     mysql_format(g_iHandle,query,sizeof(query),"SELECT * FROM serveursetting");
     new Cache:result = mysql_query(g_iHandle,query);
-	for(new serveurinfo1 = 0; serveurinfo1 < cache_get_row_count(); serveurinfo1++)
+	for(new serveurinfo = 0; serveurinfo < cache_get_row_count(); serveurinfo++)
 	{
-	    info_serveursetting[serveurinfo1][serveurinfod] = cache_get_field_content_int(serveurinfo1,"id");
-	    info_serveursetting[serveurinfo1][settingafkactive] = cache_get_field_content_int(serveurinfo1,"afkactive");
-		info_serveursetting[serveurinfo1][settingafktime] = cache_get_field_content_int(serveurinfo1,"afktime");
-		info_serveursetting[serveurinfo1][settingbraquagenpcactive] = cache_get_field_content_int(serveurinfo1,"braquagenpcactive");
-		info_serveursetting[serveurinfo1][settingbraquagebankactive] = cache_get_field_content_int(serveurinfo1,"braquagebanqueactive");
-		info_serveursetting[serveurinfo1][settingoocactive] = cache_get_field_content_int(serveurinfo1,"oocactive");
-		info_serveursetting[serveurinfo1][settingpmactive] = cache_get_field_content_int(serveurinfo1,"pmactive");
-		info_serveursetting[serveurinfo1][settingvilleactive] = cache_get_field_content_int(serveurinfo1,"villeactive");
-		info_serveursetting[serveurinfo1][settingnouveau] = cache_get_field_content_int(serveurinfo1,"nouveau");
-		info_serveursetting[serveurinfo1][settingpolice] = cache_get_field_content_int(serveurinfo1,"police");
-		info_serveursetting[serveurinfo1][settingswat] = cache_get_field_content_int(serveurinfo1,"swat");
-		info_serveursetting[serveurinfo1][settingwl] = cache_get_field_content_int(serveurinfo1,"whiteliste");
-		info_serveursetting[serveurinfo1][settingpos][0] = cache_get_field_content_int(serveurinfo1,"spawnpos1");
-		info_serveursetting[serveurinfo1][settingpos][1] = cache_get_field_content_int(serveurinfo1,"spawnpos2");
-		info_serveursetting[serveurinfo1][settingpos][2] = cache_get_field_content_int(serveurinfo1,"spawnpos3");
+	    info_serveursetting[serveurinfo][serveurinfod] = cache_get_field_content_int(serveurinfo,"id");
+	    info_serveursetting[serveurinfo][settingafkactive] = cache_get_field_content_int(serveurinfo,"afkactive");
+		info_serveursetting[serveurinfo][settingafktime] = cache_get_field_content_int(serveurinfo,"afktime");
+		info_serveursetting[serveurinfo][settingbraquagenpcactive] = cache_get_field_content_int(serveurinfo,"braquagenpcactive");
+		info_serveursetting[serveurinfo][settingbraquagebankactive] = cache_get_field_content_int(serveurinfo,"braquagebanqueactive");
+		info_serveursetting[serveurinfo][settingoocactive] = cache_get_field_content_int(serveurinfo,"oocactive");
+		info_serveursetting[serveurinfo][settingpmactive] = cache_get_field_content_int(serveurinfo,"pmactive");
+		info_serveursetting[serveurinfo][settingvilleactive] = cache_get_field_content_int(serveurinfo,"villeactive");
+		info_serveursetting[serveurinfo][settingnouveau] = cache_get_field_content_int(serveurinfo,"nouveau");
+		info_serveursetting[serveurinfo][settingpolice] = cache_get_field_content_int(serveurinfo,"police");
+		info_serveursetting[serveurinfo][settingswat] = cache_get_field_content_int(serveurinfo,"swat");
+		info_serveursetting[serveurinfo][settingwl] = cache_get_field_content_int(serveurinfo,"whiteliste");
+		info_serveursetting[serveurinfo][settingpos][0] = cache_get_field_content_int(serveurinfo,"spawnpos1");
+		info_serveursetting[serveurinfo][settingpos][1] = cache_get_field_content_int(serveurinfo,"spawnpos2");
+		info_serveursetting[serveurinfo][settingpos][2] = cache_get_field_content_int(serveurinfo,"spawnpos3");
 	}
 	cache_delete(result);
 }
-script serveursettinginfosave(serveurinfo1)
+script serveursettinginfosave(serveurinfo)
 {
 	new query[800];
 	mysql_format(g_iHandle, query, sizeof(query),"UPDATE serveursetting SET afkactive=%d, afktime=%d, braquagenpcactive=%d, braquagebanqueactive=%d, oocactive=%d, pmactive=%d, villeactive=%d, nouveau=%d, police=%d, swat=%d, whiteliste=%d, spawnpos1=%.4f,spawnpos2=%.4f,spawnpos3=%.4f WHERE id='1'",
-	info_serveursetting[serveurinfo1][settingafkactive],
-	info_serveursetting[serveurinfo1][settingafktime],
-	info_serveursetting[serveurinfo1][settingbraquagenpcactive],
-	info_serveursetting[serveurinfo1][settingbraquagebankactive],
-	info_serveursetting[serveurinfo1][settingoocactive],
-	info_serveursetting[serveurinfo1][settingpmactive],
-	info_serveursetting[serveurinfo1][settingvilleactive],
-    info_serveursetting[serveurinfo1][settingnouveau],
-    info_serveursetting[serveurinfo1][settingpolice],
-    info_serveursetting[serveurinfo1][settingswat],
-	info_serveursetting[serveurinfo1][settingwl],
-	info_serveursetting[serveurinfo1][settingpos][0],
-	info_serveursetting[serveurinfo1][settingpos][1],
-	info_serveursetting[serveurinfo1][settingpos][2]
+	info_serveursetting[serveurinfo][settingafkactive],
+	info_serveursetting[serveurinfo][settingafktime],
+	info_serveursetting[serveurinfo][settingbraquagenpcactive],
+	info_serveursetting[serveurinfo][settingbraquagebankactive],
+	info_serveursetting[serveurinfo][settingoocactive],
+	info_serveursetting[serveurinfo][settingpmactive],
+	info_serveursetting[serveurinfo][settingvilleactive],
+    info_serveursetting[serveurinfo][settingnouveau],
+    info_serveursetting[serveurinfo][settingpolice],
+    info_serveursetting[serveurinfo][settingswat],
+	info_serveursetting[serveurinfo][settingwl],
+	info_serveursetting[serveurinfo][settingpos][0],
+	info_serveursetting[serveurinfo][settingpos][1],
+	info_serveursetting[serveurinfo][settingpos][2]
 	);
     mysql_tquery(g_iHandle, query);
 }
@@ -15414,7 +16822,7 @@ script GameTimeTimer2()
 	}
 	RaceStarted = 1;
 	Prepared = 1;
-	SetTimer("HorseStartTimer", 180000,0);
+	SetTimer("HorseStartTimer", 900000,0);
 }
 script GameTimeTimeTimer2()
 {
@@ -15501,7 +16909,7 @@ script GameTimeTimeTimer2()
 			SendServerMessage(i,"1 heure avant la course! Vous pouvez pariez avec /parier sur votre cheval !");
 		}
 	}
-	SetTimer("GameTimeTimer2", 180000, 0);
+	SetTimer("GameTimeTimer2", 3600000, 0);
 }
 script HorseStartTimer()
 {
@@ -15799,6 +17207,11 @@ script OnPlayerShootDynamicObject(playerid, weaponid,objectid, Float:x, Float:y,
 //blackjack
 script blackjackstart1(playerid)
 {
+    new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
+    SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
+   	format(string, sizeof(string), "%d",sommetotal);
+    PlayerTextDrawSetString(playerid,BlackJackTD[8][playerid],string);
+    PlayerTextDrawShow(playerid,BlackJackTD[8][playerid]);
     switch (random(13))
 	{
 	    case 0:
@@ -15971,15 +17384,15 @@ script blackjackstart1(playerid)
 			PlayerTextDrawShow(playerid,BlackJackTD[1][playerid]);
 		}
 	}
+	return 1;
+}
+script blackjackstart2(playerid)
+{
     new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
     SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
    	format(string, sizeof(string), "%d",sommetotal);
     PlayerTextDrawSetString(playerid,BlackJackTD[8][playerid],string);
     PlayerTextDrawShow(playerid,BlackJackTD[8][playerid]);
-	return 1;
-}
-script blackjackstart2(playerid)
-{
     switch (random(13))
 	{
 	    case 0:
@@ -16152,11 +17565,6 @@ script blackjackstart2(playerid)
 			PlayerTextDrawShow(playerid,BlackJackTD[2][playerid]);
 		}
 	}
-    new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[8];
-    SendBlackJackMessage(playerid,"Votre somme est de %d",sommetotal);
-   	format(string, sizeof(string), "%d",sommetotal);
-    PlayerTextDrawSetString(playerid,BlackJackTD[8][playerid],string);
-    PlayerTextDrawShow(playerid,BlackJackTD[8][playerid]);
 	return 1;
 }
 script blackjackstart3(playerid)
@@ -16754,7 +18162,7 @@ script blackjackcroupier(playerid)
   			new sommetotal = BlackJack[playerid][somme1] + BlackJack[playerid][somme2] + BlackJack[playerid][somme3] + BlackJack[playerid][somme4] + BlackJack[playerid][somme5],string[4],count;
     		SendBlackJackMessage(playerid,"Votre somme est de %d et le croupier est de %d",sommetotal,blackjackcroupierpoint2);
     		format(string, sizeof(string), "%d",blackjackcroupierpoint2);
-    		if((sommetotal > blackjackcroupierpoint2) && blackjackcroupierpoint != 21)
+    		if((sommetotal > blackjackcroupierpoint2) && blackjackcroupierpoint == 21)
     		{
     		    SendBlackJackMessage(playerid,"Vous avez gagner votre main contre le croupier.");
     		    PlayerTextDrawSetString(playerid,BlackJackTD[18][playerid],string);
@@ -16890,14 +18298,16 @@ script LoadBankers()
 		    BankerData[id][bankerY] = cache_get_field_content_float(i, "PosY");
 		    BankerData[id][bankerZ] = cache_get_field_content_float(i, "PosZ");
 		    BankerData[id][bankerA] = cache_get_field_content_float(i, "PosA");
-            BankerData[id][bankerVW] = cache_get_field_content_int(i, "VW");
+
 		    BankerData[id][bankerActorID] = CreateActor(BankerData[id][Skin], BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], BankerData[id][bankerA]);
-		    SetActorVirtualWorld(BankerData[id][bankerActorID],BankerData[id][bankerVW]);
 		    if(!IsValidActor(BankerData[id][bankerActorID])) {
 				printf("  [Bank System] Couldn't create an actor for banker ID %d.", id);
 			}else{
 			    SetActorInvulnerable(BankerData[id][bankerActorID], true); // people may use a version where actors aren't invulnerable by default
 			}
+			#if defined BANKER_USE_MAPICON
+			BankerData[id][bankerIconID] = CreateDynamicMapIcon(BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ], 58, 0, .streamdistance = BANKER_ICON_RANGE);
+			#endif
 			format(label_string, sizeof(label_string), "Banker (%d)\n\n{FFFFFF}Utiliser {F1C40F}/banque!", id);
 			BankerData[id][bankerLabel] = CreateDynamic3DTextLabel(label_string, 0x1ABC9CFF, BankerData[id][bankerX], BankerData[id][bankerY], BankerData[id][bankerZ] + 0.25,5.0,INVALID_PLAYER_ID, INVALID_VEHICLE_ID,0,-1,-1);
 			Iter_Add(Bankers, id);
@@ -17105,18 +18515,6 @@ script SpeedCheck(playerid)
 	    else if(GetPlayerSpeed(playerid) < GEAR5_SPEED ) PlayerTextDrawSetString(playerid,Gear[playerid], "~r~5");
  	}
 	return 1;
-}
-script CreateBlood(objectid, alpha)
-{
-    alpha -= 5;
-
-    if(alpha) {
-        SetDynamicObjectMaterial(objectid, 0, -1, "none", "none", 0xFF0000 | (alpha << 24));
-        SetTimerEx("CreateBlood", 50, false, "ii", objectid, alpha);
-    }
-    else {
-        DestroyDynamicObject(objectid);
-    }
 }
 script SendAdminAlert(color, const str[], {Float,_}:...)
 {

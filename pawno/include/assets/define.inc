@@ -1,15 +1,15 @@
 #pragma dynamic 																400000
 
-#define SQL_HOSTNAME 															""
-#define SQL_USERNAME 															""
-#define SQL_DATABASE 															""
+#define SQL_HOSTNAME 															"localhost"
+#define SQL_USERNAME 															"root"
+#define SQL_DATABASE 															"role"
 #define SQL_PASSWORD															""
 
 //Information serveur
-#define SERVER_NAME 	 														"" //pour le nom du serveur
-#define SERVER_URL 		 														""
-#define SERVER_REVISION  														""
-#define LANGUAGE																""
+#define SERVER_NAME 	 														"[4.2]Vice Roleplay[UGMP]" //pour le nom du serveur
+#define SERVER_URL 		 														"A venir"
+#define SERVER_REVISION  														"0.0.1"
+#define LANGUAGE																"French"
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
 //Couleur
@@ -217,15 +217,16 @@
 #define     ATM_REGEN               (6000)       // a robbed atm will start working after x seconds (Default: 120)
 //discord chat A CHANGER POUR LES BONNE VALEUR
 #define DISCORD_PREFIX "!!"                  // your prefix to use command
-#define Dadmin1 ""
-#define Dadmin2 ""              
-#define Dadmin3 ""                  
-#define Dadmin4 ""                  
-#define Dverifier ""                  
-#define Ddiscord ""                  
-#define Dchat "" //pour joueur
-#define Achat "" //pour admin
-#define ooc ""
+#define Dadmin1 "1172862179708514315"
+#define Dadmin2 "1172862178760605837"              
+#define Dadmin3 "1226257887794430113"                  
+#define Dadmin4 "1172862175270936626"                  
+#define Dverifier "1224414083185377300"                  
+#define Ddiscord "1078366045586337793"         
+#define Dchat "1269057437483139194" //pour joueur
+#define Achat "1269030187350102086" //pour admin
+#define ooc "1269057437483139194"
+#define spamadmin "1269031424137363487"
 //gear
 #define GEAR1_SPEED 20
 #define GEAR2_SPEED 40

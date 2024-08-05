@@ -124,7 +124,7 @@ DISCORD:jail( DCC_Channel: channel, DCC_User: author, params[ ] )
 	{
 		DCC_TriggerBotTypingIndicator(discordaaa);
 		if (sscanf(params, "uds[128]", userid, minutes, reason))
-			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** ?jail [playerid/name] [minutes] [raison]");
+			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** !jail [playerid/name] [minutes] [raison]");
 		if (userid == INVALID_PLAYER_ID)
 			return DCC_SendChannelMessage(discordaaa,"Vous avez mis un [id/nom] invalide.");
 		if (minutes < 1)
@@ -164,7 +164,7 @@ DISCORD:dejail( DCC_Channel: channel, DCC_User: author, params[ ] )
 	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
 	{
 		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** ?dejail [playerid/nom]");
+			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** !dejail [playerid/nom]");
 		if (userid == INVALID_PLAYER_ID)
 			return DCC_SendChannelMessage(discordaaa,"Vous avez mis un [id/nom] invalide.");
 		if (!PlayerData[userid][pJailTime])
@@ -180,118 +180,6 @@ DISCORD:dejail( DCC_Channel: channel, DCC_User: author, params[ ] )
 	}
 	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 	return 1;
-}
-DISCORD:apps( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-	static userid,string1[128],string2[1280],string22[1280];
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?apps [playerid/name]");
-		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
-		DCC_TriggerBotTypingIndicator(discordaaa);
-		format(string1, sizeof(string1), "**Joueur IG %s (ID: %d)**", ReturnName(userid), userid);
-		format(string2, sizeof(string2), "**Qu elle sont vos projets une fois en ville?**\n Reponse: %s\n**Qu est ce que le metagame?**\n Reponse: %s\n**Qu est ce que le powergame?**\n Reponse: %s\n**Qu est ce que le Roleplay?**\n Reponse: %s",tuto1,tuto2,tuto3,tuto4);
-		Embed = DCC_CreateEmbed(string1,"----------------------Reponse de la personne------------------");
-		utf8encode(string22,string2,sizeof(string22));
-		DCC_AddEmbedField(Embed ,"",string22);
-		DCC_SetEmbedColor(Embed,0x00FF00);
-		DCC_SendChannelEmbedMessage(discordaaa, Embed);
-		DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?apps[a/r] accepter ou refuser");
-	}
-	return 1;	
-}
-DISCORD:appsa( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-	static userid;
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsa [playerid/name]");
-		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");	
-		SendServerMessage(userid,"Votre demande viens d'être accepté par un admin sur discord.");
-		TogglePlayerControllable(userid, 1);
-		PlayerData[userid][pTutorialStage] = 6;
-		PlayerData[userid][pNoob] = 2;
-		tuto1 = "\0";
-		tuto2 = "\0";
-		tuto3 = "\0";
-		tuto4 = "\0";
-	}
-	return 1;
-}
-DISCORD:appsr( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-	static userid;
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?appsr [playerid/name]");
-		if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
-		SendServerMessage(userid,"Votre demande viens d'être refusé par un admin sur discord.");
-		PlayerData[userid][pNoob] = 1;
-		tuto1 = "\0";
-		tuto2 = "\0";
-		tuto3 = "\0";
-		tuto4 = "\0";
-		KickEx(userid);
-	}
-	return 1;
-}
-DISCORD:voir( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-	static target;
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
-    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
-	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
-	{
-		if (sscanf(params, "u", target))
-			return DCC_SendChannelMessage(discordaaa, "**[USAGE]** ?voir [playerid/name]");
-		if (target == INVALID_PLAYER_ID)
-			return DCC_SendChannelMessage(discordaaa,"Vous avez mis un [id/nom] invalide.");
-		DCC_TriggerBotTypingIndicator(discordaaa);
-        new name[MAX_PLAYER_NAME], skin_image[200], Float:health, Float:armour, weapon_name1[30], str[50];
-        GetPlayerName(target, name, MAX_PLAYER_NAME);
-        GetPlayerHealth(target, health);
-        GetPlayerArmour(target, armour);
-        GetWeaponName(GetPlayerWeapon(target), weapon_name1, 30);
-        if(!strlen(weapon_name1))
-        {
-			format(weapon_name1, sizeof weapon_name1, "Poing");
-        }
-        format(skin_image, sizeof skin_image, "https://gtaundergroundmod.com/resources/media/skins/%d.png", GetPlayerSkin(target));
-        
-        new DCC_Embed:embed = DCC_CreateEmbed();
-        format(str, sizeof str, "%s's stats.", name);
-        DCC_SetEmbedTitle(embed, str);
-        DCC_SetEmbedThumbnail(embed, skin_image);
-        
-        format(str, sizeof str, "%0.1f", health);
-        DCC_AddEmbedField(embed, "Vie", str, true);
-        
-        format(str, sizeof str, "%0.1f", armour);
-        DCC_AddEmbedField(embed, "Armure", str, true);
-
-        DCC_AddEmbedField(embed, "Arme", weapon_name1, true);
-		DCC_AddEmbedField(embed, "", "👢 = kick \n🔨 = Ban \n❄️ = debug\n🌪 = respawn", true);
-
-		DCC_SendChannelEmbedMessage(discordaaa, embed, "", "OnPostPlayerStat", "i", target);
-	}
-	return 1;	
 }	
 DISCORD:stats( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
@@ -300,7 +188,7 @@ DISCORD:stats( DCC_Channel: channel, DCC_User: author, params[ ] )
 	if (simembreroleok)
 	{
 		if (sscanf(params, "u", userid))
-			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** ?stats [playerid/nom]");
+			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** !stats [playerid/nom]");
 		DCC_TriggerBotTypingIndicator(discordaaa);
 		ShowStatsForDiscord(userid);
 	}
@@ -316,7 +204,7 @@ DISCORD:ostats( DCC_Channel: channel, DCC_User: author, params[ ] )
 	if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
 	{
 		if ( isnull( params ) || strlen( params ) > 24 ) 
-			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** ?ostats [nom]");
+			return DCC_SendChannelMessage(discordaaa,"> **[USAGE]** !ostats [nom]");
 		static query[1024];
 		DCC_TriggerBotTypingIndicator(discordaaa);
 		format(query, sizeof(query), "SELECT * FROM `characters` WHERE `Character` = '%s'", SQL_ReturnEscaped(params));
@@ -333,7 +221,7 @@ DISCORD:baninfo( DCC_Channel: channel, DCC_User: author, params[ ] )
 	if (sistaff3ok || sistaff4ok)
 	{
 		DCC_TriggerBotTypingIndicator(discordlog);
-		if (isnull(params) || strlen(params) > 24) DCC_SendChannelMessage( discordlog, "> **[USAGE]** ?baninfo [nom de l'utilisateur]");
+		if (isnull(params) || strlen(params) > 24) DCC_SendChannelMessage( discordlog, "> **[USAGE]** !baninfo [nom de l'utilisateur]");
 		else
 		{
 			format(string, sizeof(string), "SELECT * FROM `blacklist` WHERE `Username` = '%s'", SQL_ReturnEscaped(params));
@@ -393,7 +281,7 @@ DISCORD:supprimer( DCC_Channel: channel, DCC_User: author, params[ ] )
 	    if (sscanf(params, "s[24]", type))
 		{
 			DCC_TriggerBotTypingIndicator(discordaaa);
-		    DCC_SendChannelMessage( discordaaa,"> **[USAGE]** ?supprimner [type]");
+		    DCC_SendChannelMessage( discordaaa,"> **[USAGE]** !supprimner [type]");
 			DCC_SendChannelMessage( discordaaa, "> [Type]:perso, compte");
 			return 1;
 	    }
@@ -401,7 +289,7 @@ DISCORD:supprimer( DCC_Channel: channel, DCC_User: author, params[ ] )
 		{
 			DCC_TriggerBotTypingIndicator(discordaaa);
 			if (isnull(params) || strlen(params) > 24)
-				return DCC_SendChannelMessage( discordaaa,"> **[USAGE]** ?supprimer perso [nom du perso]");
+				return DCC_SendChannelMessage( discordaaa,"> **[USAGE]** !supprimer perso [nom du perso]");
 			if (!IsValidPlayerName(params))
 				return DCC_SendChannelMessage( discordaaa,"Vous avez specifier un nom de format invalide.");
 			format(query, sizeof(query), "SELECT `ID`, `Admin` FROM `characters` WHERE `Character` = '%s'", SQL_ReturnEscaped(params));
@@ -479,19 +367,6 @@ DISCORD:abus( DCC_Channel: channel, DCC_User: author, params[ ] )
 	}
 	return 1;
 }
-DISCORD:aide( DCC_Channel: channel, DCC_User: author, params[ ] )
-{
-	DCC_HasGuildMemberRole(GUILD_ID1,author,RoleJoueur,simembreroleok);
-	if (simembreroleok)
-	{
-		new DCC_Embed:embed = DCC_CreateEmbed();
-		DCC_SetEmbedTitle(embed, "Commandes d'aide");
-		DCC_SetEmbedColor(Embed,0x00FF00);
-		DCC_AddEmbedField(embed, "", "🇨 = Aide Chat \n🇲 = Aide Maison \n🇬 = Aide General\n🇩 = Aide Divers\n🇻 = Aide Vehicule\n🇧 Aide Biz\n🧩 = Aide Discord", true);
-		DCC_SendChannelEmbedMessage(discordlog, embed, "", "OnPostAide");
-	}
-	else DCC_SendChannelMessage( discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
-}
 script OnViewDeath(extraid[])
 {
 	new string[250],desc[25],rows,fields,desc1[50],string1[250];
@@ -533,7 +408,7 @@ ShowStatsForDiscord(userid)
 }
 /*script DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)
 {
-	DCC_SendChannelMessage(discordlog,"**[Nouveau sur discord]** ?aide pour la liste des commandes, pour te faire verifier et avoir acces il faut t'inscrire IG.");
+	DCC_SendChannelMessage(discordlog,"**[Nouveau sur discord]** !aide pour la liste des commandes, pour te faire verifier et avoir acces il faut t'inscrire IG.");
 	return 1;
 }*/
 script OnPlayerDiscordStats( playerid, params[ ] )
@@ -618,10 +493,8 @@ public DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Em
 
     if(reaction_type == REACTION_ADD)
     {
-        if(!DCC_IsUserBot(reaction_user, bot))
-            return 1;
-        if(bot)
-            return 1;
+        if(!DCC_IsUserBot(reaction_user, bot)) return 1;
+        if(bot) return 1;
 
         if(StatMessage == message && _:StatMessage != 0)
         {
@@ -645,7 +518,7 @@ public DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Em
 					utf8encode(str1,str,sizeof(str1));
 					DCC_SetEmbedDescription(embed, str1);
 					SendErrorMessage(StatTarget,"Tu as été kick via le discord");
-					Kick(StatTarget);
+					KickEx(StatTarget);
 					DCC_EditMessage(message, "", embed);
 					DCC_DeleteMessageReaction(message);
 					DeleteSavedStatMessage();
@@ -839,6 +712,48 @@ public DCC_OnMessageReaction(DCC_Message:message, DCC_User:reaction_user, DCC_Em
 				else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji!");
 				return 1;
 			}
+			else if(!strcmp("✅", emoji_name))
+			{
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff1,sistaff1ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff2,sistaff2ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff3,sistaff3ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff4,sistaff4ok);
+				if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+				{
+					if(PlayerData[StatTarget][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");	
+					SendServerMessage(StatTarget,"Votre demande viens d'être accepté par un admin sur discord.");
+					TogglePlayerControllable(StatTarget, 1);
+					PlayerData[StatTarget][pTutorialStage] = 6;
+					PlayerData[StatTarget][pNoob] = 2;
+					SetPlayerCheckpoint(StatTarget, -228.8403, 1401.1831, 27.7656, 2.0);
+					tuto1 = "\0";
+					tuto2 = "\0";
+					tuto3 = "\0";
+					tuto4 = "\0";
+				}
+				else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji!");
+				return 1;
+			}
+			else if(!strcmp("❎", emoji_name))
+			{
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff1,sistaff1ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff2,sistaff2ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff3,sistaff3ok);
+				DCC_HasGuildMemberRole(GUILD_ID1,reaction_user,RoleStaff4,sistaff4ok);
+				if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+				{
+					if(PlayerData[StatTarget][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
+					SendServerMessage(StatTarget,"Votre demande viens d'être refusé par un admin sur discord.");
+					PlayerData[StatTarget][pNoob] = 1;
+					tuto1 = "\0";
+					tuto2 = "\0";
+					tuto3 = "\0";
+					tuto4 = "\0";
+					KickEx(StatTarget);
+				}
+				else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit d'utiliser cette emoji!");
+				return 1;
+			}
             else
             {
                 DCC_DeleteEmbed(embed);
@@ -885,7 +800,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
 			if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
 			{
-				SendErrorEmbedMessage(discordaaa, "**[USAGE]** ?voir [PLAYER_ID/NOM]");
+				SendErrorEmbedMessage(discordaaa, "**[USAGE]** !voir [PLAYER_ID/NOM]");
 			}
 			else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit d'utiliser cette commande");
 			return 1;
@@ -930,6 +845,46 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		DCC_AddEmbedField(embed, "", "👢 = kick \n🔨 = Ban \n❄️ = debug\n🌪 = respawn", true);
 
 		DCC_SendChannelEmbedMessage(discordaaa, embed, "", "OnPostPlayerStat", "i", target);
+		return 1;
+	}
+    else if(!strcmp(command_name, "!aide", true))
+    {
+		DCC_HasGuildMemberRole(GUILD_ID1,author,RoleJoueur,simembreroleok);
+		if (simembreroleok)
+		{
+			new DCC_Embed:embed = DCC_CreateEmbed();
+			DCC_SetEmbedTitle(embed, "Commandes d'aide");
+			DCC_SetEmbedColor(Embed,0x00FF00);
+			DCC_AddEmbedField(embed, "", "🇨 = Aide Chat \n🇲 = Aide Maison \n🇬 = Aide General\n🇩 = Aide Divers\n🇻 = Aide Vehicule\n🇧 Aide Biz\n🧩 = Aide Discord", true);
+
+			DCC_SendChannelEmbedMessage(discordlog, embed, "", "OnPostAide");
+		}
+		else DCC_SendChannelMessage( discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
+		return 1;
+	}
+	else if(!strcmp(command_name, "!apps", true))
+	{
+		static userid,string1[128],string2[1280],string22[1280];
+		DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff1,sistaff1ok);
+		DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff2,sistaff2ok);
+		DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff3,sistaff3ok);
+		DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
+		if (sistaff1ok || sistaff2ok || sistaff3ok || sistaff4ok)
+		{
+			if (sscanf(params, "u", userid))
+				return DCC_SendChannelMessage(discordaaa, "**[USAGE]** !apps [playerid/name]");
+			if(PlayerData[userid][pTutorialStage] != 5) return DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Se joueur n'est pas dans le tutoriel");
+			DCC_TriggerBotTypingIndicator(discordaaa);
+			format(string1, sizeof(string1), "**Joueur IG %s (ID: %d)**", ReturnName(userid), userid);
+			format(string2, sizeof(string2), "**Qu elle sont vos projets une fois en ville?**\n Reponse: %s\n**Qu est ce que le metagame?**\n Reponse: %s\n**Qu est ce que le powergame?**\n Reponse: %s\n**Qu est ce que le Roleplay?**\n Reponse: %s",tuto1,tuto2,tuto3,tuto4);
+			Embed = DCC_CreateEmbed(string1,"----------------------Reponse de la personne------------------");
+			utf8encode(string22,string2,sizeof(string22));
+			DCC_AddEmbedField(Embed ,"",string22);
+			DCC_SetEmbedColor(Embed,0x00FF00);
+			DCC_SendChannelEmbedMessage(discordaaa, Embed, "", "OnPostJoueurApp", "i", userid);
+		}
+		else DCC_SendChannelMessage( discordaaa, "> **[ERREUR]** Ta pas le droit de faire cette commande");
+		return 1;
 	}
     return 1;
 }
@@ -965,7 +920,7 @@ script OnPostAide()
 	DCC_CreateReaction(message, DCC_CreateEmoji("🧩"));  	
 	DCC_SetMessagePersistent(message, true);
 }
-script OnPostJoueurApp()
+script OnPostJoueurApp(playerid)
 {
 	new DCC_Message:message = DCC_GetCreatedMessage();
     if(StatMessage != DCC_Message:0 )
@@ -973,6 +928,7 @@ script OnPostJoueurApp()
         DCC_DeleteInternalMessage(StatMessage);
     }
 	StatMessage = message;
+	StatTarget = playerid;
     DCC_CreateReaction(message, DCC_CreateEmoji("✅"));
     DCC_CreateReaction(message, DCC_CreateEmoji("❎"));
 	DCC_SetMessagePersistent(message, true);

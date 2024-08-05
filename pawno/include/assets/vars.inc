@@ -1,5 +1,6 @@
-new TruckingCheck[MAX_PLAYERS],Text3D:vehicle3Dtext[MAX_VEHICLES],vehiclecallsign[MAX_VEHICLES];
-new serveurinfo; //ajoute global
+new TruckingCheck[MAX_PLAYERS];
+new Text3D:vehicle3Dtext[MAX_VEHICLES];
+new vehiclecallsign[MAX_VEHICLES];
 enum playerData {
 	pID,
 	pAccount,
@@ -477,8 +478,7 @@ enum carData {
 	carfuel,
 	Float:carvie,
 	boitier,
-	carblinder,
-	carObject
+	carblinder
 };
 enum carStorage {
 	cItemID,
@@ -825,6 +825,7 @@ enum coreVehicles {
 	vehRepairing,
 	vehSirenOn,
 	vehSirenObject,
+	vehRadio,
 	vehURL[128 char],
 	Float:vehLoadHealth,
  	Float:vehLoadPos[3]
@@ -871,9 +872,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"Burger cuit", 2703},
 	{"Pizza cuite", 2702},
 	{"permis de conduire", 1581},
-	{"Permis de chasse",19792},
-	{"Permis de peche",19792},
-	{"Permis d'arme", 19792},
+	{"License arme", 19792},
 	{"Telephone", 330}, 
 	{"Systeme GPS", 18875},
 	{"Bombe de peinture", 365},
@@ -908,14 +907,8 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"Clef de maison",11746},
 	{"Clef de vehicule",11746},
 	{"Clef de magasin",11746},
-	{"poisson jaune",1599},
-	{"truite",19630},
-	{"poisson arc-en-ciel",1604},
-	{"poisson jaune-bleu",1600},
-	{"etoile de mer",902},
-	{"meduse",1603},
+	{"poisson",19630},
 	{"canne a peche",18632},
-	{"appat",19566},
 	{"jambon cuit",19847},
 	{"kebab",2769},
 	{"hot-dog",19346},
@@ -933,6 +926,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"argent sale",1212},
 	{"gold bar",19941},
 	{"roche",905},
+	{"Permis de chasse",19792},
 	{"cafe",19835},
 	{"douille de shotgun",2038},
 	{"sandwich au poulet",2880},
@@ -1007,7 +1001,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"carrosserie",3117},
 	{"jeton poker",1924},
 	{"paquet de bandage",11748},
-	{"bandage",11747},
+	{"bandage",11747}/*,
 	//arme de UG
 	{"sab_ak47",29000},
 	{"sab_glock",29001},
@@ -1132,7 +1126,7 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"cm_deagle",29251},
 	{"cm_glock",29254},
 	{"cm_ingram",29256},
-	{"cm_m4",29257},
+	{"cm_m4 ",29257},
 	{"cm_revolver",29261},
 	{"cm_shotgspa",29264},
 	{"cm_shotgun",29265},
@@ -1177,43 +1171,39 @@ new const g_aInventoryItems[][e_InventoryItems] = {
 	{"ug_sturmgewehr",29326},
 	{"ug_sword",29327},
 	{"ug_tennisracket",29328},
-	{"ug_volcanic",29329}
+	{"ug_volcanic",29329}*/
 };
-new const Float:arrHospitalDeliver[9][3] = {
+new const Float:arrHospitalDeliver[6][3] = {
     {-2692.6580, 635.4608, 14.4531},
     {-334.9757, 1063.0171, 19.7392},
 	{1579.9666, 1767.1462, 10.8203},
 	{1177.8599, -1308.3982, 13.8301},
 	{2024.4246, -1404.1580, 17.2020},
-	{1243.9304, 331.4186, 19.5547},
-	//lc
-	{7001.2632,8169.2373,58.6934},
-	{8433.9756,8228.7197,16.1761},
-	{9397.5859,7720.9414,21.5628}
+	{1243.9304, 331.4186, 19.5547}
 };
 
-new const Float:arrHospitalSpawns[9][4] = {
+new const Float:arrHospitalSpawns[6][4] = {
 	{-2655.1240, 638.6232, 14.4531, 180.0000},
 	{-318.8799, 1049.2433, 20.3403, 0.0000},
 	{1607.4869, 1816.0693, 10.8203, 0.0000},
 	{1172.8372, -1325.3186, 15.4000, 270.0000},
 	{2034.0670, -1402.6815, 17.2938, 180.0000},
-	{1241.6802, 326.4038, 19.7555, 335.0000},
-	//lc
-	{7002.2642,8110.5352,59.0038,108.3348},
-	{8461.3281,8267.2656,16.1761,171.1504},
-	{9399.0518,7664.5010,14.9673,101.7347}
+	{1241.6802, 326.4038, 19.7555, 335.0000}
 };
 new const g_aWeaponSlots[] = {
-	0,0,1,1,1,1,1,1,1,1,10,10,10,10,10,10,8,8,8,0,0,8,2,2,2,3,3,3,4,4,5,5,4,6,6,7,7,7,7,8,8,9,9,9,11,11,11,
-	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	0,5,9,2,1,11,6,1,1,9,1,1,5,1,2,7,8,7,5,8,8,3,6,4,0,3,1,3,1,2,7,1,8,1,4,1,1,6,5,7,1,7,8,8,4,1,2,7,5,1,3,6, 	 
-	8,4,4,5,2,0,4,4,2,2,5,0,5,1,0,3,9,10,1,1,3,1,7,2,8,1,1,4,1,1,6,5,6,7,1,7,8,8,4,1,2,7,3,8,4,4,5,1,2,11,0,3, 	 
-	1,9,10,1,3,2,7,1,1,8,1,4,1,0,5,0,6,7,7,1,7,8,4,4,3,6,8,4,5,2,3,4,1,5,6,1,2,1,2,2,5,1,1,5,5,5,1,5,1,4,1,2,2,
-	6,6,6,6,1,2,4,4,4,2,4,0,1,1,1,3,2,6,5,1,6,4,2,3,4,8,1,4,1,4,1,3,4,1,3,1,1,5,3,1,1,6,1,1,10,1,1,9,1,1,1,1, 	
-	1,1,1,1,1,1,9,1,1,1,1,1,1,1,1,1,2,2,1,1,4,1,5,1,1,2,1,6,2,1,3,3,1,1,6,6,1,1,1,1,10,1,1,2,1,1,2,1,4,5,1,1, 	
-	1,1,2,1,3,3,1,1,1,1,2,1,1,1,6,10,9,2,1,1,1,1,1,1,1,1,1,6,1,0,0,0,0,1,10,2,5,5,1,0,0,2,6,4,1,0,7,0,7,4,1,0,
-	7,2,2,2,0,6,4,1,1,2, 	 
+	0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 8, 8, 8, 0, 0, 0, 2, 2,
+	2, 3, 3,3, 4, 4, 5, 5, 4, 6, 6, 7, 7, 7, 7, 8, 12, 9, 9, 9, 11, 11, 11,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	5,9,2,1,11,6,1,1,9,1,1,5,1,2,7,8,7,5,8,8,3,6,4,0,3,1,3,1,2,7,1,8,1,4,1,1,
+	6,5,7,1,7,8,8,4,1,2,7,5,1,3,6,8,4,4,5,2,4,4,2,2,5,0,5,1,0,3,9,10,1,1,3,1,7,
+	2,8,1,1,4,1,1,6,5,6,7,1,7,8,8,4,1,2,2,7,3,8,4,4,5,1,2,11,0,3,1,9,10,1,3,2,
+	2,7,1,1,8,1,4,1,0,5,6,7,7,1,7,8,4,4,3,3,6,8,4,5,2,3,4,1,5,6,1,2,1,2,2,5,1,
+	1,5,5,5,1,5,1,4,1,2,2,6,6,6,6,1,2,4,4,4,2,4,0,1,1,1,3,2,6,5,1,6,4,2,3,4,8,
+	1,4,1,4,1,3,4,1,3,1,1,5,3,1,1,6,1,1,10,1,1,9,1,1,1,1,1,1,1,1,1,1,9,1,1,1,1,
+	1,1,1,1,1,2,2,1,1,4,1,5,1,1,2,1,6,2,1,3,3,1,1,6,6,1,1,1,1,10,1,1,2,1,1,2,1,
+	4,5,1,1,1,1,2,1,3,3,1,1,1,1,2,1,1,1,6,10,9,2,1,1,1,1,1,1,1,1,1,6,1,0,0,0,0,
+	1,10,2,5,5,1,0,0,2,6,4,1,7,0,7,4,1,0,7,2,2,2,0,6,4,1,1,2	
 };
 
 new const g_aPreloadLibs[][] =
@@ -1277,27 +1267,23 @@ Job_GetName(type)
 	}
 	return str;
 }
-new const Float:arrHouseInteriors[20][houseInteriors] = {
-	{10, 2269.8772, -1210.3240, 1047.5625, 90.0000},
-    {2, 2468.2576, -1698.2361, 1013.5078, 90.0000},
-	{3, 2495.8711, -1693.0996, 1014.7422, 180.0000},
-	{5, 2233.7888, -1114.2689, 1050.8828, 0.0000},
-	{9, 2317.8015, -1026.2113, 1050.2178, 0.0000},
-	{3, 235.2923, 1187.3684, 1080.2578, 0.0000},
-	{2, 226.2912, 1240.0554, 1082.1406, 90.0000},
-	{1, 223.1618, 1287.5175, 1082.1406, 0.0000},
-	{5, 226.9281, 1114.2813, 1080.9962, 270.0000},
-	{15, 295.1485, 1473.1080, 1080.2578, 0.0000},
-	{10, 23.9584, 1340.6075, 1084.3750, 0.0000},
-	{4, 222.0425, 1140.7565, 1082.6094, 0.0000},
-	{12, 2324.4209, -1148.9365, 1050.7101, 0.0000},
-	{4, -261.1430, 1456.6396, 1084.3672, 90.0000},
-	{5, 22.9676, 1403.8368, 1084.4297, 0.0000},
-	{5, 140.3088, 1366.8196, 1083.8594, 0.0000},
-	{6, 234.3149, 1064.2772, 1084.2114, 0.0000},
-	{7, 225.7000, 1022.0012, 1084.0161, 0.0000},
-	{5, 1298.9750, -796.4567, 1084.0078, 0.0000},
-	{15, -283.8687, 1471.1174, 1084.3750, 90.0000}
+new const Float:arrHouseInteriors[16][houseInteriors] = {
+	{12,-17.7247,1493.8525,994.3759,0.0},	
+	{10,1364.9424,-807.2983,1090.8774,0.0},
+	{3,321.1324,1933.6772,900.9559,0.0},	
+	{4,1901.4923,-1853.2520,1501.5160,0.0},
+	{1,2478.8179,-1675.4286,599.3259,0.0},
+	{3,324.4288,-1579.0096,1010.1469,0.0},
+	{7,41.1230, -61.8689, 1107.7460,0.0},
+	{13,1958.5941, -289.7225, 4846.3477,0.0},
+	{16,1497.8046, -1721.1125, 1361.9089,0.0},
+	{10,-35.6880, -98.1513, 1078.0999,0.0},
+	{6,2448.8196, -1763.2864, 977.0966,0.0},
+	{1,-2294.8784, 364.7219, -86.4309,0.0},
+	{1,-317.7882, 837.7614, 601.3861,0.0},
+	{1,2511.8999, -1729.8052, 778.1525,0.0},
+	{5,248.0204, -1848.2983, 3332.9683,0.0},
+	{1,2334.9458, -1047.7510,1043.7659,0.0}
 };
 
 new const Float:arrBoothPositions[MAX_BOOTHS][3] = {
@@ -2798,11 +2784,22 @@ new const g_arrInteriorData[][e_InteriorData] = {
 	{"Ammunation Custom", 10,-317.4820, 1477.0231, 1084.5541},
 	{"Gym + Autre", 5,441.0187, 129.5129, 1008.2059},
 	{"City Hall", 15,292.2256, 1876.7339, 907.3895},
+	{"Petit appartement luxe", 12,-17.7247,1493.8525,994.3759},	
+	{"Petit studio", 10,1364.9424,-807.2983,1090.8774},
+	{"Petit studio x2", 3,321.1324,1933.6772,900.9559},	
+	{"Appartement", 4,1901.4923,-1853.2520,1501.5160},
+	{"Appartement x2", 1,2478.8179,-1675.4286,599.3259},
+	{"Appartement x3 grand", 3,324.4288,-1579.0096,1010.1469},
+	{"Appartement Brun", 7,41.123001098633, -61.868999481201, 1107.7460205078},
+	{"Appartement Gris", 13,1958.5941, -289.7225, 4846.3477},
 	{"Warehouse", 19,1620.6233, -3557.1165, 1394.0111},
+	{"Maison", 16,1497.8046, -1721.1125, 1361.9089},
 	{"Auto École", 13,-404.5512, -109.4231, 1278.4432},
+	{"Maison 2", 10,-35.6880, -98.1513, 1078.0999},
 	{"Église", 1,-1991.9131, 1118.6000, 457.4883},
 	{"Auto École 2", 3,862.9678, 4584.6729, 362.9966},
 	{"City Hall 2", 0,1467.4575,-1726.5452,1052.5127},
+	{"Maison 3", 6,2448.8196, -1763.2864, -77.0966},
 	{"HLM étage 1", 6,1394.8495, -1586.3341, 1087.7266},
 	{"HLM étage 2", 7,1348.3359, -1587.1244, 1097.6431},
 	{"Boucherie", 1,963.9811, 2107.9419, 1011.4445},
@@ -2817,11 +2814,16 @@ new const g_arrInteriorData[][e_InteriorData] = {
 	{"Casino2",3,-251.9572, -21.1579, 1004.6884},
 	{"Mairie2",10,-1821.6859,43.7851,1445.9305},
 	{"Taxi", 1,-1971.7341, -897.5184, 758.2221},
+	{"maison 3 pieces", 1,-317.7882, 837.7614, 601.3861},
 	{"Caravan FIX", 1,2511.8999, -1729.8052, 778.1525},
+	{"Maison modern",5,248.0204, -1848.2983, 3332.9683},
+	{"Mairie cool",1,-501.2894, 286.9146, 2000.7405},
 	{"Trailer park boys",1,2334.9458, -1047.7510,1043.7659},
 	{"Pompier",1,361.2743, 878.6762, 1033.5049},
 	{"Bureau Moderne",5,1543.1100,-1355.8649,226.4853},
 	{"WareHouse",10,1471.0497, -520.2286, 992.0684},
+	{"Appartement Gros Luxe",12,1518.0410,-1099.2505,129.5806},
+	{"Entrainement Swat",10,1019.8245,1246.5947,1799.4005},
 	{"Entrainement Swat",10,1019.8245,1246.5947,1799.4005},
 	{"Ammu-Nation LC",15,8603.34,7541.65,1025.95},
 	{"Apartment 3C",11,7526.9,-8827.15,1008.00},
@@ -2829,7 +2831,7 @@ new const g_arrInteriorData[][e_InteriorData] = {
 	{"Boxing interior",27,7519.29,14632.2,1299.05},
 	{"Boys dorm",5,7747.73,14561.2,1032.42},
 	{"Bullworth Academy",32,7621.53,13926.9,1001.00},
-	{"Café Robina",7,6330.19,-8111.4,1006.79 },
+	{"Caf? Robina",7,6330.19,-8111.4,1006.79 },
 	{"Chemical power plant",40,7496.02,14344.7,1131.86},
 	{"Claudes Portland hideout",1,894.148,-307.21,1008.69},
 	{"Concert hall",8,6556.27,-6415.6,1006.06},
@@ -2867,7 +2869,7 @@ new const g_arrInteriorData[][e_InteriorData] = {
 	{"Print Works",18,6433.02,-7782.69,1007.05},
 	{"Recording studio",9,6632.63,-6347.55,1009.72},
 	{"School Library Interior",9,7466.71,14452.7,1091.14},
-	{"Tarbrush Café",6,7966.65,-6493.18,1014.13},
+	{"Tarbrush Caf?",6,7966.65,-6493.18,1014.13},
 	{"Toni's Shoreside Vale safehouse",7,7419.91,8538.39,1043.57},
 	{"Tonis Staunton hideout",7,287.461,-429.894,1023.89},
 	{"Trailer",14,7594.22,14331.00,1001.23},
@@ -3040,31 +3042,8 @@ new const g_aLegalMods[][] = {
     {600, 1022, 1020, 1018, 1017, 1013, 1007, 1006, 1005, 1004, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000},
     {603, 1145, 1144, 1143, 1142, 1024, 1023, 1020, 1019, 1018, 1017, 1007, 1006, 1001, 0000, 0000, 0000, 0000, 0000}
 };
-new g_aMaleSkins[200] = { //a ajouter skin lc/vc ---392 compter sa 188
-
-	26449,26451,26454,26455,26456,26461,26462,26465,26466,//lc
-	26467,26469,26470,26471,26472,26473,26474,26475,26476,
-	26477,26478,26479,26482,26484,26485,26486,26487,26493,26497,
-	26498,26499,26500,26501,26502,26503,26504,26505,26506,26507,
-	26508,26509,26510,26511,26512,26513,26514,26515,26516,26517,
-	26518,26519,26520,26523,26524,26525,26526,26527,26528,26529,
-	26530,26532,26534,26536,26537,26538,26539,26540,26541,26531,
-	26542,26543,26546,26547,26548,26549,26550,26555,26557,26559,
-	26560,26561,26562,26563,27317,27318,27319,27320,27321,27329,
-	27330,27331,27332,26491,26492,	
-	26176,26177,26178,26179,26181,26182,26183,26184,26185,26186,//lcs
-	26189,26190,26192,26193,26196,26197,26198,26199,26200,26201,
-	26202,26203,26207,26208,26209,26210,26211,26212,26213,26217,
-	26218,26222,26223,26224,26225,26226,26227,26228,26230,26231,
-	26232,26233,26234,26235,26236,26239,26240,26241,26242,26243,
-	26244,26245,26246,26248,26249,26250,26253,26255,26256,26259,
-	26264,26265,26266,26267,26269,26271,26272,26273,26275,26276,
-	26277,26278,27265,27267,27272,27273,
-	27274,27279,27280,27281,27282,27283,27284,27285,27286,27288,
-	27289,27290,27291,27293,27294,27295,27298,27299,27300,27301,
-	27302,27303,27304,27305,27306,27308,27309,27310,27311,27312,
-	27315/*,
-	1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,//normal
+new g_aMaleSkins[188] = {
+	1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
 	30, 32, 33, 34, 35, 36, 37, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 57, 58, 59, 60,
 	61, 62, 66, 68, 72, 73, 78, 79, 80, 81, 82, 83, 84, 94, 95, 96, 97, 98, 99, 100, 101, 102,
 	103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120,
@@ -3073,24 +3052,15 @@ new g_aMaleSkins[200] = { //a ajouter skin lc/vc ---392 compter sa 188
 	177, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 200, 202, 203, 204, 206,
 	208, 209, 210, 212, 213, 217, 220, 221, 222, 223, 228, 229, 230, 234, 235, 236, 239, 240,
 	241, 242, 247, 248, 249, 250, 253, 254, 255, 258, 259, 260, 261, 262, 268, 272, 273, 289,
-	290, 291, 292, 293, 294, 295, 296, 297, 299, 303, 304, 305*/
-	
+	290, 291, 292, 293, 294, 295, 296, 297, 299, 303, 304, 305//10
 };
-new g_aFemaleSkins[60] = { //a ajouter skin lc/vc --139 compter sa 77
-	
-	26453,26457,26458,26459,26463,26464,26480,26481,26488,26489,//lc
-	26490,26494,26495,26496,26521,26522,26533,26535,
-	26544,26545,26558,26551,26552,26553,26554,26556,27316,
-	26180,26187,26191,26194,26204,26205,26206,26214,26215,26216,//lcs
-	26219,26220,26221,26229,26237,26238,26247,26251,26252,26257,
-	26258,26260,26261,26262,26263,26268,26270,26274,27266,27275,
-	27276,27313,27314/*,
-    9, 10, 11, 12, 13, 31, 38, 39, 40, 41, 53, 54, 55, 56, 63, 64, 65, 69,//normal
+new g_aFemaleSkins[77] = {
+    9, 10, 11, 12, 13, 31, 38, 39, 40, 41, 53, 54, 55, 56, 63, 64, 65, 69,
     75, 76, 77, 85, 88, 89, 90, 91, 92, 93, 129, 130, 131, 138, 140, 141,
     145, 148, 150, 151, 152, 157, 169, 178, 190, 191, 192, 193, 194, 195,
     196, 197, 198, 199, 201, 205, 207, 211, 214, 215, 216, 219, 224, 225,
     226, 231, 232, 233, 237, 238, 243, 244, 245, 246, 251, 256, 257, 263,
-    298*/
+    298
 };
 enum e_FurnitureData {
 	e_FurnitureType,
@@ -3416,6 +3386,27 @@ enum gouvernementinfo
 new info_gouvernementinfo[MAX_PLAYERS][gouvernementinfo];
 //clignotant
 new Indicators_xqz[MAX_VEHICLES][6];
+//salaire gouve
+enum salairemairied
+{
+	salairemairieiddd,	
+	salairemairie1,
+	salairemairie2,
+	salairemairie3,
+	salairemairie4,
+	salairemairie5,
+	salairemairie6,
+	salairemairie7,
+	salairemairie8,
+	salairemairie9,
+	salairemairie10,
+	salairemairie11,
+	salairemairie12,
+	salairemairie13,
+	salairemairie14,
+	salairemairie15
+}
+new info_salairemairie[MAX_FACTIONS][salairemairied];
 //salaire fbi
 enum salairefbid
 {
@@ -3503,7 +3494,7 @@ new gelblicht1[MAX_VEHICLES];
 new gelblicht2[MAX_VEHICLES];
 //limitation de vitesse sur un véhicule abimer
 new const BE_Bad_Vehs[] = {
-460, 464, 476, 511, 512, 513, 519, 520, 539, 553, 577, 592, 593, // planes a faire vc/lc
+460, 464, 476, 511, 512, 513, 519, 520, 539, 553, 577, 592, 593, // planes
 417, 425, 447, 465, 469, 487, 488, 497, 501, 548, 563 // heli
 };
 new bool: BE_Play_Check[MAX_PLAYERS];
@@ -3541,11 +3532,7 @@ new ZavodIn1[MAX_PLAYERS];
 //new killertimerusine;
 //job generator
 new OnGener[MAX_PLAYERS]; //
-new gen1 = 300; // Nombre de combustible dans le générateur au serveur N1.
-new gen1m = 0; // Générateur de l'argent Max N1 au démarrage.
-new OnGen1 = 0; // 0 - ne sont pas desservis, 1 - est servi.
-new Text3D: gen1text; // 3d générateur de texte
-new Text3D: gen1money; // 3d argent texte obtenu.
+new gen1 = 300, gen1m = 0,OnGen1 = 0,Text3D: gen1text, Text3D: gen1money;
 new gen2 = 300,gen2m = 0,OnGen2 = 0;
 new Text3D: gen2text,Text3D: gen2money;
 new gen3 = 300,gen3m = 0,OnGen3 = 0;
@@ -3554,8 +3541,7 @@ new gen4 = 300,gen4m = 0,OnGen4 = 0;
 new Text3D: gen4text,Text3D: gen4money;
 new gen5 = 300,gen5m = 0,OnGen5 = 0;
 new Text3D: gen5text,Text3D: gen5money;
-new OnBenz[MAX_PLAYERS]; // Max litres de carburant dans le lecteur de cartouche.
-new genpickup[5]; // Pick-up générateurs.
+new OnBenz[MAX_PLAYERS],genpickup[5]; // Pick-up générateurs.
 //new dambapickup[2]; // Entrée / Sortie (DAM).
 new threesecondtimer;
 //job electicien
@@ -3569,6 +3555,7 @@ new prod,topl,boe;
 //mission
 new mission[4][MAX_PLAYERS];
 new missionactor[4];
+
 //stock job
 enum stockjobinfo
 {
@@ -3685,9 +3672,9 @@ enum serveursettinginfo
 	settingpolice,
 	settingswat,
 	settingwl,
+	Float:settingpos[3],
 	settingdiscord[30],
-	settingverifier[30],
-	Float:settingpos[3] //spawn joueur premiere connexion
+	settingverifier[30]
 }
 new info_serveursetting[MAX_PLAYERS][serveursettinginfo];
 //location du vehicule
@@ -3877,7 +3864,9 @@ enum    E_BANKER
 	Float: bankerA,
 	// temp
 	bankerActorID,
-	bankerVW,
+	#if defined BANKER_USE_MAPICON
+	bankerIconID,
+	#endif
 	Text3D: bankerLabel
 }
 enum    E_ATM
@@ -3904,8 +3893,7 @@ enum    E_ATM
 new BankerData[MAX_BANKERS][E_BANKER],ATMData[MAX_ATMS][E_ATM];
 new Iterator: Bankers<MAX_BANKERS>,Iterator: ATMs<MAX_ATMS>;
 new CurrentAccountID[MAX_PLAYERS] = {-1, ...},LogListType[MAX_PLAYERS] = {TYPE_NONE, ...},LogListPage[MAX_PLAYERS],EditingATMID[MAX_PLAYERS] = {-1, ...};
-//discord
-new DCC_Guild:GUILD_ID1,DCC_Role:RoleJoueur,DCC_Channel:discordlog,DCC_Channel:discordaaa,bool:simembreroleok;
+new DCC_Guild:GUILD_ID1,DCC_Role:RoleJoueur,DCC_Channel:discordlog,DCC_Channel:discordaaa,bool:simembreroleok,DCC_Channel:discordspam;
 new DCC_Role: RoleStaff1,DCC_Role: RoleStaff2,DCC_Role: RoleStaff3,DCC_Role: RoleStaff4;
 new bool:sistaff1ok,bool:sistaff2ok,bool:sistaff3ok,bool:sistaff4ok,DCC_Embed:Embed,DCC_Channel:discordooc;
 //garage

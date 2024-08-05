@@ -29,11 +29,15 @@ script CreateZombies()
 }
 public FCNPC_OnDeath(npcid, killerid, reason)
 {
+	new Float:x,Float:y,Float:z;
+	FCNPC_GetPosition(npcid,x,y,z);
+	switch(random(50))
+	{ case 40.49: DropItem("object contamine", "Zombie Kill",1576, 1,x,y,z-1.0, 0,0);}
 	ZombieIsAttack[npcid] = 0;
 	ApplyAnimation(npcid, "PED", "BIKE_fall_off", 4.1, 0, 1, 1, 1, 0, 1);
 	CallLocalFunction("OnPlayerKillZombie","ii",killerid,npcid);
 	PlayerData[killerid][pZombieKill] +=1;
-	if (reason == 22 || reason == 113 || reason == 174)
+	if (reason == 22)
 	{
 		switch(random(5))
 		{case 0: PlayerData[killerid][pSkill][1] +=1;}
@@ -43,42 +47,42 @@ public FCNPC_OnDeath(npcid, killerid, reason)
 		switch(random(5))
 		{case 1: PlayerData[killerid][pSkill][2] +=1;}
 	}
-	if (reason == 24 || reason == 191)
+	if (reason == 24)
 	{
 		switch(random(5))
 		{case 2: PlayerData[killerid][pSkill][3] +=1;}
 	}
-	if (reason == 25 || reason == 120 )
+	if (reason == 25)
 	{
 		switch(random(5))
 		{case 3: PlayerData[killerid][pSkill][4] +=1;}
 	}
-	if (reason == 26 || reason == 171 || reason == 166)
+	if (reason == 26)
 	{
 		switch(random(5))
 		{case 4: PlayerData[killerid][pSkill][5] +=1;}
 	}
-	if (reason == 27 || reason == 193)
+	if (reason == 27)
 	{
 		switch(random(5))
 		{case 0: PlayerData[killerid][pSkill][6] +=1;}
 	}
-	if (reason == 28 || reason == 32 || reason == 122 || reason == 195 || reason == 196 || reason == 178)
+	if (reason == 28 || reason == 32)
 	{
 		switch(random(5))
 		{case 1: PlayerData[killerid][pSkill][7] +=1;}
 	}
-	if (reason == 29 || reason == 189)
+	if (reason == 29)
 	{
 		switch(random(5))
 		{case 2: PlayerData[killerid][pSkill][8] +=1;}
 	}
-	if (reason == 30 || reason == 111 || reason == 163 )
+	if (reason == 30)
 	{
 		switch(random(5))
 		{case 3: PlayerData[killerid][pSkill][9] +=1;}
 	}
-	if (reason == 31 || reason == 117 || reason == 182)
+	if (reason == 31)
 	{
 		switch(random(5))
 		{case 4: PlayerData[killerid][pSkill][0] +=1;}
@@ -146,10 +150,6 @@ stock FCNPC_GoToPlayerEx(npcid, playerid, Float:dist, Float:rangle, movetype = F
 }
 script OnPlayerKillZombie(playerid,zombieid)
 {
-	new Float:x,Float:y,Float:z;
-	FCNPC_GetPosition(zombieid,x,y,z);
-	switch(random(50))
-	{ case 40.49: DropItem("object contamine", "Zombie Kill",1576, 1,x,y,z-1.0, 0,0);}
 	FCNPC_Respawn(zombieid);
 	return 1;
 }

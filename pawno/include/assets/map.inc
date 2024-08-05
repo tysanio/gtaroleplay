@@ -1,4 +1,4 @@
-#define STREAM_DISTANCE 3000.0
+#define STREAM_DISTANCE 300.0
 //static arrVirtualWorlds[2000],id = -1;
 new mariaintaa,retexture,mairiecool,housedjord,tmpobjid1[156],idpp;
 stock CreateServerObjects()

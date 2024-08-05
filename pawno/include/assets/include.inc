@@ -1,7 +1,6 @@
+#include <a_samp>
 #include <a_http>
 #include <a_mysql1>
-#include <ugmp>
-#include <FCNPC>
 #include <assets/antiairbreak>
 #include <foreach>
 #include <easyDialog>
@@ -16,6 +15,6 @@
 #include <discord-connector>
 #include <discord-command>
 #include <physics>
-#include <colandreas>
 #include <WeaponData>
 #include <YSI\y_iterate>
+#include <ugmp>

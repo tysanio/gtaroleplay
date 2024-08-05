@@ -416,6 +416,7 @@ stock BubbleSort(a[], size)
 		}
 	} while(swapped);
 }
+
 script PokerExit(playerid)
 {
 	SetCameraBehindPlayer(playerid);
@@ -957,6 +958,7 @@ script PokerPulse(tableid)
 	}
 	return 1;
 }
+
 CameraRadiusSetPos(playerid, Float:x, Float:y, Float:z, Float:degree = 0.0, Float:height = 3.0, Float:radius = 8.0)
 {
 	new Float:deltaToX = x + radius * floatsin(-degree, degrees);
@@ -975,6 +977,7 @@ GlobalPlaySound(soundid, Float:x, Float:y, Float:z)
 		}
 	}
 }
+
 script split(const strsrc[], strdest[][], delimiter)
 {
 	new i, li,aNum,len;
@@ -989,6 +992,7 @@ script split(const strsrc[], strdest[][], delimiter)
 	}
 	return 1;
 }
+
 PokerOptions(playerid, option)
 {
 	switch(option)
@@ -1034,22 +1038,27 @@ PokerOptions(playerid, option)
 		}
 	}
 }
+
 PokerCallHand(playerid)
 {
 	ShowCasinoGamesMenu(playerid, DIALOG_CGAMESCALLPOKER);
 }
+
 PokerRaiseHand(playerid)
 {
 	ShowCasinoGamesMenu(playerid, DIALOG_CGAMESRAISEPOKER);
 }
+
 PokerCheckHand(playerid)
 {
 	if(GetPVarInt(playerid, "pkrActiveHand")) {
 		SetPVarString(playerid, "pkrStatusString", "Check");
 	}
+
 	// Animation
 	ApplyAnimation(playerid, "CASINO", "cards_raise", 4.1, 0, 1, 1, 1, 1, 1);
 }
+
 PokerFoldHand(playerid)
 {
 	if(GetPVarInt(playerid, "pkrActiveHand")) {
@@ -1069,9 +1078,11 @@ PokerFoldHand(playerid)
 		ApplyAnimation(playerid, "CASINO", "cards_out", 4.1, 0, 1, 1, 1, 1, 1);
 	}
 }
+
 PokerDealHands(tableid)
 {
 	new tmp = 0;
+
 	// Loop through active players.
 	for(new i = 0; i < 6; i++) {
 		new playerid = PokerTable[tableid][pkrSlot][i];
@@ -1096,6 +1107,7 @@ PokerDealHands(tableid)
 			}
 		}
 	}
+
 	// Loop through community cards.
 	for(new i = 0; i < 5; i++) {
 
@@ -1103,14 +1115,17 @@ PokerDealHands(tableid)
 		tmp++;
 	}
 }
+
 PokerShuffleDeck(tableid)
 {
 	// SFX
 	GlobalPlaySound(5600, PokerTable[tableid][pkrX], PokerTable[tableid][pkrY], PokerTable[tableid][pkrZ]);
+
 	// Order the deck
 	for(new i = 0; i < 52; i++) {
 		PokerTable[tableid][pkrDeck][i] = i;
 	}
+
 	// Randomize the array (AKA Shuffle Algorithm)
 	new rand, tmp, i;
 	for(i = 52; i > 1; i--) {
@@ -1120,6 +1135,7 @@ PokerShuffleDeck(tableid)
 		PokerTable[tableid][pkrDeck][i-1] = tmp;
 	}
 }
+
 PokerFindPlayerOrder(tableid, index)
 {
 	new tmpIndex = -1;
@@ -2075,7 +2091,7 @@ PlacePokerTable(tableid, skipmisc, Float:x, Float:y, Float:z, Float:rx, Float:ry
 	if(skipmisc != 0) {
 	}
 	format(szzString, sizeof(szzString), "Poker Table %d", tableid);
-	PokerTable[tableid][pkrText3DID] = CreateDynamic3DTextLabel(szzString, COLOR_GOLD, x, y, z+1.0, DRAWDISTANCE_POKER_MISC,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, virtualworld,interior);
+	PokerTable[tableid][pkrText3DID] = CreateDynamic3DTextLabel(szzString, COLOR_GOLD, x, y, z+1.3, DRAWDISTANCE_POKER_MISC,INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, virtualworld,interior);
 	SavePokerTables();
 	return tableid;
 }

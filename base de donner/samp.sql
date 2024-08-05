@@ -1118,6 +1118,136 @@ CREATE TABLE `salairejob` (
 INSERT INTO `salairejob` (`id`, `salairecariste`, `salairemanutentionnaire`, `salairedock`, `salairelaitier`, `salaireminer`, `salaireusineelectronic`, `salairebucheron`, `salairemenuisier`, `salairegenerateur`, `salaireelectricien`, `salairearme`, `salairepetrolier`, `salaireboucher`) VALUES
 (1, 30, 60, 50, 18, 50, 50, 75, 50, 20, 75, 50, 75, 50);
 
+
+
+--
+-- Structure de la table `salairejournaliste`
+--
+
+CREATE TABLE `salairejournaliste` (
+  `idfaction` int NOT NULL,
+  `salairerang1` int DEFAULT '0',
+  `salairerang2` int DEFAULT '0',
+  `salairerang3` int DEFAULT '0',
+  `salairerang4` int DEFAULT '0',
+  `salairerang5` int DEFAULT '0',
+  `salairerang6` int DEFAULT '0',
+  `salairerang7` int DEFAULT '0',
+  `salairerang8` int DEFAULT '0',
+  `salairerang9` int DEFAULT '0',
+  `salairerang10` int DEFAULT '0',
+  `salairerang11` int DEFAULT '0',
+  `salairerang12` int DEFAULT '0',
+  `salairerang13` int DEFAULT '0',
+  `salairerang14` int DEFAULT '0',
+  `salairerang15` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `salairejournaliste`
+--
+
+INSERT INTO `salairejournaliste` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
+(1, 700, 800, 1000, 1200, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+
+
+--
+-- Structure de la table `salairelivreurbiz`
+--
+
+CREATE TABLE `salairelivreurbiz` (
+  `idfaction` int NOT NULL,
+  `salairerang1` int DEFAULT '0',
+  `salairerang2` int DEFAULT '0',
+  `salairerang3` int DEFAULT '0',
+  `salairerang4` int DEFAULT '0',
+  `salairerang5` int DEFAULT '0',
+  `salairerang6` int DEFAULT '0',
+  `salairerang7` int DEFAULT '0',
+  `salairerang8` int DEFAULT '0',
+  `salairerang9` int DEFAULT '0',
+  `salairerang10` int DEFAULT '0',
+  `salairerang11` int DEFAULT '0',
+  `salairerang12` int DEFAULT '0',
+  `salairerang13` int DEFAULT '0',
+  `salairerang14` int DEFAULT '0',
+  `salairerang15` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `salairelivreurbiz`
+--
+
+INSERT INTO `salairelivreurbiz` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
+(1, 1000, 0, 1100, 1150, 1200, 1250, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+
+
+--
+-- Structure de la table `salairemairie`
+--
+
+CREATE TABLE `salairemairie` (
+  `idfaction` int NOT NULL,
+  `salairerang1` int DEFAULT '0',
+  `salairerang2` int DEFAULT '0',
+  `salairerang3` int DEFAULT '0',
+  `salairerang4` int DEFAULT '0',
+  `salairerang5` int DEFAULT '0',
+  `salairerang6` int DEFAULT '0',
+  `salairerang7` int DEFAULT '0',
+  `salairerang8` int DEFAULT '0',
+  `salairerang9` int DEFAULT '0',
+  `salairerang10` int DEFAULT '0',
+  `salairerang11` int DEFAULT '0',
+  `salairerang12` int DEFAULT '0',
+  `salairerang13` int DEFAULT '0',
+  `salairerang14` int DEFAULT '0',
+  `salairerang15` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `salairemairie`
+--
+
+INSERT INTO `salairemairie` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
+(1, 800, 850, 900, 950, 1050, 1100, 1150, 1200, 2500, 2500, 1350, 2400, 2500, 1200, 2500);
+
+
+
+--
+-- Structure de la table `salairemecano`
+--
+
+CREATE TABLE `salairemecano` (
+  `idfaction` int NOT NULL,
+  `salairerang1` int DEFAULT '0',
+  `salairerang2` int DEFAULT '0',
+  `salairerang3` int DEFAULT '0',
+  `salairerang4` int DEFAULT '0',
+  `salairerang5` int DEFAULT '0',
+  `salairerang6` int DEFAULT '0',
+  `salairerang7` int DEFAULT '0',
+  `salairerang8` int DEFAULT '0',
+  `salairerang9` int DEFAULT '0',
+  `salairerang10` int DEFAULT '0',
+  `salairerang11` int DEFAULT '0',
+  `salairerang12` int DEFAULT '0',
+  `salairerang13` int DEFAULT '0',
+  `salairerang14` int DEFAULT '0',
+  `salairerang15` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `salairemecano`
+--
+
+INSERT INTO `salairemecano` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
+(1, 0, 0, 0, 1000, 1, 0, 0, 0, 0, 0, 2000, 0, 0, 0, 0);
+
+
+
 --
 -- Structure de la table `salairepolice`
 --
@@ -1213,6 +1343,39 @@ INSERT INTO `salaireurgentiste` (`idfaction`, `salairerang1`, `salairerang2`, `s
 (1, 1100, 1100, 1200, 1200, 1300, 1300, 1450, 1450, 1600, 1600, 1750, 1750, 1900, 1900, 2000);
 
 
+
+--
+-- Structure de la table `salairevendeurrue`
+--
+
+CREATE TABLE `salairevendeurrue` (
+  `idfaction` int NOT NULL,
+  `salairerang1` int DEFAULT '0',
+  `salairerang2` int DEFAULT '0',
+  `salairerang3` int DEFAULT '0',
+  `salairerang4` int DEFAULT '0',
+  `salairerang5` int DEFAULT '0',
+  `salairerang6` int DEFAULT '0',
+  `salairerang7` int DEFAULT '0',
+  `salairerang8` int DEFAULT '0',
+  `salairerang9` int DEFAULT '0',
+  `salairerang10` int DEFAULT '0',
+  `salairerang11` int DEFAULT '0',
+  `salairerang12` int DEFAULT '0',
+  `salairerang13` int DEFAULT '0',
+  `salairerang14` int DEFAULT '0',
+  `salairerang15` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `salairevendeurrue`
+--
+
+INSERT INTO `salairevendeurrue` (`idfaction`, `salairerang1`, `salairerang2`, `salairerang3`, `salairerang4`, `salairerang5`, `salairerang6`, `salairerang7`, `salairerang8`, `salairerang9`, `salairerang10`, `salairerang11`, `salairerang12`, `salairerang13`, `salairerang14`, `salairerang15`) VALUES
+(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+
+
 --
 -- Structure de la table `serveursetting`
 --
@@ -1231,23 +1394,23 @@ CREATE TABLE `serveursetting` (
   `police` int NOT NULL DEFAULT '0',
   `swat` int NOT NULL DEFAULT '0',
   `whiteliste` int NOT NULL DEFAULT '0',
-  `spawnpos1` float DEFAULT '0',
-  `spawnpos2` float DEFAULT '0',
-  `spawnpos3` float DEFAULT '0',
   `discord` varchar(128) NOT NULL DEFAULT '0',
   `verifier` varchar(20) NOT NULL DEFAULT '0',
   `admin1` varchar(20) NOT NULL DEFAULT '0',
   `admin2` varchar(20) NOT NULL DEFAULT '0',
   `admin3` varchar(20) NOT NULL DEFAULT '0',
-  `admin4` varchar(20) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `admin4` varchar(20) NOT NULL DEFAULT '0',
+  `spawnpos1` float NOT NULL,
+  `spawnpos2` float NOT NULL,
+  `spawnpos3` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Déchargement des données de la table `serveursetting`
 --
 
-INSERT INTO `serveursetting` (`id`, `motd`, `afkactive`, `afktime`, `braquagenpcactive`, `braquagebanqueactive`, `oocactive`, `pmactive`, `villeactive`, `nouveau`, `police`, `swat`, `whiteliste`, `discord`, `verifier`, `admin1`, `admin2`, `admin3`, `admin4`) VALUES
-(1, 'Allo pédale', 1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, '823231678008262677', '850527688048377856', '833499786866327552', '833499765555200070', '833499739294924840', '833499716616323083');
+INSERT INTO `serveursetting` (`id`, `motd`, `afkactive`, `afktime`, `braquagenpcactive`, `braquagebanqueactive`, `oocactive`, `pmactive`, `villeactive`, `nouveau`, `police`, `swat`, `whiteliste`, `discord`, `verifier`, `admin1`, `admin2`, `admin3`, `admin4`, `spawnpos1`, `spawnpos2`, `spawnpos3`) VALUES
+(1, 'Allo pédale', 1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, '823231678008262677', '850527688048377856', '833499786866327552', '833499765555200070', '833499739294924840', '833499716616323083', 6089.5, -8328.9, 9.835);
 
 
 
@@ -1644,6 +1807,12 @@ ALTER TABLE `salairelivreurbiz`
   ADD PRIMARY KEY (`idfaction`);
 
 --
+-- Index pour la table `salairemairie`
+--
+ALTER TABLE `salairemairie`
+  ADD PRIMARY KEY (`idfaction`);
+
+--
 -- Index pour la table `salairemecano`
 --
 ALTER TABLE `salairemecano`
@@ -1968,6 +2137,30 @@ ALTER TABLE `salairefbi`
   MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT pour la table `salairejournaliste`
+--
+ALTER TABLE `salairejournaliste`
+  MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `salairelivreurbiz`
+--
+ALTER TABLE `salairelivreurbiz`
+  MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `salairemairie`
+--
+ALTER TABLE `salairemairie`
+  MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `salairemecano`
+--
+ALTER TABLE `salairemecano`
+  MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT pour la table `salairepolice`
 --
 ALTER TABLE `salairepolice`
@@ -1983,6 +2176,12 @@ ALTER TABLE `salaireswat`
 -- AUTO_INCREMENT pour la table `salaireurgentiste`
 --
 ALTER TABLE `salaireurgentiste`
+  MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `salairevendeurrue`
+--
+ALTER TABLE `salairevendeurrue`
   MODIFY `idfaction` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
