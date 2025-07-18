@@ -1,5 +1,5 @@
 //zombie include
-#include <YSI\y_timers>
+/*#include <YSI\y_timers>
 #define MAX_ZOMBIES 600 // change this to whatever number you want
 new SpawnedZombies=0, ZombiesTimer,ZombieIsAttack[MAX_PLAYERS],Timer:ZombieTimer[MAX_PLAYERS],IsAZombie[MAX_PLAYERS];
 //new z_zombieskin[] = {20012, 20013, 20014, 20015, 20016, 20017, 20018};
@@ -198,27 +198,4 @@ script UpdateRadiation()
 			{ /*rien a mettre la dedans*/ }
 		}
 	}
-}
-//skill set
-script skill_set(playerid)
-{
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, PlayerData[playerid][pSkill][1]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL_SILENCED, PlayerData[playerid][pSkill][2]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_DESERT_EAGLE, PlayerData[playerid][pSkill][3]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_SHOTGUN, PlayerData[playerid][pSkill][4]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_SAWNOFF_SHOTGUN, PlayerData[playerid][pSkill][5]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_SPAS12_SHOTGUN, PlayerData[playerid][pSkill][6]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_MICRO_UZI, PlayerData[playerid][pSkill][7]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_MP5, PlayerData[playerid][pSkill][8]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_AK47, PlayerData[playerid][pSkill][9]);
-	SetPlayerSkillLevel(playerid, WEAPONSKILL_M4, PlayerData[playerid][pSkill][0]);
-	return false;
-}
-CMD:zkill(playerid,params[])
-{
-    static stringm[512],st[101];
-	format(st, sizeof(st), "~n~~w~Zombie Kill : ~g~~h~~h~~h~%d",PlayerData[playerid][pZombieKill]);
-	format(stringm, sizeof(stringm), "~n~Arme Pistol ~g~~h~~h~~h~%d~w~ Arme Silencieux ~g~~h~~h~~h~%d ~w~Arme Desert Eagle ~g~~h~~h~~h~%d~n~~w~Arme shotgun ~g~~h~~h~~h~%d~w~  Arme sawn-off ~g~~h~~h~~h~%d~w~ Arme spas-12 ~g~~h~~h~~h~%d~w~~n~Arme uzi/tec9 ~g~~h~~h~~h~%d~w~ Arme mp5 ~g~~h~~h~~h~%d~w~~n~Arme ak-47 ~g~~h~~h~~h~%d ~w~ Arme m4 ~g~~h~~h~~h~%d",PlayerData[playerid][pSkill][1],PlayerData[playerid][pSkill][2],PlayerData[playerid][pSkill][3],PlayerData[playerid][pSkill][4], PlayerData[playerid][pSkill][5], PlayerData[playerid][pSkill][6], PlayerData[playerid][pSkill][7], PlayerData[playerid][pSkill][8], PlayerData[playerid][pSkill][9], PlayerData[playerid][pSkill][0]);
-	TSM(playerid, stringm, st, 5000, 0x00000088, 20.0000, 120.000000, 130.000000);
-	return 1;
-}
+}*/

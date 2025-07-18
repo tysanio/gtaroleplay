@@ -818,7 +818,7 @@ cPoker_button(playerid, _button, _value=0) {
 			case CASINO_POKER_BTN_DEAL: {
 				if (_playerGameState == 0) {
 					//print("cPoker_button -> _playerGameState(0) [S]");
-					if (CasinoGetPlayerMoney(playerid) >= (100 * _coinsWagered)) {
+					if (GetMoney(playerid) >= (100 * _coinsWagered)) {
 						CallLocalFunction("OnCasinoMoney", "iiii", playerid, _machineID, 100 * _coinsWagered, CASINO_MONEY_CHARGE);
 						cPoker_freshGame(playerid);
 						cPoker_deal(playerid);

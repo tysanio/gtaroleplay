@@ -4575,6 +4575,8 @@ SetFaction(playerid, id)
 	{
 		PlayerData[playerid][pFaction] = id;
 		PlayerData[playerid][pFactionID] = FactionData[id][factionID];
+		new DCC_User:user = DCC_FindUserById(PlayerData[playerid][pRole]);		
+		DCC_AddGuildMemberRole(GUILD_ID1,user,RoleFaction);		
 	}
 	return 1;
 }
@@ -8349,7 +8351,7 @@ Dialog:MainGPS(playerid, response, listitem, inputtext[])
 			    Dialog_Show(playerid, FindEntrance, DIALOG_STYLE_LIST, "Trouver une entrée", "L'auto école la plus proche\nLa banque la plus proche\nLa Warehouse la plus proche\nLa mairie la plus proche\nLe stand de tir la plus proche\nLe casino la plus proche\nLe PMU la plus proche\nLe commissariat le plus proche\nLe bowling le plus proche\nL'anpe la plus proche", "Choisir", "Retour");
 
             case 3:
-	            Dialog_Show(playerid, Findtravailler, DIALOG_STYLE_LIST, "Trouver un travail", "Cariste (Prendre a l'anpe)\nMenuisier (Prendre a l'anpe)\nMiner (Prendre a l'anpe)\nManutentionnaire (Prendre a l'anpe)\nBucheron (Prendre a l'anpe)\nFabrication d'arme (Prendre a l'anpe)\nBoucher (Prendre a l'anpe)\nTechnicien générateur (Prendre a l'anpe)\nPétrolier (Prendre a l'anpe)\nElectricien (Prendre a l'anpe)\nDoc (Prendre a l'anpe)\nUsine électronic (Prendre a l'anpe)", "Choisir", "Retour");
+	            Dialog_Show(playerid, Findtravailler, DIALOG_STYLE_LIST, "Trouver un travail", "Cariste (Prendre a l'anpe)\nMenuisier (Prendre a l'anpe)\nMineur (Prendre a l'anpe)\nManutentionnaire (Prendre a l'anpe)\nBucheron (Prendre a l'anpe)\nFabrication d'arme (Prendre a l'anpe)\nBoucher (Prendre a l'anpe)\nTechnicien générateur (Prendre a l'anpe)\nPétrolier (Prendre a l'anpe)\nElectricien (Prendre a l'anpe)\nDoc (Prendre a l'anpe)\nUsine électronic (Prendre a l'anpe)", "Choisir", "Retour");
 
 			case 4:
 			{
@@ -8382,18 +8384,30 @@ Dialog:Findtravailler(playerid, response, listitem, inputtext[])
 		}
 		if(listitem == 2) // Miner
 		{
- 			Waypoint_Set(playerid,"Mineur",828.1657,849.2316,11.7477);
-	        SendServerMessage(playerid, "Un point a été marquer pour Mineur (marquer sur le radar).");
+			new id = GetClosestJobPoint(playerid, 3);
+			if (id != -1)
+			{
+				Waypoint_Set(playerid, "Mineur", JobData[id][jobPoint][0], JobData[id][jobPoint][1], JobData[id][jobPoint][2]);
+				SendServerMessage(playerid, "Un point a été marquer pour %s (marquer sur le radar).", inputtext);
+			}
 		}
 		if(listitem == 3) // Manutentionnaire
 		{
- 			Waypoint_Set(playerid,"Manutentionnaire", 2770.5461,-2421.3342,13.6535);
-	        SendServerMessage(playerid, "Un point a été marquer pour Manutentionnaire (marquer sur le radar).");
+			new id = GetClosestJobPoint(playerid, 4);
+			if (id != -1)
+			{
+				Waypoint_Set(playerid, "Manutentionnaire", JobData[id][jobPoint][0], JobData[id][jobPoint][1], JobData[id][jobPoint][2]);
+				SendServerMessage(playerid, "Un point a été marquer pour %s (marquer sur le radar).", inputtext);
+			}
 		}
 		if(listitem == 4) // Bucheron
 		{
- 			Waypoint_Set(playerid,"Bucheron",-459.3773,-58.1205,59.9582);
-	        SendServerMessage(playerid, "Un point a été marquer pour Bucheron (marquer sur le radar).");
+			new id = GetClosestJobPoint(playerid, 7);
+			if (id != -1)
+			{
+				Waypoint_Set(playerid, "Bucheron", JobData[id][jobPoint][0], JobData[id][jobPoint][1], JobData[id][jobPoint][2]);
+				SendServerMessage(playerid, "Un point a été marquer pour %s (marquer sur le radar).", inputtext);
+			}
 		}
 		if(listitem == 5) //Fabrication d'arme
 		{
@@ -10299,6 +10313,8 @@ Business_Create(playerid, type, price)
     	        BusinessData[i][bizSpawn][1] = y;
     	        BusinessData[i][bizSpawn][2] = z;
     	        BusinessData[i][bizSpawn][3] = angle;
+				
+				BusinessData[i][bizInteriorVW] = random(100)+1000;
 
     	        BusinessData[i][bizDeliver][0] = 0.0;
     	        BusinessData[i][bizDeliver][1] = 0.0;
@@ -15338,7 +15354,7 @@ stock RestartCheck()
 	else if (g_ServerRestart == 1) {
 		GetElapsedTime(g_RestartTime--, time[0], time[1], time[2]);
 		format(string, 32, "~r~Serveur Restart:~w~ %02d:%02d", time[1], time[2]);
-	    TextDrawSetString(gServerTextdraws[3], string);
+	    TextDrawSetString(gServerTextdraws[1], string);
 	}
 	return 1;
 }
@@ -21286,7 +21302,7 @@ script TimerNotDeadYet(playerid)
 	ShowHungerTextdraw(playerid, 1);
 	PlayerData[playerid][pInjured] = 0;
 	ClearAnimations(playerid);
-	TextDrawHideForPlayer(playerid, gServerTextdraws[2]);
+	TextDrawHideForPlayer(playerid, gServerTextdraws[0]);
 	return 1;
 }
 Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
@@ -21356,7 +21372,7 @@ Dialog:InfomationClickedPlayer(playerid, response, listitem, inputtext[])
 				ShowHungerTextdraw(AdminTarget[playerid], 1);
 				PlayerData[AdminTarget[playerid]][pInjured] = 0;
 				ClearAnimations(AdminTarget[playerid]);
-				TextDrawHideForPlayer(AdminTarget[playerid], gServerTextdraws[2]);
+				TextDrawHideForPlayer(AdminTarget[playerid], gServerTextdraws[0]);
 				SendAdminAction(playerid, "Vous avez 1up %s.", ReturnName(AdminTarget[playerid], 0));
 				SendAdminAction(AdminTarget[playerid], "%s vous a réanimé.", ReturnName(playerid, 0));
 				Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action a faire sur ce joueur",menuclick3fr,"Valider","Annuler");		
@@ -22413,7 +22429,6 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 }
 Dialog:discordid(playerid, response, listitem, inputtext[])
 {
-	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
 	if (response)
 	{
 		new DCC_User:user = DCC_FindUserById(inputtext),amount = strlen(inputtext);
@@ -22422,33 +22437,10 @@ Dialog:discordid(playerid, response, listitem, inputtext[])
 		if(RoleJoueur == DCC_INVALID_ROLE) return Dialog_Show(playerid, discordid, DIALOG_STYLE_INPUT, "Votre discord id ICI", "Mettre votre ID discord ici\nSi vous trouver pas votre ID discord parlé-en a un administrateur pour le trouver!\n Erreur 3 ID role", "Voila", " X ");
 		DCC_AddGuildMemberRole(GUILD_ID1,user,RoleJoueur);
 		PlayerData[playerid][pRole] = amount;
-		Dialog_Show(playerid, tutoconnaitre1, DIALOG_STYLE_INPUT, "QCM LSR","Qu’elle sont vos projets une fois en ville?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
-		TogglePlayerControllable(playerid, 0);
 		return 1;
 	}
 	return 1;
 }
-/*Dialog:discordid1(playerid, response, listitem, inputtext[])
-{
-	if(!response) return SendErrorMessage(playerid,"Bon bah vous allez pas sur le serveur au revoir.");
-	if (response)
-	{
-		new pop,DCC_Role:role = DCC_FindRoleById(info_serveursetting[pop][settingverifier]),lol;//role a faire
-		if (role == DCC_INVALID_ROLE)
-			return SendErrorMessage(playerid,"Erreur sur le role"); // invalid role id
-		new DCC_Guild:guild = DCC_FindGuildById(info_serveursetting[lol][settingdiscord]);
-		if (guild == DCC_INVALID_GUILD)
-			return SendErrorMessage(playerid,"Erreur sur le id discord"); // invalid guild id
-		new DCC_User:user = DCC_FindUserById(inputtext);//id joueur
-		if (user == DCC_INVALID_USER)
-			return SendErrorMessage(playerid,"Erreur sur le id user"); // invalid user id
-		if (!DCC_AddGuildMemberRole(guild, user, role))
-			return SendErrorMessage(playerid,"Erreur sur l'ajout du tout"); // invalid guild, user and/or role passed
-		PlayerData[playerid][pRole] = user;
-		return 1;
-	}
-	return 1;
-}*/
 IsPlayerNearBanker(playerid)
 {
 	foreach(new i : Bankers)
@@ -23226,7 +23218,7 @@ Dialog:tutoconnaitre4(playerid, response, listitem, inputtext[])
 		SendServerMessage(playerid,"Si un admin n'est pas présent il vous sera recommander de quitter et de refaire un personnage.");
 		SendAdminAlert(COLOR_ADMINCHAT, "Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d",ReturnName(playerid, 0),playerid);
 		SendAdminAlert(COLOR_ADMINCHAT, "/apps [playerid] pour accepter ou refuser un joueur");
-		format(msg1, sizeof(msg1),"Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d",ReturnName(playerid, 0),playerid);
+		format(msg1, sizeof(msg1),"Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d !apps ID",ReturnName(playerid, 0),playerid);
 		utf8encode(msg2,msg1,sizeof(msg2));
 		DCC_SendChannelMessage(discordaaa,msg2);
 		TogglePlayerControllable(playerid, 0);

@@ -17,4 +17,4 @@
 #include <physics>
 #include <WeaponData>
 #include <YSI\y_iterate>
-#include <ugmp>
+//#include <ugmp>

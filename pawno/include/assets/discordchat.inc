@@ -1,4 +1,4 @@
-CMD:chatdc(playerid,params[])
+CMD:dc(playerid,params[])
 {
     new string[65],name[MAX_PLAYER_NAME + 1],string1[65];
     GetPlayerName(playerid, name, sizeof(name));
@@ -19,8 +19,8 @@ CMD:discordchat(playerid, params[])
 	if (PlayerData[playerid][pDiscordChat] == 0)
 	{
 		PlayerData[playerid][pDiscordChat] = 1;
-		SendServerMessage(playerid,"Chat discord mis à on /chatdc pour ecrire!");
-		SendServerMessage(playerid,"Attention /chatdc [texte] pour voir les messages ooc seulement!");
+		SendServerMessage(playerid,"Chat discord mis à on /dc pour ecrire!");
+		SendServerMessage(playerid,"Attention /dc [texte] pour voir les messages ooc seulement!");
 		//SendServerMessage(playerid,"Attention le /fac [texte] fera en sorte que vous voyez les messages de votre faction seulement!");
 		return 1;
 	}
@@ -87,7 +87,7 @@ DISCORD:rapports( DCC_Channel: channel, DCC_User: author, params[ ] )
 		}
 		if (!count) return DCC_SendChannelMessage(discordaaa, "Aucun rapport de joueurs pour le moment.");
 	}
-	else DCC_SendChannelMessage(discordaaa, "> **[ERREUR]** Ta pas le droit de faire cette commande");
+	else DCC_SendChannelMessage(discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 	return 1;
 }
 DISCORD:restart( DCC_Channel: channel, DCC_User: author, params[ ] )
@@ -98,13 +98,13 @@ DISCORD:restart( DCC_Channel: channel, DCC_User: author, params[ ] )
 	{
 		if (g_ServerRestart)
 		{
-			TextDrawHideForAll(gServerTextdraws[3]);
+			TextDrawHideForAll(gServerTextdraws[1]);
 			g_ServerRestart = 0;
 			g_RestartTime = 0;
 			return SendClientMessageToAllEx(COLOR_LIGHTRED, "[DISCORD]: Un admin sur discord a commencer un restart du serveur.");
 		}
 		DCC_TriggerBotTypingIndicator(discordaaa);
-		TextDrawShowForAll(gServerTextdraws[3]);
+		TextDrawShowForAll(gServerTextdraws[1]);
 		g_ServerRestart = 1;
 		g_RestartTime = 10;
 		DCC_SendChannelMessage(discordaaa, "> **[DISCORD]** Reboot du serveur dans 10 secondes!");
@@ -220,8 +220,8 @@ DISCORD:baninfo( DCC_Channel: channel, DCC_User: author, params[ ] )
     DCC_HasGuildMemberRole(GUILD_ID1,author,RoleStaff4,sistaff4ok);
 	if (sistaff3ok || sistaff4ok)
 	{
-		DCC_TriggerBotTypingIndicator(discordlog);
-		if (isnull(params) || strlen(params) > 24) DCC_SendChannelMessage( discordlog, "> **[USAGE]** !baninfo [nom de l'utilisateur]");
+		DCC_TriggerBotTypingIndicator(discordaaa);
+		if (isnull(params) || strlen(params) > 24) DCC_SendChannelMessage( discordaaa, "> **[USAGE]** !baninfo [nom de l'utilisateur]");
 		else
 		{
 			format(string, sizeof(string), "SELECT * FROM `blacklist` WHERE `Username` = '%s'", SQL_ReturnEscaped(params));
@@ -388,7 +388,7 @@ ShowStatsForDiscord(userid)
 	for (new i = 0; i < MAX_INVENTORY; i ++) if (InventoryData[userid][i][invExists]) {
 	    count++;
 	}
-	DCC_TriggerBotTypingIndicator(discordlog);
+	DCC_TriggerBotTypingIndicator(discordaaa);
 	format(origin, 32, "%.16s",PlayerData[userid][pOrigin]);
 	if (strlen(PlayerData[userid][pOrigin]) > 16)
 		strcat(origin, "...");
@@ -403,7 +403,7 @@ ShowStatsForDiscord(userid)
 	DCC_SetEmbedColor(Embed,0x00FF00);
 	format(string, sizeof(string), "https://gtaundergroundmod.com/resources/media/skins/%d.png",PlayerData[userid][pSkin]);
 	DCC_SetEmbedThumbnail(Embed,string);		
-	DCC_SendChannelEmbedMessage(discordlog, Embed);
+	DCC_SendChannelEmbedMessage(discordaaa, Embed);
 	return 1;
 }
 /*script DCC_OnGuildMemberAdd(DCC_Guild:guild, DCC_User:user)
@@ -468,15 +468,15 @@ script OnBanLookupDC(username[])
 	if (rows) {
 	    cache_get_field_content(0, "Reason", reason, g_iHandle);
 	    cache_get_field_content(0, "Date", date, g_iHandle);
-		DCC_TriggerBotTypingIndicator(discordlog);
+		DCC_TriggerBotTypingIndicator(discordaaa);
 		format(string, sizeof(string), "```Ce joueur a été banni le %s, raison: %s```", username, date, reason);
 		utf8encode(string3,string,sizeof(string3));
-		DCC_SendChannelMessage(discordlog,string3); 
+		DCC_SendChannelMessage(discordaaa,string3); 
 	}
 	else {
-		DCC_TriggerBotTypingIndicator(discordlog);
+		DCC_TriggerBotTypingIndicator(discordaaa);
 		format(string, sizeof(string), "```Ce joueur n'est pas banni de ce serveur.```", username);
-	    DCC_SendChannelMessage(discordlog,string); 
+	    DCC_SendChannelMessage(discordaaa,string); 
 	}
 	return 1;
 }
@@ -883,7 +883,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			DCC_SetEmbedColor(Embed,0x00FF00);
 			DCC_SendChannelEmbedMessage(discordaaa, Embed, "", "OnPostJoueurApp", "i", userid);
 		}
-		else DCC_SendChannelMessage( discordaaa, "> **[ERREUR]** Ta pas le droit de faire cette commande");
+		else DCC_SendChannelMessage( discordlog, "> **[ERREUR]** Ta pas le droit de faire cette commande");
 		return 1;
 	}
     return 1;

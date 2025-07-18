@@ -5921,7 +5921,6 @@ stock CreateServerObjects()
 	CreateDynamicObject(19894, 387.00226, 864.56891, 1037.93945,   0.00000, 0.00000, 0.00000,-1,-1);
 	CreateDynamicObject(11727, 390.04416, 866.82233, 1039.33850,   0.00000, 0.00000, -88.97996,-1);
 	//casino
-	//CreateDynamicObject(2325, -238.25, -2.54, 1004.74,   0.00, 0.00, 0.00);
 	SetDynamicObjectMaterial(CreateDynamicObject(19379,-230.15300,-28.66790,1003.06012,0.00000,90.00000,0.00000),0,4587,"skyscrapelan2","nt_bonav1",0xFFFFFFFF);
 	SetDynamicObjectMaterial(CreateDynamicObject(19379,-240.62140,-28.65960,1003.06012,0.00000,90.00000,0.00000),0,4587,"skyscrapelan2","nt_bonav1",0xFFFFFFFF);
 	SetDynamicObjectMaterial(CreateDynamicObject(19379,-240.62569,-15.59195,1003.06012,0.00000,90.00000,0.00000),0,4587,"skyscrapelan2","nt_bonav1",0xFFFFFFFF);

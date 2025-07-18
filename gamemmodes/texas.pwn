@@ -18,25 +18,24 @@
 #include <a_samp>
 #include <assets/include>
 native IsValidVehicle(vehicleid);
-#include <FCNPC>
 #include <assets/extactor>
 #include <assets/LB_TDBox>
 #include <assets/define>
 #include <assets/vars>
 #include <assets/stock>
 #include <assets/command>
+#include <assets/cmdadmins>
 #include <assets/stamina>
 #include <assets/pop>
 #include <assets/callback>
 #include <assets/bowling>
-#include <assets/zombie>
 #include <assets/discordchat>
 #include <assets/poker3>
 #include <assets/pool>
 #include <assets/pool2>
 #include <assets/map>
-//#include <assets/mapls>
-//#include <assets/maison>
+#include <assets/autremapping>
+#include <assets/GrimCasino>
 main()
 {
     print(" ");
@@ -731,7 +730,7 @@ script Faction_Load()
         FactionData[i][factioncoffre] = cache_get_field_int(i, "factioncoffre");
         cache_get_field_content(i, "factiondiscord", FactionData[i][factiondiscord], g_iHandle, 20);
         cache_get_field_content(i, "factionrole", FactionData[i][factionrole], g_iHandle, 20);
-        
+        RoleFaction = DCC_Role:DCC_FindRoleById(FactionData[i][factionrole]);    //role
 	    for (new j = 0; j < 8; j ++) {
 	        format(str, sizeof(str), "factionSkin%d", j + 1);
 	        FactionData[i][factionSkins][j] = cache_get_field_int(i, str);
@@ -3481,12 +3480,12 @@ script UpdateTime1()
 		format(string, 32, "%02d:%02d AM", (time[0] == 0) ? (12) : (time[0]), time[1]);
 	if(time[0] == 5 && time[1] == 0)
 	{
-		TextDrawShowForAll(gServerTextdraws[3]);
+		TextDrawShowForAll(gServerTextdraws[1]);
 		g_ServerRestart = 1;
 		g_RestartTime = 120;
 		SendClientMessageToAllEx(COLOR_LIGHTRED, "[ADMIN]: Le serveur a commencer un restart et sera effectué dans %d seconds.",g_RestartTime);
 	}
-	TextDrawSetString(gServerTextdraws[0], string);
+	TextDrawSetString(gServerTextdraws[1], string);
 	foreach (new i : Player) if (PlayerData[i][pDrugUsed] != 3) {
 		SetPlayerTime(i, time[0], time[1]);
 	}
@@ -7200,7 +7199,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_CUFFED && newkeys & KEY_JUMP && !(oldkeys & KEY_JUMP))
 		ApplyAnimation(playerid, "GYMNASIUM", "gym_jog_falloff", 4.0, 0, 1, 1, 0, 0, 1);
 	if (newkeys & KEY_CROUCH && IsPlayerInAnyVehicle(playerid)) {cmd_open(playerid, "\1");}
-	if (newkeys & KEY_CROUCH && IsPlayerInRangeOfPoint(playerid, 1.5, -226.4219, 1408.4594, 26.7734) && PlayerData[playerid][pTutorialStage] == 1)
+	if (newkeys & KEY_CROUCH && IsPlayerInRangeOfPoint(playerid, 3, -226.4219, 1408.4594, 26.7734) && PlayerData[playerid][pTutorialStage] == 1)
 	{
 	    DisablePlayerCheckpoint(playerid);
 		PlayerData[playerid][pTutorialStage] = 2;
@@ -8904,7 +8903,6 @@ script OnPlayerEnterCheckpoint(playerid)
             SetPlayerInterior(playerid, 0);
             SetPlayerVirtualWorld(playerid, 0);
 			TogglePlayerControllable(playerid, 1);
-			SendTutorialMessage(playerid, "Un /etape pour quelque information supplémentaire est offert.");
 			SendTutorialMessage(playerid, "Un canal nouveau /n est disponible pour vos question.");
 		}
 		return 1;
@@ -10115,7 +10113,7 @@ script OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		else
 		{
-		    TextDrawHideForPlayer(playerid, gServerTextdraws[2]);
+		    TextDrawHideForPlayer(playerid, gServerTextdraws[0]);
 			PlayerData[playerid][pInjured] = 0;
 			PlayerData[playerid][pHospital] = GetClosestHospital(playerid);
 		}
@@ -10771,10 +10769,8 @@ script OnPlayerConnect(playerid)
 	SetPlayerArmedWeapon(playerid, 0);
 	ResetEditing(playerid);
 	PreloadAnimations(playerid);
-    SetPlayerHUDComponentsColour(playerid, HUD_COMPONENT_HEALTH, 233);
-    SetPlayerHUDComponentsColour(playerid, 4, 183);
 	if (g_ServerRestart) {
-		TextDrawShowForPlayer(playerid, gServerTextdraws[3]);
+		TextDrawShowForPlayer(playerid, gServerTextdraws[1]);
 	}
 	for (new i = 0; i != MAX_PLAYER_ATTACHED_OBJECTS; i ++) {
 	    RemovePlayerAttachedObject(playerid, i);
@@ -10803,7 +10799,10 @@ script OnPlayerConnect(playerid)
     RemoveBuildingForPlayer(playerid, 1977, 0.0, 0.0, 0.0, 6000.0);
     RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 6000.00);
 	RemoveBuildingForPlayer(playerid, 1280, 0.0, 0.0, 0.0, 6000.0);
-	//MaisonIntEXTREM(playerid);
+	RemoveBuildingForPlayer(playerid, 1340, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1341, 0.0, 0.0, 0.0, 6000.0);
+	RemoveBuildingForPlayer(playerid, 1300, 0.0, 0.0, 0.0, 6000.0);
+	RemoveExt(playerid);
 	//fin remove
 	CancelSelectTextDraw(playerid);
 	GetPlayerIp(playerid, PlayerData[playerid][pIP], 16);
@@ -11059,11 +11058,11 @@ script OnPlayerClickPlayer(playerid, clickedplayerid, source)
 }
 script OnGameModeInit()
 {
-    DCC_SetBotPresenceStatus(DO_NOT_DISTURB);
-    DCC_SetBotActivity("Cette version est pour Winlost seulement :)");
+	DCC_SetBotPresenceStatus(DO_NOT_DISTURB);
+    DCC_SetBotActivity("Serveur On!");
     GUILD_ID1 = DCC_FindGuildById(Ddiscord);
     discordlog = DCC_FindChannelById(Dchat); //chat general
-    discordaaa = DCC_FindChannelById(Achat); //chat general
+    discordaaa = DCC_FindChannelById(Achat); //admin general
     discordooc = DCC_FindChannelById(ooc);
     discordspam = DCC_FindChannelById(spamadmin);
     RoleJoueur = DCC_Role:DCC_FindRoleById(Dverifier);
@@ -11078,14 +11077,17 @@ script OnGameModeInit()
 	SendRconCommand("loadfs skins");*/
     SendRconCommand("unloadfs soccer");
     SendRconCommand("loadfs soccer");
+    SendRconCommand("loadfs lol");
+    SendRconCommand("unloadfs mappingsdev");
+    SendRconCommand("loadfs mappingsdev");
     ConnectNPC("Albert_Folker","Albert");
     LoadPool();
     LoadPool2();
     //fin des fs oubliger
     //CA_Init();
     //zombie + radiation
-	ZombiesTimer = SetTimer("CreateZombies", 50, true);
-	SetTimer("UpdateRadiation",5000, 1);
+	/*ZombiesTimer = SetTimer("CreateZombies", 50, true);
+	SetTimer("UpdateRadiation",5000, 1);*/
 	//fin zombie
     AntiDeAMX();
 	static arrVirtualWorlds[2000]; /*id = -1;*/
@@ -11489,8 +11491,8 @@ script OnGameModeInit()
 	actorvendeuramendes[0] = CreateActor(310,1563.0867,-1650.5616,3001.2083,181.9357);
 	SetActorVirtualWorld(actorvendeuramendes[0],1000);
 	//permis
-	actorvendeurpermis[0] = CreateActor(240,-2035.0946,-117.3694,1035.1719,272.2659);
-	SetActorVirtualWorld(actorvendeurpermis[0], 7002);
+	actorvendeurpermis[0] = CreateActor(240,1172.8411,1346.7783,10.9219,4.0382);
+	SetActorVirtualWorld(actorvendeurpermis[0], 0);
 	//mairie
 	actorvendeurmairie[0] = CreateActor(150,-501.2239,296.4949,2001.5667,186.2353);
 	SetActorVirtualWorld(actorvendeurmairie[0], 7005);
@@ -11518,41 +11520,24 @@ script OnGameModeInit()
 		Create3DTextLabel("[Livraison d'hopital]\n{FFFFFF}/dechargermalade pour décharger le patient.", COLOR_DARKBLUE, arrHospitalDeliver[i][0], arrHospitalDeliver[i][1], arrHospitalDeliver[i][2], 15.0, 0);
 	}
 	// Textdraws
-	gServerTextdraws[0] = TextDrawCreate(547.000000, 23.000000, "12:00 PM");
+
+    gServerTextdraws[0] = TextDrawCreate(11.000000, 430.000000, "~r~Tu est blesser!~w~ /appeler 911 ou /mort.");
 	TextDrawBackgroundColor(gServerTextdraws[0], 255);
 	TextDrawFont(gServerTextdraws[0], 1);
-	TextDrawLetterSize(gServerTextdraws[0], 0.360000, 1.499999);
+	TextDrawLetterSize(gServerTextdraws[0], 0.300000, 1.100000);
 	TextDrawColor(gServerTextdraws[0], -1);
 	TextDrawSetOutline(gServerTextdraws[0], 1);
 	TextDrawSetProportional(gServerTextdraws[0], 1);
 	TextDrawSetSelectable(gServerTextdraws[0], 0);
 
-	gServerTextdraws[1] = TextDrawCreate(500.000000, 6.000000, "Vice ~p~ Roleplay");
+    gServerTextdraws[1] = TextDrawCreate(237.000000, 409.000000, "~r~Serveur Restart:~w~ 00:00");
 	TextDrawBackgroundColor(gServerTextdraws[1], 255);
 	TextDrawFont(gServerTextdraws[1], 1);
-	TextDrawLetterSize(gServerTextdraws[1], 0.260000, 1.200000);
+	TextDrawLetterSize(gServerTextdraws[1], 0.480000, 1.300000);
 	TextDrawColor(gServerTextdraws[1], -1);
 	TextDrawSetOutline(gServerTextdraws[1], 1);
 	TextDrawSetProportional(gServerTextdraws[1], 1);
 	TextDrawSetSelectable(gServerTextdraws[1], 0);
-
-    gServerTextdraws[2] = TextDrawCreate(11.000000, 430.000000, "~r~Tu est blesser!~w~ /appeler 911 ou /mort.");
-	TextDrawBackgroundColor(gServerTextdraws[2], 255);
-	TextDrawFont(gServerTextdraws[2], 1);
-	TextDrawLetterSize(gServerTextdraws[2], 0.300000, 1.100000);
-	TextDrawColor(gServerTextdraws[2], -1);
-	TextDrawSetOutline(gServerTextdraws[2], 1);
-	TextDrawSetProportional(gServerTextdraws[2], 1);
-	TextDrawSetSelectable(gServerTextdraws[2], 0);
-
-    gServerTextdraws[3] = TextDrawCreate(237.000000, 409.000000, "~r~Serveur Restart:~w~ 00:00");
-	TextDrawBackgroundColor(gServerTextdraws[3], 255);
-	TextDrawFont(gServerTextdraws[3], 1);
-	TextDrawLetterSize(gServerTextdraws[3], 0.480000, 1.300000);
-	TextDrawColor(gServerTextdraws[3], -1);
-	TextDrawSetOutline(gServerTextdraws[3], 1);
-	TextDrawSetProportional(gServerTextdraws[3], 1);
-	TextDrawSetSelectable(gServerTextdraws[3], 0);
 	DisableInteriorEnterExits();
 	EnableStuntBonusForAll(0);
 	SetNameTagDrawDistance(25.0);
@@ -11676,15 +11661,12 @@ script WeatherRotator()
 {
 	new index = random(sizeof(g_aWeatherRotations));
 	SetWeather(g_aWeatherRotations[index]);
-	switch (random(7))
+	switch (random(4))
 	{
 		case 0: DCC_SetBotActivity("!aide pour plus d'informations");
-		case 1: DCC_SetBotActivity("!aide pour plus d'informations");
-		case 2: DCC_SetBotActivity("!aide pour plus d'informations");
-		case 3: DCC_SetBotActivity("!aide pour plus d'informations");
-		case 4: DCC_SetBotActivity("!aide pour plus d'informations");
-		case 5: DCC_SetBotActivity("!aide pour plus d'informations");
-		case 6: DCC_SetBotActivity("!aide pour plus d'informations");
+		case 1: DCC_SetBotActivity("Aller viens on est bien!");
+		case 2: DCC_SetBotActivity("Les aides se passe IG ou discord!");
+		case 3: DCC_SetBotActivity("Un ticket une idee? Discord!");
 	}
 }
 script LotteryUpdate()
@@ -11742,11 +11724,6 @@ script OnPlayerRequestClass(playerid, classid)
 }
 script OnPlayerSpawn(playerid)
 {
-	if (PlayerData[playerid][pHUD])
-	{
-	 	//TextDrawShowForPlayer(playerid, gServerTextdraws[0]);
-		TextDrawShowForPlayer(playerid, gServerTextdraws[1]);
-	}
     SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
     Streamer_ToggleIdleUpdate(playerid, true);
 	PlayerData[playerid][pKilled] = 0;
@@ -11826,7 +11803,7 @@ script OnPlayerSpawn(playerid)
 		    ShowHungerTextdraw(playerid, 0);
 		    SetPlayerPosEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 
-			TextDrawShowForPlayer(playerid, gServerTextdraws[2]);
+			TextDrawShowForPlayer(playerid, gServerTextdraws[0]);
 			SendClientMessage(playerid, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Vous êtes blessé vous avez besoin d'attention médical (/appeler 911).");
             SendClientMessage(playerid, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Si vous êtes blessé par arme autre que qu'une arme a feu attendez 2 minutes.");
 
@@ -18515,6 +18492,20 @@ script SpeedCheck(playerid)
 	    else if(GetPlayerSpeed(playerid) < GEAR5_SPEED ) PlayerTextDrawSetString(playerid,Gear[playerid], "~r~5");
  	}
 	return 1;
+}
+script skill_set(playerid)
+{
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL, PlayerData[playerid][pSkill][1]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_PISTOL_SILENCED, PlayerData[playerid][pSkill][2]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_DESERT_EAGLE, PlayerData[playerid][pSkill][3]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_SHOTGUN, PlayerData[playerid][pSkill][4]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_SAWNOFF_SHOTGUN, PlayerData[playerid][pSkill][5]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_SPAS12_SHOTGUN, PlayerData[playerid][pSkill][6]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_MICRO_UZI, PlayerData[playerid][pSkill][7]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_MP5, PlayerData[playerid][pSkill][8]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_AK47, PlayerData[playerid][pSkill][9]);
+	SetPlayerSkillLevel(playerid, WEAPONSKILL_M4, PlayerData[playerid][pSkill][0]);
+	return false;
 }
 script SendAdminAlert(color, const str[], {Float,_}:...)
 {
