@@ -39,7 +39,6 @@ DISCORD:c( DCC_Channel: channel, DCC_User: author, params[ ] )
 		new msg[100],msg1[100],msg2[100];
 		if(sscanf(params, "s[100]", msg)) return DCC_SendChannelMessage(discordlog,""DISCORD_PREFIX"c [Msg]");
 		DCC_TriggerBotTypingIndicator(discordlog);
-		utf8encode(msg1,msg,sizeof(msg));
 		format(msg1, sizeof(msg1),"> %s: %s ", ReturnDiscordName( author ), msg);
 		utf8encode(msg2,msg1,sizeof(msg2));
 		DCC_SendChannelMessage(discordlog,msg2);
@@ -332,7 +331,7 @@ DISCORD:factionlist( DCC_Channel: channel, DCC_User: author, params[ ] )
 	{
 		new string[1040],string1[1040];
 		for (new i = 0; i != MAX_FACTIONS; i ++) if (FactionData[i][factionExists]) {
-			format(string, sizeof(string), "%s Faction (ID %i) | %s | PiD %d \n", string, i, FactionData[i][factionName],FactionData[i][factionID]);
+			format(string, sizeof(string), "%s Faction (ID %i) | %s | PiD %d\n", string, i, FactionData[i][factionName],FactionData[i][factionID]);
 		}
 		DCC_SendChannelMessage(discordlog,"**Faction sur le serveur**");
 		utf8encode(string1,string,sizeof(string1));
@@ -361,7 +360,7 @@ DISCORD:abus( DCC_Channel: channel, DCC_User: author, params[ ] )
 	if (simembreroleok)
 	{
 		DCC_TriggerBotTypingIndicator(discordlog);
-		format(string, sizeof(string), "```Donc vous avez fait !abus.\nVous trouver que d'attendre X nombres d'heures est injuste?\nDit vous qu'il y a des gens qui abusent des scripts mis en place pour le serveur et\nqui en abusent donc on doit sanctionner tout le monde a cause de certaines personnes.\nVous pouvez vous plaindre sur le discord\nmais à cause de gens qui abusent les actions entreprises par le staff et les développeurs peut être lourd ou injuste.\nNe soyer par surprit des réponses données.\nMerci de votre compréension et bonne journée.\nL'équipe de développement du serveur.```");
+		format(string, sizeof(string), "```Donc vous avez fait !abus.\nVous trouver que d'attendre X nombres d'heures est injuste?\nDit vous qu'il y a des gens qui abusent des scripts mis en place pour le serveur et\nqui en abusent donc on doit sanctionner tout le monde a cause de certaines personnes.\nVous pouvez vous plaindre sur le discord\nmais Ã  cause de gens qui abusent les actions entreprises par le staff et les dÃ©veloppeurs peut Ãªtre lourd ou injuste.\nNe soyer par surprit des rÃ©ponses donnÃ©es.\nMerci de votre comprÃ©ension et bonne journÃ©e.\nL'Ã©quipe de dÃ©veloppement du serveur.```");
 		utf8encode(string1,string,sizeof(string1));
 		DCC_SendChannelMessage(discordlog, string1);
 	}

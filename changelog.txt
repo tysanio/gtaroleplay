@@ -192,3 +192,20 @@ modification bdd pour spawn joueur
 05/08/2024
 enlever code inutile
 Modifcation des type log pour log discord (spam a lot)
+
+17/07/2025
+Rectification de certaine commande
+Ajoute d'un fichier distint pour commande joueur et admin
+Correction d'un probleme lier au /bizcreer
+enlever zombie pour moins de script réactivable dans les fichiers
+modification de mapping pour mapping oubliger
+Remettre grimcasino pour videopoker
+Modification dans le fichier discord chat pour mettre les bon cannaux
+Modification dans le tuto pour mettre prendre la bouteille plus gros (joueur mobile)
+
+20/07/2025
+Plusieurs correction niveau français
+Modification de certaines phrase encore en anglais
+Modification des jobs - retrait de garbage man et de deliverboy
+Modification de la faction Vendeur de rue qui acquis le job garbageman (anciennement a la mairie)
+Modification de la faction Camionneur pour voir les livraisons par eux et non pas l'ancien job deliverboy

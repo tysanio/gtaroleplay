@@ -758,7 +758,7 @@ CMD:vendre(playerid, params[])
 	if (sscanf(params, "us[24]S()[128]", targetid, type, string))
 	{
 	    SendSyntaxMessage(playerid, "/vendre [playerid/name] [nom]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} maison, magasin, vehicule, servicemecano");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} maison, magasin, vehicule, servicemecano");
 	    return 1;
 	}
 	if (targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
@@ -840,7 +840,7 @@ CMD:accepter(playerid, params[])
 	if (isnull(params))
  	{
 	 	SendSyntaxMessage(playerid, "/accepter [name]");
-		SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} maison, magasin, vehicule, food, faction, greet, fouille, servicemecano, mappel");
+		SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} maison, magasin, vehicule, food, faction, greet, fouille, servicemecano, mappel");
 		return 1;
 	}
 	if (!strcmp(params, "maison", true) && PlayerData[playerid][pHouseSeller] != INVALID_PLAYER_ID)
@@ -1168,7 +1168,7 @@ CMD:accepter(playerid, params[])
 		GiveMoney(playerid, -price);
 		for (new ii = 0; ii != MAX_FACTIONS; ii ++) if (FactionData[ii][factionExists] && FactionData[ii][factionacces][13] == 1)
 		{
-			if(FactionData[ii][factionacces][14] == 1)
+			if(FactionData[ii][factionacces][9] == 1)
 			{
 				FactionData[ii][factioncoffre] += price;
 				Faction_Save(ii);
@@ -1297,7 +1297,7 @@ CMD:bcoffre(playerid, params[])
 	    if (sscanf(params, "s[24]S()[12]", type, str))
 	    {
 			SendSyntaxMessage(playerid, "/bcoffre [name] (%s valide)", FormatNumber(BusinessData[bizid][bizVault]));
-	        SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} retirer, deposer, balance");
+	        SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} retirer, deposer, balance");
 	        return 1;
 		}
 		if (!strcmp(type, "retirer", true))
@@ -1332,8 +1332,6 @@ CMD:passerpermis4321(playerid, params[])
 {
 	if (PlayerData[playerid][pDrivingTest])
 	    return SendErrorMessage(playerid, "Vous avez déja commencer le test!");
-	if (!IsPlayerInRangeOfPoint(playerid, 3.0, -2035.0946,-117.3694,1035.1719))
-	    return SendErrorMessage(playerid, "Vous n'êtes pas à l'auto école");
 	if (Inventory_HasItem(playerid, "permis de conduire"))
 	    return SendErrorMessage(playerid, "Vous avez déjà votre permis.");
 	if (GetMoney(playerid) < 500)
@@ -1681,33 +1679,6 @@ CMD:quitjob(playerid, params[])
 			DisablePlayerCheckpoint(playerid);
 			RemovePlayerAttachedObject(playerid, 4);
 			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-		}
-		if (PlayerData[playerid][pJob] == JOB_COURIER)
-		{
-			if (PlayerData[playerid][pUnloading] != -1)
-			{
-	   		 	PlayerData[playerid][pUnloading] = -1;
-	    		PlayerData[playerid][pUnloadVehicle] = INVALID_VEHICLE_ID;
-	    		DisablePlayerCheckpoint(playerid);
-			}
-			if (PlayerData[playerid][pDeliverShipment])
-			{
-			    PlayerData[playerid][pShipment] = -1;
-			    PlayerData[playerid][pDeliverShipment] = 0;
-			    DisablePlayerCheckpoint(playerid);
-			}
-			if (PlayerData[playerid][pLoading])
-			{
-	   	 		PlayerData[playerid][pLoading] = 0;
-	    		PlayerData[playerid][pLoadType] = 0;
-	    		DisablePlayerCheckpoint(playerid);
-			}
-			if (PlayerData[playerid][pLoadCrate])
- 			{
-  				PlayerData[playerid][pLoadCrate] = 0;
-				RemovePlayerAttachedObject(playerid, 4);
-				SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-			}
 		}
 		if (IsPlayerInWarehouse(playerid) && GetVehicleModel(vehicleid) == 530 && CoreVehicles[vehicleid][vehLoadType] == 7)
 		{
@@ -2175,7 +2146,7 @@ CMD:decrocher(playerid, params[])
 	new targetid = PlayerData[playerid][pCallLine];
 	PlayerData[playerid][pIncomingCall] = 0;
 	PlayerData[targetid][pIncomingCall] = 0;
-	SendClientMessage(playerid, COLOR_YELLOW, "[SERVER]:{FFFFFF} Vous avez répondu.");
+	SendSyntaxMessage(playerid, "[SERVER]:{FFFFFF} Vous avez répondu.");
 	SendClientMessage(targetid, COLOR_YELLOW, "[SERVER]:{FFFFFF} Il à accepté l'appelle.");
 	SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s à accepté un appelle.", ReturnName(playerid, 0));
 	SetPlayerAttachedObject(playerid, 7, 330, 6,0.068,0.002,0.028999,-91.000205,0.400055,177.100051,1,1,1);
@@ -2195,13 +2166,13 @@ CMD:racrocher(playerid, params[])
 	}
 	if (PlayerData[playerid][pIncomingCall])
 	{
-	    SendClientMessage(playerid, COLOR_YELLOW, "[Téléphone]:{FFFFFF} Vous n'avez pas répondu");
+	    SendSyntaxMessage(playerid, "[Téléphone]:{FFFFFF} Vous n'avez pas répondu");
 	    SendClientMessage(targetid, COLOR_YELLOW, "[Téléphone]:{FFFFFF} Aucune réponse.");
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s a décliné un appelle.", ReturnName(playerid, 0));
 	}
 	else
 	{
-        SendClientMessage(playerid, COLOR_YELLOW, "[Téléphone]:{FFFFFF} Vous avez raccroché votre téléphone.");
+        SendSyntaxMessage(playerid, "[Téléphone]:{FFFFFF} Vous avez raccroché votre téléphone.");
 	    SendClientMessage(targetid, COLOR_YELLOW, "[Téléphone]:{FFFFFF} Il/elle a raccroché.");
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s raccroche son téléphone.", ReturnName(playerid, 0));
 	    SendNearbyMessage(targetid, 30.0, COLOR_PURPLE, "** %s raccroche son téléphone.", ReturnName(targetid, 0));
@@ -2341,7 +2312,7 @@ CMD:vendrefood(playerid, params[])
 	if (sscanf(params, "us[24]d", userid, food, price))
 	{
 	    SendSyntaxMessage(playerid, "/vendrefood [playerid/name] [nom du produit] [prix]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} eau, soda, burger, pizza, chicken, chargeur");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} eau, soda, burger, pizza, chicken, chargeur");
 	    return 1;
 	}
 	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 7.0))
@@ -2405,7 +2376,7 @@ CMD:boite(playerid, params[])
 	for (new i = 1; i != MAX_VEHICLES; i ++) if (IsLoadableVehicle(i) && IsPlayerNearBoot(playerid, i))
 	{
 	    if (GetVehicleCrates(i) < 1)
-	        return SendErrorMessage(playerid, "There are no crates in ce vehicule.");
+	        return SendErrorMessage(playerid, "Il n'a pas de boite dans ce vehicule.");
 		for (new j = 0; j != MAX_DYNAMIC_OBJ; j ++) if (CrateData[j][crateExists] && CrateData[j][crateVehicle] == i) {
 			format(string, sizeof(string), "%sCrate #%d: %s Parts\n", string, j, Crate_GetType(CrateData[j][crateType]));
 		}
@@ -2802,7 +2773,7 @@ CMD:leader(playerid, params[])
 	if (sscanf(params, "S()[128]",type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/leader [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} models, ranks, action[1 a 3], action[1 a 3]range");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} models, ranks, action[1 a 3], action[1 a 3]range");
 		return 1;
 	}
 	else if (!strcmp(type, "ranks", true)) {Faction_ShowRanks(playerid, factionid);}
@@ -3109,7 +3080,7 @@ CMD:mort(playerid, params[])
 	if (!PlayerData[playerid][pInjured])
 	    return SendErrorMessage(playerid, "Tu n'est pas blessé ou mort.");
 	SetPlayerHealth(playerid, 0.0);
-	SendServerMessage(playerid, "Vous accepté votre mort..");
+	SendServerMessage(playerid, "Vous accepté votre mort.");
 	GiveMoney(playerid, -500);
 	new moneyentrepriseid;
 	argent_entreprise[moneyentrepriseid][argentmedecin] +=500;
@@ -3201,7 +3172,7 @@ CMD:diffuser(playerid, params[])
 	if (FactionData[facass][factionacces][10] == 0)
 		return SendErrorMessage(playerid, "Tu doit faire partie du san news.");
 	if (!IsNewsVehicle(GetPlayerVehicleID(playerid)))
-	    return SendErrorMessage(playerid, "Vous devez être à l'intérieur du van sand news.");
+	    return SendErrorMessage(playerid, "Vous devez être à l'intérieur du van san news.");
 	if (!PlayerData[playerid][pBroadcast])
 	{
 	    PlayerData[playerid][pBroadcast] = true;
@@ -3389,7 +3360,7 @@ CMD:tog(playerid, params[])
 	if (isnull(params))
 	{
 	    SendSyntaxMessage(playerid, "/tog [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} ooc, pm, faction, Helpeur, broadcast, hud");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} ooc, pm, faction, Helpeur, broadcast, hud");
 	    return 1;
 	}
 	//new vehicleid = GetPlayerVehicleID(playerid);
@@ -3633,7 +3604,7 @@ CMD:herse(playerid, params[])
 	if (isnull(params))
  	{
 	 	SendSyntaxMessage(playerid, "/herse [option]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[OPTIONS]:{FFFFFF} poser, enlever, detruire");
+	    SendSyntaxMessage(playerid, "[OPTIONS]:{FFFFFF} poser, enlever, detruire");
 		return 1;
 	}
 	static Float:fX,Float:fY,Float:fZ,Float:fA;
@@ -3945,7 +3916,7 @@ CMD:enleverlicense(playerid, params[])
 CMD:prendrepoubelle(playerid, params[])
 {
 	new id = Garbage_Nearest(playerid),string[64],factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][7] == 0)
+	if (FactionData[factionid][factionacces][11] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (id == -1)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas proche du bon point pour faire cela.");
@@ -3965,19 +3936,31 @@ CMD:prendrepoubelle(playerid, params[])
 }
 CMD:viderpoubelle(playerid, params[])
 {
-	new vehicleid = GetPlayerVehicleID(playerid),factionid = PlayerData[playerid][pFaction],moneyentrepriseid;
-	if (FactionData[factionid][factionacces][7] == 0)
+	new vehicleid = GetPlayerVehicleID(playerid),factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][11] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
 	if (GetVehicleModel(vehicleid) != 408)
 	    return SendErrorMessage(playerid, "Tu doit conduire un camion poubelle.");
     if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[factionid][factionaction1Pos][0],FactionData[factionid][factionaction1Pos][1],FactionData[factionid][factionaction1Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
 	if (CoreVehicles[vehicleid][vehTrash] < 1)
 	    return SendErrorMessage(playerid, "Aucune poubelle dans ce véhicule.");
-	argent_entreprise[moneyentrepriseid][argentmairie] += CoreVehicles[vehicleid][vehTrash] * 15;
-	moneyentreprisesave(moneyentrepriseid);
+	FactionData[factionid][factioncoffre] += CoreVehicles[vehicleid][vehTrash] * 15;
 	ShowPlayerFooter(playerid, "Vous avez ~g~videz~w~ les poubelles!");
 	SendServerMessage(playerid, "Vous avez fait gagné %d$  à l'entreprise, pour avoir vidé les %d sacs de poubelles.", (CoreVehicles[vehicleid][vehTrash] * 15), CoreVehicles[vehicleid][vehTrash]);
 	CoreVehicles[vehicleid][vehTrash] = 0;
+	return 1;
+}
+CMD:trouverpoubelle(playerid, params[])
+{
+	new factionid = PlayerData[playerid][pFaction];
+	if (FactionData[factionid][factionacces][11] == 0)
+	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
+	new id = GetClosestGarbage(playerid);
+	if (id == -1)
+	    return SendErrorMessage(playerid, "Il ya pas de poubelle proche de vous.");
+	PlayerData[playerid][pCP] = 1;
+	SetPlayerCheckpoint(playerid, GarbageData[id][garbagePos][0], GarbageData[id][garbagePos][1], GarbageData[id][garbagePos][2], 2.5);
+	SendServerMessage(playerid, "Une poubelle est indiquée sur votre carte.");
 	return 1;
 }
 CMD:stylecombat(playerid, params[])
@@ -4715,7 +4698,7 @@ CMD:boombox(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", type, string))
 	{
 	    SendSyntaxMessage(playerid, "/boombox [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} place, prendre, url");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} place, prendre, url");
 	    return 1;
 	}
 	if (!strcmp(type, "place", true))
@@ -4752,26 +4735,13 @@ CMD:boombox(playerid, params[])
 	}
 	return 1;
 }
-CMD:trouverpoubelle(playerid, params[])
-{
-	new factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][7] == 0)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	new id = GetClosestGarbage(playerid);
-	if (id == -1)
-	    return SendErrorMessage(playerid, "Il ya pas de poubelle proche de vous.");
-	PlayerData[playerid][pCP] = 1;
-	SetPlayerCheckpoint(playerid, GarbageData[id][garbagePos][0], GarbageData[id][garbagePos][1], GarbageData[id][garbagePos][2], 2.5);
-	SendServerMessage(playerid, "Une poubelle est indiquée sur votre carte.");
-	return 1;
-}
 CMD:search(playerid, params[])
 {
 	new userid;
 	if (sscanf(params, "u", userid))
 	{
 		SendSyntaxMessage(playerid, "/search [playerid/nom]");
-		SendClientMessage(playerid, COLOR_YELLOW, "[HINT]:{FFFFFF} Tape /searchbp Une recherche le sac à dos d'un joueur.");
+		SendSyntaxMessage(playerid, "[HINT]:{FFFFFF} Tape /searchbp Une recherche le sac à dos d'un joueur.");
 		return 1;
 	}
 	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -5002,16 +4972,38 @@ CMD:stopchargement(playerid, params[])
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 	DisablePlayerCheckpoint(playerid);
 	SendServerMessage(playerid, "Tu ne charge plus de marchandise.");
+	if (PlayerData[playerid][pUnloading] != -1)
+	{
+	 	PlayerData[playerid][pUnloading] = -1;
+		PlayerData[playerid][pUnloadVehicle] = INVALID_VEHICLE_ID;
+		DisablePlayerCheckpoint(playerid);
+	}
+	if (PlayerData[playerid][pDeliverShipment])
+	{
+		PlayerData[playerid][pShipment] = -1;
+		PlayerData[playerid][pDeliverShipment] = 0;
+		DisablePlayerCheckpoint(playerid);
+	}
+	if (PlayerData[playerid][pLoading])
+	{
+		PlayerData[playerid][pLoading] = 0;
+		PlayerData[playerid][pLoadType] = 0;
+		DisablePlayerCheckpoint(playerid);
+	}
+	if (PlayerData[playerid][pLoadCrate])
+ 	{
+  		PlayerData[playerid][pLoadCrate] = 0;
+		RemovePlayerAttachedObject(playerid, 4);
+		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+	}
 	return 1;
 }
 CMD:chargermarchandise(playerid, params[])
 {
- 	new id = Job_NearestPoint(playerid),stockjobinfoid,factionid = PlayerData[playerid][pFaction];
-	if (FactionData[factionid][factionacces][6] == 0)
+ 	new stockjobinfoid,facass = PlayerData[playerid][pFaction];
+	if (FactionData[facass][factionacces][6] == 0)
 	    return SendErrorMessage(playerid, "Vous n'êtes pas dans cette entreprise.");
-	if (id == -1 || JobData[id][jobType] != JOB_COURIER)
-	    return SendErrorMessage(playerid, "Vous n'êtes pas proche de la position.");
-	Job_Refresh(id);
+    if (!IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2])) return SendErrorMessage(playerid,"Vous n'êtes pas à la bonne place.");
     if(info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] < 10)
 		return SendErrorMessage(playerid,"Il n'y a pas assez de marchandise pour livrer");
 	if (PlayerData[playerid][pLoadType] > 0)
@@ -5062,6 +5054,30 @@ CMD:refuserlivraison(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'avez pas accepté de livraison.");
 	CancelShipment(playerid);
 	SendServerMessage(playerid, "Vous avez annulé une livraison");
+	if (PlayerData[playerid][pUnloading] != -1)
+	{
+	 	PlayerData[playerid][pUnloading] = -1;
+		PlayerData[playerid][pUnloadVehicle] = INVALID_VEHICLE_ID;
+		DisablePlayerCheckpoint(playerid);
+	}
+	if (PlayerData[playerid][pDeliverShipment])
+	{
+		PlayerData[playerid][pShipment] = -1;
+		PlayerData[playerid][pDeliverShipment] = 0;
+		DisablePlayerCheckpoint(playerid);
+	}
+	if (PlayerData[playerid][pLoading])
+	{
+		PlayerData[playerid][pLoading] = 0;
+		PlayerData[playerid][pLoadType] = 0;
+		DisablePlayerCheckpoint(playerid);
+	}
+	if (PlayerData[playerid][pLoadCrate])
+ 	{
+  		PlayerData[playerid][pLoadCrate] = 0;
+		RemovePlayerAttachedObject(playerid, 4);
+		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+	}
 	return 1;
 }
 CMD:fairelivraison(playerid, params[])
@@ -5544,7 +5560,7 @@ CMD:appeler(playerid, params[])
 	    PlayerData[playerid][pTaxiCalled] = 1;
 	    PlayerPlaySound(playerid, 3600, 0.0, 0.0, 0.0);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort son téléphone puis compose un numéro.", ReturnName(playerid, 0));
-		SendClientMessage(playerid, COLOR_YELLOW, "[OPÉRATEUR]:{FFFFFF} Les chauffeurs de taxi ont reçu votre appel. Ne Bougez pas.");
+		SendSyntaxMessage(playerid, "[OPÉRATEUR]:{FFFFFF} Les chauffeurs de taxi ont reçu votre appel. Ne Bougez pas.");
         SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s décroche son téléphone.", ReturnName(playerid, 0));
         PlayerData[playerid][pAcom] -= 3;
 		foreach (new i : Player)
@@ -5557,7 +5573,7 @@ CMD:appeler(playerid, params[])
 	}
 	else if (number == 555)
 	{
-		SendClientMessage(playerid, COLOR_YELLOW, "OPÉRATEUR:{FFFFFF} Un service de mécanicien a été prévenu de votre appel.");
+		SendSyntaxMessage(playerid, "OPÉRATEUR:{FFFFFF} Un service de mécanicien a été prévenu de votre appel.");
 		MecanoApel = playerid;
 		PlayerData[playerid][pAcom] -= 3;
 		foreach (new i : Player)
@@ -5610,7 +5626,7 @@ CMD:appeler(playerid, params[])
 	}
 	else if (number == 1002)
 	{
-		if (FactionData[factionid][factionacces][14] == 0)
+		if (FactionData[factionid][factionacces][9] == 0)
 			return SendTelephoneMessage(playerid, "Téléphone : Vous êtes qui vous?");
 		if (PlayerData[playerid][pFactionRank] < FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1)
 			return SendErrorMessage(playerid, "Tu doit être minimum rang %d pour commander des pièces.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
@@ -7807,7 +7823,7 @@ CMD:craft(playerid,params[])
 	if (sscanf(params, "s[64]",type))
 	{
 	    SendSyntaxMessage(playerid, "/craft [option]");
-		SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} pomme verte,pomme rouge,object contaminer");
+		SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} pomme verte,pomme rouge,object contaminer");
 		return 1;
 	}
 	else if (!strcmp(type, "pomme verte", true))

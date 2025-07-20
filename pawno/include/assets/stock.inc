@@ -4587,13 +4587,22 @@ Faction_Refresh(factionid)
 	    if (FactionData[factionid][factionLockerPos][0] != 0.0 && FactionData[factionid][factionLockerPos][1] != 0.0 && FactionData[factionid][factionLockerPos][2] != 0.0)
 	    {
 		    static string[128];
-			if (IsValidDynamicPickup(FactionData[factionid][factionPickup]))
-			    DestroyDynamicPickup(FactionData[factionid][factionPickup]);
+			if (IsValidDynamicPickup(FactionData[factionid][factionPickup][0]))
+				DestroyDynamicPickup(FactionData[factionid][factionPickup][0]);
 			if (IsValidDynamic3DTextLabel(FactionData[factionid][factionText3D]))
 			    DestroyDynamic3DTextLabel(FactionData[factionid][factionText3D]);
-			FactionData[factionid][factionPickup] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
+			if (IsValidDynamicPickup(FactionData[factionid][factionPickup][1]))
+			    DestroyDynamicPickup(FactionData[factionid][factionPickup][1]);
+			if (IsValidDynamicPickup(FactionData[factionid][factionPickup][2]))
+			    DestroyDynamicPickup(FactionData[factionid][factionPickup][2]);
+			if (IsValidDynamicPickup(FactionData[factionid][factionPickup][3]))
+			    DestroyDynamicPickup(FactionData[factionid][factionPickup][3]);
+			FactionData[factionid][factionPickup][0] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
 			format(string, sizeof(string), "[Equipement %d]\n{FFFFFF}(/fequip)ement pour vous équiper.", factionid);
 	  		FactionData[factionid][factionText3D] = CreateDynamic3DTextLabel(string, COLOR_DARKBLUE, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], 10.0, INVALID_VEHICLE_ID, INVALID_PLAYER_ID, 1, FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
+			FactionData[factionid][factionPickup][1] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionaction1Pos][0], FactionData[factionid][factionaction1Pos][1], FactionData[factionid][factionaction1Pos][2],-1, -1);
+			FactionData[factionid][factionPickup][2] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionaction2Pos][0], FactionData[factionid][factionaction2Pos][1], FactionData[factionid][factionaction2Pos][2],-1, -1);
+			FactionData[factionid][factionPickup][3] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionaction3Pos][0], FactionData[factionid][factionaction3Pos][1], FactionData[factionid][factionaction3Pos][2],-1, -1);
 		}
 	}
 	return 1;
@@ -4907,7 +4916,8 @@ Crate_Drop(playerid, Float:radius = 0.0)
 	{
 		GetPlayerPos(playerid, x, y, z);
 		GetPlayerFacingAngle(playerid, angle);
-		if (radius != 0.0) {
+		if (radius != 0.0) {
+
 		    x += radius * floatsin(-angle, degrees);
 		    y += radius * floatcos(-angle, degrees);
 		}
@@ -7309,8 +7319,8 @@ Dialog:DateBirth(playerid, response, listitem, inputtext[])
 	    if (sscanf(inputtext, "p</>ddd", iDay, iMonth, iYear)) {
 	        Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
 		}
-		else if (iYear < 1950 || iYear > 2000) { // a changer pour les année qu'on veux
-			return Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année) entre 1950 et 2000:", "Envoyer", "Annuler");
+		else if (iYear < 1930 || iYear > 1980) { // a changer pour les année qu'on veux
+			return Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année) entre 1930 et 1980:", "Envoyer", "Annuler");
 		}
 		else if (iMonth < 1 || iMonth > 12) {
 		    Dialog_Show(playerid, DateBirth, DIALOG_STYLE_INPUT, "Date de naissance", "Erreur: Format invalide!\n\nVeuiller entré dans le formant (Jour/Mois/Année):", "Envoyer", "Annuler");
@@ -7677,19 +7687,15 @@ Dialog:StartDelivery(playerid, response, listitem, inputtext[])
 {
 	if (response)
 	{
-	    new id = Job_NearestPoint(playerid),stockjobinfoid;
-	    if (id == -1)
-	        return 0;
-
+	    new stockjobinfoid;
 		PlayerData[playerid][pLoadType] = listitem + 1;
 		PlayerData[playerid][pLoadCrate] = 1;
 		PlayerData[playerid][pLoading] = 1;
 		SendEntrepriseMessage(playerid, "Tu a choisi de livrer \"%s\". Charge dans le camion pour commencé.", inputtext);
-		SetPlayerCheckpoint(playerid, JobData[id][jobPoint][0], JobData[id][jobPoint][1], JobData[id][jobPoint][2], 1.0);
         SetPlayerAttachedObject(playerid, 4, 3014, 1, 0.038192, 0.371544, 0.055191, 0.000000, 90.000000, 357.668670, 1.000000, 1.000000, 1.000000);
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
 		ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
-		ShowPlayerFooter(playerid, "Appuyer  sur ~y~'N'~w~ pour chargé des marchandises.");
+		ShowPlayerFooter(playerid, "Appuyer  sur ~y~'N'~w~ pour charger des marchandises.");
 		info_stockjobinfo[stockjobinfoid][stockjobinfostockmagasin] -= 1;
 		stockjobinfosave(stockjobinfoid);
 		Updatestockmagasin();
@@ -9195,7 +9201,7 @@ Dialog:Crates(playerid, response, listitem, inputtext[])
             SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
 
 			SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s prend un(e) et tu la sorti du vehicule.", ReturnName(playerid, 0));
-			SendVehiculeMessage(playerid, "Tu a prit %s et tu la sorti du vehicule.", Crate_GetType(CrateData[id][crateType]));
+			SendVehiculeMessage(playerid, "Tu a pris une boite de %s et tu la sorti du vehicule.", Crate_GetType(CrateData[id][crateType]));
 		}
 	}
 	return 1;
@@ -19322,7 +19328,7 @@ Dialog:commande(playerid, response, listitem, inputtext[])
 				{
 					//if(mercco < 1) {ShowPlayerFooter(playerid, " Il n'a pas de livreur de marchandise"); return 1;}
 					if (FactionData[facass][factioncoffre] < 5000)
-						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (500$)");
+						return SendErrorMessage(playerid, "Vous n'avez pas asser d'argent dans le coffre pour cette transation. (5000$)");
 					SendClientMessage(playerid,COLOR_YELLOW,"John : Une livraison a une place a été commencer.(10 minute environ pour la livraison)");
 					SetTimer("commandlunchnos",1000,0);
 					SendClientMessage(playerid,COLOR_YELLOW,"Téléphone : Livraison a un aéroport fait, attendre les livreurs.");
@@ -22345,7 +22351,7 @@ Dialog:aidemenu(playerid, response, listitem, inputtext[])
 				"- /banque pour ouvrir le menu de la banque,\n- /payer pour payer un joueur,\n- /donnerarme pour donner une arme a un joueur,\n- /serrermain pour demander un serrage de main,\n- /volerbanque pour voler la banque,\n- /voleritem voler un item dans un magasin,\n\
 				- /ouvrircargaison pour ouvrir une boite,\n- /boombox pour mettre une musique,\n- /montrerpermis Pour montrer vos permis a un joueur,\n- /boite savoir le nombre de cargaisons dans un vehicule,\n- /planter pour pouvoir planter de la drogue,\n- /recolter Pour récolter une plante de drogue poussée\n\
 				- /trousse pour utiliser un kit de premier soin,\n- /crocheterporte pour forcer une porte d'un vehicule,\n- /fouiller pour fouiller dans l'inventaire d'un joueur,\n- /freq pour choisir le channel de votre talkie-walkie,\n\
-				- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n-/bras et /jambes voir votre musculation niveau bras et ou jambes\n-/zkill pour les skills de vos armes et le nombre de zombie tuée\n- /credits pour voir les credits\n\
+				- /chargeur pour charger votre arme avec des munitions,\n- /usemag pour utiliser un seul chargeur dans votre inventaire pour votre arme,\n- /carte Montrer sa carte d'indentité,\n- /tme [texte] Pour une description de votre personage (120 charactere de max)\n- /quitjob pour quitter son job actuel,\n- /tmeoff pour enlever le tme\n- /bras et /jambes voir votre musculation niveau bras et ou jambes\n- /zkill pour les skills de vos armes et le nombre de zombie tuée\n- /credits pour voir les credits\n\
 				","Quitter","");
 			}
 		}
@@ -22396,7 +22402,7 @@ Dialog:echanger(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Tu a besoin de 5 gold bars pour l'échanger");
 				Inventory_Remove(playerid,"gold bar",5);
 				PlayerData[playerid][pAcom] = 1000;
-				SendServerMessage(playerid,"Voila 1000% de batterie pour votre téléphone!");
+				SendServerMessage(playerid,"Voila 1000 pourcent de batterie pour votre téléphone!");
 			}
 			case 7:
 			{
@@ -23214,11 +23220,11 @@ Dialog:tutoconnaitre4(playerid, response, listitem, inputtext[])
 		new msg1[100],msg2[100];
 		if (isnull(inputtext)) return Dialog_Show(playerid, tutoconnaitre4, DIALOG_STYLE_INPUT, "Questionnaire","Qu’est ce que le Roleplay?\n Veuillez écrire brièvement votre réponse\n96 caractère maximun", "Envoyer", " X ");
 		SendServerMessage(playerid,"Merci un admin va vous prendre en charge");
+		SendServerMessage(playerid,"Si aucun admin est présent IG ou discord et si vous quittez vous aller devoir refaire un personnage.");
 		SendServerMessage(playerid,"Même s'il n'y a aucun admin IG attentez quelques minutes ou voir discord.");
-		SendServerMessage(playerid,"Si un admin n'est pas présent il vous sera recommander de quitter et de refaire un personnage.");
 		SendAdminAlert(COLOR_ADMINCHAT, "Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d",ReturnName(playerid, 0),playerid);
 		SendAdminAlert(COLOR_ADMINCHAT, "/apps [playerid] pour accepter ou refuser un joueur");
-		format(msg1, sizeof(msg1),"Un joueur dénommer %s a fini son tutoriel et attent une réponse ID %d !apps ID",ReturnName(playerid, 0),playerid);
+		format(msg1, sizeof(msg1),"Un joueur denommer %s a fini son tutoriel et attent une reponse ID %d !apps ID",ReturnName(playerid, 0),playerid);
 		utf8encode(msg2,msg1,sizeof(msg2));
 		DCC_SendChannelMessage(discordaaa,msg2);
 		TogglePlayerControllable(playerid, 0);

@@ -745,7 +745,7 @@ script Faction_Load()
 		    format(str, sizeof(str), "factionRank%d", j + 1);
 		    cache_get_field_content(i, str, FactionRanks[i][j], g_iHandle, 32);
 		}
-		for (new j = 1; j < 10; j ++) {
+		for (new j = 1; j < 15; j ++) {
 		    format(str, sizeof(str), "factionacces%d",j);
 		    FactionData[i][factionacces][j] = cache_get_field_int(i, str);
 		    format(str, sizeof(str), "SalaireRank%d",j);
@@ -3376,18 +3376,18 @@ script PlayerCheck()
 		    if (!IsPlayerInRangeOfPoint(i, 600.0, g_arrDrivingCheckpoints[PlayerData[i][pTestStage]][0], g_arrDrivingCheckpoints[PlayerData[i][pTestStage]][1], g_arrDrivingCheckpoints[PlayerData[i][pTestStage]][2]))
 			{
 		        CancelDrivingTest(i);
-				SendClientMessage(i, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Tu a échoué car tu a quitté la zone.");
+				SendPermisMessage(i, "[ATTENTION]:{FFFFFF} Tu a échoué car tu a quitté la zone.");
     		}
 			else if (GetPlayerSpeed(i) >= 59.0)
    			{
 				if (++PlayerData[i][pTestWarns] < 3)
 				{
-    				SendClientMessageEx(i, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Pas si vite ralentie!!!! (%d/3)", PlayerData[i][pTestWarns]);
+    				SendPermisMessage(i, "[ATTENTION]:{FFFFFF} Pas si vite ralentie!!!! (%d/3)", PlayerData[i][pTestWarns]);
         		}
 	       		else
 				{
     				CancelDrivingTest(i);
-        			SendClientMessage(i, COLOR_LIGHTRED, "[ATTENTION]:{FFFFFF} Tu a échoué car tu roulais trop vite");
+        			SendPermisMessage(i, "[ATTENTION]:{FFFFFF} Tu a échoué car tu roulais trop vite");
 			    }
 			}
 		}
@@ -3802,7 +3802,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 		Inventory_Add(playerid, "Bouteille vide", 1484);
 		Inventory_Remove(playerid, "Soda");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_SPRUNK);
- 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
+ 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille de soda et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
     else if (!strcmp(name, "eau", true)) {
@@ -3810,14 +3810,14 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de bouteille d'eau sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 3;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
 		Inventory_Add(playerid, "Bouteille vide", 1484);
 		Inventory_Remove(playerid, "eau");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_SPRUNK);
- 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
+ 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille d'eau et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
     else if (!strcmp(name, "jus de pomme", true)) {
@@ -3825,14 +3825,14 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de jus de pomme sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 3;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
 		Inventory_Add(playerid,"Boite de carton", 928);
 		Inventory_Remove(playerid, "jus de pomme");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_SPRUNK);
- 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
+ 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une boite de jus de pommes et l'ouvre..", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
     else if (!strcmp(name, "jus dorange", true)) {
@@ -3840,14 +3840,14 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de jus de d'orange sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 3;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
 		Inventory_Add(playerid, "Boite de carton", 928);
 		Inventory_Remove(playerid, "jus dorange");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_SPRUNK);
- 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
+ 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une boite de jus d'orange et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
     else if (!strcmp(name, "cafe", true)) {
@@ -3855,7 +3855,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 	    	return SendErrorMessage(playerid, "Vous n'avez pas de café sur vous.");
 		if (PlayerData[playerid][pThirst] > 90)
 	    	return SendErrorMessage(playerid, "Vous n'avez pas soif maintenant.");
-        PlayerData[playerid][pDrinking] = 2;
+        PlayerData[playerid][pDrinking] = 3;
         PlayerData[playerid][pDrinkBar] = CreatePlayerProgressBar(playerid, 572.00, 440.00, 56.50, 3.20, -1429936641, 100.0);
         ShowPlayerProgressBar(playerid, PlayerData[playerid][pDrinkBar]);
         SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], 100.0);
@@ -3876,7 +3876,7 @@ script OnPlayerUseItem(playerid, itemid, name[])
 		Inventory_Add(playerid, "Bouteille vide", 1484);
 		Inventory_Remove(playerid, "alcool");
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DRINK_WINE);
- 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille et l'ouvre.", ReturnName(playerid, 0));
+ 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s sort une bouteille d'alcool et l'ouvre.", ReturnName(playerid, 0));
  		ShowPlayerFooter(playerid, "Appuyer ~y~LMB~w~ pour boire.");
     }
     else if (!strcmp(name, "Pizza surgele", true)) {
@@ -7324,6 +7324,11 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	    	    {
 					case 1: PlayerData[playerid][pThirst] = (PlayerData[playerid][pThirst] + 5 >= 100) ? (100) : (PlayerData[playerid][pThirst] + 5);
                     case 2: PlayerData[playerid][pThirst] = (PlayerData[playerid][pThirst] + 5 >= 100) ? (100) : (PlayerData[playerid][pThirst] + 5);
+                    case 3:
+					{
+						PlayerData[playerid][pThirst] = (PlayerData[playerid][pThirst] + 5 >= 100) ? (100) : (PlayerData[playerid][pThirst] + 5);
+						SetPlayerStaminaSubVal(playerid, -10.0);
+					}
 				}
 			    SetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar], GetPlayerProgressBarValue(playerid, PlayerData[playerid][pDrinkBar]) - 10.0);
 			}
@@ -7467,7 +7472,7 @@ script OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		    HoldWeapon(playerid, 0);
 		    return SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "** %s lache son arme vide.", ReturnName(playerid, 0));
 		}
-		if (PlayerData[playerid][pLoadCrate])
+		if (PlayerData[playerid][pLoadCrate] == 1)
 		{
 		    for (new i = 1; i != MAX_VEHICLES; i ++) if (IsPlayerNearBoot(playerid, i))
 			{
@@ -8976,7 +8981,7 @@ script OnPlayerEnterCheckpoint(playerid)
 		}
 		else if (FactionData[facass][factionacces][6] == 1 && !IsPlayerInAnyVehicle(playerid))
 		{
-			if (PlayerData[playerid][pLoading] && !PlayerData[playerid][pLoadCrate] && Job_NearestPoint(playerid) != -1)
+			if (PlayerData[playerid][pLoading] == 1 && PlayerData[playerid][pLoadCrate] == 1 && IsPlayerInRangeOfPoint(playerid, 5.0,FactionData[facass][factionaction1Pos][0],FactionData[facass][factionaction1Pos][1],FactionData[facass][factionaction1Pos][2]))
 			{
 			    PlayerData[playerid][pLoadCrate] = 1;
 		        SetPlayerAttachedObject(playerid, 4, 3014, 1, 0.038192, 0.371544, 0.055191, 0.000000, 90.000000, 357.668670, 1.000000, 1.000000, 1.000000);
@@ -9084,7 +9089,7 @@ script OnPlayerEnterCheckpoint(playerid)
 						DisablePlayerCheckpoint(playerid);
 					    SendServerMessage(playerid, "Vous avez livrer toute les marchandises.");
 					    SendServerMessage(playerid, "Retournez au dépot pour que l'entreprise soit payer.");
-					    SetPlayerCheckpoint(playerid,2459.6982,-2115.7124,13.5469, 5.0);
+					    SetPlayerCheckpoint(playerid,FactionData[facass][factionaction2Pos][0],FactionData[facass][factionaction2Pos][1],FactionData[facass][factionaction2Pos][2],15.0);
 					    if (PlayerData[playerid][pShipment] != -1)
 					    {
 					        foreach (new i : Player) if (Business_IsOwner(i, PlayerData[playerid][pShipment])) {
@@ -10451,7 +10456,7 @@ script OnPlayerUpdate(playerid)
 	}
 	if (GetPlayerScore(playerid) != PlayerData[playerid][pPlayingHours])
 	{
-		SetPlayerScore(playerid, PlayerData[playerid][pPlayingHours]/12);
+		SetPlayerScore(playerid, PlayerData[playerid][pPlayingHours]/4);
 	}
 	if (PlayerData[playerid][pWaypoint])
 	{
@@ -11488,8 +11493,8 @@ script OnGameModeInit()
 		case 69: missionactor[2] = CreateActor(179,2040.6052,-1830.0254,13.5937,55.5965); //
 	}
 	//amendes
-	actorvendeuramendes[0] = CreateActor(310,1563.0867,-1650.5616,3001.2083,181.9357);
-	SetActorVirtualWorld(actorvendeuramendes[0],1000);
+	actorvendeuramendes[0] = CreateActor(310,232.3615,160.6323,1003.0234,219.2114);
+	SetActorVirtualWorld(actorvendeuramendes[0],1911);
 	//permis
 	actorvendeurpermis[0] = CreateActor(240,1172.8411,1346.7783,10.9219,4.0382);
 	SetActorVirtualWorld(actorvendeurpermis[0], 0);
@@ -11507,7 +11512,7 @@ script OnGameModeInit()
 	soinbot = CreateActor(274,-196.3317, -1743.2111, 675.3954,96.44); //bot soins
 	armespolice = CreateActor(267,1548.5010,-1629.3090,3001.0859,205.6856);//bot arme jetter
 	SetActorVirtualWorld(piececaisse, 7039);
-	SetActorVirtualWorld(armespolice,1000);
+	SetActorVirtualWorld(armespolice,1911);
 	SetActorVirtualWorld(soinbot,5003);
 	for (new i = 0; i < sizeof(arrBoothPositions); i ++) {
 	    CreateDynamic3DTextLabel("[Shooting Range]\n{FFFFFF}Press 'F' pour utiliser cette emplacement.", COLOR_DARKBLUE, arrBoothPositions[i][0], arrBoothPositions[i][1], arrBoothPositions[i][2], 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, 7);

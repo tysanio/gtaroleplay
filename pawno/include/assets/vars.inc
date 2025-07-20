@@ -273,7 +273,7 @@ enum playerData {
 	pBraceletProx,
 	//loc veh
 	pLocaID,
-	//prêt veh
+	//pr?veh
 	pCarD,
 	//baterie telephone
 	pAcom,
@@ -566,7 +566,7 @@ enum factionData {
 	factionWeapons[10],
 	factionAmmo[10],
 	Text3D:factionText3D,
-	factionPickup,
+	factionPickup[4],
 	factionacces[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
 	factioncoffre,
 	factionsalaire[16], // jai du mettre 16 car sa va de 1 a 15 mais je prend pas le 0 en compte
@@ -1258,7 +1258,7 @@ Job_GetName(type)
 		case 7: str = "Bucheron";
 		case 8: str = "Boucher";
 		case 9: str = "Technicien generateur";
-		case 10: str = "Pétrolier";
+		case 10: str = "P?olier";
 		case 11: str = "Electricien";
 		case 12: str = "Doc port";
 		case 13: str = "Usine electronique";
@@ -2721,7 +2721,7 @@ new const g_arrInteriorData[][e_InteriorData] = {
     {"Denise's Room", 1, 244.411987, 305.032989, 999.148437},
     {"Katie's Room", 2, 271.884979, 306.631988, 999.148437},
     {"Helena's Room", 3, 291.282989, 310.031982, 999.148437},
-    {"Michelle's Room(ModifiÉ)", 4, 302.180999, 300.722991, 999.148437},
+    {"Michelle's Room(Modifi?", 4, 302.180999, 300.722991, 999.148437},
     {"Barbara's Room", 5, 322.197998, 302.497985, 999.148437},
     {"Millie's Room", 6, 346.870025, 309.259033, 999.155700},
     {"Sherman Dam", 17, -959.564392, 1848.576782, 9.000000},
@@ -2794,14 +2794,14 @@ new const g_arrInteriorData[][e_InteriorData] = {
 	{"Appartement Gris", 13,1958.5941, -289.7225, 4846.3477},
 	{"Warehouse", 19,1620.6233, -3557.1165, 1394.0111},
 	{"Maison", 16,1497.8046, -1721.1125, 1361.9089},
-	{"Auto École", 13,-404.5512, -109.4231, 1278.4432},
+	{"Auto ?ole", 13,-404.5512, -109.4231, 1278.4432},
 	{"Maison 2", 10,-35.6880, -98.1513, 1078.0999},
-	{"Église", 1,-1991.9131, 1118.6000, 457.4883},
-	{"Auto École 2", 3,862.9678, 4584.6729, 362.9966},
+	{"?lise", 1,-1991.9131, 1118.6000, 457.4883},
+	{"Auto ?ole 2", 3,862.9678, 4584.6729, 362.9966},
 	{"City Hall 2", 0,1467.4575,-1726.5452,1052.5127},
 	{"Maison 3", 6,2448.8196, -1763.2864, -77.0966},
-	{"HLM étage 1", 6,1394.8495, -1586.3341, 1087.7266},
-	{"HLM étage 2", 7,1348.3359, -1587.1244, 1097.6431},
+	{"HLM ?ge 1", 6,1394.8495, -1586.3341, 1087.7266},
+	{"HLM ?ge 2", 7,1348.3359, -1587.1244, 1097.6431},
 	{"Boucherie", 1,963.9811, 2107.9419, 1011.4445},
 	{"Usine", 2,2570.1716, -1301.7283, 1044.1682},
 	{"Generateur", 17,-959.5922,1952.5701,9.0000},
@@ -3492,7 +3492,7 @@ new info_salaireurgentiste[MAX_FACTIONS][salaireurgentisted];
 new UCL[MAX_VEHICLES];
 new gelblicht1[MAX_VEHICLES];
 new gelblicht2[MAX_VEHICLES];
-//limitation de vitesse sur un véhicule abimer
+//limitation de vitesse sur un v?cule abimer
 new const BE_Bad_Vehs[] = {
 460, 464, 476, 511, 512, 513, 519, 520, 539, 553, 577, 592, 593, // planes
 417, 425, 447, 465, 469, 487, 488, 497, 501, 548, 563 // heli
@@ -3501,8 +3501,8 @@ new bool: BE_Play_Check[MAX_PLAYERS];
 //Job fab arme
 new gunjob;
 //Job boucher
-new meats[MAX_PLAYERS];// Quantité article
-new meatprocces[MAX_PLAYERS];// vérifier Checkpoint
+new meats[MAX_PLAYERS];// Quantit?rticle
+new meatprocces[MAX_PLAYERS];// v?fier Checkpoint
 new AnimTimer;// ??????
 new PlayerInJob[MAX_PLAYERS];
 new OldSkin[MAX_PLAYERS];
@@ -3519,7 +3519,7 @@ enum ainfo
 }
 new ActorInfo[MAX_DYNAMIC_OBJ][ainfo];
 //ceinture
-new SeatbeltStatus[MAX_PLAYERS]; // Variable qui est va tenir le statut de la ceinture de sécurité.
+new SeatbeltStatus[MAX_PLAYERS]; // Variable qui est va tenir le statut de la ceinture de s?rit?
 new Float:CarHealth[MAX_PLAYERS];
 //job usine
 new Sklad;
@@ -3541,8 +3541,8 @@ new gen4 = 300,gen4m = 0,OnGen4 = 0;
 new Text3D: gen4text,Text3D: gen4money;
 new gen5 = 300,gen5m = 0,OnGen5 = 0;
 new Text3D: gen5text,Text3D: gen5money;
-new OnBenz[MAX_PLAYERS],genpickup[5]; // Pick-up générateurs.
-//new dambapickup[2]; // Entrée / Sortie (DAM).
+new OnBenz[MAX_PLAYERS],genpickup[5]; // Pick-up g?rateurs.
+//new dambapickup[2]; // Entr?/ Sortie (DAM).
 new threesecondtimer;
 //job electicien
 new Elektrik[4];
@@ -3642,12 +3642,12 @@ new AFKTimer;
 new AFKMin[MAX_PLAYERS];
 new Float:AFKPos[MAX_PLAYERS][3];
 /* PARAMETRE */
-new AFKMaxMin; //Nombre de minutes avant le kick pour AFK (valeur par defaut mais peux être modifier IG par un admin via la commande /afkmaxmin)
-new AFKActiver; //1 = Anti AFK activé 0 = afk desactivé (valeur par defaut mais peux être modifier IG par un admin via la commande /afksystem)
+new AFKMaxMin; //Nombre de minutes avant le kick pour AFK (valeur par defaut mais peux ?e modifier IG par un admin via la commande /afkmaxmin)
+new AFKActiver; //1 = Anti AFK activ? = afk desactiv?valeur par defaut mais peux ?e modifier IG par un admin via la commande /afksystem)
 //dynamite boom
 new dynamite_Timer,dynamiteobject,Float:dx, Float:dy, Float:dz;
 //braquage
-new cop_nbrCops=0;                              // Nombre de flics connectés.
+new cop_nbrCops=0;                              // Nombre de flics connect?
 new swat_nbrCops=0; 								// swat co
 //bank
 new objectbank[MAX_PLAYERS];
@@ -3742,13 +3742,12 @@ new Float:cPos[37][2] ={
 {517.000000, 145.000000}
 };
 //candidat vote
-const MAX_CANDIDATES = 10; // Le nombre maximum de candidats (20) | Le plus petit est le nombre, moins de mémoire sera alloué.
-const SERVER_SLOTS = 1000; // Nombre de serveur de fentes
+const MAX_CANDIDATES = 10; // Le nombre maximum de candidats (20) | Le plus petit est le nombre, moins de m?ire sera allou?const SERVER_SLOTS = 1000; // Nombre de serveur de fentes
 new Sphere[3];
 new Candidates1[MAX_CANDIDATES][MAX_PLAYER_NAME];
-new bool: Voting[SERVER_SLOTS+1]; // Vérifiez la newsletter
+new bool: Voting[MAX_PLAYERS+1]; // V?fiez la newsletter
 new Votes[MAX_CANDIDATES], // Nombre de votes pour chaque candidat
-        NumberOfCandidates; // Le nombre de candidats (en partant de la base de données)
+        NumberOfCandidates; // Le nombre de candidats (en partant de la base de donn?)
 //limiteur
 new seb[MAX_PLAYERS];
 //bot

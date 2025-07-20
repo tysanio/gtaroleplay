@@ -8,7 +8,7 @@
 //Information serveur
 #define SERVER_NAME 	 														"" //pour le nom du serveur
 #define SERVER_URL 		 														""
-#define SERVER_REVISION  														"0.0.1"
+#define SERVER_REVISION  														""
 #define LANGUAGE																"French"
 #define PASSWORD																"0" // a mettre 0 pour pas de mot de passe
 
@@ -75,7 +75,6 @@
 
 //Job
 #define JOB_CHOMEUR																(0)
-#define JOB_COURIER 															(1)
 #define JOB_UNLOADER 															(2)
 #define JOB_MINER 																(3)
 #define JOB_SORTER 																(4)
@@ -88,7 +87,6 @@
 #define JOB_ELECTRICIEN                                                        	(11)
 #define JOB_DOC                                                        			(12)
 #define JOB_USINE                                                               (13)
-#define JOB_GARBAGE																(14)
 
 //Maximum par joueur/serveur
 #define MAX_REPORTS 															(20)
@@ -101,7 +99,7 @@
 #define MAX_DYNAMIC_CARS 														(1500)
 #define MAX_FURNITURE 															(7500)
 #define MAX_HOUSE_FURNITURE 													(100)
-#define MAX_DYNAMIC_JOBS 														(20)
+#define MAX_DYNAMIC_JOBS 														(15)
 #define MAX_CONTACTS 															(20)
 #define MAX_GPS_LOCATIONS 														(20)
 #define MAX_CAR_STORAGE 														(10)
@@ -217,16 +215,16 @@
 #define     ATM_REGEN               (6000)       // a robbed atm will start working after x seconds (Default: 120)
 //discord chat A CHANGER POUR LES BONNE VALEUR
 #define DISCORD_PREFIX "!!"                  // your prefix to use command
-#define Dadmin1 ""
-#define Dadmin2 ""              
-#define Dadmin3 ""                  
-#define Dadmin4 ""                  
-#define Dverifier ""                  
-#define Ddiscord ""         
-#define Dchat "" //pour joueur
-#define Achat "" //pour admin
-#define ooc ""
-#define spamadmin ""
+#define Dadmin1 "1394333307596050482"
+#define Dadmin2 "1394333286318215298"              
+#define Dadmin3 "1394333246535503892"                  
+#define Dadmin4 "1394330616782258206"                  
+#define Dverifier "1394333330614386758"                  
+#define Ddiscord "1394325970424434830"         
+#define Dchat "1394341051027951779" //pour joueur
+#define Achat "1394428262452564189" //pour admin
+#define ooc "1394341051027951779"
+#define spamadmin "1394341189582454856"
 //gear 
 #define GEAR1_SPEED 20
 #define GEAR2_SPEED 40

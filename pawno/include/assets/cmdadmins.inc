@@ -10,8 +10,8 @@ CMD:ahelp(playerid, params[])
 		SendClientMessage(playerid, COLOR_GREY, "[LEVEL 1]:{FFFFFF} /x /y /z /renvoyer, /gotoactor.");
  	}
 	if (PlayerData[playerid][pAdmin] >= 2) {
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber, /blacklist.");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /unban.");
+	    SendSyntaxMessage(playerid, "[LEVEL 2]:{FFFFFF} /entercar, /flipcar, /proche, /healall, /tracenumber, /blacklist.");
+	    SendSyntaxMessage(playerid, "[LEVEL 2]:{FFFFFF} /afire, /akillfire, /adestroybox, /unban.");
 	}
 	if (PlayerData[playerid][pAdmin] >= 3) {
         SendClientMessage(playerid, COLOR_RED, "[LEVEL 3]:{FFFFFF} /asellmaison, /asellbiz, /jetpack, /setweather, /setfuel, /setcarhp, /itemlist.");
@@ -340,7 +340,7 @@ CMD:goto(playerid, params[])
 	if (sscanf(params, "u", id))
  	{
 	 	SendSyntaxMessage(playerid, "/goto [playerid/nom]");
-		SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} prison, house, biz, entrance, job, gate, interior, billboard");
+		SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} prison, house, biz, entrance, job, gate, interior, billboard");
 		return 1;
 	}
     if (id == INVALID_PLAYER_ID)
@@ -348,7 +348,7 @@ CMD:goto(playerid, params[])
 	    if (sscanf(params, "s[24]S()[64]", type, string))
 		{
 		    SendSyntaxMessage(playerid, "/goto [player or name]");
-			SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} car, prison, house, business, entrer, job, gate, interior, billboard");
+			SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} car, prison, house, business, entrer, job, gate, interior, billboard");
 			return 1;
 	    }
 		else if (!strcmp(type, "prison", true))
@@ -493,7 +493,7 @@ CMD:renvoyer(playerid, params[])
 	if (sscanf(params, "us[32]", userid, type))
  	{
 	 	SendSyntaxMessage(playerid, "/renvoyer [player] [name]");
-		SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} prison");
+		SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} prison");
 		return 1;
 	}
     if (userid == INVALID_PLAYER_ID)
@@ -567,7 +567,7 @@ CMD:blacklist(playerid, params[])
 	if (sscanf(params, "s[24]s[128]", type, params))
  	{
 	 	SendSyntaxMessage(playerid, "/blacklist [name] [parameter]");
-	 	SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} ban, banip, unbanip");
+	 	SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} ban, banip, unbanip");
 	 	return 1;
 	}
 	if (!strcmp(type, "ban", true))
@@ -772,7 +772,7 @@ CMD:editmaison(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editmaison [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, interior, price, address, type");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, interior, price, address, type");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_HOUSES) || !HouseData[id][houseExists])
@@ -906,8 +906,8 @@ CMD:editbiz(playerid, params[])
 	    return SendErrorMessage(playerid, "Vous n'êtes pas autorisé à utiliser cette commande.");
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
-	 	SendSyntaxMessage(playerid, "/editbiz [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, interior, deliver, name, price, stock, type, cars, spawn, heures");
+	 	SendSyntaxMessage(playerid, "/editbiz [id] [nom]");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, interior, livraison, nom, prix, stock, type, cars, spawn, heures");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_BUSINESSES) || !BusinessData[id][bizExists])
@@ -949,7 +949,7 @@ CMD:editbiz(playerid, params[])
 		Business_Refresh(id);
 		Business_Save(id);			
 	}
-	else if (!strcmp(type, "deliver", true))
+	else if (!strcmp(type, "livraison", true))
 	{
 	    if (BusinessData[id][bizType] == 5)
 	        return SendErrorMessage(playerid, "Ce biz accepte pas les livraisons.");
@@ -960,7 +960,7 @@ CMD:editbiz(playerid, params[])
 		Business_Save(id);
 		SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté le point de livraison du biz (ID: %d.)", ReturnName(playerid, 0), id);
 	}
-	else if (!strcmp(type, "price", true))
+	else if (!strcmp(type, "prix", true))
 	{
 	    new price;
 	    if (sscanf(string, "d", price))
@@ -980,7 +980,7 @@ CMD:editbiz(playerid, params[])
 	    Business_Save(id);
 		SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s a ajusté le stock du biz ID: %d a %s products.", ReturnName(playerid, 0), id, FormatNumber(amount, ""));
 	}
-	else if (!strcmp(type, "name", true))
+	else if (!strcmp(type, "nom", true))
 	{
 	    new name[32];
 	    if (sscanf(string, "s[32]", name))
@@ -1124,7 +1124,7 @@ CMD:creerbiz(playerid, params[])
 	if (sscanf(params, "dd", type, price))
  	{
 	 	SendSyntaxMessage(playerid, "/creerbiz [type] [price]");
-    	SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie | 11 : VIP");
+    	SendSyntaxMessage(playerid, "[TYPES]:{FFFFFF} 1: Retail | 2: Weapons | 3: Clothes | 4: Fast Food | 5: Dealership | 6: Gas Station | 7: Furniture | 8 : Bar | 9 : Épicerie | 10 : Quincaillerie | 11 : VIP");
     	return 1;
 	}
 	if (type < 1 || type > 11)
@@ -1168,7 +1168,7 @@ CMD:editentrer(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editentrer [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, interior, password, name, porte, mapicon, type, custom, virtual");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, interior, password, name, porte, mapicon, type, custom, virtual");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !EntranceData[id][entranceExists])
@@ -1517,7 +1517,7 @@ CMD:editjob(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editjob [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, type, point, deliver");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, type, point, deliver");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_JOBS) || !JobData[id][jobExists])
@@ -1583,7 +1583,7 @@ CMD:creercrate(playerid, params[])
 	if (sscanf(params, "d", type))
 	{
 	    SendSyntaxMessage(playerid, "/creercrate [type]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece d'extra | 15: Piece de muffler | 16: Piece de roue | 17: Piece de carrosserie");
+	    SendSyntaxMessage(playerid, "[TYPES]: 1: Melee | 2: Pistol Parts | 3: SMG Parts | 4: Shotgun Parts | 5: Rifle Parts | 6: Drugs | 7: Munitions | 8: Cocktail Molotov | 9: Piece de frontbumper | 10: Piece de rearbumper | 11: Piece de roof | 12: Piece de hood | 13: Piece de spoiler | 14: Piece d'extra | 15: Piece de muffler | 16: Piece de roue | 17: Piece de carrosserie");
 		return 1;
 	}
 	if (type < 1 || type > 17)
@@ -1644,7 +1644,7 @@ CMD:editfaction(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editfaction [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, models, locker, ranks, maxranks, acces[1 a 15], action[1 a 3]");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} name, models, locker, ranks, maxranks, acces[1 a 15], action[1 a 3]");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_FACTIONS) || !FactionData[id][factionExists])
@@ -1978,7 +1978,7 @@ CMD:editgate(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editgate [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, speed, radius, time, model, pos, move, pass, linkid, faction");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, speed, radius, time, model, pos, move, pass, linkid, faction");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !GateData[id][gateExists])
@@ -2150,7 +2150,7 @@ CMD:editobject(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editobject[id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, model, pos");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, model, pos");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_batiementS) || !batiementData[id][batiementExists])
@@ -2372,7 +2372,7 @@ CMD:editimpound(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editimpound [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, release");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, release");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !ImpoundData[id][impoundExists])
@@ -2527,7 +2527,7 @@ CMD:editcar(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editcar [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, faction, color1, color2, reset, carowner,four, boitier");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, faction, color1, color2, reset, carowner,four, boitier");
 		return 1;
 	}
 	if (!IsValidVehicle(id) || Car_GetID(id) == -1)
@@ -2638,7 +2638,7 @@ CMD:creergarbage(playerid, params[])
 	if (sscanf(params, "d", type))
 	{
 	    SendSyntaxMessage(playerid, "/creergarbage [type]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Dumpster | 2: Trash Can| 3: Poubelle interieur");
+	    SendSyntaxMessage(playerid, "[TYPES]:{FFFFFF} 1: Dumpster | 2: Trash Can| 3: Poubelle interieur");
 		return 1;
 	}
 	if (type < 1 || type > 3)
@@ -2670,7 +2670,7 @@ CMD:creervendor(playerid, params[])
 	if (sscanf(params, "d", type))
 	{
 	    SendSyntaxMessage(playerid, "/creervendor [type]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Food | 2: Soda");
+	    SendSyntaxMessage(playerid, "[TYPES]:{FFFFFF} 1: Food | 2: Soda");
 		return 1;
 	}
 	if (type < 1 || type > 2)
@@ -3045,7 +3045,7 @@ CMD:editbillboard(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editbillboard [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} location, name, price, message, owner, range");
+	    SendSyntaxMessage(playerid, "[NAMES]:{FFFFFF} location, name, price, message, owner, range");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_DYNAMIC_OBJ) || !BillBoardData[id][bbExists])
